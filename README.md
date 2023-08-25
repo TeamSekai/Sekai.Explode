@@ -1,2 +1,2 @@
-# Discord.js_Bot
-Simple Discord.js Bot
+# Simple Discord.js Bot
+> for learn javascript ✏️
