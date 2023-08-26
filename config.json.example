@@ -1,4 +1,5 @@
 #Please rename to config.json
+#And Delete this message (because JSON doesn't support commentout)
 
 {
 	"token": "YourDiscordBotTokenHere",
