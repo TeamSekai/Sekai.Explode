@@ -1,5 +1,7 @@
 // Discord.js Bot - by ringoXD
 
+const testFile = require('./commands/test.js');
+
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 
 const { token } = require('./config.json');

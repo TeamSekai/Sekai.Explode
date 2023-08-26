@@ -1,0 +1,7 @@
+#Please rename to config.json
+
+{
+	"token": "YourDiscordBotTokenHere",
+	"applicationId": "YourDiscordBotAppID",
+	"guildId": "YourGuildID"
+}
