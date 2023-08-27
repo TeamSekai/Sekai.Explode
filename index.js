@@ -1,6 +1,7 @@
 // Discord.js Bot - by ringoXD
 
 const testFile = require('./commands/test.js');
+const statusFile = require('./commands/mcstatus.js');
 
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 
@@ -30,6 +31,20 @@ client.on(Events.InteractionCreate, async interaction => {
 				await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
 			}
 		}
+	}
+	
+	if (interaction.commandName === statusFile.data.name) {
+		try {
+			await statusFile.execute(interaction);
+		} catch (error) {
+			console.error(error);
+			if (interaction.replied || interaction.deferred) {
+				await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+			} else {
+				await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+			}
+		}
+
 	} else {
 		console.error(`${interaction.commandName}というコマンドには対応していません。`);
 	}
