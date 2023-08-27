@@ -13,6 +13,13 @@ client.once(Events.ClientReady, c => {
 	console.log(`準備OKです! ${c.user.tag}がログインします。`);
 });
 
+client.on('ready', () => {
+	setInterval(() => {
+	  client.user.setActivity({
+		name: `${client.ws.ping}ms`
+	  })
+	}, 10000)
+  })
 
 client.on(Events.InteractionCreate, async interaction => {
 
