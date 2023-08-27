@@ -8,6 +8,6 @@ module.exports = {
         .setName('version')
         .setDescription('てすと'),
     execute: async function (interaction) {
-        await interaction.reply("Running in Node.女子小学生 " + process.version + " w/ " + os.version);
+        await interaction.reply("Running in Node.女子小学生(js) " + process.version + " | " + os.version);
     }
 };
