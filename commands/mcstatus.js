@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription("サーバーの状態を確認します。")
 		.addStringOption(option =>
 			option
-				.setName("ServerName")
+				.setName("server")
 				.setDescription("サーバーを指定します。")
 				.setRequired(true) //trueで必須、falseで任意
 				.addChoices(
