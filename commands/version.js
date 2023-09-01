@@ -6,7 +6,7 @@ const os = require("os");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('version')
-        .setDescription('てすと'),
+        .setDescription('バージョン表示'),
     execute: async function (interaction) {
         await interaction.reply("Running in Node.女子小学生(js) " + process.version + " | " + os.version);
     }
