@@ -26,16 +26,16 @@ client.on('ready', async () => {
 	await client.application.commands.set(commands.map(x => x.data.toJSON()), guildId);
 	console.log("Ready!");
 	client.user.setActivity({
-		name: `[${client.ws.ping}ms] | /ping`,
-		type: ActivityType.Competing,
+		name: `[${client.ws.ping}ms] | Created by ringoXD`,
+		type: ActivityType.Listening,
 		Status: `online`
 	})
 
 	// 10秒毎に更新
 	setInterval(() => {
 		client.user.setActivity({
-			name: `[${client.ws.ping}ms] | /ping`,
-			type: ActivityType.Competing,
+			name: `[${client.ws.ping}ms] | Created by ringoXD`,
+			type: ActivityType.Listening,
 			Status: `online`
 		})
 	}, 10000)
