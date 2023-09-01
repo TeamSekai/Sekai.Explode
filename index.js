@@ -1,6 +1,6 @@
 // Discord.js Bot - by ringoXD
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
-const { Client, Events, GatewayIntentBits, Status } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Status, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
 const { token, guildId } = require('./config.json');
@@ -28,7 +28,7 @@ client.on('ready', async () => {
 	setInterval(() => {
 		client.user.setActivity({
 			name: `[${client.ws.ping}ms] | /ping`,
-			type: COMPETING,
+			type: ActivityType.Competing,
 			Status: `online`
 		})
 	}, 10000)
