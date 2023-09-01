@@ -26,7 +26,7 @@ client.on('ready', async () => {
 	console.log("Ready!");
 	setInterval(() => {
 		client.user.setActivity({
-			name: `Ping: ${client.ws.ping}ms`
+			name: `[${client.ws.ping}ms] | /ping`
 		})
 	}, 10000)
 })
