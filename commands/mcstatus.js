@@ -3,7 +3,7 @@ const axios = require("axios");
 
 let servers = {
 	main: {
-		name: "メ↑インサ↓ーバー",
+		name: "メインサーバー",
 		url: "https://api.mcsv.life/v1/server/status"
 	},
 	creative: {
@@ -15,19 +15,9 @@ let servers = {
 		url: "https://api3.mcsv.life/v1/server/status"
 	},
 	mcsv: {
-		name: "MCSV",
-		ip: "connect.mcsv.life",
+		name: "MCSV(プロキシー)",
+		ip: "play.mcsv.life",
 		be: false
-	},
-	kairun: {
-		name: "TeamKairun",
-		ip: "play.kairun.jp",
-		be: true
-	},
-	kairunprivate: {
-		name: "かいるんプラベ鯖",
-		ip: "133.114.6.88:1683",
-		be: true
 	},
 	hive: {
 		name: "The Hive",
@@ -126,7 +116,7 @@ module.exports = {
 						description: `内部エラー: ${e.response.statusText}(${e.response.status})`,
 						color: 0xff0000,
 						footer: {
-							text: "Powered by KairunWebServer v82.64"
+							text: "ringoXD's Discord.js Bot"
 						}
 					}]
 				})
