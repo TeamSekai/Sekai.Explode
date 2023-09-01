@@ -1,6 +1,6 @@
 // Discord.js Bot - by ringoXD
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Status } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
 const { token, guildId } = require('./config.json');
@@ -17,16 +17,19 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once(Events.ClientReady, c => {
-	console.log(`準備OKです! ${c.user.tag}がログインします。`);
+	console.log(`Logged in as ${c.user.tag}`);
+	client.user.setActivity('起動中...', {status: 'dnd'});
 });
 
 client.on('ready', async () => {
-	console.log("コマンドを登録しています...")
+	console.log("Registering guild commands...")
 	await client.application.commands.set(commands.map(x => x.data.toJSON()), guildId);
 	console.log("Ready!");
 	setInterval(() => {
 		client.user.setActivity({
-			name: `[${client.ws.ping}ms] | /ping`
+			name: `[${client.ws.ping}ms] | /ping`,
+			type: COMPETING,
+			Status: `online`
 		})
 	}, 10000)
 })
