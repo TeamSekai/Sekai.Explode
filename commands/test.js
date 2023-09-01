@@ -1,6 +1,6 @@
 // Import SlashCommandBuilder from discord.js
 const { SlashCommandBuilder } = require('discord.js');
-const { CanvasRenderService } = require('chart.js')
+const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 
 // いいかんじに
 module.exports = {
