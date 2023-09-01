@@ -25,6 +25,13 @@ client.on('ready', async () => {
 	console.log("Registering guild commands...")
 	await client.application.commands.set(commands.map(x => x.data.toJSON()), guildId);
 	console.log("Ready!");
+	client.user.setActivity({
+		name: `[${client.ws.ping}ms] | /ping`,
+		type: ActivityType.Competing,
+		Status: `online`
+	})
+
+	// 10秒毎に更新
 	setInterval(() => {
 		client.user.setActivity({
 			name: `[${client.ws.ping}ms] | /ping`,
