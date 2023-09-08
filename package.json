@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@discordjs/builders": "^1.6.5",
     "axios": "^1.5.0",
     "bytebuffer": "^5.0.1",
     "chart.js": "^4.4.0",

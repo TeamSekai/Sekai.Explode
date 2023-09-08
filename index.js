@@ -1,6 +1,6 @@
 // Discord.js Bot - by ringoXD
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
-const { Client, Events, GatewayIntentBits, Status, ActivityType } = require('discord.js');
+const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
 const { token, guildId } = require('./config.json');
@@ -14,20 +14,21 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 	commands.push(require(path.join(__dirname, "commands", file.name)));
 })
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+    intents: [Intents.FLAGS.GUILDS]
+})
 
-client.once(Events.ClientReady, c => {
-	console.log(`Logged in as ${c.user.tag}`);
-	client.user.setActivity('起動中...', {status: 'dnd'});
-});
+
 
 client.on('ready', async () => {
+	console.log(`Logged in as ${client.user.tag}`);
+	client.user.setActivity('起動中...', {status: 'dnd'});
 	console.log("Registering guild commands...")
 	await client.application.commands.set(commands.map(x => x.data.toJSON()), guildId);
 	console.log("Ready!");
 	client.user.setActivity({
 		name: `[${client.ws.ping}ms] | Created by ringoXD`,
-		type: ActivityType.Listening,
+		type: `LISTENING`,
 		Status: `online`
 	})
 
@@ -35,14 +36,14 @@ client.on('ready', async () => {
 	setInterval(() => {
 		client.user.setActivity({
 			name: `[${client.ws.ping}ms] | Created by ringoXD`,
-			type: ActivityType.Listening,
+			type: `LISTENING`,
 			Status: `online`
 		})
 	}, 10000)
 })
 
-client.on(Events.InteractionCreate, async interaction => {
-	if (!interaction.isChatInputCommand()) return;
+client.on("interactionCreate", async interaction => {
+	if (!interaction.isCommand()) return;
 
 	let command = commands.find(x => x.data.name == interaction.commandName);
 	if (!command) {
