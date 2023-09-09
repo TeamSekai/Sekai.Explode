@@ -9,6 +9,7 @@ module.exports = {
             option
                 .setName("ip")
                 .setDescription("IPアドレスを指定します。")
+				.setRequired(true)
         ),
     execute: async function (interaction) {
         await interaction.deferReply();

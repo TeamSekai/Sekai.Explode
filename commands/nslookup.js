@@ -17,6 +17,7 @@ module.exports = {
             option
                 .setName("domain")
                 .setDescription("ドメインを指定します。")
+				.setRequired(true)
         ),
     execute: async function (interaction) {
         await interaction.deferReply();
