@@ -66,7 +66,7 @@ module.exports = {
 								value: res.data.version
 							}],
 							...(res.data.icon && {
-								thumbnail: { url: "https://api.mcsrvstat.us/icon/" + server.ip }
+								thumbnail: { url: "https://api.mcsrvstat.us/icon/" + server }
 							})
 						}]
 					});
