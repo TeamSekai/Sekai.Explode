@@ -5,7 +5,8 @@
     "bytebuffer": "^5.0.1",
     "chart.js": "^4.4.0",
     "chartjs-node-canvas": "^4.1.6",
-    "discord.js": "v13"
+    "discord.js": "v13",
+    "ip-range-check": "^0.2.0"
   },
   "name": "mcsv-discord-bot",
   "version": "8.2.64",
