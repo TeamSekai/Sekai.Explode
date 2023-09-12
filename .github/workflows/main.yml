@@ -22,3 +22,5 @@ jobs:
             cd ${{ secrets.SERVER_DEPLOY_DIR }}
             git checkout .
             git pull origin main
+            screen -p 0 -S bot -X eval 'stuff "^C\015"'
+            screen -p 0 -S bot -X eval 'stuff "node index.js\015"'
