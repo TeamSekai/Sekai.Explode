@@ -4,7 +4,6 @@ const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
 const { token, guildId } = require('./config.json');
-
 let commands = [];
 fs.readdirSync(path.join(__dirname, "commands"), {
 	withFileTypes: true
@@ -26,6 +25,8 @@ client.on('ready', async () => {
 	console.log("Registering guild commands...")
 	await client.application.commands.set(commands.map(x => x.data.toJSON()), guildId);
 	console.log("Ready!");
+	const SyslogChannel = client.channels.cache.get("1151139585791901746");
+	SyslogChannel.send('Discord.js Bot is Ready!')
 	client.user.setActivity({
 		name: `[${client.ws.ping}ms] | Created by ringoXD`,
 		type: `LISTENING`,
