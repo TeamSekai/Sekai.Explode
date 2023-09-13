@@ -25,7 +25,8 @@ client.on('ready', async () => {
 	console.log("Registering guild commands...")
 	await client.application.commands.set(commands.map(x => x.data.toJSON()), guildId);
 	console.log("Ready!");
-	client.channels.cache.get('1151139585791901746').send('Discord.js Bot is Ready!')
+	const SyslogChannel = client.channels.cache.get("1151139585791901746");
+	SyslogChannel.send('Discord.js Bot is Ready!')
 	client.user.setActivity({
 		name: `[${client.ws.ping}ms] | Created by ringoXD`,
 		type: `LISTENING`,
@@ -66,5 +67,6 @@ client.login(token);
 
 process.on('uncaughtException', function(err) {
     console.error(err);
-	client.channels.cache.get('1151139585791901746').send(err)
+	if (SyslogChannel)
+		SyslogChannel.send(err)
 });
