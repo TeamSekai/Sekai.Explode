@@ -67,5 +67,6 @@ client.login(token);
 
 process.on('uncaughtException', function(err) {
     console.error(err);
-	SyslogChannel.send(err)
+	if (SyslogChannel)
+		SyslogChannel.send(err)
 });
