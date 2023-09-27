@@ -14,7 +14,7 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 })
 
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS]
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES]
 })
 
 
