@@ -8,7 +8,7 @@ module.exports = {
 		.setName('ping')
 		.setDescription('Check ping'),
 	execute: async function(interaction) {
-		await interaction.reply(`Pong!(${client.ws.ping}ms)`);
+		await interaction.reply(`Pong!(${interaction.client.ws.ping}ms)`);
 	},
 };
 
