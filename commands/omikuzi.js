@@ -32,9 +32,6 @@ module.exports = {
 			await interaction.reply(`大吉`);
 			return;
 		}
-		else {
-			await interaction.reply(`エラー(function result: ${number}) - ボットが燃えました`);
-			return;
-		}
+		await interaction.reply(`エラー(function result: ${number}) - ボットが燃えました`);
 	},
 };
