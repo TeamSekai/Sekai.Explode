@@ -5,10 +5,10 @@ const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 // いいかんじに
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('test')
-		.setDescription('じっけんちゅー'),
+		.setName('ping')
+		.setDescription('Check ping'),
 	execute: async function(interaction) {
-		await interaction.reply('はろーわーるど');
+		await interaction.reply(`Pong!(${client.ws.ping}ms)`);
 	},
 };
 
