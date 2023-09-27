@@ -14,21 +14,27 @@ module.exports = {
 		let number = GenNum();
 		if (number == 1) {
 			await interaction.reply(`凶`);
+			return;
 		}
 		if (number == 2) {
 			await interaction.reply(`吉`);
+			return;
 		}
 		if (number == 3) {
 			await interaction.reply(`小吉`);
+			return;
 		}
 		if (number == 4) {
 			await interaction.reply(`中吉`);
+			return;
 		}
 		if (number == 5) {
 			await interaction.reply(`大吉`);
+			return;
 		}
 		else {
 			await interaction.reply(`エラー(function result: ${number}) - ボットが燃えました`);
+			return;
 		}
 	},
 };
