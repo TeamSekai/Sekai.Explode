@@ -67,7 +67,4 @@ client.login(token);
 
 process.on('uncaughtException', function(err) {
     console.error(err);
-	let SyslogChannel = client.channels.cache.get("1151139585791901746");
-	if (SyslogChannel)
-		SyslogChannel.send(err)
 });
