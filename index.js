@@ -4,6 +4,7 @@ const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
 const { token, guildId } = require('./config.json');
+const { generateDependencyReport } = require('@discordjs/voice');
 let commands = [];
 fs.readdirSync(path.join(__dirname, "commands"), {
 	withFileTypes: true
@@ -67,4 +68,5 @@ client.login(token);
 
 process.on('uncaughtException', function(err) {
     console.error(err);
+    console.error("Depend Err ->" + generateDependencyReport());
 });
