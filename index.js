@@ -23,7 +23,7 @@ client.on('ready', async () => {
 	console.log(`Logged in as ${client.user.tag}`);
 	client.user.setActivity('起動中...', {status: 'dnd'});
 	console.log("Registering guild commands...")
-	await client.application.commands.set(commands.map(x => x.data.toJSON()), guildId);
+	await client.application.commands.set(commands.map(x => x.data.toJSON()));
 	console.log("Ready!");
 	let SyslogChannel = client.channels.cache.get("1151139585791901746");
 	SyslogChannel.send('Discord.js Bot is Ready!')
