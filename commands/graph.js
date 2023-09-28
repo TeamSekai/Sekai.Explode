@@ -1,5 +1,4 @@
 //const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
-const { CanvasRenderService } = require('chartjs-node-canvas');
 const { createCanvas, loadImage } = require('canvas');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
@@ -28,13 +27,19 @@ module.exports = {
 				}],
 			}
 		}
-    	const buffer = canvas.toBuffer('image/png');
-		fs.writeFileSync('chart.png', buffer);
-
-    	const embed = new MessageEmbed()
-    	  .setTitle('Chart')
-    	  .setImage('attachment://chart.png');
-
-    	await interaction.reply({ embeds: [embed] });
+    	await interaction.reply({
+			files: [{
+			  attachment: orimoto_kairu_img,
+			  name:"chart.png"
+			}],
+			embeds:[{
+			  title: "Chart",
+			  image: {
+				 "url": "attachment://chart.png"
+			  }
+			}]
+		  })
 	},
 };
+
+
