@@ -24,7 +24,7 @@ module.exports = {
 	  });
 
 	// 音声ファイルのパスを指定
-    const audioFilePath = join(__dirname, '../ityaitya.wav');
+    const audioFilePath = join(__dirname, '../ityaitya.mp3');
 
     // 音声ファイルを読み込み、ストリームとして再生
 	const player = createAudioPlayer();
