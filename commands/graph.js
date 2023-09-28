@@ -2,6 +2,8 @@
 const { CanvasRenderService } = require('chartjs-node-canvas');
 const { createCanvas, loadImage } = require('canvas');
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed, MessageAttachment } = require('discord.js');
+const fs = require('fs');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,14 +28,13 @@ module.exports = {
 				}],
 			}
 		}
-    	const image = await canvasRenderService.renderToBuffer(configuration);
-    	fs.writeFileSync('chart.png', image);
+    	const buffer = canvas.toBuffer('image/png');
+		fs.writeFileSync('chart.png', buffer);
 
     	const embed = new MessageEmbed()
     	  .setTitle('Chart')
-    	  .attachFiles(['chart.png'])
     	  .setImage('attachment://chart.png');
 
-    	await message.channel.send({ embeds: [embed] });
+    	await interaction.reply({ embeds: [embed] });
 	},
 };
