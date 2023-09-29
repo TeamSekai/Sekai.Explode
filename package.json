@@ -6,7 +6,7 @@
     "axios": "^1.5.0",
     "bytebuffer": "^5.0.1",
     "canvas": "^2.11.2",
-    "chart.js": "^4.4.0",
+    "chart.js": "3.5.1",
     "chartjs-node-canvas": "^4.1.6",
     "discord.js": "v13",
     "fs": "^0.0.1-security",

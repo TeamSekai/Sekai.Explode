@@ -1,4 +1,4 @@
-//const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
+const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 const { createCanvas, loadImage } = require('canvas');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
@@ -17,19 +17,21 @@ module.exports = {
     	const configuration = {
 			type: 'line',
 			data: {
-				labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+				labels: ['1', '2', '3', '4', '5'],
 				datasets: [{
-					label: 'Sales',
-					data: [12, 19, 3, 5, 2],
+					label: 'かいるん',
+					data: [12, 19, 3, 0, 10],
 					fill: false,
 					borderColor: 'rgb(75, 192, 192)',
 					tension: 0.1,
 				}],
 			}
 		}
+		const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour:"#01010e" });
+		const orimoto = await chartJSNodeCanvas.renderToBuffer(configuration);
     	await interaction.reply({
 			files: [{
-			  attachment: orimoto_kairu_img,
+			  attachment: orimoto,
 			  name:"chart.png"
 			}],
 			embeds:[{
