@@ -35,18 +35,18 @@ module.exports = {
 
 		const executorID = interaction.user.id;
 		let graphtitle = `${executorID}'s graph`
-		if (interaction.option.getString('title')) {
-			let graphtitle = interaction.option.getString('title');
+		if (interaction.options.getString('title')) {
+			let graphtitle = interaction.options.getString('title');
 		}
 
 		let label = `value`
-		if (interaction.option.getString('label')) {
-			let label = interaction.option.getString('label');
+		if (interaction.options.getString('label')) {
+			let label = interaction.options.getString('label');
 		}
 
 		let AtZero = false;
-		if (interaction.option.getBoolean('begin_at_zero')) {
-			let AtZero = interaction.option.getBoolean('begin_at_zero')
+		if (interaction.options.getBoolean('begin_at_zero')) {
+			let AtZero = interaction.options.getBoolean('begin_at_zero')
 		}
 
 		const valuesString = interaction.options.getString('values');
