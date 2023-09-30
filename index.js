@@ -6,6 +6,9 @@ const path = require("path");
 const { token, guildId } = require('./config.json');
 const { generateDependencyReport } = require('@discordjs/voice');
 let commands = [];
+
+console.log('Starting Discord.js bot...')
+
 fs.readdirSync(path.join(__dirname, "commands"), {
 	withFileTypes: true
 }).forEach((file) => {
@@ -19,6 +22,7 @@ const client = new Client({
 })
 
 
+require('./activity')(client);
 
 client.on('ready', async () => {
 	console.log(`Logged in as ${client.user.tag}`);
@@ -28,21 +32,8 @@ client.on('ready', async () => {
 	console.log("Ready!");
 	let SyslogChannel = client.channels.cache.get("1151139585791901746");
 	SyslogChannel.send('Discord.js Bot is Ready!')
-	client.user.setActivity({
-		name: `[${client.ws.ping}ms] | Created by ringoXD`,
-		type: `LISTENING`,
-		Status: `online`
-	})
-
-	// 10秒毎に更新
-	setInterval(() => {
-		client.user.setActivity({
-			name: `[${client.ws.ping}ms] | Created by ringoXD`,
-			type: `LISTENING`,
-			Status: `online`
-		})
-	}, 10000)
 })
+
 
 client.on("interactionCreate", async interaction => {
 	if (!interaction.isCommand()) return;
