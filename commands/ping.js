@@ -26,7 +26,7 @@ module.exports = {
 		.setName('ping')
 		.setDescription('show ping'),
 	execute: async function(interaction) {
-		const data = `[${wspingValues}]`
+		const data = wspingValues;
 		const width = 800;
 		const height = 400;
 
