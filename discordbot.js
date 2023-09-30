@@ -25,7 +25,7 @@ const client = new Client({
 
 activity.setupActivity(client);
 const activityModule = require('../activity');
-const wspingValues = activityModule.getPingValues();
+const wspingValues = activityModule.addPingValue();
 
 client.on('ready', async () => {
 	console.log(`Logged in as ${client.user.tag}`);
