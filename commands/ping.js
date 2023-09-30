@@ -26,7 +26,7 @@ module.exports = {
 		.setName('ping')
 		.setDescription('show ping'),
 	execute: async function(interaction) {
-		const data = wspingValues.slice(-30).concat(new Array(30 - Math.min(30, wspingValues.length)).fill(0)); // 過去30個のデータを取得し、足りない分は0で補完
+		const data = wspingValues.slice(-30).concat(new Array(30 - Math.min(30, wspingValues.length)).fill(0)).reverse(); // データを取得し、0で補完して逆順に並べ替え
 		const width = 800;
 		const height = 400;
 
