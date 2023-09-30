@@ -24,7 +24,7 @@ const client = new Client({
 
 
 activity.setupActivity(client);
-const activityModule = require('../activity');
+const activityModule = require('./activity');
 const wspingValues = activityModule.addPingValue();
 
 client.on('ready', async () => {
