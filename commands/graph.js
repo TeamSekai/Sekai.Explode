@@ -1,5 +1,5 @@
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
-const { createCanvas } = require('canvas');
+const { createCanvas, loadImage } = require('canvas');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const fs = require('fs');
 
@@ -9,7 +9,7 @@ module.exports = {
 		.setDescription('グラフを描画します。')
 		.addStringOption(option =>
 			option
-				.setName("value")
+				.setName("values")
 				.setDescription("値を入力(それぞれの値は1, 2, 3のようにコンマで区切ること。)")
 				.setRequired(true)
 		)
@@ -36,20 +36,21 @@ module.exports = {
 		const executorID = interaction.user.id;
 		let graphtitle = `${executorID}'s graph`
 		if (interaction.options.getString('title')) {
-			let graphtitle = interaction.options.getString('title');
+			graphtitle = interaction.options.getString('title');
 		}
 
 		let label = `value`
 		if (interaction.options.getString('label')) {
-			let label = interaction.options.getString('label');
+			label = interaction.options.getString('label');
 		}
 
 		let AtZero = false;
 		if (interaction.options.getBoolean('begin_at_zero')) {
-			let AtZero = interaction.options.getBoolean('begin_at_zero')
+			AtZero = interaction.options.getBoolean('begin_at_zero')
 		}
 
 		const valuesString = interaction.options.getString('values');
+		console.log(valuesString)
 		const values = valuesString.split(',').map(val => parseInt(val.trim()));
 		console.log(values)
 
@@ -62,7 +63,7 @@ module.exports = {
     	const configuration = {
 			type: 'line',
 			data: {
-				labels: values.map((_, index) => `Value ${index + 1}`),
+				labels: values.map((_, index) => `${index + 1}`),
 				datasets: [{
 					label: label,
 					data: data,
