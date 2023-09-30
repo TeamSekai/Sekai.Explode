@@ -26,7 +26,7 @@ module.exports = {
 		.setName('ping')
 		.setDescription('show ping'),
 	execute: async function(interaction) {
-		const data = wspingValues;
+		const data = wspingValues.slice(-30).concat(new Array(30 - Math.min(30, wspingValues.length)).fill(0)); // 過去30個のデータを取得し、足りない分は0で補完
 		const width = 800;
 		const height = 400;
 
@@ -43,7 +43,14 @@ module.exports = {
 					borderColor: 'rgb(75, 192, 192)',
 					tension: 0.1,
 				}],
-			}
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true, // 最小値を0に設定
+					},
+				},
+			},
 		}
 		const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour:"#01010e" });
 		const orimoto = await chartJSNodeCanvas.renderToBuffer(configuration);
