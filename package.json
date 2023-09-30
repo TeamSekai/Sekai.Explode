@@ -13,8 +13,8 @@
     "discord.js": "v13",
     "fs": "^0.0.1-security",
     "ip-range-check": "^0.2.0",
-    "path": "^0.12.7",
-    "tweetnacl": "^1.0.3"
+    "libsodium-wrappers": "^0.7.13",
+    "path": "^0.12.7"
   },
   "name": "mcsv-discord-bot",
   "version": "2.1.0",
