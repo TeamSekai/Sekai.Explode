@@ -1,7 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-
-const AdminuserIDs = ['1063527758292070591', '1126422758696427552']
-
+const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
+const childprocess = require('child_process');
+const path = require("path");
+const color = require("colors");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('update')
@@ -20,7 +21,7 @@ module.exports = {
     await interaction.reply("```ansi\n" + msg + "\n```");
     let lock = false;
     let lockTimeout = null;
-    let gitProcess = childProcess.spawn("git", ["-c", "color.ui=always", "pull"], {
+    let gitProcess = childprocess.spawn("git", ["-c", "color.ui=always", "pull"], {
         cwd: path.resolve(__dirname, "../../")
     });
     let timeout = setTimeout(() => {
