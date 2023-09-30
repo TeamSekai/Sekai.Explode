@@ -4,10 +4,12 @@ const { createCanvas, loadImage } = require('canvas');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const fs = require('fs');
+const activityModule = require('../activity');
+const wspingValues = activityModule.getPingValues();
 
 // いいかんじに
 
-
+/*
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('ping')
@@ -16,14 +18,15 @@ module.exports = {
 		await interaction.reply(`Pong!(${interaction.client.ws.ping}ms)`);
 	},
 };
+*/
 
 
-/*
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('graph')
 		.setDescription('test'),
 	execute: async function(interaction) {
+		const data = `[${wspingValues}]`
 		const width = 800;
 		const height = 400;
 
@@ -32,10 +35,10 @@ module.exports = {
     	const configuration = {
 			type: 'line',
 			data: {
-				labels: ['1', '2', '3', '4', '5'],
+				labels: data.map((_, index) => index + 1),
 				datasets: [{
-					label: 'かいるん',
-					data: [12, 19, 3, 0, 10],
+					label: 'Ping',
+					data: data,
 					fill: false,
 					borderColor: 'rgb(75, 192, 192)',
 					tension: 0.1,
@@ -59,7 +62,7 @@ module.exports = {
 	},
 };
 
-*/
+
 
 // 引用: https://www.geeklibrary.jp/counter-attack/discord-js-bot/
 // module.exportsの補足
