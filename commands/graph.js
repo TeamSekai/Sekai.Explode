@@ -51,6 +51,7 @@ module.exports = {
 
 		const valuesString = interaction.options.getString('values');
 		const values = valuesString.split(',').map(val => parseInt(val.trim()));
+		console.log(values)
 
 		const width = 800;
 		const height = 400;
