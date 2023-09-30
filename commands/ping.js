@@ -53,7 +53,7 @@ module.exports = {
 			  name:"chart.png"
 			}],
 			embeds:[{
-			  title: "Chart",
+			  title: `Last ping: ${interaction.client.ws.ping}ms`,
 			  image: {
 				 "url": "attachment://chart.png"
 			  }
