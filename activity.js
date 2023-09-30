@@ -8,22 +8,38 @@ console.log('Loaded activity.js')
 
 let wspingValues = [];
 
-module.exports = (client) => {
-	client.on('ready', async () => {
-		setInterval(() => {
-			const wsping = client.ws.ping;
-			wspingValues.push(wsping);
+
+// add
+function addPingValue(ping) {
+	wspingValues.push(ping);
 	
-			if (wspingValues.length > 30) {
-				wspingValues.shift(); // 最も古い値を削除
-			}
+	// autoremove(30)
+	if (wspingValues.length > 30) {
+	  wspingValues.shift(); // 最も古い値を削除
+	}
+  }
+  
+  // get
+  function getPingValues() {
+	return wspingValues;
+  }
+  
+  module.exports = {
+	setupActivity(client){
+		client.on('ready', async () => {
+			setInterval(() => {
+				const wsping = client.ws.ping;
+				addPingValue(wsping)
 			// avg
-		//	const avgPing = wspingValues.reduce((sum, value) => sum + value, 0) / wspingValues.length;
-			client.user.setActivity({
-				name: `[${client.ws.ping}ms] | Created by ringoXD`,
-				type: `LISTENING`,
-				Status: `online`
-			})
-		}, 10000)
-	})
-};
+			//	const avgPing = wspingValues.reduce((sum, value) => sum + value, 0) / wspingValues.length;
+				client.user.setActivity({
+					name: `[${client.ws.ping}ms] | Created by ringoXD`,
+					type: `LISTENING`,
+					Status: `online`
+				})
+			}, 40000)
+		})
+	},
+	addPingValue,
+	getPingValues
+  };

@@ -40,7 +40,7 @@ module.exports = {
 				 "url": "attachment://chart.png"
 			  }
 			}]
-		  })
+		})
 	},
 };
 

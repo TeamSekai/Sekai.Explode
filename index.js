@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const { token, guildId } = require('./config.json');
 const { generateDependencyReport } = require('@discordjs/voice');
+const activity = require('./activity');
 let commands = [];
 
 console.log('Starting Discord.js bot...')
@@ -22,7 +23,7 @@ const client = new Client({
 })
 
 
-require('./activity')(client);
+activity.setupActivity(client);
 
 client.on('ready', async () => {
 	console.log(`Logged in as ${client.user.tag}`);
@@ -32,6 +33,11 @@ client.on('ready', async () => {
 	console.log("Ready!");
 	let SyslogChannel = client.channels.cache.get("1151139585791901746");
 	SyslogChannel.send('Discord.js Bot is Ready!')
+	client.user.setActivity({
+		name: `[${client.ws.ping}ms] | Created by ringoXD`,
+		type: `LISTENING`,
+		Status: `online`
+	})
 })
 
 
