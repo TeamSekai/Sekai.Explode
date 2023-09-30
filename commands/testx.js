@@ -1,4 +1,4 @@
-
+/*
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const activityModule = require('../activity');
 const wspingValues = activityModule.getPingValues();
@@ -15,3 +15,4 @@ module.exports = {
 		console.log('Responsed')
     }
 };
+*/
