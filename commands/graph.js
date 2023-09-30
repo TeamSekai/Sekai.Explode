@@ -27,7 +27,7 @@ module.exports = {
 		)
 		.addBooleanOption(option =>
 			option
-				.setName('beginAtZero')
+				.setName('begin_at_zero')
 				.setDescription('グラフの最小値を0に固定するか(デフォルト: false)')
 				.setRequired(false) // 任意のオプション
 		),
@@ -45,8 +45,8 @@ module.exports = {
 		}
 
 		let AtZero = false;
-		if (interaction.option.getBoolean('beginAtZero')) {
-			let AtZero = interaction.option.getBoolean('beginAtZero')
+		if (interaction.option.getBoolean('begin_at_zero')) {
+			let AtZero = interaction.option.getBoolean('begin_at_zero')
 		}
 
 		const valuesString = interaction.options.getString('values');
