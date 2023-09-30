@@ -33,8 +33,8 @@ module.exports = {
 		),
 	execute: async function(interaction) {
 
-		const executorID = interaction.user.id;
-		let graphtitle = `${executorID}'s graph`
+		const nickname = interaction.member.nickname || interaction.user.username;
+		let graphtitle = `${nickname}'s graph`
 		if (interaction.options.getString('title')) {
 			graphtitle = interaction.options.getString('title');
 		}
