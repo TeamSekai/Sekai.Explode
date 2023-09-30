@@ -23,8 +23,8 @@ module.exports = {
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('graph')
-		.setDescription('test'),
+		.setName('ping')
+		.setDescription('show ping'),
 	execute: async function(interaction) {
 		const data = `[${wspingValues}]`
 		const width = 800;
