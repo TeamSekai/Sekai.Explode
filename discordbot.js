@@ -24,8 +24,6 @@ const client = new Client({
 
 
 activity.setupActivity(client);
-const activityModule = require('./activity');
-const wspingValues = activityModule.addPingValue();
 
 client.on('ready', async () => {
 	console.log(`Logged in as ${client.user.tag}`);
@@ -36,7 +34,7 @@ client.on('ready', async () => {
 	let SyslogChannel = client.channels.cache.get("1151139585791901746");
 	SyslogChannel.send('Discord.js Bot is Ready!')
 	const wsping = client.ws.ping;
-	addPingValue(wsping)
+	activity.addPingValue(wsping)
 	client.user.setActivity({
 		name: `[${client.ws.ping}ms] | Created by ringoXD`,
 		type: `LISTENING`,
