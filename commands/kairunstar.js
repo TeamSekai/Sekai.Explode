@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { joinVoiceChannel, createAudioResource, createAudioPlayer, generateDependencyReport } = require('@discordjs/voice');
 const { createReadStream } = require('fs');
 const { join } = require('path');
+const Denyguilds = ['1080075319429562480', '826482648264826482648264826482648264']
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,6 +11,12 @@ module.exports = {
 	execute: async function(interaction) {
 		const member = interaction.member;
 		const voiceChannel = member.voice.channel;
+		const guild = interaction.guildId
+	
+	if (!Denyguilds.includes(guild)) {
+		await interaction.reply('あんた馬鹿ぁ？(このサーバーでは音声を流せません。)');
+		return;
+	}
 
 	if (!voiceChannel) {
 		await interaction.reply("ぽまえvcに居らんから無理やで");
