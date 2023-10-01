@@ -18,7 +18,7 @@ module.exports = {
     	return;
     }
 	// rolecheck
-	let adminRole = guild.roles.cache.find(role => role.name === "*");
+	let adminRole = guild.roles.cache.find(role => role.name === "tmp");
     if (!adminRole) {
 		console.log("ﾃﾞｭｱｳﾝ...")
     	await interaction.reply('吐血しちゃった；；')

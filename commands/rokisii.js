@@ -13,7 +13,7 @@ module.exports = {
 		const voiceChannel = member.voice.channel;
 		const guild = interaction.guildId
 	
-	if (!Denyguilds.includes(guild)) {
+	if (Denyguilds.includes(guild)) {
 		await interaction.reply('あんた馬鹿ぁ？(このサーバーでは音声を流せません。)');
 		return;
 	}
