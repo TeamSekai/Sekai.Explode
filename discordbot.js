@@ -6,7 +6,13 @@ const path = require("path");
 const { token, guildId } = require('./config.json');
 const { generateDependencyReport } = require('@discordjs/voice');
 const activity = require('./activity');
+
+const creset = '\x1b[0m';
+const cgreen = '\x1b[32m';
+const cred = '\x1b[31m';
+
 let commands = [];
+
 
 console.log('Starting Discord.js bot...')
 
@@ -26,11 +32,11 @@ const client = new Client({
 activity.setupActivity(client);
 
 client.on('ready', async () => {
-	console.log(`Logged in as ${client.user.tag}`);
+	console.log(`${cgreen}Logged in as${creset} ${client.user.tag}`);
 	client.user.setActivity('起動中...', {status: 'dnd'});
-	console.log("Registering guild commands...")
+	console.log(`Registering guild commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
-	console.log("Ready!");
+	console.log(`${cgreen}Ready!`);
 	let SyslogChannel = client.channels.cache.get("1151139585791901746");
 	SyslogChannel.send('Discord.js Bot is Ready!')
 	const wsping = client.ws.ping;
