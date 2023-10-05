@@ -21,5 +21,6 @@
   "main": "index.js",
   "repository": "https://github.com/ringo360/Discord.js_Bot.git",
   "author": "ringo360",
-  "license": "WTFPL(ただしかいるんはソスコを見ることすら禁じられています)"
+  "license": "WTFPL(ただしかいるんはソスコを見ることすら禁じられています)",
+  "devDependencies": {}
 }

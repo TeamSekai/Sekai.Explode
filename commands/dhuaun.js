@@ -32,7 +32,7 @@ module.exports = {
 	  });
 
 	// 音声ファイルのパスを指定
-    const audioFilePath = join(__dirname, '../dhuaun.wav');
+    const audioFilePath = join(__dirname, '../sounds/dhuaun.wav');
 
     // 音声ファイルを読み込み、ストリームとして再生
 	const player = createAudioPlayer();

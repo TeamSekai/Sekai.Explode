@@ -31,7 +31,7 @@ module.exports = {
 	  });
 
 	// 音声ファイルのパスを指定
-    const audioFilePath = join(__dirname, '../youdied.mp3');
+    const audioFilePath = join(__dirname, '../sounds/youdied.mp3');
 
     // 音声ファイルを読み込み、ストリームとして再生
 	const player = createAudioPlayer();
