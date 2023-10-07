@@ -15,7 +15,7 @@ module.exports = {
         await interaction.deferReply();
         let ip = interaction.options.getString("ip");
         try {
-            let data = (await axios.get(`https://ipinfo.io/${encodeURI(ip)}/json`)).data;
+            let data = (await axios.get(`https://ipinfo.io/${encodeURI(ip)}`)).data;
             if (data?.status == "404" || data?.bogon == true) {
                 throw new Error("IPアドレスが間違っています");
             }
@@ -27,6 +27,9 @@ module.exports = {
                         text: "ringoXD's Discord.js Bot"
                     },
                     fields: [{
+						name: "Target",
+						value: interaction.options.getString("ip")
+					}, {
                         name: "Host Name",
                         value: data.hostname
                     }, {
