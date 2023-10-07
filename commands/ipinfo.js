@@ -15,7 +15,7 @@ module.exports = {
         await interaction.deferReply();
         let ip = interaction.options.getString("ip");
         try {
-            let data = (await axios.get(`https://ipinfo.io/${encodeURI(ip)}`)).data;
+            let data = (await axios.get(`https://ipinfo.io/${encodeURI(ip)}/json`)).data;
 			console.log(`Target: ${encodeURI(ip)}`)
 			console.log(`Status: ${data.status}`)
             if (data?.status == "404" || data?.bogon == true) {
