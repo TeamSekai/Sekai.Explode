@@ -37,9 +37,6 @@ module.exports = {
 						name: "Target",
 						value: interaction.options.getString("ip")
 					}, {
-                        name: "Host Name",
-                        value: data.hostname
-                    }, {
                         name: "Country",
                         value: data.country
                     }, {
