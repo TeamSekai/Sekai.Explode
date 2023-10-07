@@ -52,7 +52,7 @@ module.exports = {
 						footer: {
 							text: "ringoXD's Discord.js Bot"
 						},
-						formattedResult
+						description: formattedResult
 					}]
 				})
 			});
