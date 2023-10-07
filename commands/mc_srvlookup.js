@@ -45,17 +45,17 @@ module.exports = {
                 )).join('\n');
 
                 // interaction.reply(`SRV Records for ${domain}:\n${formattedResult}`);
-            });
-			await interaction.reply({
-				embeds: [{
-					title: `${domainName}`,
-					color: 0xfd75ff,
-					footer: {
-						text: "ringoXD's Discord.js Bot"
-					},
-					formattedResult
-				}]
-			})
+				interaction.reply({
+					embeds: [{
+						title: `${domainName}`,
+						color: 0xfd75ff,
+						footer: {
+							text: "ringoXD's Discord.js Bot"
+						},
+						formattedResult
+					}]
+				})
+			});
         } catch (error) {
             console.error(`An error occurred: ${error.message}`);
             await interaction.reply(`An error occurred: ${error.message}`);
