@@ -21,6 +21,11 @@ module.exports = {
             if (data?.status == "404" || data?.bogon == true) {
                 throw new Error("IPアドレスが間違っています");
             }
+			console.log(data.hostname)
+			console.log(data.country)
+			console.log(data.city)
+			console.log(data.region)
+			console.log(data.org)
             await interaction.editReply({
                 embeds: [{
                     title: `${ip}'s IPInfo`,
