@@ -50,7 +50,7 @@ module.exports = {
         } catch (e) {
             await interaction.editReply({
                 embeds: [{
-                    title: "エラー",
+                    title: `エラー - HTTP:${data?.status}`,
                     description: `${e.message}`,
                     color: 0xff0000,
                     footer: {
