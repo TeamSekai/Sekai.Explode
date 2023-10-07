@@ -16,7 +16,8 @@ module.exports = {
         let ip = interaction.options.getString("ip");
         try {
             let data = (await axios.get(`https://ipinfo.io/${encodeURI(ip)}`)).data;
-			console.log(`Status: ${data?.status}`)
+			console.log(`Target: ${encodeURI(ip)}`)
+			console.log(`Status: ${data.status}`)
             if (data?.status == "404" || data?.bogon == true) {
                 throw new Error("IPアドレスが間違っています");
             }
