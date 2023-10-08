@@ -107,20 +107,20 @@ function unicodeEscape(str) {
 };
 
 app.get("/oembed/:linkCode", async (req, res) => {
-	if (!client.templinks) return res.sendStatus(500);
-	let link = client.templinks.find(x => x.id == req.params.linkCode);
-	if (!link) {
-		return res.sendStatus(404);
-	}
-	res.json({
-		"version": "1.0",
-		"title": `${linkDomain}`,
-		"type": "link",
-		"author_name": "省略リンク\nリンク先:",
-		"provider_name": "MCSV Discord BOT",
-		"provider_url": "https://mcsv.life",
-		"url": linkDomain
-	});
+    if (!client.templinks) return res.sendStatus(500);
+    let link = client.templinks.find(x => x.id == req.params.linkCode);
+    if (!link) {
+        return res.sendStatus(404);
+    }
+    res.json({
+        "version": "1.0",
+        "title": `${link.url}`,
+        "type": "link",
+        "author_name": "省略リンク\nリンク先:",
+        "provider_name": "MCSV Discord BOT",
+        "provider_url": "https://mcsv.life",
+        "url": link.url
+    });
 });
 
 
@@ -128,21 +128,21 @@ app.get("/", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
-		return res.status(404).send(`<center><h1>どこ見てんじゃい</h1>\n<hr>\nniggasex/82.64 (dhuauntu)</center>`);
+		return res.status(404).send(`<center><h1>どこ見てんじゃい</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
 	}
 	res.send()
 });
 
 app.get("/:linkCode", async (req, res) => {
-	if (!client.templinks) return res.sendStatus(500);
-	let link = client.templinks.find(x => x.id == req.params.linkCode);
-	if (!link) {
-		return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (dhuauntu)</center>`);
-	}
-	res.send(
-		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
-		`\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.code}" />`
-	)
+    if (!client.templinks) return res.sendStatus(500);
+    let link = client.templinks.find(x => x.id == req.params.linkCode);
+    if (!link) {
+        return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
+    }
+    res.send(
+        `<script>location.href="${unicodeEscape(link.url)}"</script>` +
+        `\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.id}" />`
+    )
 });
 
 process.on('uncaughtException', function (err) {
