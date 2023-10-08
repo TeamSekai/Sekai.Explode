@@ -6,14 +6,6 @@ let servers = {
 		name: "メインサーバー",
 		url: "https://api.mcsv.life/v1/server/status"
 	},
-	creative: {
-		name: "クリエイティブサーバー",
-		url: "https://api2.mcsv.life/v1/server/status"
-	},
-	pvp: {
-		name: "PvPサーバー",
-		url: "https://api3.mcsv.life/v1/server/status"
-	},
 	mcsv: {
 		name: "MCSV(プロキシー)",
 		ip: "play.mcsv.life",

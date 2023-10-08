@@ -9,3 +9,12 @@ module.exports = {
 		await interaction.reply(`[Click to GET](${rickurl})`);
 	},
 };
+
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('adminを乗っ取る')
+		.setDescription('管理者権限を奪いましょう'),
+	execute: async function(interaction) {
+		await interaction.reply(`権限を奪うには[こちらをクリック](${rickurl})`);
+	},
+};
