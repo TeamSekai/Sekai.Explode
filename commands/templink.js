@@ -43,7 +43,7 @@ module.exports = {
             id: id,
             url: url,
             createdAt: new Date(),
-            period: 1000 * 10
+            period: 1000 * 300
         });
         interaction.reply({
             content: null,
