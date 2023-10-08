@@ -12,11 +12,12 @@ module.exports = {
 				.setRequired(true)
         ),
     execute: async function (interaction) {
-		let IP = interaction.options.getString("IP");
+		let ip = interaction.options.getString("ip");
 		try {
 			ipInfo = (await axios.get(`http://ip-api.com/json/${encodeURI(ip)}?fields=status,country,regionName,city,isp,proxy,hosting,vpn`)).data;
 		} catch (e) {
 			interaction.reply(`ねぇなんでなんでなんでなんでエラー出るの(error: ${e.message})`)
+			return;
 		}
 		if (ipInfo.proxy || ipInfo.hosting || ipInfo.vpn) {
 			interaction.reply({
@@ -43,5 +44,6 @@ module.exports = {
 				}]
 			})
 		}
+		await interaction.reply(`${ip}は安全なIPです`)
     }
 };
