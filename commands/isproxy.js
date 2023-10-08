@@ -3,8 +3,8 @@ const axios = require('axios')
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('dev02')
-        .setDescription('view'),
+        .setName('isproxy')
+        .setDescription('check IP address using ip-api.com'),
     execute: async function (interaction) {
 		let IP = interaction.options.getString("IP");
 		try {
