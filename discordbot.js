@@ -114,12 +114,12 @@ app.get("/oembed/:linkCode", async (req, res) => {
 	}
 	res.json({
 		"version": "1.0",
-		"title": `${link.link}`,
+		"title": `${linkDomain}`,
 		"type": "link",
 		"author_name": "省略リンク\nリンク先:",
 		"provider_name": "MCSV Discord BOT",
 		"provider_url": "https://mcsv.life",
-		"url": link.link
+		"url": linkDomain
 	});
 });
 
