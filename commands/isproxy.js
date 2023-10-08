@@ -19,6 +19,9 @@ module.exports = {
 			interaction.reply(`ねぇなんでなんでなんでなんでエラー出るの(error: ${e.message})`)
 			return;
 		}
+		console.log(ipInfo.proxy)
+		console.log(ipInfo.hosting)
+		console.log(ipInfo.vpn)
 		if (ipInfo.proxy || ipInfo.hosting || ipInfo.vpn) {
 			interaction.reply({
 				embeds: [{
