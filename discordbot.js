@@ -128,7 +128,7 @@ app.get("/:linkCode", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
-		return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\niggasex/82.64 (dhuantu)</center>`);
+		return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (dhuauntu)</center>`);
 	}
 	res.send(
 		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
