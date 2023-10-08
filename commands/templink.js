@@ -16,7 +16,7 @@ function makeid(length) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('templink')
-        .setDescription('一時リンクを生成します')
+        .setDescription('5分間のみ使用できる一時リンクを生成します')
         .addStringOption(option =>
             option
                 .setName("url")
@@ -48,7 +48,12 @@ module.exports = {
         interaction.reply({
             content: null,
             embeds: [{
-                title: `https://${linkDomain}/${id}`
+                title: "TempLinkを生成しました!",
+				description: "5分間のみ使用できます。",
+				fields: [{
+					name: "リンク",
+					value: `https://${linkDomain}/${id}`
+				}]
             }]
         })
     }
