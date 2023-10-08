@@ -124,6 +124,15 @@ app.get("/link/oembed/:linkCode", async (req, res) => {
 });
 
 
+app.get("/", async (req, res) => {
+	if (!client.templinks) return res.sendStatus(500);
+	let link = client.templinks.find(x => x.id == req.params.linkCode);
+	if (!link) {
+		return res.status(404).send(`<center><h1>どこ見てんじゃい</h1>\n<hr>\nniggasex/82.64 (dhuauntu)</center>`);
+	}
+	res.send()
+});
+
 app.get("/:linkCode", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
