@@ -8,7 +8,7 @@ const { generateDependencyReport } = require('@discordjs/voice');
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
-const activity = require('./activity');
+const activity = require('./internal/activity');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
