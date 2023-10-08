@@ -17,8 +17,8 @@
     "path": "^0.12.7"
   },
   "name": "mcsv-discord-bot",
-  "version": "2.1.0",
-  "main": "index.js",
+  "version": "2.2.0",
+  "main": "discordbot.js",
   "repository": "https://github.com/ringo360/Discord.js_Bot.git",
   "author": "ringo360",
   "license": "WTFPL(ただしかいるんはソスコを見ることすら禁じられています)",

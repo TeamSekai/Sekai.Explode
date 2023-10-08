@@ -25,7 +25,7 @@ module.exports = {
 			interaction.reply({
 				embeds: [{
 					title: "ねぇ、このIP怪しいよ",
-					description: `This IP issuspicious...`,
+					description: `This IP is suspicious...`,
 					thumbnail: {
 						url: `https://cdn.discordapp.com/attachments/1126424081630249002/1160444437453881344/unknown.jpg`
 					},
