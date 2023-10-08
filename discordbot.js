@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const { token, guildId } = require('./config.json');
 const { generateDependencyReport } = require('@discordjs/voice');
-const activity = require('./activity');
+const activity = require('./internal/activity');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -21,6 +21,7 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 }).forEach((file) => {
 	if (!file.isFile() || path.extname(file.name) != ".js")
 		return;
+	console.log(`Loading ${file.name}`)
 	commands.push(require(path.join(__dirname, "commands", file.name)));
 })
 
@@ -73,5 +74,5 @@ client.login(token);
 
 process.on('uncaughtException', function(err) {
     console.error(err);
-    console.error("Depend Err ->" + generateDependencyReport());
+    // console.error("Depend Err ->" + generateDependencyReport());
 });

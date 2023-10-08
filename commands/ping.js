@@ -4,7 +4,7 @@ const { createCanvas, loadImage } = require('canvas');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const fs = require('fs');
-const activityModule = require('../activity');
+const activityModule = require('../internal/activity');
 const wspingValues = activityModule.getPingValues();
 
 // いいかんじに
