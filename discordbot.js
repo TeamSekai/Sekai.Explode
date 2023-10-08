@@ -3,9 +3,12 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
 const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
-const { token, guildId } = require('./config.json');
+const { token, linkPort, linkDomain } = require('./config.json');
 const { generateDependencyReport } = require('@discordjs/voice');
-const activity = require('./internal/activity');
+const express = require("express");
+const app = express();
+const server = require("http").Server(app);
+const activity = require('./activity');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -21,20 +24,32 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 }).forEach((file) => {
 	if (!file.isFile() || path.extname(file.name) != ".js")
 		return;
-	console.log(`Loading ${file.name}`)
 	commands.push(require(path.join(__dirname, "commands", file.name)));
 })
 
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES]
+	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES]
 })
 
 
 activity.setupActivity(client);
 
+setInterval(() => {
+	if (!client.templinks) return;
+	client.templinks = client.templinks.filter((link) => {
+		if ((Date.now() - link.createdAt.valueOf()) > link.period) {
+			console.log(`[TempLink] リンク: ${link.id} が期限切れになりました`)
+			return false;
+		} else {
+			return true;
+		}
+	});
+}, 1000);
+
 client.on('ready', async () => {
+	client.templinks = [];
 	console.log(`${cgreen}Logged in as${creset} ${client.user.tag}`);
-	client.user.setActivity('起動中...', {status: 'dnd'});
+	client.user.setActivity('起動中...', { status: 'dnd' });
 	console.log(`Registering guild commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
 	console.log(`${cgreen}Ready!`);
@@ -72,7 +87,59 @@ client.on("interactionCreate", async interaction => {
 
 client.login(token);
 
-process.on('uncaughtException', function(err) {
-    console.error(err);
-    // console.error("Depend Err ->" + generateDependencyReport());
+function unicodeEscape(str) {
+	if (!String.prototype.repeat) {
+		String.prototype.repeat = function (digit) {
+			var result = '';
+			for (var i = 0; i < Number(digit); i++) result += str;
+			return result;
+		};
+	}
+
+	var strs = str.split(''), hex, result = '';
+
+	for (var i = 0, len = strs.length; i < len; i++) {
+		hex = strs[i].charCodeAt(0).toString(16);
+		result += '\\u' + ('0'.repeat(Math.abs(hex.length - 4))) + hex;
+	}
+
+	return result;
+};
+
+app.get("/link/oembed/:linkCode", async (req, res) => {
+	if (!client.templinks) return res.sendStatus(500);
+	let link = client.templinks.find(x => x.id == req.params.linkCode);
+	if (!link) {
+		return res.sendStatus(404);
+	}
+	res.json({
+		"version": "1.0",
+		"title": `${link.link}`,
+		"type": "link",
+		"author_name": "省略リンク\nリンク先:",
+		"provider_name": "MCSV Discord BOT",
+		"provider_url": "https://mcsv.life",
+		"url": link.link
+	});
 });
+
+
+app.get("/:linkCode", async (req, res) => {
+	if (!client.templinks) return res.sendStatus(500);
+	let link = client.templinks.find(x => x.id == req.params.linkCode);
+	if (!link) {
+		return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nnginsex/82.64 (UwUbuntu)</center>`);
+	}
+	res.send(
+		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
+		`\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.code}" />`
+	)
+});
+
+process.on('uncaughtException', function (err) {
+	console.error(err);
+	//console.error("Depend Err ->" + generateDependencyReport());
+});
+server.listen(linkPort, () => {
+	console.log(`[TempLink] ポート${linkPort} (${linkDomain}) でlistenしました`)
+})
