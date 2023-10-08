@@ -106,7 +106,7 @@ function unicodeEscape(str) {
 	return result;
 };
 
-app.get("/link/oembed/:linkCode", async (req, res) => {
+app.get("/oembed/:linkCode", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
