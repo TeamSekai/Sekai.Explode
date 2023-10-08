@@ -16,7 +16,7 @@ function makeid(length) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('templink')
-        .setDescription('ﾃﾞｭﾙﾙｯﾂﾃﾞｭﾝﾙﾝﾙﾝﾙﾝﾙﾝ')
+        .setDescription('一時リンクを生成します')
         .addStringOption(option =>
             option
                 .setName("url")
