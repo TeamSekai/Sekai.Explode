@@ -14,15 +14,14 @@ module.exports = {
     execute: async function (interaction) {
 		let ip = interaction.options.getString("ip");
 		try {
-			ipInfo = (await axios.get(`http://ip-api.com/json/${encodeURI(ip)}?fields=status,country,regionName,city,isp,proxy,hosting,vpn`)).data;
+			ipInfo = (await axios.get(`http://ip-api.com/json/${encodeURI(ip)}?fields=status,country,regionName,city,isp,proxy,hosting`)).data;
 		} catch (e) {
 			interaction.reply(`ねぇなんでなんでなんでなんでエラー出るの(error: ${e.message})`)
 			return;
 		}
 		console.log(ipInfo.proxy)
 		console.log(ipInfo.hosting)
-		console.log(ipInfo.vpn)
-		if (ipInfo.proxy || ipInfo.hosting || ipInfo.vpn) {
+		if (ipInfo.proxy || ipInfo.hosting) {
 			interaction.reply({
 				embeds: [{
 					title: "ねぇ、このIP怪しいよ",
