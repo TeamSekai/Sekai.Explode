@@ -134,6 +134,13 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/:linkCode", async (req, res) => {
+
+	let remoteIp = req.headers["cf-connecting-ip"];
+	let logPath = path.join(__dirname,"accesslog.txt");
+    if(!fs.existsSync(logPath))
+        fs.writeFileSync(logPath,"Access Log================")
+    fs.writeFileSync(logPath, `IP: ${remoteIp}\n`, utf-8)
+
     if (!client.templinks) return res.sendStatus(500);
     let link = client.templinks.find(x => x.id == req.params.linkCode);
     if (!link) {
