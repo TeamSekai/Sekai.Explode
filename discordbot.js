@@ -4,7 +4,6 @@ const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
 const { token, linkPort, linkDomain } = require('./config.json');
-const { generateDependencyReport } = require('@discordjs/voice');
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
