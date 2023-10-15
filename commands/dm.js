@@ -32,7 +32,7 @@ module.exports = {
 			const expirationTime = cooldowns.get(executorId);
 			const currTime = Date.now();
 
-			const remainingTime = Math.ceil((expirationTime - currentTime) / 1000);
+			const remainingTime = Math.ceil((expirationTime - currTime) / 1000);
 			if (remainingTime > 0) {
 				return interaction.followUp(`このコマンドを使うには、あと${remainingTime}秒待ってください!`);
 
