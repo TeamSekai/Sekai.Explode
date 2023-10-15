@@ -1,5 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
+const cooldowns = new Map();
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('dm')
@@ -23,6 +25,20 @@ module.exports = {
 				.setRequired(false) // 任意のオプション
 		),
     execute: async function (interaction) {
+		const cooldownTime = 60;
+		
+		const executorId = interaction.user.id
+		if (cooldowns.has(executorId)) {
+			const expirationTime = cooldowns.get(executorId);
+			const currTime = Date.now();
+
+			const remainingTime = Math.ceil((expirationTime - currentTime) / 1000);
+			if (remainingTime > 0) {
+				return interaction.reply(`このコマンドを使うには、あと${remainingTime}秒待ってください!`);
+
+			}
+		}
+
         let isSilent = false;
 		if (interaction.options.getBoolean('silent')) {
 			isSilent = interaction.options.getBoolean('silent')
@@ -45,5 +61,9 @@ module.exports = {
 				}]
 			}]
 		});
+
+		const expirationTime = Date.now() + cooldownTime * 1000;
+		cooldowns.set(executorId, expirationTime)
+
     }
 };
