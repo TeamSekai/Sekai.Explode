@@ -25,7 +25,7 @@ module.exports = {
 				.setRequired(false) // 任意のオプション
 		),
     execute: async function (interaction) {
-		const cooldownTime = 60;
+		const cooldownTime = 10;
 		
 		const executorId = interaction.user.id
 		if (cooldowns.has(executorId)) {
@@ -34,7 +34,7 @@ module.exports = {
 
 			const remainingTime = Math.ceil((expirationTime - currentTime) / 1000);
 			if (remainingTime > 0) {
-				return interaction.reply(`このコマンドを使うには、あと${remainingTime}秒待ってください!`);
+				return interaction.followUp(`このコマンドを使うには、あと${remainingTime}秒待ってください!`);
 
 			}
 		}
@@ -61,6 +61,10 @@ module.exports = {
 				}]
 			}]
 		});
+		
+		const userName = userId.username
+		await interaction.reply(`${userName}にDMを送信しました!`)
+		
 
 		const expirationTime = Date.now() + cooldownTime * 1000;
 		cooldowns.set(executorId, expirationTime)
