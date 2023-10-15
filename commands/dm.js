@@ -34,7 +34,7 @@ module.exports = {
 
 			const remainingTime = Math.ceil((expirationTime - currTime) / 1000);
 			if (remainingTime > 0) {
-				return interaction.followUp(`このコマンドを使うには、あと${remainingTime}秒待ってください!`);
+				return interaction.reply(`このコマンドを使うには、あと${remainingTime}秒待ってください!`);
 
 			}
 		}
