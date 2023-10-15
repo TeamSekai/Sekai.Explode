@@ -17,13 +17,14 @@ module.exports = {
 				.setName("text")
 				.setDescription("送りたい文章を入力")
 				.setRequired(true)
-		)
-		.addBooleanOption(option =>
+		),
+		/* .addBooleanOption(option =>
 			option
 				.setName('silent')
 				.setDescription('通知を無効にして送るかどうか')
 				.setRequired(false) // 任意のオプション
 		),
+		*/
     execute: async function (interaction) {
 		const cooldownTime = 10;
 		
