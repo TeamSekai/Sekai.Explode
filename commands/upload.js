@@ -32,7 +32,7 @@ module.exports = {
             form.append('file', res.data, file.name)
             let res2 = await axios.post(config.cdnUploadURL, form, { headers: form.getHeaders() });
             if (!res2.data?.success) throw new Error();
-            interaction.editReply(`/${req.data.fileName} としてアップロードしました！`);
+            interaction.editReply(`/${res2.data.fileName} としてアップロードしました！`);
         } catch (e) {
             if (e?.name == "AxiosError" && e?.response?.status) {
                 await interaction.editReply({
