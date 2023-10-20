@@ -11,7 +11,12 @@ module.exports = {
             option
                 .setName("file")
                 .setRequired(true)
-                .setDescription("アップロードするファイル")),
+                .setDescription("アップロードするファイル"))
+        .addStringOption(option =>
+            option
+                .setName("fileName")
+                .setDescription("ファイル名")
+        ),
     execute: async function (interaction) {
         if (!config.cdnUploadURL || !config.uploadAllowUsers) {
             return interaction.reply("内部エラー (missing config.json)");
@@ -29,10 +34,22 @@ module.exports = {
                 responseType: "stream"
             });
             const form = new FormData()
-            form.append('file', res.data, file.name)
+            let filename = interaction.options.get("fileName")?.value;
+            form.append('file', res.data, filename || file.name)
             let res2 = await axios.post(config.cdnUploadURL, form, { headers: form.getHeaders() });
             if (!res2.data?.success) throw new Error();
             interaction.editReply(`/${res2.data.fileName} としてアップロードしました！`);
+            try {
+                if (!config.cfZone || !config.cfToken || !config.cfPurgeUrl) return;
+                axios.post(`https://api.cloudflare.com/client/v4/zones/${config.cfZone}/purge_cache`, {
+                    files: [config.cfPurgeUrl]
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${config.cfToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+            } catch (e) { console.error(e) }
         } catch (e) {
             if (e?.name == "AxiosError" && e?.response?.status) {
                 await interaction.editReply({
