@@ -34,7 +34,7 @@ module.exports = {
                 responseType: "stream"
             });
             const form = new FormData()
-            let filename = interaction.options.get("fileName")?.value;
+            let filename = interaction.options.get("filename")?.value;
             form.append('file', res.data, filename || file.name)
             let res2 = await axios.post(config.cdnUploadURL, form, { headers: form.getHeaders() });
             if (!res2.data?.success) throw new Error();
