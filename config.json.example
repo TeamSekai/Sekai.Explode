@@ -5,6 +5,8 @@
 	"kairun": 8264,
 	"token": "YourDiscordBotTokenHere",
 	"linkDomain": "link.mcsv.life",
-	"linkPort": 8264
-	"applicationId": "000000",
+	"linkPort": 8264,
+	"cdnUploadURL": "http://192.168.1.109/upload",
+	"uploadAllowUsers": ["1126422758696427552","1063527758292070591","929521152244744192"],
+	"applicationId": "000000"
 }

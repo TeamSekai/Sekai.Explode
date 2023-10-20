@@ -3,7 +3,7 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
 const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
-const { token, linkPort, linkDomain } = require('./config.json');
+const { token, linkPort, linkDomain, guildId } = require('./config.json');
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
@@ -50,7 +50,7 @@ client.on('ready', async () => {
 	console.log(`${cgreen}Logged in as${creset} ${client.user.tag}`);
 	client.user.setActivity('起動中...', { status: 'dnd' });
 	console.log(`Registering guild commands...`)
-	await client.application.commands.set(commands.map(x => x.data.toJSON()));
+	await client.application.commands.set(commands.map(x => x.data.toJSON()), guildId);
 	console.log(`${cgreen}Ready!`);
 	let SyslogChannel = client.channels.cache.get("1151139585791901746");
 	SyslogChannel.send('Discord.js Bot is Ready!')
@@ -106,20 +106,20 @@ function unicodeEscape(str) {
 };
 
 app.get("/oembed/:linkCode", async (req, res) => {
-    if (!client.templinks) return res.sendStatus(500);
-    let link = client.templinks.find(x => x.id == req.params.linkCode);
-    if (!link) {
-        return res.sendStatus(404);
-    }
-    res.json({
-        "version": "1.0",
-        "title": `${link.url}`,
-        "type": "link",
-        "author_name": "省略リンク\nリンク先:",
-        "provider_name": "MCSV Discord BOT",
-        "provider_url": "https://mcsv.life",
-        "url": link.url
-    });
+	if (!client.templinks) return res.sendStatus(500);
+	let link = client.templinks.find(x => x.id == req.params.linkCode);
+	if (!link) {
+		return res.sendStatus(404);
+	}
+	res.json({
+		"version": "1.0",
+		"title": `${link.url}`,
+		"type": "link",
+		"author_name": "省略リンク\nリンク先:",
+		"provider_name": "MCSV Discord BOT",
+		"provider_url": "https://mcsv.life",
+		"url": link.url
+	});
 });
 
 
@@ -135,20 +135,20 @@ app.get("/", async (req, res) => {
 app.get("/:linkCode", async (req, res) => {
 
 	let remoteIp = req.headers["cf-connecting-ip"];
-	let logPath = path.join(__dirname,"accesslog.txt");
-    if(!fs.existsSync(logPath))
-        fs.writeFileSync(logPath,"Access Log================\n");
-    fs.appendFileSync(logPath, `IP: ${remoteIp} | ${req.originalUrl}\n`)
+	let logPath = path.join(__dirname, "accesslog.txt");
+	if (!fs.existsSync(logPath))
+		fs.writeFileSync(logPath, "Access Log================\n");
+	fs.appendFileSync(logPath, `IP: ${remoteIp} | ${req.originalUrl}\n`)
 
-    if (!client.templinks) return res.sendStatus(500);
-    let link = client.templinks.find(x => x.id == req.params.linkCode);
-    if (!link) {
-        return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
-    }
-    res.send(
-        `<script>location.href="${unicodeEscape(link.url)}"</script>` +
-        `\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.id}" />`
-    )
+	if (!client.templinks) return res.sendStatus(500);
+	let link = client.templinks.find(x => x.id == req.params.linkCode);
+	if (!link) {
+		return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
+	}
+	res.send(
+		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
+		`\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.id}" />`
+	)
 });
 
 process.on('uncaughtException', function (err) {
