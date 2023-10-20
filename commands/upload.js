@@ -14,7 +14,7 @@ module.exports = {
                 .setDescription("アップロードするファイル"))
         .addStringOption(option =>
             option
-                .setName("fileName")
+                .setName("filename")
                 .setDescription("ファイル名")
         ),
     execute: async function (interaction) {
