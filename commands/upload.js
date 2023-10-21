@@ -84,7 +84,7 @@ module.exports = {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('upload_private')
+        .setName('private_upload')
         .setDescription('(プライベート)ファイルをcdnにアップロード')
         .addAttachmentOption(option =>
             option
