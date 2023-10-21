@@ -35,9 +35,6 @@ module.exports = {
 
     await interaction.reply('Success!');
   },
-};
-
-module.exports = {
 	data: new SlashCommandBuilder()
 	  .setName('test02')
 	  .setDescription('testcmd'),
@@ -64,4 +61,4 @@ module.exports = {
   
 	  await interaction.reply('Success!');
 	},
-  };
+};
