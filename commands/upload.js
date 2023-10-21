@@ -47,7 +47,7 @@ module.exports = {
 					color: 0x5865f2,
 					fields: [{
 						name: "URL",
-						value: "```" + `https://cdn.mcsv.life/${res2.data.fileName}` + "```",
+						value: "```" + `https://cdn.mcsv.life/${res2.data.fileName}` + "```" + `\n[Click to copy!](https://paste-pgpj.onrender.com/?p=https://cdn.mcsv.life/${res2.data.fileName})`,
 					}]
 				}]
 			});
