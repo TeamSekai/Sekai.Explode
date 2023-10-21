@@ -39,8 +39,8 @@ module.exports = {
             let res2 = await axios.post(config.cdnUploadURL, form, { headers: form.getHeaders() });
             if (!res2.data?.success) throw new Error();
             interaction.editReply(`/${res2.data.fileName} としてアップロードしました！`);
-			const userId = interaction.user.id
-			const dmChannel = await userId.createDM();
+			const user = interaction.user
+			const dmChannel = await user.createDM();
 			dmChannel.send({
 				embeds: [{
 					title: `${res2.data.fileName}がアップロードされました!`,
