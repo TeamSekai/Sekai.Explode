@@ -7,9 +7,10 @@
 	"linkDomain": "link.mcsv.life",
 	"linkPort": 8264,
 	"cdnUploadURL": "http://192.168.1.109/upload",
+	"cdnUploadURL2": "http://192.168.1.109/prvupload",
 	"uploadAllowUsers": ["1126422758696427552","1063527758292070591","929521152244744192"],
 	"applicationId": "000000",
 	"cfToken": "ORIMOTOKAIRUNDHUAUNDHUAUN",
-	"cfZone: "133114688",
-	"cfPurgeUrl":"https://cdn.mcsv.life/"
+	"cfZone": "133114688",
+	"cfPurgeUrl": "https://cdn.mcsv.life/"
 }
