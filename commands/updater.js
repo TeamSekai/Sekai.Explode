@@ -31,7 +31,7 @@ module.exports = {
     gitProcess.stdout.on("data", data => {
         msg += data.toString().replace(/\x1b\[m/g, "\x1b[0m");
         if (!lock) {
-            interaction.editReply("```ansi\n" + msg + "\n```");
+            interaction.editReply("<a:loading:1071641234310955129> 更新中...\n" + "```ansi\n" + msg + "\n```");
             lock = true;
         }
         if (lockTimeout)
@@ -45,7 +45,7 @@ module.exports = {
     })
     gitProcess.on("close", async () => {
         clearTimeout(timeout);
-        await interaction.editReply("```ansi\n" + msg + "\n```\n" + "完了\nBOTを再起動します");
+        await interaction.editReply("```ansi\n" + msg + "\n```\n" + "<:check:962405846002847754> 完了\nBOTを再起動します");
         setTimeout(() => {
             process.exit(0);
         }, 5000);
