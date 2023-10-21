@@ -18,7 +18,7 @@ module.exports = {
     }
 
 	let msg = ">".yellow + " git pull\n".green;
-    await interaction.reply("```ansi\n" + msg + "\n```");
+    await interaction.reply("<a:loading:1071641234310955129> 更新中...\n" + "```ansi\n" + msg + "\n```");
     let lock = false;
     let lockTimeout = null;
     let gitProcess = childprocess.spawn("git", ["-c", "color.ui=always", "pull"], {
