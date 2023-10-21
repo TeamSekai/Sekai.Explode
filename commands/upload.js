@@ -39,6 +39,18 @@ module.exports = {
             let res2 = await axios.post(config.cdnUploadURL, form, { headers: form.getHeaders() });
             if (!res2.data?.success) throw new Error();
             interaction.editReply(`/${res2.data.fileName} としてアップロードしました！`);
+			const userId = interaction.user.id
+			const dmChannel = await userId.createDM();
+			dmChannel.send({
+				embeds: [{
+					title: `${res2.data.fileName}がアップロードされました!`,
+					color: 0x5865f2,
+					fields: [{
+						name: "URL",
+						value: "```" + `https://cdn.mcsv.life/${res2.data.fileName}` + "```",
+					}]
+				}]
+			});
             try {
                 if (!config.cfZone || !config.cfToken || !config.cfPurgeUrl) return;
                 axios.post(`https://api.cloudflare.com/client/v4/zones/${config.cfZone}/purge_cache`, {
@@ -106,6 +118,18 @@ module.exports = {
             let res2 = await axios.post(config.cdnUploadURL2, form, { headers: form.getHeaders() });
             if (!res2.data?.success) throw new Error();
             interaction.editReply(`/private/${res2.data.fileName} としてアップロードしました！`);
+			const userId = interaction.user.id
+			const dmChannel = await userId.createDM();
+			dmChannel.send({
+				embeds: [{
+					title: `${res2.data.fileName}がアップロードされました!`,
+					color: 0x5865f2,
+					fields: [{
+						name: "URL",
+						value: "```" + `https://cdn.mcsv.life/private/${res2.data.fileName}` + "```",
+					}]
+				}]
+			});
         } catch (e) {
             if (e?.name == "AxiosError" && e?.response?.status) {
                 await interaction.editReply({
