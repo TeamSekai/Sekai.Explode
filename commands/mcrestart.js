@@ -12,9 +12,9 @@ module.exports = {
                 .setName('target')
                 .setDescription('再起動するサーバーを選択')
                 .setRequired(true)
-                .addChoices('メインサーバー', 'main')
-                .addChoices('クリエイティブサーバー', 'creative')
-                .addChoices('PvPサーバー', 'pvp')
+                .addChoices({name:"メインサーバー",value:"main"})
+                .addChoices({name:"クリエイティブサーバー",value:"creative"})
+                .addChoices({name:"PvPサーバー",value:"pvp"})
         )),
     execute: async function (interaction) {
 		if (!AdminuserIDs.includes(executorID)) {
