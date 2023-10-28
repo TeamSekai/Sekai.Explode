@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
 
 
 // いいかんじに
@@ -15,6 +16,10 @@ module.exports = {
 				.addChoice('PvPサーバー', 'pvp'),
 		),
     execute: async function (interaction) {
+		if (!AdminuserIDs.includes(executorID)) {
+			await interaction.reply('このコマンドはBotの管理者のみ使えます。');
+			return;
+		}
         const target = interaction.options.getString('target');
 
 		if (target === 'main') {
