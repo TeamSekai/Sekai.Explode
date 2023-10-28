@@ -35,7 +35,7 @@ module.exports = {
 			await interaction.reply(`Selected ${target}.`);
 			return;
 		} else {
-			await interaction.reply(`Unknown Target. (${target})`);
+			await interaction.reply(`\<a:alert:1167793917199122462> 無効なオプションを検知しました。`);
 			return;
 		}
     }
