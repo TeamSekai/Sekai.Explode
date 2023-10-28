@@ -17,7 +17,7 @@ module.exports = {
                 .addChoices({name:"PvPサーバー",value:"pvp"})
         )),
     execute: async function (interaction) {
-		if (!AdminuserIDs.includes(executorID)) {
+		if (!AdminuserIDs.includes(interaction.user.id)) {
 			await interaction.reply('このコマンドはBotの管理者のみ使えます。');
 			return;
 		}
