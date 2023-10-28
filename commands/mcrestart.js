@@ -6,27 +6,16 @@ const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('restart')
-        .setDescription('サーバーを再起動します。')
-		.addStringOption(option => ({
-			name: 'target',
-			description: '再起動するサーバーを選択',
-			required: true,
-			choices: [
-				{
-					name: 'メインサーバー',
-					value: 'a'
-				},
-				{
-					name: 'クリエイティブサーバー',
-					value: 'creative'
-				},
-				{
-					name: 'PvPサーバー',
-					value: 'pvp'
-				}
-			]
-
-		})),
+        .setDescription('サーバーを再起動します.')
+        .addStringOption(option => (
+            option
+                .setName('target')
+                .setDescription('再起動するサーバーを選択')
+                .setRequired(true)
+                .addChoice('メインサーバー', 'main')
+                .addChoice('クリエイティブサーバー', 'creative')
+                .addChoice('PvPサーバー', 'pvp')
+        )),
     execute: async function (interaction) {
 		if (!AdminuserIDs.includes(executorID)) {
 			await interaction.reply('このコマンドはBotの管理者のみ使えます。');
