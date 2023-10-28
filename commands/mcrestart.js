@@ -25,14 +25,18 @@ module.exports = {
 
 		if (target === 'main') {
 			await interaction.reply(`Selected ${target}.`);
+			return;
 		}
 		if (target === 'creative') {
 			await interaction.reply(`Selected ${target}.`);
+			return;
 		}
 		if (target === 'pvp') {
 			await interaction.reply(`Selected ${target}.`);
+			return;
 		} else {
 			await interaction.reply(`Unknown Target. (${target})`);
+			return;
 		}
     }
 };
