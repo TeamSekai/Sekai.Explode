@@ -35,8 +35,8 @@ const player = async (url, voiceChannel) => {
 		guildId: voiceChannel.guild.id,
 		adapterCreator: voiceChannel.guild.voiceAdapterCreator,
 	});
-	const stream = ytdl(ytdl.getURLVideoID(url), { filter: 'audioonly' });
-	const dispatcher = connection.play(stream, { volume: 0.1, bitrate: 256 });
+	const stream = ytdl(ytdl.getURLVideoID(url), { filter: 'audioonly' })
+	const dispatcher = connection.subscribe(stream, { volume: 0.1, bitrate: 256 });
 	dispatcher.once('finish', () => {
 	  connection.destroy();
 	});
