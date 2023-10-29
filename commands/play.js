@@ -21,6 +21,7 @@ module.exports = {
 		}
 		if (yrdl.validateURL(url)) {
 			player(url, voiceChannel)
+			await interaction.reply(`${url} を再生ちゅー`)
 		}
 
     }
