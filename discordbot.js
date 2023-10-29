@@ -8,7 +8,7 @@ const express = require("express");
 const app = express();
 const server = require("http").Server(app);
 const activity = require('./internal/activity');
-const player = require('discord-player');
+const { Player } = require('discord-player');
 const yt = require('youtube-ext')
 
 const creset = '\x1b[0m';
