@@ -16,7 +16,8 @@
     "fs": "^0.0.1-security",
     "ip-range-check": "^0.2.0",
     "libsodium-wrappers": "^0.7.13",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "ytdl": "^1.4.1"
   },
   "name": "mcsv-discord-bot",
   "version": "2.1.0",
