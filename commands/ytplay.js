@@ -20,7 +20,7 @@ module.exports = {
         if (!voiceChannel) {
 			await interaction.reply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
 		}
-		if (yrdl.validateURL(url)) {
+		if (ytdl.validateURL(url)) {
 			player(url, voiceChannel)
 			await interaction.reply(`${url} を再生ちゅー`)
 		}
