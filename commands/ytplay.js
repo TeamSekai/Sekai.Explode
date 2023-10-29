@@ -1,10 +1,11 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { joinVoiceChannel } = require('@discordjs/voice')
-const client = require('../discordbot')
-const playerInit = require('../internal/discordplayer')
+const { joinVoiceChannel } = require('@discordjs/voice');
+const discordbot = require('../discordbot');
+const player = discordbot.player;
 const { VoiceChannel } = require('discord.js');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
+
 
 
 console.log("Loaded play.js")
@@ -22,7 +23,6 @@ module.exports = {
 		const query = interaction.options.get("query").value;
 		const member = interaction.member;
 		const voiceChannel = member.voice.channel;
-		const player = playerInit(client);
 
         if (!voiceChannel) {
 			await interaction.editreply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
