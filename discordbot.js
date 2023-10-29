@@ -8,6 +8,8 @@ const express = require("express");
 const app = express();
 const server = require("http").Server(app);
 const activity = require('./internal/activity');
+const player = require('discord-player');
+const yt = require('youtube-ext')
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -90,7 +92,7 @@ client.login(token);
 const player = new Player(client);
 
 // Now, lets load all the default extractors, except 'YouTubeExtractor'. You can remove the filter if you want to load all the extractors.
-await player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
+player.extractors.loadDefault(ext);
 
 // this event is emitted whenever discord-player starts to play a track
 player.events.on('playerStart', (queue, track) => {

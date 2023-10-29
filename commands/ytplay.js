@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { joinVoiceChannel } = require('@discordjs/voice')
 const player = require('discord-player');
 const { VoiceChannel } = require('discord.js');
-const yt = require('youtube-ext')
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 
