@@ -92,7 +92,7 @@ client.login(token);
 const player = new Player(client);
 
 // Now, lets load all the default extractors, except 'YouTubeExtractor'. You can remove the filter if you want to load all the extractors.
-player.extractors.loadDefault(ext);
+player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
 
 // this event is emitted whenever discord-player starts to play a track
 player.events.on('playerStart', (queue, track) => {
