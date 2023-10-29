@@ -94,7 +94,7 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@discordjs/opus@^0.9.0", "@discordjs/opus@>=0.8.0 <1.0.0":
+"@discordjs/opus@>=0.8.0 <1.0.0":
   version "0.9.0"
   resolved "https://registry.npmjs.org/@discordjs/opus/-/opus-0.9.0.tgz"
   integrity sha512-NEE76A96FtQ5YuoAVlOlB3ryMPrkXbUCTQICHGKb8ShtjXyubGicjRMouHtP1RpuDdm16cDa+oI3aAMo1zQRUQ==
