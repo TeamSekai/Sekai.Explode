@@ -92,10 +92,11 @@ client.login(token);
 const player = new Player(client);
 
 // this event is emitted whenever discord-player starts to play a track
-player.events.on('playerStart', (queue, track) => {
-    // we will later define queue.metadata object while creating the queue
-    queue.metadata.channel.send(`**${track.title}**を再生中`);
-});
+// add the trackStart event so when a song will be played this message will be sent
+player.on("trackStart", (queue, track) => {
+	queue.metadata.channel.send(`🎶 **${track.title}**を再生中`)
+})
+
 
 function unicodeEscape(str) {
 	if (!String.prototype.repeat) {
