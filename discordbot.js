@@ -21,6 +21,17 @@ let commands = [];
 
 console.log('Starting Discord.js bot...')
 
+// this is the entrypoint for discord-player based application
+console.log('Loading Discord-Player')
+const player = new Player(client);
+
+// this event is emitted whenever discord-player starts to play a track
+// add the trackStart event so when a song will be played this message will be sent
+player.on("trackStart", (queue, track) => {
+	queue.metadata.channel.send(`🎶 **${track.title}**を再生中`)
+})
+console.log('OK')
+
 fs.readdirSync(path.join(__dirname, "commands"), {
 	withFileTypes: true
 }).forEach((file) => {
@@ -76,7 +87,7 @@ client.on("interactionCreate", async interaction => {
 		return;
 	}
 	try {
-		await command.execute(interaction);
+		await command.execute(client, interaction);
 	} catch (error) {
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
@@ -88,17 +99,6 @@ client.on("interactionCreate", async interaction => {
 });
 
 client.login(token);
-
-// this is the entrypoint for discord-player based application
-console.log('Loading Discord-Player')
-const player = new Player(client);
-
-// this event is emitted whenever discord-player starts to play a track
-// add the trackStart event so when a song will be played this message will be sent
-player.on("trackStart", (queue, track) => {
-	queue.metadata.channel.send(`🎶 **${track.title}**を再生中`)
-})
-console.log('OK')
 
 function unicodeEscape(str) {
 	if (!String.prototype.repeat) {
