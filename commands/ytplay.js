@@ -13,12 +13,12 @@ module.exports = {
         .setDescription('YouTubeの動画/音楽を再生します。Googleが怒ります。')
 		.addStringOption(option =>
 			option
-				.setName("url")
-				.setDescription("YouTubeのリンク")
+				.setName("query")
+				.setDescription("YouTubeのリンク、または検索したいワード")
 				.setRequired(true)
 		),
     execute: async function (interaction) {
-		const url = interaction.options.get("url", true);
+		const query = interaction.options.get("query", true);
 		const member = interaction.member;
 		const voiceChannel = member.voice.channel;
 
