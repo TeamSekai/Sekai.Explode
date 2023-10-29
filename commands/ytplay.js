@@ -28,7 +28,7 @@ module.exports = {
 
 		await interaction.deferReply();
 
-		const queue = player.createQueue(interaction.guild, {
+		const queue = client.player.createQueue(interaction.guild, {
             metadata: {
                 channel: interaction.channel
             }
@@ -42,7 +42,7 @@ module.exports = {
             return await interaction.reply(`吐血しちゃった... ${e}`);
         }
 
-		const track = await player.search(query, {
+		const track = await client.player.search(query, {
             requestedBy: member
         }).then(x => x.tracks[0]);
         if (!track) return await interaction.followUp({ content: `❌ **${query}** が見つかりませんでした!` });
