@@ -5,7 +5,7 @@ const ytdl = require('ytdl-core');
 console.log("Loaded play.js")
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('play')
+        .setName('play_yt')
         .setDescription('YouTubeの動画/音楽を再生します。Googleが怒ります。')
 		.addStringOption(option =>
 			option
