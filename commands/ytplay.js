@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { joinVoiceChannel } = require('@discordjs/voice')
 const ytdl = require('ytdl-core');
 // const yts = require('yt-search'); 検索機能？要らんやろ
 
@@ -29,11 +30,14 @@ module.exports = {
 };
 
 const player = async (url, voiceChannel) => {
-	const channel = voiceChannel.id
-	const connection = await channel.join();
+	const connection = joinVoiceChannel({
+		channelId: voiceChannel.id,
+		guildId: voiceChannel.guild.id,
+		adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+	});
 	const stream = ytdl(ytdl.getURLVideoID(url), { filter: 'audioonly' });
 	const dispatcher = connection.play(stream, { volume: 0.1, bitrate: 256 });
 	dispatcher.once('finish', () => {
-	  channel.leave();
+	  connection.destroy();
 	});
   };

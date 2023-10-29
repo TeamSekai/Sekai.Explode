@@ -30,10 +30,10 @@ module.exports = {
 		adapterCreator: voiceChannel.guild.voiceAdapterCreator,
 	  });
 
-	// 音声ファイルのパスを指定
+	// 音声ファイルのパス
     const audioFilePath = join(__dirname, '../sounds/youdied.mp3');
 
-    // 音声ファイルを読み込み、ストリームとして再生
+    // 音声ファイルを読み込み
 	const player = createAudioPlayer();
     const audioResource = createAudioResource(createReadStream(audioFilePath));
    	player.play(audioResource);
