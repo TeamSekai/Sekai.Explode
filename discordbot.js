@@ -9,7 +9,8 @@ const app = express();
 const server = require("http").Server(app);
 const activity = require('./internal/activity');
 const { Player } = require('discord-player');
-const yt = require('youtube-ext')
+const yt = require('youtube-ext');
+const { crypto_kx_client_session_keys } = require('libsodium-wrappers');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -89,6 +90,7 @@ client.on("interactionCreate", async interaction => {
 client.login(token);
 
 // this is the entrypoint for discord-player based application
+console.log('Loading Discord-Player')
 const player = new Player(client);
 
 // this event is emitted whenever discord-player starts to play a track
@@ -96,7 +98,7 @@ const player = new Player(client);
 player.on("trackStart", (queue, track) => {
 	queue.metadata.channel.send(`🎶 **${track.title}**を再生中`)
 })
-
+console.log('OK')
 
 function unicodeEscape(str) {
 	if (!String.prototype.repeat) {
