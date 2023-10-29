@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const ytdl = require('ytdl-core');
 // const yts = require('yt-search'); 検索機能？要らんやろ
 
+console.log("Loaded play.js")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('play')
