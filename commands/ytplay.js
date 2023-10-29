@@ -1,6 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { joinVoiceChannel } = require('@discordjs/voice')
-const ytdl = require('ytdl-core');
+const player = require('discord-player');
+const { VoiceChannel } = require('discord.js');
+const yt = require('youtube-ext')
+// const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 
 console.log("Loaded play.js")
@@ -15,29 +18,29 @@ module.exports = {
 				.setRequired(true)
 		),
     execute: async function (interaction) {
-		const url = interaction.options.get("url").value;
+		const url = interaction.options.get("url", true);
 		const member = interaction.member;
 		const voiceChannel = member.voice.channel;
+
         if (!voiceChannel) {
-			await interaction.reply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
+			await interaction.editreply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
 		}
-		if (ytdl.validateURL(url)) {
-			player(url, voiceChannel)
-			await interaction.reply(`${url} を再生ちゅー`)
+
+		await interaction.deferReply();
+		try {
+			const { track } = await player.play(voiceChannel, query, {
+				nodeOptions: {
+					// nodeOptions are the options for guild node (aka your queue in simple word)
+					metadata: interaction // we can access this metadata object using queue.metadata later on
+				}
+			});
+	
+			return interaction.editReply(`**${track.title}** をキューに追加しました！`);
+		} catch (e) {
+			// let's return error if something failed
+			return interaction.editReply(`吐血しちゃった... ${e}`);
 		}
+
 
     }
 };
-
-const player = async (url, voiceChannel) => {
-	const connection = joinVoiceChannel({
-		channelId: voiceChannel.id,
-		guildId: voiceChannel.guild.id,
-		adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-	});
-	const stream = ytdl(ytdl.getURLVideoID(url), { filter: 'audioonly' })
-	const dispatcher = connection.subscribe(stream, { volume: 0.1, bitrate: 256 });
-	dispatcher.once('finish', () => {
-	  connection.destroy();
-	});
-  };
