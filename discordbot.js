@@ -87,7 +87,7 @@ client.on("interactionCreate", async interaction => {
 		return;
 	}
 	try {
-		await command.execute(client, interaction);
+		await command.execute(interaction);
 	} catch (error) {
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
