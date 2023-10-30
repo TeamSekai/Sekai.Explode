@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@discordjs/builders": "^1.6.5",
     "@discordjs/voice": "^0.16.0",
     "axios": "^1.5.0",
     "bytebuffer": "^5.0.1",
