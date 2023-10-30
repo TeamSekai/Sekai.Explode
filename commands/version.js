@@ -1,5 +1,3 @@
-// Import SlashCommandBuilder from discord.js
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const os = require("os");
 
 // いいかんじに

@@ -1,7 +1,5 @@
-// Import SlashCommandBuilder from discord.js
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 const { createCanvas, loadImage } = require('canvas');
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const fs = require('fs');
 const activityModule = require('../internal/activity');

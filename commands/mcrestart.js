@@ -1,4 +1,3 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
 
 

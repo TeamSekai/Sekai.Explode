@@ -1,6 +1,5 @@
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 const { createCanvas, loadImage } = require('canvas');
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const fs = require('fs');
 
 module.exports = {

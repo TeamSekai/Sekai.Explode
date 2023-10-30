@@ -1,4 +1,3 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const axios = require("axios").default;
 const FormData = require("form-data");
 const config = require("../config.json");

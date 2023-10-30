@@ -1,5 +1,3 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-
 const cooldowns = new Map();
 
 module.exports = {
