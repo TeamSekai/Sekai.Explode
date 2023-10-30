@@ -25,7 +25,7 @@ module.exports = {
 		const channel = member.voice.channel;
 
         if (!channel) {
-			await interaction.editreply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
+			await interaction.reply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
 		}
 
 		await interaction.deferReply();
