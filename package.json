@@ -18,7 +18,7 @@
     "libsodium-wrappers": "^0.7.13",
     "mediaplex": "^0.0.8",
     "path": "^0.12.7",
-    "ytdl": "^1.4.1"
+    "ytdl-core": "^4.11.5"
   },
   "name": "mcsv-discord-bot",
   "version": "2.1.0",
