@@ -3,7 +3,7 @@ const { joinVoiceChannel } = require('@discordjs/voice');
 const { VoiceChannel } = require('discord.js');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
-
+//
 
 
 console.log("Loaded play.js")
