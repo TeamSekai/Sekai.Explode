@@ -32,7 +32,7 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 })
 
 const client = new Client({
-	intents: [GatewayIntentsBits.Guilds, GatewayIntentsBits.GUILD_VOICE_STATES]
+	intents: [GatewayIntentsBits.GUILDS, GatewayIntentsBits.GUILD_VOICE_STATES]
 })
 
 // this is the entrypoint for discord-player based application
