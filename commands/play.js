@@ -9,12 +9,12 @@ const { VoiceChannel } = require('discord.js');
 console.log("Loaded play.js")
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('play_yt')
-        .setDescription('YouTubeの動画/音楽を再生します。Googleが怒ります。')
+        .setName('play')
+        .setDescription('動画/音楽を再生します。Googleが怒ります。')
 		.addStringOption(option =>
 			option
 				.setName("query")
-				.setDescription("YouTubeのリンク、または検索したいワード")
+				.setDescription("YouTubeやSoundCloudのリンク、または検索したいワード")
 				.setRequired(true)
 		),
     execute: async function (interaction) {
