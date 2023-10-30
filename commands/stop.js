@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { useMainPlayer } = require('discord-player');
+const { useMainPlayer, Player } = require('discord-player');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 //
@@ -14,11 +14,13 @@ module.exports = {
 		const player = useMainPlayer();
 		const member = interaction.member;
 		const channel = member.voice.channel;
-		const queue = player.queues(interaction.guildId);
+		/*
+		const queue = player.queryCache
 
 		if (!queue) {
 			await interaction.reply("音楽が再生されていません!")
 		}
+		*/
 
         if (!channel) {
 			await interaction.reply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
