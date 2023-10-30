@@ -48,6 +48,7 @@ module.exports = {
         if (!track) return await interaction.followUp({ content: `❌ **${query}** が見つかりませんでした!` });
 
         queue.play(track);
+		console.log(`Loading ${track.title}...`)
 
         return await interaction.followUp({ content: `⏱️ **${track.title}**を読み込み中...` });
 

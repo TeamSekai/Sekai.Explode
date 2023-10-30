@@ -42,6 +42,7 @@ client.player = new Player(client);
 // this event is emitted whenever discord-player starts to play a track
 // add the trackStart event so when a song will be played this message will be sent
 client.player.on("trackStart", (queue, track) => {
+	console.log(`Playing ${track.title}`)
 	queue.metadata.channel.send(`🎶 **${track.title}**を再生中`)
 });
 console.log('OK')
