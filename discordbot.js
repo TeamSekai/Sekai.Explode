@@ -12,6 +12,7 @@ const activity = require('./internal/activity');
 const { Player } = require('discord-player');
 const yt = require('youtube-ext');
 const { crypto_kx_client_session_keys } = require('libsodium-wrappers');
+process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
