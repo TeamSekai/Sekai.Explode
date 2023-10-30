@@ -17,7 +17,6 @@
     "libsodium-wrappers": "^0.7.13",
     "mediaplex": "^0.0.8",
     "path": "^0.12.7",
-    "youtube-ext": "^1.1.16",
     "ytdl": "^1.4.1"
   },
   "name": "mcsv-discord-bot",
