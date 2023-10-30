@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('discord.js');
 const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
 const childprocess = require('child_process');
 const path = require("path");

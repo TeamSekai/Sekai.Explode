@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('discord.js');
 const axios = require("axios");
 
 let servers = {

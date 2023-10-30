@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('discord.js');
 
 function GenNum() {
 	const min = 1;

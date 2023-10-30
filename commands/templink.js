@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('discord.js');
 const { linkDomain } = require("../config.json");
 
 function makeid(length) {

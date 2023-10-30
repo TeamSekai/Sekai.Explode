@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('discord.js');
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { VoiceChannel } = require('discord.js');
 // const ytdl = require('ytdl-core'); さよなら!!!

@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('discord.js');
 const dns = require("dns");
 const axios = require("axios").default;
 const ipRangeCheck = require("ip-range-check");

@@ -1,6 +1,6 @@
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 const { createCanvas, loadImage } = require('canvas');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageAttachment, SlashCommandBuilder } = require('discord.js');
 const fs = require('fs');
 const activityModule = require('../internal/activity');
 const wspingValues = activityModule.getPingValues();
