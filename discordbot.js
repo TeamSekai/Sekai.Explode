@@ -32,7 +32,7 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 })
 
 const options = {
-	intents: [GatewayIntentBits.Guilds]
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]
 };
 
 const client = new Client(options);
