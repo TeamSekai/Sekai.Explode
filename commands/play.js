@@ -11,7 +11,7 @@ console.log("Loaded play.js")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('play')
-        .setDescription('動画/音楽を再生します。Googleが怒ります。')
+        .setDescription('動画/音楽を再生します!')
 		.addStringOption(option =>
 			option
 				.setName("query")
