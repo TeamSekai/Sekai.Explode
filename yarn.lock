@@ -4,7 +4,7 @@
 
 "@discord-player/equalizer@^0.2.3":
   version "0.2.3"
-  resolved "https://registry.npmjs.org/@discord-player/equalizer/-/equalizer-0.2.3.tgz"
+  resolved "https://registry.yarnpkg.com/@discord-player/equalizer/-/equalizer-0.2.3.tgz#a5a00150479db71d28d85ed162cf4954341e325a"
   integrity sha512-71UAepYMbHTg2QQLXQAgyuXYHrgAYpJDxjg9dRWfTUNf+zfOAlyJEiRRk/WFhQyGu6m23iLR/H/JxgF4AW8Csg==
 
 "@discord-player/extractor@^4.4.5":
@@ -23,48 +23,65 @@
 
 "@discord-player/ffmpeg@^0.1.0":
   version "0.1.0"
-  resolved "https://registry.npmjs.org/@discord-player/ffmpeg/-/ffmpeg-0.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@discord-player/ffmpeg/-/ffmpeg-0.1.0.tgz#3c8f1fc7dfdb033dc8ecd18a9e82fde2a3867196"
   integrity sha512-0kW6q4gMQN2B4Z4EzmUgXrKQSXXmyhjdZBBZ/6jSHZ9fh814oOu+JXP01VvtWHwTylI7qJHIctEWtSyjEubCJg==
 
 "@discord-player/opus@^0.1.2":
   version "0.1.2"
-  resolved "https://registry.npmjs.org/@discord-player/opus/-/opus-0.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/@discord-player/opus/-/opus-0.1.2.tgz#f097cdeb0fb0478f56ff586e26e57cdfea5dc63d"
   integrity sha512-yF0m+pW7H9RCbRcgk/i6vv47tlWxaCHjp6/F0W4GXZMGZ0pcvZaxk8ic7aFPc3+IoDvrAHvWNomLq+JeFzdncA==
 
 "@discord-player/utils@^0.2.2":
   version "0.2.2"
-  resolved "https://registry.npmjs.org/@discord-player/utils/-/utils-0.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/@discord-player/utils/-/utils-0.2.2.tgz#ece599124472ea8a5fc28e81adaee38cf4ad5a0c"
   integrity sha512-UklWUT7BcZEkBgywM9Cmpo2nwj3SQ9Wmhu6ml1uy/YRQnY8IRdZEHD84T2kfjOg4LVZek0ej1VerIqq7a9PAHQ==
   dependencies:
     "@discordjs/collection" "^1.1.0"
 
-"@discordjs/collection@^1.1.0":
+"@discordjs/builders@^1.6.5":
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/@discordjs/builders/-/builders-1.6.5.tgz#3e23912eaab1d542b61ca0fa7202e5aaef2b7200"
+  integrity sha512-SdweyCs/+mHj+PNhGLLle7RrRFX9ZAhzynHahMCLqp5Zeq7np7XC6/mgzHc79QoVlQ1zZtOkTTiJpOZu5V8Ufg==
+  dependencies:
+    "@discordjs/formatters" "^0.3.2"
+    "@discordjs/util" "^1.0.1"
+    "@sapphire/shapeshift" "^3.9.2"
+    discord-api-types "0.37.50"
+    fast-deep-equal "^3.1.3"
+    ts-mixer "^6.0.3"
+    tslib "^2.6.1"
+
+"@discordjs/collection@^1.1.0", "@discordjs/collection@^1.5.3":
   version "1.5.3"
   resolved "https://registry.npmjs.org/@discordjs/collection/-/collection-1.5.3.tgz"
   integrity sha512-SVb428OMd3WO1paV3rm6tSjM4wC+Kecaa1EUGX7vc6/fddvw/6lg90z4QtCqm21zvVe92vMMDt9+DkIvjXImQQ==
 
-"@discordjs/node-pre-gyp@^0.4.5":
-  version "0.4.5"
-  resolved "https://registry.npmjs.org/@discordjs/node-pre-gyp/-/node-pre-gyp-0.4.5.tgz"
-  integrity sha512-YJOVVZ545x24mHzANfYoy0BJX5PDyeZlpiJjDkUBM/V/Ao7TFX9lcUvCN4nr0tbr5ubeaXxtEBILUrHtTphVeQ==
+"@discordjs/formatters@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@discordjs/formatters/-/formatters-0.3.2.tgz#3ae054f7b3097cc0dc7645fade37a3f20fa1fb4b"
+  integrity sha512-lE++JZK8LSSDRM5nLjhuvWhGuKiXqu+JZ/DsOR89DVVia3z9fdCJVcHF2W/1Zxgq0re7kCzmAJlCMMX3tetKpA==
   dependencies:
-    detect-libc "^2.0.0"
-    https-proxy-agent "^5.0.0"
-    make-dir "^3.1.0"
-    node-fetch "^2.6.7"
-    nopt "^5.0.0"
-    npmlog "^5.0.1"
-    rimraf "^3.0.2"
-    semver "^7.3.5"
-    tar "^6.1.11"
+    discord-api-types "0.37.50"
 
-"@discordjs/opus@>=0.8.0 <1.0.0":
-  version "0.9.0"
-  resolved "https://registry.npmjs.org/@discordjs/opus/-/opus-0.9.0.tgz"
-  integrity sha512-NEE76A96FtQ5YuoAVlOlB3ryMPrkXbUCTQICHGKb8ShtjXyubGicjRMouHtP1RpuDdm16cDa+oI3aAMo1zQRUQ==
+"@discordjs/rest@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@discordjs/rest/-/rest-2.0.1.tgz#100c208a964e54b8d7cd418bbaed279c816b8ec5"
+  integrity sha512-/eWAdDRvwX/rIE2tuQUmKaxmWeHmGealttIzGzlYfI4+a7y9b6ZoMp8BG/jaohs8D8iEnCNYaZiOFLVFLQb8Zg==
   dependencies:
-    "@discordjs/node-pre-gyp" "^0.4.5"
-    node-addon-api "^5.0.0"
+    "@discordjs/collection" "^1.5.3"
+    "@discordjs/util" "^1.0.1"
+    "@sapphire/async-queue" "^1.5.0"
+    "@sapphire/snowflake" "^3.5.1"
+    "@vladfrangu/async_event_emitter" "^2.2.2"
+    discord-api-types "0.37.50"
+    magic-bytes.js "^1.0.15"
+    tslib "^2.6.1"
+    undici "5.22.1"
+
+"@discordjs/util@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@discordjs/util/-/util-1.0.1.tgz#7d6f97b65425d3a8b46ea1180150dee6991a88cf"
+  integrity sha512-d0N2yCxB8r4bn00/hvFZwM7goDcUhtViC5un4hPj73Ba4yrChLSJD8fy7Ps5jpTLg1fE9n4K0xBLc1y9WGwSsA==
 
 "@discordjs/voice@^0.16.0":
   version "0.16.0"
@@ -75,6 +92,21 @@
     discord-api-types "^0.37.37"
     prism-media "^1.3.5"
     tslib "^2.5.0"
+    ws "^8.13.0"
+
+"@discordjs/ws@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@discordjs/ws/-/ws-1.0.1.tgz#fab8aa4c1667040a95b5268a2875add27353d323"
+  integrity sha512-avvAolBqN3yrSvdBPcJ/0j2g42ABzrv3PEL76e3YTp2WYMGH7cuspkjfSyNWaqYl1J+669dlLp+YFMxSVQyS5g==
+  dependencies:
+    "@discordjs/collection" "^1.5.3"
+    "@discordjs/rest" "^2.0.1"
+    "@discordjs/util" "^1.0.1"
+    "@sapphire/async-queue" "^1.5.0"
+    "@types/ws" "^8.5.5"
+    "@vladfrangu/async_event_emitter" "^2.2.2"
+    discord-api-types "0.37.50"
+    tslib "^2.6.1"
     ws "^8.13.0"
 
 "@fastify/busboy@^2.0.0":
@@ -97,6 +129,24 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@sapphire/async-queue@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/async-queue/-/async-queue-1.5.0.tgz#2f255a3f186635c4fb5a2381e375d3dfbc5312d8"
+  integrity sha512-JkLdIsP8fPAdh9ZZjrbHWR/+mZj0wvKS5ICibcLrRI1j84UmLMshx5n9QmL8b95d4onJ2xxiyugTgSAX7AalmA==
+
+"@sapphire/shapeshift@^3.9.2":
+  version "3.9.3"
+  resolved "https://registry.yarnpkg.com/@sapphire/shapeshift/-/shapeshift-3.9.3.tgz#89d26713044bc21cc5e0845e61a8a328ca3c1a84"
+  integrity sha512-WzKJSwDYloSkHoBbE8rkRW8UNKJiSRJ/P8NqJ5iVq7U2Yr/kriIBx2hW+wj2Z5e5EnXL1hgYomgaFsdK6b+zqQ==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+    lodash "^4.17.21"
+
+"@sapphire/snowflake@^3.5.1":
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/@sapphire/snowflake/-/snowflake-3.5.1.tgz#254521c188b49e8b2d4cc048b475fb2b38737fec"
+  integrity sha512-BxcYGzgEsdlG0dKAyOm0ehLGm2CafIrfQTZGWgkfKYbj+pNNsorZ7EotuZukc2MT70E0UbppVbtpBrqpzVzjNA==
+
 "@tokenizer/token@^0.3.0":
   version "0.3.0"
   resolved "https://registry.npmjs.org/@tokenizer/token/-/token-0.3.0.tgz"
@@ -113,6 +163,11 @@
   integrity sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==
   dependencies:
     "@types/node" "*"
+
+"@vladfrangu/async_event_emitter@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@vladfrangu/async_event_emitter/-/async_event_emitter-2.2.2.tgz#84c5a3f8d648842cec5cc649b88df599af32ed88"
+  integrity sha512-HIzRG7sy88UZjBJamssEczH5q7t5+axva19UbZLO6u0ySbYPrwzWiXBcC0WuHyhKKoeCyneH+FvYzKQq/zTtkQ==
 
 abbrev@1:
   version "1.1.1"
@@ -226,6 +281,13 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
+busboy@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/busboy/-/busboy-1.6.0.tgz#966ea36a9502e43cdb9146962523b92f531f6893"
+  integrity sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==
+  dependencies:
+    streamsearch "^1.1.0"
+
 bytebuffer@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/bytebuffer/-/bytebuffer-5.0.1.tgz"
@@ -247,9 +309,9 @@ call-bind@^1.0.0:
     get-intrinsic "^1.2.1"
     set-function-length "^1.1.1"
 
-canvas@^2.11.2, canvas@^2.8.0:
+canvas@2.11.2, canvas@^2.8.0:
   version "2.11.2"
-  resolved "https://registry.npmjs.org/canvas/-/canvas-2.11.2.tgz"
+  resolved "https://registry.yarnpkg.com/canvas/-/canvas-2.11.2.tgz#553d87b1e0228c7ac0fc72887c3adbac4abbd860"
   integrity sha512-ItanGBMrmRV7Py2Z+Xhs7cT+FNt5K0vPL4p9EZ/UX/Mu7hFbkxSjKF2KVtPwX7UYWp7dRKnrTvReflgrItJbdw==
   dependencies:
     "@mapbox/node-pre-gyp" "^1.0.0"
@@ -264,7 +326,7 @@ chalk@^4.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chart.js@^3.5.1, chart.js@3.5.1:
+chart.js@3.5.1:
   version "3.5.1"
   resolved "https://registry.npmjs.org/chart.js/-/chart.js-3.5.1.tgz"
   integrity sha512-m5kzt72I1WQ9LILwQC4syla/LD/N413RYv2Dx2nnTkRS9iv/ey1xLTt0DnPc/eWV4zI+BgEgDYBIzbQhZHc/PQ==
@@ -381,13 +443,6 @@ data-uri-to-buffer@^4.0.0:
   resolved "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz"
   integrity sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==
 
-debug@^4.3.4:
-  version "4.3.4"
-  resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
-  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
-  dependencies:
-    ms "2.1.2"
-
 debug@2.6.9:
   version "2.6.9"
   resolved "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz"
@@ -395,7 +450,7 @@ debug@2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4:
+debug@4, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
@@ -443,15 +498,20 @@ detect-libc@^2.0.0:
   resolved "https://registry.npmjs.org/detect-libc/-/detect-libc-2.0.2.tgz"
   integrity sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==
 
+discord-api-types@0.37.50:
+  version "0.37.50"
+  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.37.50.tgz#6059eb8c0b784ad8194655a8b8b7f540fcfac428"
+  integrity sha512-X4CDiMnDbA3s3RaUXWXmgAIbY1uxab3fqe3qwzg5XutR3wjqi7M3IkgQbsIBzpqBN2YWr/Qdv7JrFRqSgb4TFg==
+
 discord-api-types@^0.37.37, discord-api-types@^0.37.50:
   version "0.37.61"
   resolved "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.61.tgz"
   integrity sha512-o/dXNFfhBpYHpQFdT6FWzeO7pKc838QeeZ9d91CfVAtpr5XLK4B/zYxQbYgPdoMiTDvJfzcsLW5naXgmHGDNXw==
 
-discord-player@^6.6.6:
-  version "6.6.6"
-  resolved "https://registry.npmjs.org/discord-player/-/discord-player-6.6.6.tgz"
-  integrity sha512-XYQU4Vuy3H1aXgdaNPajzp8od7salL5cy2JIWoUdINKv5rCVXeu24BxkPj7QB5Db6uK3yKCOumfIWkL0Il1uVQ==
+discord-player@6.6.5:
+  version "6.6.5"
+  resolved "https://registry.yarnpkg.com/discord-player/-/discord-player-6.6.5.tgz#6fcd3f3a959c475287c48d4e4b7ae52ca499f26a"
+  integrity sha512-6vhmonIh/544g7yN9+kvnWVK+JPyS08EmAynlgRRZA1mCLIbmYnFloiuU/eJo92SrfE/ySGjU7OBENNx6d4vpQ==
   dependencies:
     "@discord-player/equalizer" "^0.2.3"
     "@discord-player/ffmpeg" "^0.1.0"
@@ -462,7 +522,7 @@ discord-player@^6.6.6:
 
 discord-voip@^0.1.3:
   version "0.1.3"
-  resolved "https://registry.npmjs.org/discord-voip/-/discord-voip-0.1.3.tgz"
+  resolved "https://registry.yarnpkg.com/discord-voip/-/discord-voip-0.1.3.tgz#6823ad81b924314f6a9aa536cd5bb43fb1631a80"
   integrity sha512-9DWY5/BLPXeldVwPr8/ggGjggTYOTw77aGQc3+4n5K54bRbbiJ9DUJc+mJzDiSLoHN3f286eRGACJYtrUu27xA==
   dependencies:
     "@discord-player/ffmpeg" "^0.1.0"
@@ -471,6 +531,26 @@ discord-voip@^0.1.3:
     discord-api-types "^0.37.50"
     prism-media "^1.3.5"
     tslib "^2.6.1"
+    ws "^8.13.0"
+
+discord.js@v14:
+  version "14.13.0"
+  resolved "https://registry.yarnpkg.com/discord.js/-/discord.js-14.13.0.tgz#e7a00bdba70adb9e266a06884ca1acaf9a0b5c20"
+  integrity sha512-Kufdvg7fpyTEwANGy9x7i4od4yu5c6gVddGi5CKm4Y5a6sF0VBODObI3o0Bh7TGCj0LfNT8Qp8z04wnLFzgnbA==
+  dependencies:
+    "@discordjs/builders" "^1.6.5"
+    "@discordjs/collection" "^1.5.3"
+    "@discordjs/formatters" "^0.3.2"
+    "@discordjs/rest" "^2.0.1"
+    "@discordjs/util" "^1.0.1"
+    "@discordjs/ws" "^1.0.1"
+    "@sapphire/snowflake" "^3.5.1"
+    "@types/ws" "^8.5.5"
+    discord-api-types "0.37.50"
+    fast-deep-equal "^3.1.3"
+    lodash.snakecase "^4.1.1"
+    tslib "^2.6.1"
+    undici "5.22.1"
     ws "^8.13.0"
 
 dom-serializer@^2.0.0:
@@ -574,6 +654,11 @@ express@^4.18.2:
     type-is "~1.6.18"
     utils-merge "1.0.1"
     vary "~1.1.2"
+
+fast-deep-equal@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
+  integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
 fetch-blob@^3.1.2, fetch-blob@^3.1.4:
   version "3.2.0"
@@ -801,7 +886,7 @@ inflight@^1.0.4:
     once "^1.3.0"
     wrappy "1"
 
-inherits@^2.0.3, inherits@2, inherits@2.0.4:
+inherits@2, inherits@2.0.4, inherits@^2.0.3:
   version "2.0.4"
   resolved "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
@@ -820,10 +905,10 @@ ip-range-check@^0.2.0:
 
 ip@^1.1.8:
   version "1.1.8"
-  resolved "https://registry.npmjs.org/ip/-/ip-1.1.8.tgz"
+  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.8.tgz#ae05948f6b075435ed3307acce04629da8cdbf48"
   integrity sha512-PuExPYUiu6qMBQb4l06ecm6T6ujzhmh+MeJcW9wa89PoAz5pvd4zPgN5WJV104mb6S2T1AwNIAaB70JNrLQWhg==
 
-ipaddr.js@^1.0.1, ipaddr.js@1.9.1:
+ipaddr.js@1.9.1, ipaddr.js@^1.0.1:
   version "1.9.1"
   resolved "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-1.9.1.tgz"
   integrity sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==
@@ -864,10 +949,20 @@ list-it@^1.3.3:
     hash-arg "^1.0.6"
     node-getopt "github:takamin/node-getopt"
 
+lodash.snakecase@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.snakecase/-/lodash.snakecase-4.1.1.tgz#39d714a35357147837aefd64b5dcbb16becd8f8d"
+  integrity sha512-QZ1d4xoBHYUeuouhEq3lk3Uq7ldgyFXGBhg04+oRLnIz8o9T65Eh+8YdroUwn846zchkA9yDsDl5CVVaV2nqYw==
+
 lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 long@~3:
   version "3.2.0"
@@ -889,6 +984,11 @@ m3u8stream@^0.8.6:
     miniget "^4.2.2"
     sax "^1.2.4"
 
+magic-bytes.js@^1.0.15:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/magic-bytes.js/-/magic-bytes.js-1.5.0.tgz#f5531ca53e1c8dab5692b8dcfb360f7ca6c6b6bc"
+  integrity sha512-wJkXvutRbNWcc37tt5j1HyOK1nosspdh3dj6LUYYAvF6JYNqs53IfRvK9oEpcwiDA1NdoIi64yAMfdivPeVAyw==
+
 make-dir@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/make-dir/-/make-dir-3.1.0.tgz"
@@ -901,9 +1001,54 @@ media-typer@0.3.0:
   resolved "https://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz"
   integrity sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==
 
+mediaplex-android-arm64@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mediaplex-android-arm64/-/mediaplex-android-arm64-0.0.8.tgz#8b75c92f9025eef94024f5833ab73e185ee8a7ef"
+  integrity sha512-67azKxuexHj7dSWqqAHwzZFk1FHwPWzslLgvCfCER+0szPbZ0Nme6k3jgEC6rIjoZyhP8aNmpWBKj8M2KG0kBA==
+
+mediaplex-darwin-arm64@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mediaplex-darwin-arm64/-/mediaplex-darwin-arm64-0.0.8.tgz#80ae7c8090b047cf910b0f9a781e829ca2ce0d4b"
+  integrity sha512-FhajN2Sb93BtPzghGtrglIme7yHIif8Exen/TvpRAqc8ps770oOu0Bo7Hcm/sRgZh3HSUZg2KbPhQlrhposq2Q==
+
+mediaplex-darwin-universal@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mediaplex-darwin-universal/-/mediaplex-darwin-universal-0.0.8.tgz#e452caa56aadd7b93f07fbd0d2f4d0a4c584d37b"
+  integrity sha512-Q3OOYXM0FrwfiRXouI+kcn+TySYayMQabGSSe5Nz4cqYTlnJ1erarPSq6P+1fKjxZLaYkacgnILcZSKzAn1kAg==
+
+mediaplex-darwin-x64@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mediaplex-darwin-x64/-/mediaplex-darwin-x64-0.0.8.tgz#9e59091fbdd504da79f7a0522637ee0e4617f586"
+  integrity sha512-Xj7x7z2widAchu2c1TMH/SF6PtX1zG3yKdQebZg5aOuacbIJUlRgLCBYn6tc66TyPJp88hMWbLEl5992VU1RKQ==
+
+mediaplex-freebsd-x64@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mediaplex-freebsd-x64/-/mediaplex-freebsd-x64-0.0.8.tgz#8657bdb9b8ea8617865d05dfed3966345ebcfcc7"
+  integrity sha512-HwwcA1D2GHYKpGKZdrWCH/rsTqqfwT0EmBy6qZF2EG5tY1ncxU4qFlgBgpHLPJt/XopKWa1fpGnaO2zSdN5aHQ==
+
+mediaplex-linux-arm-gnueabihf@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mediaplex-linux-arm-gnueabihf/-/mediaplex-linux-arm-gnueabihf-0.0.8.tgz#66c2e283f468791399a293bb42c5d1068c558017"
+  integrity sha512-HfSzKrx6ZEDnSk42+ypZ6Bp/8OYSp6av6xenh5hyBhSu/2Czy8yZQDwGe2zSxibK44QXtpJKlrZB8HszFv2OPg==
+
+mediaplex-linux-x64-gnu@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.npmjs.org/mediaplex-linux-x64-gnu/-/mediaplex-linux-x64-gnu-0.0.8.tgz"
+  integrity sha512-5Myyy9zlQLPl1daWXKn7zLP2iMDqBqHPOtezhmt/4C/hKvsPkll4YxrpDE3Dn5gGBAA7WYfB03ALgdltt7JVKQ==
+
+mediaplex-win32-arm64-msvc@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mediaplex-win32-arm64-msvc/-/mediaplex-win32-arm64-msvc-0.0.8.tgz#411122ac8a6d639282bcf4614d218196fb9f1452"
+  integrity sha512-eHgIdDMDX2BZMY0vfwqXf2+C5v80jKoKMthzQqQIVgob27/jJUN4K9X/kMDWJ38dUEIlLMK9k83OzKtyRyshjA==
+
+mediaplex-win32-ia32-msvc@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mediaplex-win32-ia32-msvc/-/mediaplex-win32-ia32-msvc-0.0.8.tgz#c7ae818d6229946fd46115b5bc4889051512094f"
+  integrity sha512-DWNWOJ1fQib5UpE6Yj2Otg9kAR0W7xLnHN/937uHQMNciu3SEQO5GD9Dknp6iH/v4EEMOlVU6JNiihby45IODg==
+
 mediaplex-win32-x64-msvc@0.0.8:
   version "0.0.8"
-  resolved "https://registry.npmjs.org/mediaplex-win32-x64-msvc/-/mediaplex-win32-x64-msvc-0.0.8.tgz"
+  resolved "https://registry.yarnpkg.com/mediaplex-win32-x64-msvc/-/mediaplex-win32-x64-msvc-0.0.8.tgz#6db46c27423c7a369e62a76444b87b69057352c1"
   integrity sha512-3Tn3fx8/rAlP8ml1VcMs7oC9chYDtnG1o8bBQD1hipirjsNcCY5qQwCs989XrNirtlgiKg82CiA3OUakrtDuMw==
 
 mediaplex@^0.0.8:
@@ -1015,11 +1160,6 @@ negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
-
-node-addon-api@^5.0.0:
-  version "5.1.0"
-  resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-5.1.0.tgz"
-  integrity sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==
 
 node-domexception@^1.0.0:
   version "1.0.0"
@@ -1205,7 +1345,7 @@ rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
-safe-buffer@~5.2.0, safe-buffer@5.2.1:
+safe-buffer@5.2.1, safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
@@ -1341,17 +1481,15 @@ statuses@2.0.1:
   resolved "https://registry.npmjs.org/statuses/-/statuses-2.0.1.tgz"
   integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
 
+streamsearch@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/streamsearch/-/streamsearch-1.1.0.tgz#404dd1e2247ca94af554e841a8ef0eaa238da764"
+  integrity sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==
+
 streamspeed@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/streamspeed/-/streamspeed-2.0.1.tgz"
   integrity sha512-j6pFynhO0nZ+1zhyTDqLLlIxM0IyCdLKMj1EUJznDA87xLE/JWSwEg3FlJWERDB72KYt5OD29ZUWxxVkMTnqWg==
-
-string_decoder@^1.1.1:
-  version "1.3.0"
-  resolved "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz"
-  integrity sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==
-  dependencies:
-    safe-buffer "~5.2.0"
 
 "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.2.3:
   version "4.2.3"
@@ -1361,6 +1499,13 @@ string_decoder@^1.1.1:
     emoji-regex "^8.0.0"
     is-fullwidth-code-point "^3.0.0"
     strip-ansi "^6.0.1"
+
+string_decoder@^1.1.1:
+  version "1.3.0"
+  resolved "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz"
+  integrity sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==
+  dependencies:
+    safe-buffer "~5.2.0"
 
 strip-ansi@^6.0.1:
   version "6.0.1"
@@ -1421,6 +1566,11 @@ truncate-utf8-bytes@^1.0.0:
   dependencies:
     utf8-byte-length "^1.0.1"
 
+ts-mixer@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/ts-mixer/-/ts-mixer-6.0.3.tgz#69bd50f406ff39daa369885b16c77a6194c7cae6"
+  integrity sha512-k43M7uCG1AkTyxgnmI5MPwKoUvS/bRvLvUb7+Pgpdlmok8AoqmUaZxUUw8zKM5B1lqZrt41GjYgnvAi0fppqgQ==
+
 tslib@^2.3.1, tslib@^2.5.0, tslib@^2.6.1:
   version "2.6.2"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz"
@@ -1434,7 +1584,14 @@ type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-undici@^5.22.1, undici@^5.24.0, undici@^5.26.3:
+undici@5.22.1:
+  version "5.22.1"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-5.22.1.tgz#877d512effef2ac8be65e695f3586922e1a57d7b"
+  integrity sha512-Ji2IJhFXZY0x/0tVBXeQwgPlLWw13GVzpsWPQ3rV50IFMMof2I55PZZxtm4P6iNq+L5znYN9nSTAq0ZyE6lSJw==
+  dependencies:
+    busboy "^1.6.0"
+
+undici@^5.22.1, undici@^5.24.0:
   version "5.27.0"
   resolved "https://registry.npmjs.org/undici/-/undici-5.27.0.tgz"
   integrity sha512-l3ydWhlhOJzMVOYkymLykcRRXqbUaQriERtR70B9LzNkZ4bX52Fc8wbTDneMiwo8T+AemZXvXaTx+9o5ROxrXg==
@@ -1446,7 +1603,7 @@ unfetch@^5.0.0:
   resolved "https://registry.npmjs.org/unfetch/-/unfetch-5.0.0.tgz"
   integrity sha512-3xM2c89siXg0nHvlmYsQ2zkLASvVMBisZm5lF3gFDqfF2xonNStDJyMpvaOBe0a1Edxmqrf2E0HBdmy9QyZaeg==
 
-unpipe@~1.0.0, unpipe@1.0.0:
+unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz"
   integrity sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==
@@ -1517,13 +1674,6 @@ yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/yallist/-/yallist-4.0.0.tgz"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
-
-youtube-ext@^1.1.16:
-  version "1.1.16"
-  resolved "https://registry.npmjs.org/youtube-ext/-/youtube-ext-1.1.16.tgz"
-  integrity sha512-vyzHSwxlCAwqWUxZKJ/5g139BgnbmZFTy9I0nxDwqlbAh74dB1LjayCoB5BgLaaIkSMruEQwlf5bF+EeR235qA==
-  dependencies:
-    undici "^5.26.3"
 
 youtube-sr@^4.3.9:
   version "4.3.9"
