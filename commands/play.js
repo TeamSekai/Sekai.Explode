@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { VoiceChannel } = require('discord.js');
+const { useMainPlayer } = require('discord-player');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 //
@@ -28,29 +29,19 @@ module.exports = {
 
 		await interaction.deferReply();
 
-		const queue = interaction.client.player.createQueue(interaction.guild, {
-            metadata: {
-                channel: interaction.channel
-            }
-        });
-
-		// verify vc connection
-        try {
-            if (!queue.connection) await queue.connect(interaction.member.voice.channel);
-        } catch (e) {
-            queue.destroy();
-            return await interaction.reply(`吐血しちゃった... ${e}`);
-        }
-
-		const track = await interaction.client.player.search(query, {
-            requestedBy: member
-        }).then(x => x.tracks[0]);
-        if (!track) return await interaction.followUp({ content: `❌ **${query}** が見つかりませんでした!` });
-
-        queue.play(track);
-		console.log(`Loading ${track.title}...`)
-
-        return await interaction.followUp({ content: `⏱️ **${track.title}**を読み込み中...` });
+		try {
+			const { track } = await player.play(channel, query, {
+				nodeOptions: {
+					// nodeOptions are the options for guild node (aka your queue in simple word)
+					metadata: interaction // we can access this metadata object using queue.metadata later on
+				}
+			});
+	
+			return interaction.followUp(`**${track.title}** enqueued!`);
+		} catch (e) {
+			// let's return error if something failed
+			return interaction.followUp(`Something went wrong: ${e}`);
+		}
 
 
     }

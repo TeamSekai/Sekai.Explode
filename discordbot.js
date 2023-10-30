@@ -38,14 +38,17 @@ const options = {
 const client = new Client(options);
 // this is the entrypoint for discord-player based application
 console.log('Loading Discord-Player')
-client.player = new Player(client);
+const player = new Player(client);
+
+// Now, lets load all the default extractors, except 'YouTubeExtractor'. You can remove the filter if you want to load all the extractors.
+await player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
 
 // this event is emitted whenever discord-player starts to play a track
-// add the trackStart event so when a song will be played this message will be sent
-client.player.on("trackStart", (queue, track) => {
-	console.log(`Playing ${track.title}`)
-	queue.metadata.channel.send(`🎶 **${track.title}**を再生中`)
+player.events.on('playerStart', (queue, track) => {
+    // we will later define queue.metadata object while creating the queue
+    queue.metadata.channel.send(`**${track.title}**を再生中`);
 });
+
 console.log('OK')
 
 activity.setupActivity(client);
