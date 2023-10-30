@@ -55,10 +55,6 @@ player.events.on('playerStart', (queue, track) => {
 				url: track.thumbnail
 			},
 			color: 0x5865f2,
-			fields: [{
-				name: "Requested by",
-				value: track.requestedBy,
-			}]
 		}]
 	})
 });
