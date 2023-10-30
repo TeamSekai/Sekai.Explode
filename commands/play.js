@@ -19,11 +19,12 @@ module.exports = {
 				.setRequired(true)
 		),
     execute: async function (interaction) {
+		const player = useMainPlayer();
 		const query = interaction.options.get("query").value;
 		const member = interaction.member;
-		const voiceChannel = member.voice.channel;
+		const channel = member.voice.channel;
 
-        if (!voiceChannel) {
+        if (!channel) {
 			await interaction.editreply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
 		}
 
@@ -40,7 +41,7 @@ module.exports = {
 			return interaction.followUp(`**${track.title}** enqueued!`);
 		} catch (e) {
 			// let's return error if something failed
-			return interaction.followUp(`Something went wrong: ${e}`);
+			return interaction.followUp(`ばーか! ${e}`);
 		}
 
 
