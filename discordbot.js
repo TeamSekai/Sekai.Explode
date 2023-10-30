@@ -47,7 +47,20 @@ player.extractors.loadDefault();
 // this event is emitted whenever discord-player starts to play a track
 player.events.on('playerStart', (queue, track) => {
     // we will later define queue.metadata object while creating the queue
-    queue.metadata.channel.send(`**${track.title}**を再生中`);
+    // queue.metadata.channel.send(`**${track.title}**を再生中`);
+    queue.metadata.channel.send({
+		embeds: [{
+			title: `**${track.title}**を再生中!`,
+			thumbnail: {
+				url: track.thumbnail
+			},
+			color: 0x5865f2,
+			fields: [{
+				name: "Requested by",
+				value: track.requestedBy,
+			}]
+		}]
+	})
 });
 
 console.log('OK')
