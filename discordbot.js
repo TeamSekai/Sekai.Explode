@@ -1,7 +1,7 @@
 // Discord.js Bot - by ringoXD
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
 const { Client, Events, GatewayIntentBits, Status, ActivityType } = require('discord.js');
-const { Guilds, GUILD_VOICE_STATES } = GatewayIntentBits
+const { Guilds, VoiceState } = GatewayIntentBits
 const fs = require("fs");
 const path = require("path");
 const { token, linkPort, linkDomain, guildId } = require('./config.json');
@@ -32,10 +32,11 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 	commands.push(require(path.join(__dirname, "commands", file.name)));
 })
 
-const client = new Client({
-	intents: [Guilds, GUILD_VOICE_STATES]
-})
+const options = {
+	intents: [Guilds, VoiceState]
+};
 
+const client = new Client(options);
 // this is the entrypoint for discord-player based application
 console.log('Loading Discord-Player')
 client.player = new Player(client);
