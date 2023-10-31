@@ -39,7 +39,15 @@ module.exports = {
 				}
 			});
 	
-			return interaction.followUp(`**${track.title}** enqueued!`);
+			return interaction.followUp({
+				embeds: [{
+					title: `**${track.title}**をキューに追加しました!`,
+					thumbnail: {
+						url: track.thumbnail
+					},
+					color: 0x5865f2,
+				}]
+			})
 		} catch (e) {
 			// let's return error if something failed
 			return interaction.followUp(`ばーか! ${e}`);
