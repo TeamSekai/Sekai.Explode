@@ -187,6 +187,9 @@ process.on('uncaughtException', function (err) {
 	console.error(err);
 	//console.error("Depend Err ->" + generateDependencyReport());
 });
+
+player.on("error", () => console.log("ねぇ吐血したんだけど??"));
+
 server.listen(linkPort, () => {
 	console.log(`[TempLink] ポート${linkPort} (${linkDomain}) でlistenしました`)
 })
