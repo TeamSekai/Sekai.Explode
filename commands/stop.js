@@ -1,9 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { useMainPlayer, Player } = require('discord-player');
-// const ytdl = require('ytdl-core'); さよなら!!!
-// const yts = require('yt-search'); 検索機能？要らんやろ
-//
-
+const { useQueue } = require('discord-player');
 
 console.log("Loaded play.js")
 module.exports = {
@@ -11,24 +7,16 @@ module.exports = {
         .setName('stop')
         .setDescription('音楽を停止します。'),
     execute: async function (interaction) {
-		const player = useMainPlayer();
-		const member = interaction.member;
-		const channel = member.voice.channel;
-		/*
-		const queue = player.queryCache
+        const queue = useQueue(interaction.guildId);
 
-		if (!queue) {
-			await interaction.reply("音楽が再生されていません!")
-		}
-		*/
+        const member = interaction.member;
+        const channel = member.voice.channel;
 
         if (!channel) {
-			await interaction.reply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
-		}
+            await interaction.reply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
+        }
 
-		player.destroy();
-		await interaction.reply(`音楽を停止しました👋`)
-
-
+        queue.delete();
+        await interaction.reply(`音楽を停止しました👋`)
     }
 };
