@@ -32,11 +32,11 @@ function addPingValue(ping) {
 				addPingValue(wsping)
 			// avg
 			//	const avgPing = wspingValues.reduce((sum, value) => sum + value, 0) / wspingValues.length;
-				client.user.setActivity({
+				client.user.setPresence({
 					name: `[${client.ws.ping}ms] | Created by ringoXD`,
-					type: `LISTENING`,
-					Status: `online`
-				})
+					type: ActivityType.Watching,
+					Status: `online`,
+				});
 			}, 40000)
 		})
 	},

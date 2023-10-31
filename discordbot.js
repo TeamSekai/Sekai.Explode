@@ -78,7 +78,7 @@ setInterval(() => {
 client.on('ready', async () => {
 	client.templinks = [];
 	console.log(`${cgreen}Logged in as${creset} ${client.user.tag}`);
-	client.user.setActivity('起動中...', { status: 'dnd' });
+	client.user.setPresence('起動中...', { status: 'dnd' });
 	console.log(`Registering commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
 	console.log(`${cgreen}Ready!`);
@@ -86,11 +86,11 @@ client.on('ready', async () => {
 	SyslogChannel.send('Discord.js Bot is Ready!')
 	const wsping = client.ws.ping;
 	activity.addPingValue(wsping)
-	client.user.setActivity({
+	client.user.setPresence({
 		name: `[${client.ws.ping}ms] | Created by ringoXD`,
-		type: `LISTENING`,
-		Status: `online`
-	})
+		type: ActivityType.Watching,
+		Status: `online`,
+	});
 })
 
 
