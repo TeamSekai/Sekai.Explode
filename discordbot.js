@@ -88,7 +88,7 @@ client.on('ready', async () => {
 	activity.addPingValue(wsping)
 	client.user.setPresence({
 		name: `[${client.ws.ping}ms] | Created by ringoXD`,
-		type: ActivityType.Watching,
+		activities: ActivityType.Watching,
 		Status: `online`,
 	});
 })
