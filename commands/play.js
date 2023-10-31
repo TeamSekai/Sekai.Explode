@@ -26,6 +26,7 @@ module.exports = {
 
         if (!channel) {
 			await interaction.reply("えー流したくないなぁー...だってVCに実行者が居ないんだもん...")
+			return;
 		}
 
 		await interaction.deferReply();
