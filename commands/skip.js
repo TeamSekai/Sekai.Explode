@@ -4,8 +4,8 @@ const { useQueue } = require('discord-player');
 console.log("Loaded stop.js")
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('stop')
-        .setDescription('音楽を停止します。'),
+        .setName('skip')
+        .setDescription('音楽をスキップします！'),
     execute: async function (interaction) {
         const queue = useQueue(interaction.guildId);
 
@@ -13,20 +13,23 @@ module.exports = {
         const channel = member.voice.channel;
 
         if (!channel) {
-            return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
+            await interaction.reply("えー実行したくないなぁー...だってVCに君が居ないんだもん...")
+			return;
         }
-
-		if (
-			interaction.guild.members.me.voice.channelId &&
-			interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId
-		)
-			return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
 
 		const queuedTracks = queue.tracks.toArray();
     	if (!queuedTracks[0])
     	  return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
 
         queue.delete();
-        await interaction.reply(`音楽を停止しました👋`)
+        await interaction.reply({
+			embeds: [{
+				title: `**${queue.currentTrack.title}**をスキップしました!`,
+				thumbnail: {
+					url: queue.currentTrack.thumbnail
+				},
+				color: 0x5865f2,
+			}]
+		})
     }
 };
