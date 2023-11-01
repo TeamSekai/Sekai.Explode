@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { useQueue } = require('discord-player');
 
-console.log("Loaded stop.js")
+console.log("Loaded skip.js")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('skip')
