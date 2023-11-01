@@ -26,15 +26,19 @@ module.exports = {
     	if (!queuedTracks[0])
     	  return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
 
-        queue.delete();
-        await interaction.reply({
-			embeds: [{
-				title: `**${queue.currentTrack.title}**をスキップしました!`,
-				thumbnail: {
-					url: queue.currentTrack.thumbnail
-				},
-				color: 0x5865f2,
-			}]
-		})
+        try {
+			queue.node.skip()
+        	await interaction.reply({
+				embeds: [{
+					title: `**${queue.currentTrack.title}**をスキップしました!`,
+					thumbnail: {
+						url: queue.currentTrack.thumbnail
+					},
+					color: 0x5865f2,
+				}]
+			})
+		} catch (e) {
+			interaction.reply(`はぁ？処理の実行中にエラー(${e})が発生してるんだけど？\nコードもまともに書けないなんてどうしようもないクズね...`)
+		}
     }
 };
