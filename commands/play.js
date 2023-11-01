@@ -25,9 +25,14 @@ module.exports = {
 		const channel = member.voice.channel;
 
         if (!channel) {
-			await interaction.reply("えー実行したくないなぁー...だってVCに君が居ないんだもん...")
-			return;
-		}
+            return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
+        }
+
+		if (
+			interaction.guild.members.me.voice.channelId &&
+			interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId
+		)
+			return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
 
 		await interaction.deferReply();
 
