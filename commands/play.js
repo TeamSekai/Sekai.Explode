@@ -60,13 +60,15 @@ module.exports = {
     		  },
     		});
 
+			const message = res.track.playlist
+				? `**${res.track.playlist.title}**をキューに追加しました！`
+				: `**${res.track.author} - ${res.track.title}**をキューに追加しました！`;
+
 			return interaction.followUp({
 				embeds: [{
-					title: `**${track.title}**をキューに追加しました!`,
-					thumbnail: {
-						url: track.thumbnail
-					},
+					title: message,
 					color: 0x5865f2,
+					footer: `リクエスト者: ${interaction.user}`,
 				}]
 			})
 		} catch (e) {
