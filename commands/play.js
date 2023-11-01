@@ -68,7 +68,9 @@ module.exports = {
 				embeds: [{
 					title: message,
 					color: 0x5865f2,
-					footer: `リクエスト者: ${interaction.user}`,
+					footer: {
+                        text: `リクエスト者: ${interaction.user}`
+                    },
 				}]
 			})
 		} catch (e) {
