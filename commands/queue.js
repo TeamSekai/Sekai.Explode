@@ -30,7 +30,7 @@ module.exports = {
 
     const embed = new EmbedBuilder()
       .setColor('Red')
-      .setTitle('キュー一覧')
+      .setTitle(`${queue.tracks.size}の曲がキューに入っています!`)
       .setDescription(
         tracks.slice(currentPage * chunkSize, (currentPage + 1) * chunkSize).join('\n') || '**キューに曲がありません！**',
       )
