@@ -19,7 +19,7 @@ module.exports = {
 
     const queuedTracks = queue.tracks.toArray();
     if (!queuedTracks[0])
-      return interaction.reply({ content: `❌ | There is no music is currently in the queue!`, ephemeral: true });
+		return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
 
     const tracks = queuedTracks.map((track, idx) => `**${idx + 1})** [${track.title}](${track.url})`);
 
