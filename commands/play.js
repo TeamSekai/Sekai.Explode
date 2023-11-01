@@ -69,7 +69,7 @@ module.exports = {
 					title: message,
 					color: 0x5865f2,
 					footer: {
-                        text: `リクエスト者: ${interaction.user}`
+                        text: `リクエスト者: ${interaction.user.tag}`
                     },
 				}]
 			})

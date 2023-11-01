@@ -54,7 +54,7 @@ player.events.on('playerStart', (queue, track) => {
 				url: track.thumbnail
 			},
 			footer: {
-				text: `リクエスト者: ${queue.currentTrack.requestedBy}`
+				text: `リクエスト者: ${queue.currentTrack.requestedBy.tag}`
 			},
 			color: 0x5865f2,
 		}]
