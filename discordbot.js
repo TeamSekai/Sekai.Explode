@@ -199,14 +199,15 @@ client.on('messageCreate', async (message) => {
     if (urls) {
         for (const url of urls) {
             if (url.includes('twitter.com') || url.includes('x.com')) {
-                await message.react('👍'); // リアクションを追加
+                await message.react('🔗'); // リアクションを追加
 
-				const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '👍';
+				const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
                 const collector = message.createReactionCollector({ filter, time: 30000 });
 
                 collector.on('collect', async (reaction, user) => {
                     const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
-                    message.channel.send(`Fixed! ${modifiedURL}`);
+                    message.channel.send(`Requested by:${user.id}\n${modifiedURL}`);
+					message.reactions.removeAll();
 					collector.stop();
                 });
 
