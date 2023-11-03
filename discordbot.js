@@ -201,17 +201,18 @@ client.on('messageCreate', async (message) => {
             if (url.includes('twitter.com') || url.includes('x.com')) {
                 await message.react('🔗'); // リアクションを追加
 
-				const filter = (reaction, user) => user.u == message.author.id && reaction.emoji.name === '🔗';
+				const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
                 const collector = message.createReactionCollector({ filter, time: 30000 });
 
+				let fxmsg = '';
 
                 collector.on('collect', async (reaction, user) => {
                     const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
-					let = fxmsg = `Requested by:${user.username}\n${modifiedURL}`
-					message.channel.send(fxmsg);
+					fxmsg = `Requested by:${user.username}\n${modifiedURL}`
 					message.reactions.removeAll().catch(e => {
-						message.channel.send(`\n> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${e.code})`)
+						fxmsg += `\n> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${e.code})`
 					})
+					message.channel.send(fxmsg);
 					collector.stop();
                 });
 
