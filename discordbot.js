@@ -202,15 +202,13 @@ client.on('messageCreate', async (message) => {
             if (url.includes('twitter.com') || url.includes('x.com')) {
                 await message.react('👍'); // リアクションを追加
 
-                // リアクションを押したユーザーがメッセージの送信者と同じでない場合は無視
-                const collector = message.createReactionCollector({ max: 1, time: 30000 });
+				const filter = (reaction, user) => user.id !== message.author.id && reaction.emoji.name === '👍';
+                const collector = message.createReactionCollector({ filter, time: 30000 });
+
                 collector.on('collect', async (reaction, user) => {
-                    if (user.id === message.author.id) return;
-
-                    // リンクのドメインをvxtwitter.comに変更
                     const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
-
                     message.channel.send(`Fixed! ${modifiedURL}`);
+					collector.stop();
                 });
 
                 collector.on('end', (collected, reason) => {
