@@ -25,6 +25,26 @@ module.exports = {
 				.setDescription(`タイトルを入力(未入力の場合はuser's graphとなります`)
 				.setRequired(false)
 		)
+		.addStringOption(option => (
+			option
+				.setName('line_color')
+				.setDescription('線の色を選択')
+				.setRequired(false)
+				.addChoices({name:"Red",value:'rgb(255, 0, 0)'})
+				.addChoices({name:"Green",value:'rgb(0, 255, 0)'})
+				.addChoices({name:"Pink",value:'rgb(255, 0, 255)'})
+				.addChoices({name:"White",value:'rgb(255, 255, 255)'})
+				.addChoices({name:"Black",value:'rgb(0, 0, 0)'})
+				.addChoices({name:"Orange",value:'rgb(255, 128, 0)'})
+		))
+		.addStringOption(option => (
+			option
+				.setName('background_theme')
+				.setDescription('背景の色を選択')
+				.setRequired(false)
+				.addChoices({name:"Dark",value:"#01010e"})
+				.addChoices({name:"Light",value:"#F3F3F6"})
+		))
 		.addBooleanOption(option =>
 			option
 				.setName('begin_at_zero')
@@ -32,6 +52,17 @@ module.exports = {
 				.setRequired(false) // 任意のオプション
 		),
 	execute: async function(interaction) {
+
+
+		let linergb = 'rgb(75, 192, 192)'
+		if (interaction.options.getString('line_color')) {
+			linergb = interaction.options.getString('line_color');
+		}
+
+		let bgtheme = "#01010e"
+		if (interaction.options.getString('background_theme')) {
+			bgtheme = interaction.options.getString('background_theme');
+		}
 
 		const nickname = interaction.member.nickname || interaction.user.username;
 		let graphtitle = `${nickname}'s graph`
@@ -68,7 +99,7 @@ module.exports = {
 					label: label,
 					data: data,
 					fill: false,
-					borderColor: 'rgb(75, 192, 192)',
+					borderColor: linergb,
 					tension: 0.1,
 				}],
 			},
@@ -80,7 +111,7 @@ module.exports = {
 				},
 			},
 		}
-		const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour:"#01010e" });
+		const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour:bgtheme });
 		const orimoto = await chartJSNodeCanvas.renderToBuffer(configuration);
     	await interaction.reply({
 			files: [{
