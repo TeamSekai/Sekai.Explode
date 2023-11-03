@@ -210,7 +210,7 @@ client.on('messageCreate', async (message) => {
 					message.reactions.removeAll().catch(e => {
 						console.error(`reaction.removeAll error: ${e.code}`)
 						let errmsg = `\n> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${e.code})`
-						message.channel.send(`${fxmsg}${errmsg}`);
+						message.edit(`${fxmsg}${errmsg}`);
 					})
 		
 					collector.stop();
