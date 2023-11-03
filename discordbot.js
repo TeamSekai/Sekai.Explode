@@ -206,12 +206,14 @@ client.on('messageCreate', async (message) => {
                 collector.on('collect', async (reaction, user) => {
                     const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
 					let fxmsg = `Requested by:${user.username}\n${modifiedURL}`
-					const sentmsg = message.channel.send(fxmsg);
-					message.reactions.removeAll().catch(e => {
-						console.error(`reaction.removeAll error: ${e.code}`)
-						let errmsg = `\n> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${e.code})`
-						sentmsg.edit(`${fxmsg}${errmsg}`);
-					})
+					message.channel.send(fxmsg)
+						.then(sentmsg => {
+							message.reactions.removeAll().catch(e => {
+								console.error(`reaction.removeAll error: ${e.code}`)
+								let errmsg = `\n> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${e.code})`
+								sentmsg.edit(`${fxmsg}${errmsg}`);
+							})
+						})
 		
 					collector.stop();
                 });
