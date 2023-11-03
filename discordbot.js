@@ -191,6 +191,7 @@ client.on('messageCreate', async (message) => {
     const urls = message.content.match(/https?:\/\/[^\s]+/g);
 
     if (urls) {
+		console.log("Loop")
         for (const url of urls) {
             if (url.includes('twitter.com') || url.includes('x.com')) {
                 await message.react('👍'); // リアクションを追加
