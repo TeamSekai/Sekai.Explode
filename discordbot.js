@@ -204,10 +204,17 @@ client.on('messageCreate', async (message) => {
 				const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
                 const collector = message.createReactionCollector({ filter, time: 30000 });
 
+				let fxmsg = '';
+
                 collector.on('collect', async (reaction, user) => {
                     const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
-                    message.channel.send(`Requested by:${user.id}\n${modifiedURL}`);
-					message.reactions.removeAll();
+					fxmsg = `Requested by:${user.id}\n${modifiedURL}`
+					message.reactions.removeAll().catch(e => {
+						if (e.code === 50013) {
+							fxmsg += `\n> ⚠ 権限不足により、リアクションを削除できませんでした! (APIError: 50013)`
+						}
+					})
+					message.channel.send(fxmsg);
 					collector.stop();
                 });
 
