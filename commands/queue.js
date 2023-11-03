@@ -20,6 +20,7 @@ module.exports = {
 	if (!queue || !queue.isPlaying())
 	  return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
 
+	const queuedTracks = queue.tracks.toArray();
     const tracks = queuedTracks.map((track, idx) => `**${idx + 1})** [${track.title}](${track.url})`);
 
     const chunkSize = 10;
