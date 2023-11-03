@@ -11,8 +11,8 @@ module.exports = {
 				.setName("volume")
 				.setDescription("音量を設定(1~100)")
 				.setRequired(true)
-				.min_value(0)
-				.max_value(100)
+				.setMinValue(0)
+				.setMaxValue(100)
 		),
     execute: async function (interaction) {
         const queue = useQueue(interaction.guildId);
