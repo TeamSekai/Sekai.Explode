@@ -23,11 +23,15 @@ console.log('Starting Discord.js bot...')
 
 
 fs.readdirSync(path.join(__dirname, "commands"), {
-	withFileTypes: true
+    withFileTypes: true
 }).forEach((file) => {
-	if (!file.isFile() || path.extname(file.name) != ".js")
-		return;
-	commands.push(require(path.join(__dirname, "commands", file.name)));
+    if (!file.isFile() || path.extname(file.name) != ".js")
+        return;
+    let cmds = require(path.join(__dirname, "commands", file.name));
+    if (Array.isArray(cmds))
+        commands = [...commands, ...cmds];
+    else
+        commands.push(cmds);
 })
 
 const options = {
