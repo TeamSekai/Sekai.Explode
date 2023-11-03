@@ -24,7 +24,7 @@ module.exports = {
 
 		const queuedTracks = queue.tracks.toArray();
     	if (!queuedTracks[0])
-    	  return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
+    	  return interaction.reply({ content: `キューに曲がありません！`, ephemeral: true });
 
         try {
 			queue.node.skip()

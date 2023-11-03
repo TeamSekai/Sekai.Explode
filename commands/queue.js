@@ -17,9 +17,8 @@ module.exports = {
     )
       return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
 
-    const queuedTracks = queue.tracks.toArray();
-    if (!queuedTracks[0])
-		return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
+	if (!queue || !queue.isPlaying())
+	  return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
 
     const tracks = queuedTracks.map((track, idx) => `**${idx + 1})** [${track.title}](${track.url})`);
 

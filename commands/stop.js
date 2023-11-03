@@ -22,9 +22,8 @@ module.exports = {
 		)
 			return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
 
-		const queuedTracks = queue.tracks.toArray();
-    	if (!queuedTracks[0])
-    	  return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
+		if (!queue || !queue.isPlaying())
+			return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
 
         queue.delete();
         await interaction.reply(`音楽を停止しました👋`)

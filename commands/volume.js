@@ -31,6 +31,10 @@ module.exports = {
 		)
 			return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
 
+    	if (!queue || !queue.isPlaying())
+    	  return interaction.reply({ content: `再生されている曲がありません！`, ephemeral: true });
+
+
 		try {
 			queue.node.setVolume(vol)
 			interaction.reply(`音量を**${vol}**に設定しました!`)
