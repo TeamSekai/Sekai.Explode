@@ -25,22 +25,22 @@ module.exports = {
 			return interaction.reply({
 				embeds: [{
 					title: "ねぇ、このIP怪しいよ",
-					description: `This IP is suspicious...`,
+					description: `${ip}はproxy、またはhostingのIPです!`,
 					thumbnail: {
 						url: `https://cdn.discordapp.com/attachments/1126424081630249002/1160444437453881344/unknown.jpg`
 					},
 					color: 0xf2930d,
 					fields: [{
-						name: "IP",
-						value: ip,
-						inline: true
-					}, {
 						name: "Country",
 						value: ipInfo.country,
 						inline: true
 					}, {
 						name: "ISP",
 						value: ipInfo.isp,
+						inline: true
+					}, {
+						name: "isProxy/Hosting",
+						value: `isProxy? -> ${ipInfo.proxy}\n` + `isHosting? -> ${ipInfo.hosting}`,
 						inline: true
 					}]
 				}]
