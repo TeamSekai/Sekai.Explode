@@ -32,7 +32,7 @@ module.exports = {
 					color: 0xf2930d,
 					fields: [{
 						name: "IP",
-						value: IP,
+						value: ip,
 						inline: true
 					}, {
 						name: "Country",
