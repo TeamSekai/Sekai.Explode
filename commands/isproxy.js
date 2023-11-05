@@ -22,7 +22,7 @@ module.exports = {
 		console.log(ipInfo.proxy)
 		console.log(ipInfo.hosting)
 		if (ipInfo.proxy || ipInfo.hosting) {
-			interaction.reply({
+			return interaction.reply({
 				embeds: [{
 					title: "ねぇ、このIP怪しいよ",
 					description: `This IP is suspicious...`,
