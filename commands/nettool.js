@@ -27,6 +27,17 @@ module.exports = {
 		)
 		.addSubcommand(subcommand =>
 			subcommand
+				.setName('ipinfo')
+				.setDescription('IPInfo Lookup')
+				.addStringOption(option =>
+					option
+						.setName("ip")
+						.setDescription("IPアドレスを指定します")
+						.setRequired(true)
+				)
+		)
+		.addSubcommand(subcommand =>
+			subcommand
 				.setName('nslookup')
 				.setDescription('DNS Lookup!')
 				.addStringOption(option =>
