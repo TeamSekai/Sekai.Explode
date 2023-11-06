@@ -35,10 +35,6 @@ module.exports = {
 						.setDescription("ドメインを指定します。")
 						.setRequired(true)
 				),
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-
 		),
 		
     execute: async function (interaction) {
