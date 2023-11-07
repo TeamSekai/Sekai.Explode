@@ -18,9 +18,13 @@ const cred = '\x1b[31m';
 
 let commands = [];
 
+let oWrite = process.stdout.write;
+process.stdout.write = function () {
+    oWrite.apply(this, arguments);
+    fs.appendFileSync("discordbot.log", arguments[0] || "")
+}
 
 console.log('Starting Discord.js bot...')
-
 
 fs.readdirSync(path.join(__dirname, "commands"), {
     withFileTypes: true
