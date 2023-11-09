@@ -239,7 +239,6 @@ client.on('messageCreate', async (message) => {
 
 process.on('uncaughtException', function (err) {
 	console.error(err);
-	//console.error("Depend Err ->" + generateDependencyReport());
 });
 
 player.on("error", () => console.log("ねぇ吐血したんだけど??"));
