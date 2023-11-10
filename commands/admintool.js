@@ -39,7 +39,7 @@ module.exports = {
 					console.log("Sending Request...")
 					console.log(await rcon.send("say 再起動中..."))
 					console.log(await rcon.send("discord bcast サーバーを再起動します..."))
-					// console.log(await rcon.send("restart"))
+					console.log(await rcon.send("restart"))
 					console.log("Closing Connection...")
 					await rcon.end()
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
