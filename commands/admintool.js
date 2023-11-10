@@ -23,7 +23,7 @@ module.exports = {
     execute: async function (interaction) {
         const member = interaction.guild.members.cache.get(interaction.user.id);
 		if (!member.roles.cache.has(AdminRoleID)) {
-			await interaction.reply({ content: '管理者権限がありません。', ephemeral: true });
+			return await interaction.reply({ content: '管理者権限がありません。', ephemeral: true });
 		}
 		if (interaction.options.getSubcommand() === 'mc_restart') {
 			if (interaction.options.getString('target') ==='main') {
