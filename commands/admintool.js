@@ -37,11 +37,23 @@ module.exports = {
 					});
 					await rcon.connect()
 					console.log("Sending Request...")
-					console.log(await rcon.send("say HelloWorld"))
-					console.log(await rcon.send("discord bcast HelloWorld"))
+					console.log(await rcon.send("say 再起動中..."))
+					console.log(await rcon.send("discord bcast サーバーを再起動します..."))
+					// console.log(await rcon.send("restart"))
 					console.log("Closing Connection...")
 					await rcon.end()
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
+					const svmsg = client.channels.cache.get("907525069297831967");
+					svmsg.send({
+						embeds: [{
+							title: "再起動のリクエストが送信されました!",
+							description: "```\n再起動には数分程かかります。起動までお待ちください。\n```",
+							fields: [{
+								name: "実行者",
+								value: `<@${interaction.user.id}>`
+							}],
+						}]
+					})
 				} catch (e) {
 					console.error(e);
                     interaction.editReply(`<a:alert:1167793917199122462> 内部エラーが発生しました。(${e}`)
