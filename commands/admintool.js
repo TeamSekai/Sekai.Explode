@@ -41,6 +41,7 @@ module.exports = {
 							rcon.send('/say はろーわーるど')
 							rcon.send('/discord bcast はろーわーるど!')
 							.then((rcon) => {
+								console.log("Closing Connection...")
 								rcon.end()
 							})
 						})
