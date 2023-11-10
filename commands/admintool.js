@@ -40,7 +40,9 @@ module.exports = {
 							console.log("Sending Request...")
 							rcon.send('/say はろーわーるど')
 							rcon.send('/discord bcast はろーわーるど!')
-							rcon.end()
+							.then((rcon) => {
+								rcon.end()
+							})
 						})
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
 				} catch (e) {
