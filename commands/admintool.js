@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, IntegrationApplication } = require('discord.js');
 const { Rcon } = require('rcon-client');
-
 const { AdminRoleID, rconhost1, rconport1, rconpass1 } = require('../config.json');
 
 module.exports = {
