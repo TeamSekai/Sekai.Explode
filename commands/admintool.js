@@ -35,16 +35,11 @@ module.exports = {
                 	    port: rconport1,
                 	    password: rconpass1
 					});
-					rcon.connect()
-						.then((rcon) => {
-							console.log("Sending Request...")
-							rcon.send('/say はろーわーるど')
-							rcon.send('/discord bcast はろーわーるど!')
-							.then((rcon) => {
-								console.log("Closing Connection...")
-								rcon.end()
-							})
-						})
+					await rcon.connect()
+					console.log("Sending Request...")
+					await rcon.send('/say はろーわーるど')
+					await rcon.send('/discord bcast はろーわーるど!')
+					await rcon.end()
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
 				} catch (e) {
 					console.error(e);
