@@ -37,11 +37,11 @@ module.exports = {
 					});
 					rcon.connect()
 						.then((rcon) => {
-							rcon.send('/say はろーわーるど');
-							rcon.send('/discord bcast はろーわーるど!');
-					
+							rcon.send('/say はろーわーるど')
+							rcon.send('/discord bcast はろーわーるど!')
+							rcon.end()
 						})
-					rcon.end();
+
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
 				} catch (e) {
 					console.error(e);
