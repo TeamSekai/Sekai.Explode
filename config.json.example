@@ -12,5 +12,6 @@
 	"applicationId": "000000",
 	"cfToken": "ORIMOTOKAIRUNDHUAUNDHUAUN",
 	"cfZone": "133114688",
-	"cfPurgeUrl": "https://cdn.yourdomain.com/"
+	"cfPurgeUrl": "https://cdn.yourdomain.com/",
+	"AdminRoleID": "00000000000"
 }
