@@ -42,7 +42,6 @@ module.exports = {
 							rcon.send('/discord bcast はろーわーるど!')
 							rcon.end()
 						})
-
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
 				} catch (e) {
 					console.error(e);
