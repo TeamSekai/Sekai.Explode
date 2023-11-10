@@ -27,18 +27,23 @@ module.exports = {
 		}
 		if (interaction.options.getSubcommand() === 'mc_restart') {
 			if (interaction.options.getString('target') ==='main') {
-                await interaction.reply('<a:loading:1071641234310955129> 接続中...')
-				console.log(`Connecting to ${rconhost1}:${rconport1}...`)
-				const rcon = new Rcon({
-					host: rconhost1,
-                    port: rconport1,
-                    password: rconpass1
-				});
-				rcon.connect();
-				rcon.send('/say はろーわーるど');
-				rcon.send('/discord bcast はろーわーるど!');
-				rcon.end();
-				interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
+				try {
+					await interaction.reply('<a:loading:1071641234310955129> 接続中...')
+					console.log(`Connecting to ${rconhost1}:${rconport1}...`)
+					const rcon = new Rcon({
+						host: rconhost1,
+                	    port: rconport1,
+                	    password: rconpass1
+					});
+					rcon.connect();
+					rcon.send('/say はろーわーるど');
+					rcon.send('/discord bcast はろーわーるど!');
+					rcon.end();
+					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
+				} catch (e) {
+					console.error(e);
+                    interaction.editReply(`<a:alert:1167793917199122462> 内部エラーが発生しました。(${e}`)
+				}
             } else if (interaction.options.getString('target') === 'creative') {
                 await interaction.reply('準備中')
             } else if (interaction.options.getString('target') === 'pvp') {
