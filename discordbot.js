@@ -206,6 +206,9 @@ client.on('messageCreate', async (message) => {
     if (urls) {
         for (const url of urls) {
             if (url.includes('twitter.com') || url.includes('x.com')) {
+				if (url.includes('vxtwitter.com') || url.includes('fxtwitter.com')) { //ignore vxtwitter.com and fxtwitter.com
+					return;
+				}
                 await message.react('🔗'); // リアクションを追加
 
 				const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
