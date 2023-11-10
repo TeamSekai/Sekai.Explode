@@ -35,9 +35,12 @@ module.exports = {
                 	    port: rconport1,
                 	    password: rconpass1
 					});
-					rcon.connect();
-					rcon.send('/say はろーわーるど');
-					rcon.send('/discord bcast はろーわーるど!');
+					rcon.connect()
+						.then((rcon) => {
+							rcon.send('/say はろーわーるど');
+							rcon.send('/discord bcast はろーわーるど!');
+					
+						})
 					rcon.end();
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
 				} catch (e) {
