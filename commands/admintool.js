@@ -37,8 +37,8 @@ module.exports = {
 					});
 					await rcon.connect()
 					console.log("Sending Request...")
-					await rcon.send('/say はろーわーるど')
-					await rcon.send('/discord bcast はろーわーるど!')
+					await rcon.send('/say HelloWorld')
+					await rcon.send('/discord bcast HelloWorld')
 					await rcon.end()
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
 				} catch (e) {
