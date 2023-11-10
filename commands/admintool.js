@@ -43,7 +43,7 @@ module.exports = {
 					console.log("Closing Connection...")
 					await rcon.end()
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
-					const svmsg = client.channels.cache.get("907525069297831967");
+					const svmsg = interaction.client.channels.cache.get("907525069297831967");
 					svmsg.send({
 						embeds: [{
 							title: "再起動のリクエストが送信されました!",
