@@ -39,6 +39,7 @@ module.exports = {
 					console.log("Sending Request...")
 					await rcon.send("/say HelloWorld")
 					await rcon.send("/discord bcast HelloWorld")
+					console.log("Closing Connection...")
 					await rcon.end()
 					interaction.editReply(`<:check:962405846002847754> サーバーにリクエストを送信しました!`)
 				} catch (e) {
