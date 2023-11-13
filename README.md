@@ -26,7 +26,9 @@ discord.js@v14を使用した、多機能botです。
 
 1. このリポジトリをクローン
 2. `npm install`で依存関係をインストール
-3. `node discordbot.js`、または`pm2 start discordbot.js`で起動!
+3. `config.json.example`を`config.json`としてコピーする
+4. `config.json`を編集
+6. `node discordbot.js`、または`pm2 start discordbot.js`で起動!
 
 
 ## コマンドを登録する
