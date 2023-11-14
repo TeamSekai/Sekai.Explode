@@ -20,8 +20,16 @@ module.exports = {
 		),
 
     execute: async function (interaction) {
-        min = Math.ceil(interaction.options.getInteger("min_value"));
-        max = Math.floor(interaction.options.getInteger("max_value"));
+		if (interaction.options.getInteger("min_value")) {
+			min = Math.ceil(interaction.options.getInteger("min_value"));
+		} else {
+			min = 0
+		}
+        if (interaction.options.getInteger("max_value")) {
+			max = Math.floor(interaction.options.getInteger("max_value"));
+		} else {
+			max = 100
+		}
 		const result = Math.floor(Math.random() * (max - min) + min);
 		await interaction.reply(`結果: ${result}`)
     }
