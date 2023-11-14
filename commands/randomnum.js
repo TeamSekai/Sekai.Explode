@@ -40,7 +40,9 @@ module.exports = {
 					name: "結果:",
 					value: result,
 				}],
-				footer: `実行者: ${interaction.user.username}`
+				footer: {
+					text: `実行者: ${interaction.user.username}`
+				}
 			}]
 		})
     }
