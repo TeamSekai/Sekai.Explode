@@ -38,7 +38,7 @@ module.exports = {
 				color: 0x00fa9a,
 				fields: [{
 					name: "結果:",
-					value: result,
+					value: "```\n" + result + "\n```",
 				}],
 				footer: {
 					text: `実行者: ${interaction.user.username}`
