@@ -31,6 +31,17 @@ module.exports = {
 			max = 100
 		}
 		const result = Math.floor(Math.random() * (max - min) + min);
-		await interaction.reply(`結果: ${result}`)
+		await interaction.reply({
+			embeds: [{
+				title: "乱数を生成しました!",
+				description: `最小値: ${min}, 最大値: ${max}`,
+				color: 0x00fa9a,
+				fields: [{
+					name: "結果:",
+					value: result,
+				}],
+				footer: `実行者: ${interaction.user.username}`
+			}]
+		})
     }
 };
