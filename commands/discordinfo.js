@@ -33,6 +33,7 @@ module.exports = {
 				const groles = guild.roles.cache.size;
 				const boostStatus = guild.premiumSubscriptionCount > 0 ? `ブースト中（ブースト数: ${guild.premiumSubscriptionCount}）` : 'ブーストなし';
 				const createdAt = guild.createdAt.toDateString();
+				console.log(`${guild.createdAt} - ${createdAt}`)
 
 				const serverInfoMessage = `サーバーの情報\n
 					人数: ${gmembers}\n
