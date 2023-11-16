@@ -31,8 +31,8 @@ module.exports = {
 				const gchannels = guild.channels.cache.size;
 				const gvoicechannels = guild.channels.cache.filter(channel => channel.type === ChannelType.GuildVoice).size;
 				const groles = guild.roles.cache.size;
-				const boostStatus = guild.premiumSubscriptionCount > 0 ? `ブースト中（ブースト数: ${guild.premiumSubscriptionCount}）` : 'ブーストなし';
-				const createdAt = guild.createdAt.toDateString();
+				const boostStatus = guild.premiumSubscriptionCount > 0 ? `ブースト中（${guild.premiumSubscriptionCount} Boost!）` : 'ブーストなし';
+				const createdAt = `<t:${Math.floor(guild.createdTimestamp / 1000)}:f>`;
 				console.log(`${guild.createdAt} - ${createdAt}`)
 
 				const serverInfoMessage = `サーバーの情報\n
