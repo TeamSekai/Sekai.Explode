@@ -40,6 +40,9 @@ module.exports = {
 				await interaction.reply({
 					embeds: [{
 						title: `${username}の情報`,
+						thumbnail: {
+							url: user.displayAvatarURL({ dynamic: true })
+						},
 						color: 0x77e4a6,
 						fields: [{
 							name: "ユーザーID",
@@ -69,10 +72,17 @@ module.exports = {
 				const groles = guild.roles.cache.size;
 				const boostStatus = guild.premiumSubscriptionCount > 0 ? `あり(${guild.premiumSubscriptionCount} ブースト）` : 'なし';
 				const createdAt = `<t:${Math.floor(guild.createdTimestamp / 1000)}:R>`;
+				let guildIcon = guild.iconURL({ dynamic: true })
+				if (!guildIcon) {
+					guildIcon = 'https://cdn.mcsv.life/boticon.webp'
+				}
 
 				await interaction.reply({
 					embeds: [{
 						title: `${guildname}の情報`,
+						thumbnail: {
+							url: guildIcon
+						},
 						color: 0x52c9e0,
 						fields: [{
 							name: "サーバー人数",
