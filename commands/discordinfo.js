@@ -69,17 +69,6 @@ module.exports = {
 				const groles = guild.roles.cache.size;
 				const boostStatus = guild.premiumSubscriptionCount > 0 ? `あり(${guild.premiumSubscriptionCount} ブースト）` : 'なし';
 				const createdAt = `<t:${Math.floor(guild.createdTimestamp / 1000)}:R>`;
-				console.log(`${guild.createdAt} - ${createdAt}`)
-
-				/*
-				const serverInfoMessage = `サーバーの情報\n
-					人数: ${gmembers}\n
-					テキストチャンネル数: ${gchannels}\n
-					ボイスチャンネル数: ${gvoicechannels}\n
-					ロール数: ${groles}\n
-					作成日: ${createdAt}\n
-					ブースト状態: ${boostStatus}`;
-				*/
 
 				await interaction.reply({
 					embeds: [{
