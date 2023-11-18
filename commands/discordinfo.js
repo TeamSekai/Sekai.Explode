@@ -29,7 +29,11 @@ module.exports = {
 				const userid = user.id
 				const createdAt = `<t:${Math.floor(user.createdTimestamp / 1000)}:f>`; //*ChatGPT MOMENT
 				const joinDate = `<t:${Math.floor(member.joinedTimestamp / 1000)}:f>`;
-				const roles = member.roles.cache.map(role => role.name).join(', ');
+				const roles = member.roles.cache
+					.filter(role => role.id !== interaction.guild.roles.everyone.id)
+					.map(role => role.name)
+					.join(', ');
+
 				const userInfoMessage = `ユーザーの情報\n
                 名前: ${username} (id: ${userid})\n
                 アカウント作成日: ${createdAt}\n
