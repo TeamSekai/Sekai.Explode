@@ -23,7 +23,21 @@ module.exports = {
 		execute: async function (interaction) {
 			const subcommand = interaction.options.getSubcommand();
 			if (subcommand === 'user') {
-				await interaction.reply("さーせん、こいつまだ作ってないんすわ")
+				const user = interaction.options.getUser('target')
+				const member = await interaction.guild.members.fetch(user.id)
+				const username = user.username
+				const userid = user.id
+				const createdAt = `<t:${Math.floor(user.createdTimestamp / 1000)}:f>`; //*ChatGPT MOMENT
+				const joinDate = `<t:${Math.floor(member.joinedTimestamp / 1000)}:f>`;
+				const roles = member.roles.cache.map(role => role.name).join(', ');
+				const userInfoMessage = `ユーザーの情報\n
+                名前: ${username} (id: ${userid})\n
+                アカウント作成日: ${createdAt}\n
+                サーバー参加日: ${joinDate}\n
+                所持しているロール: ${roles}`;
+
+				await interaction.reply(userInfoMessage);
+
 			}
 			if (subcommand === 'server') {
 				const guild = interaction.guild;
