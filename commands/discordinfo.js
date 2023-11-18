@@ -33,7 +33,6 @@ module.exports = {
 					.filter(role => role.id !== interaction.guild.roles.everyone.id)
 					.map(role => role.name)
 					.join(', ');
-				const rolecount = roles.size
 
 				await interaction.reply({
 					embeds: [{
@@ -51,7 +50,7 @@ module.exports = {
 							value: joinDate,
 							inline: true
 						}, {
-							name: `ロール(${role.size})`,
+							name: `ロール(${roles.size})`,
 							value: roles
 						}]
 					}]
