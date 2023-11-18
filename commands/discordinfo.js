@@ -53,7 +53,7 @@ module.exports = {
 							value: joinDate,
 							inline: true
 						}, {
-							name: `ロール(${RoleSelectMenuComponent})`,
+							name: `ロール(${roleCount})`,
 							value: roles
 						}]
 					}]
