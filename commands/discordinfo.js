@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, ChannelType, RoleSelectMenuComponent } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -33,7 +33,10 @@ module.exports = {
 					.filter(role => role.id !== interaction.guild.roles.everyone.id)
 					.map(role => role.name)
 					.join(', ');
-
+				
+				const roleCount = member.roles.cache
+					.filter(role => role.id !== interaction.guild.roles.everyone.id)
+					.size; //*ChatGPT again
 				await interaction.reply({
 					embeds: [{
 						title: `${username}の情報`,
@@ -50,7 +53,7 @@ module.exports = {
 							value: joinDate,
 							inline: true
 						}, {
-							name: `ロール(${roles.size})`,
+							name: `ロール(${RoleSelectMenuComponent})`,
 							value: roles
 						}]
 					}]
