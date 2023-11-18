@@ -43,7 +43,7 @@ module.exports = {
 						color: 0x77e4a6,
 						fields: [{
 							name: "ユーザーID",
-							value: `${userid} - [Copy](https://paste-pgpj.onrender.com/?p${userid})`
+							value: `${userid} - [Copy](https://paste-pgpj.onrender.com/?p=${userid})`
 						}, {
 							name: "アカウント作成日",
 							value: createdAt,
