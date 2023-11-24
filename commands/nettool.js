@@ -51,7 +51,7 @@ module.exports = {
     execute: async function (interaction) {
 		const subcommand = interaction.options.getSubcommand();
 		if (subcommand === 'isproxy') {
-			let ip = interaction.options.getString("ip");
+			let ip = interaction.options.getString("ip")
 			try {
 				ipInfo = (await axios.get(`http://ip-api.com/json/${encodeURI(ip)}?fields=status,country,regionName,city,isp,proxy,hosting`)).data;
 			} catch (e) {
@@ -60,6 +60,7 @@ module.exports = {
 			}
 			console.log(ipInfo.proxy)
 			console.log(ipInfo.hosting)
+			ip.replace(/@/g, '@\u200B');
 			if (ipInfo.proxy || ipInfo.hosting) {
 				return interaction.reply({
 					embeds: [{
