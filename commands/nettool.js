@@ -49,7 +49,7 @@ module.exports = {
 		),
 		
     execute: async function (interaction) {
-		const subcommand = interaction.options.getSubcommand();
+		const subcommand = interaction.options.getSubcommand().replace(/@/g, '@\u200B');
 		if (subcommand === 'isproxy') {
 			let ip = interaction.options.getString("ip")
 			try {
@@ -60,7 +60,6 @@ module.exports = {
 			}
 			console.log(ipInfo.proxy)
 			console.log(ipInfo.hosting)
-			ip.replace(/@/g, '@\u200B');
 			if (ipInfo.proxy || ipInfo.hosting) {
 				return interaction.reply({
 					embeds: [{
