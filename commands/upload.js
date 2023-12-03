@@ -52,6 +52,9 @@ module.exports = {
                 },
                 headers: form.getHeaders()
             });
+			console.log(res)
+			console.log("==========")
+			console.log(res2)
             interaction.editReply(`/${res2.data.fileName} としてアップロードしました！`);
             const user = interaction.user;
             const dmChannel = await user.createDM();
