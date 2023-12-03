@@ -16,8 +16,16 @@ module.exports = {
             option
                 .setName("filename")
                 .setDescription("ファイル名")
+        )
+        .addBooleanOption(option =>
+            option
+                .setName("private")
+                .setDescription("プライベート")
+                .setRequired(false)
         ),
-    execute: async function (interaction) {
+    execute: async function (
+        /** @type {import('discord.js').CommandInteraction} */
+        interaction) {
         if (!config.cdnUploadURL || !config.uploadAllowUsers) {
             return interaction.reply("内部エラー (missing config.json)");
         }
@@ -29,28 +37,34 @@ module.exports = {
         }
         await interaction.deferReply();
         const file = interaction.options.getAttachment("file")
+
         try {
             let res = await axios.get(file.proxyURL, {
                 responseType: "stream"
             });
             const form = new FormData()
             let filename = interaction.options.get("filename")?.value;
+            let isPrivate = interaction.options.get("private")?.value == true;
             form.append('file', res.data, filename || file.name)
-            let res2 = await axios.post(config.cdnUploadURL, form, { headers: form.getHeaders() });
-            if (!res2.data?.success) throw new Error();
+            let res2 = await axios.post(config.cdnUploadURL, form, {
+                params: {
+                    private: isPrivate
+                },
+                headers: form.getHeaders()
+            });
             interaction.editReply(`/${res2.data.fileName} としてアップロードしました！`);
-			const user = interaction.user
-			const dmChannel = await user.createDM();
-			dmChannel.send({
-				embeds: [{
-					title: `${res2.data.fileName}がアップロードされました!`,
-					color: 0x5865f2,
-					fields: [{
-						name: "URL",
-						value: "```" + `https://cdn.mcsv.life/${res2.data.fileName}` + "```" + `\n[Click to copy!](https://paste-pgpj.onrender.com/?p=https://cdn.mcsv.life/${res2.data.fileName})`,
-					}]
-				}]
-			});
+            const user = interaction.user;
+            const dmChannel = await user.createDM();
+            dmChannel.send({
+                embeds: [{
+                    title: `${res2.data.fileName}がアップロードされました!` + (isPrivate ? " (プライベート)" : ""),
+                    color: 0x5865f2,
+                    fields: [{
+                        name: "URL",
+                        value: "```" + `https://cdn.mcsv.life/${res2.data.fileName}` + "```" + `\n[Click to copy!](https://paste-pgpj.onrender.com/?p=https://cdn.mcsv.life/${res2.data.fileName})`,
+                    }]
+                }]
+            });
             try {
                 if (!config.cfZone || !config.cfToken || !config.cfPurgeUrl) return;
                 axios.post(`https://api.cloudflare.com/client/v4/zones/${config.cfZone}/purge_cache`, {
