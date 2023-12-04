@@ -38,7 +38,7 @@ function addPingValue(ping) {
 						state: `Ping: ${client.ws.ping}ms(avg: ${avgPing}ms)`,
 						type: ActivityType.Watching,
 					}],
-					Status: `online`,
+					status: `online`,
 				});
 			}, 40000)
 		})
