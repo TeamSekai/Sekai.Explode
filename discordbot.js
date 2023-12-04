@@ -46,7 +46,7 @@ const options = {
 		GatewayIntentBits.GuildMessageReactions,
 		GatewayIntentBits.MessageContent
 	],
-	ws: { properties: { $browser: "Discord iOS" }}
+	// ws: { properties: { $browser: "Discord iOS" }}
 };
 
 const client = new Client(options);
