@@ -101,13 +101,6 @@ client.on('ready', async () => {
 	SyslogChannel.send('Discord.js Bot is Ready!')
 	const wsping = client.ws.ping;
 	activity.addPingValue(wsping)
-	client.user.setPresence({
-		activities: [{
-			name: `[${client.ws.ping}ms] | Created by ringoXD`,
-			type: ActivityType.Watching,
-		}],
-		Status: `online`,
-	});
 })
 
 
