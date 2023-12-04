@@ -100,7 +100,7 @@ client.on('ready', async () => {
 			state: `Sekai.explode is now loading...`,
 			type: ActivityType.Playing,
 		}],
-		Status: "idle"
+		status: "dns"
 	});
 	console.log(`Registering commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
