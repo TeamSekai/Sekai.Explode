@@ -46,7 +46,7 @@ const options = {
 		GatewayIntentBits.GuildMessageReactions,
 		GatewayIntentBits.MessageContent
 	],
-	ws: { properties: { browser: 'Discord iOS' } },
+	ws: { properties: { $browser: "Discord iOS" }}
 };
 
 const client = new Client(options);
@@ -100,7 +100,7 @@ client.on('ready', async () => {
 			state: `Sekai.explode is now loading...`,
 			type: ActivityType.Watching,
 		}],
-		Status: "dnd",
+		Status: "idle"
 	});
 	console.log(`Registering commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
