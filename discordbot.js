@@ -98,7 +98,7 @@ client.on('ready', async () => {
 		activities: [{
 			name: `Loading...`,
 			state: `Sekai.explode is now loading...`,
-			type: ActivityType.Watching,
+			type: ActivityType.Playing,
 		}],
 		Status: "idle"
 	});
