@@ -99,8 +99,6 @@ client.on('ready', async () => {
 	console.log(`${cgreen}Ready!`);
 	let SyslogChannel = client.channels.cache.get("1151139585791901746");
 	SyslogChannel.send('Discord.js Bot is Ready!')
-	const wsping = client.ws.ping;
-	activity.addPingValue(wsping)
 })
 
 

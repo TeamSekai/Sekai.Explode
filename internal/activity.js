@@ -34,8 +34,8 @@ function addPingValue(ping) {
 				const avgPing = wspingValues.reduce((sum, value) => sum + value, 0) / wspingValues.length;
 				client.user.setPresence({
 					activities: [{
-						name: `Created by ringoXD`,
-						state: `Running on Node.js...\nPing: ${client.ws.ping}(avg: ${avgPing})`,
+						name: `Sekai`,
+						state: `Ping: ${client.ws.ping}ms(avg: ${avgPing}ms)`,
 						type: ActivityType.Watching,
 					}],
 					Status: `online`,
