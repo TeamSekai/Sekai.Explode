@@ -93,7 +93,14 @@ setInterval(() => {
 client.on('ready', async () => {
 	client.templinks = [];
 	console.log(`${cgreen}Logged in as${creset} ${client.user.tag}`);
-	client.user.setPresence('起動中...', { status: 'dnd' });
+	client.user.setPresence({
+		activities: [{
+			name: `Loading...`,
+			state: `Sekai.explode is now loading...`,
+			type: ActivityType.Watching,
+		}],
+		Status: `dnd`,
+	});
 	console.log(`Registering commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
 	console.log(`${cgreen}Ready!`);
