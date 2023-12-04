@@ -1,6 +1,6 @@
 //* Discord.js Bot - by ringoXD
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
-const { Client, Events, GatewayIntentBits, Status, ActivityType } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Status, ActivityType, ActivityPlatform } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
 const { token, linkPort, linkDomain, guildId } = require('./config.json');
@@ -45,7 +45,8 @@ const options = {
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildMessageReactions,
 		GatewayIntentBits.MessageContent
-	]
+	],
+	ws: { properties: { browser: 'Discord iOS' } },
 };
 
 const client = new Client(options);
@@ -99,7 +100,7 @@ client.on('ready', async () => {
 			state: `Sekai.explode is now loading...`,
 			type: ActivityType.Watching,
 		}],
-		Status: `dnd`,
+		Status: "dnd",
 	});
 	console.log(`Registering commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
