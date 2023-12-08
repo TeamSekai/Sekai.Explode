@@ -1,4 +1,4 @@
-//* Discord.js Bot - by ringoXD
+//* Discord.js Bot - by ringoXD -
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
 const { Client, Events, GatewayIntentBits, Status, ActivityType, ActivityPlatform } = require('discord.js');
 const fs = require("fs");
