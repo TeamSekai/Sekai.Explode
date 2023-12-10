@@ -14,6 +14,11 @@
 	"cfZone": "133114688",
 	"cfPurgeUrl": "https://cdn.yourdomain.com/",
 	"AdminRoleID": "00000000000",
+	"mongoDBhost": "127.0.0.1",
+	"mongoDBport": "27017",
+	"mongoDBuser": "admin",
+	"mongoDBpass": "password",
+	"mongoDBdatabase": "password",
 	"rconhost1": "192.168.1.255",
 	"rconport1": "25575",
 	"rconpass1": "yourpassword1234"

@@ -17,6 +17,7 @@
     "ip-range-check": "^0.2.0",
     "libsodium-wrappers": "^0.7.13",
     "mediaplex": "^0.0.8",
+    "mongoose": "^8.0.3",
     "path": "^0.12.7",
     "rcon-client": "^4.2.3",
     "ytdl-core": "^4.11.5"
