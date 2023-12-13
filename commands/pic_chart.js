@@ -5,7 +5,7 @@ const fs = require('fs');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('pie_chart')
+		.setName('piechart')
 		.setDescription('円グラフを生成します。')
 		.addStringOption(option =>
 			option
