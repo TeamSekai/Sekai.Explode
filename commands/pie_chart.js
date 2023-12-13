@@ -1,4 +1,3 @@
-/*
 const { SlashCommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 const { createCanvas, loadImage } = require('canvas');
@@ -89,4 +88,3 @@ module.exports = {
 };
 
 
-*/
