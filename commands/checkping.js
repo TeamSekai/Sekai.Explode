@@ -3,7 +3,13 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('checkping')
-        .setDescription('Ping Checker'),
+        .setDescription('Ping Checker')
+		.addStringOption(option => (
+			option
+			.setName('ip')
+			.setDescription('IPアドレスを入力')
+			.setRequired(true)
+		)),
     execute: async function (interaction) {
         let url = args[0];
             try { new URL(url) } catch { return message.reply("URLが間違っています") };
