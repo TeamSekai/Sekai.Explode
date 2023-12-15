@@ -22,7 +22,7 @@ module.exports = {
                 "Accept": "application/json"
             }
         })
-        let msg = await message.reply("チェックしています...");
+        let msg = await interaction.reply("チェックしています...");
         let checkCount = 0;
         let checkResult = async () => {
             checkCount++;
