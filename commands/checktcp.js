@@ -12,7 +12,7 @@ module.exports = {
 		)),
     execute: async function (interaction) {
         let url = interaction.options.getString('ip');
-        try { new URL(url) } catch { return message.reply("URLが間違っています") };
+        try { new URL(url) } catch { return interaction.reply("URLが間違っています") };
         let res = await axios.get("https://check-host.net/check-ping", {
             params: {
                 host: url,
