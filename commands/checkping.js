@@ -1,5 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const axios = require('axios').default;
+
+const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('checkping')
@@ -12,7 +15,14 @@ module.exports = {
 		)),
 	execute: async function (interaction) {
 		let url = interaction.options.getString('ip');
-		try { new URL(url) } catch { return interaction.reply("URLが間違っています") };
+		if (!ipv4Regex.test(url)) {
+			try {
+				new URL(url)
+			} catch {
+				return interaction.reply("IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。")
+			}
+			// return interaction.reply("IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。");
+		}
 		let res = await axios.get("https://check-host.net/check-ping", {
 			params: {
 				host: url,
