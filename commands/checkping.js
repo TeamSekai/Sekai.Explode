@@ -2,8 +2,8 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('dev02')
-        .setDescription('view'),
+        .setName('checkping')
+        .setDescription('Ping Checker'),
     execute: async function (interaction) {
         let url = args[0];
             try { new URL(url) } catch { return message.reply("URLが間違っています") };
@@ -25,7 +25,7 @@ module.exports = {
                 let str = Object.entries(res2.data).map(([key, value]) => {
                     let nodeName = key.replace(".node.check-host.net", "");
                     let data = value?.[0];
-					console.log("")
+					console.log("Data for", nodeName, ":", data);
                     if (!value || !data) return `[${nodeName}] Timeout`;
                     return `[${nodeName}] ${data[3] || "Error"}/${data[2]} | Ping: ${Math.floor(data[1] * 1000)}ms`;
                 }).filter(x => !!x).join("\n");
