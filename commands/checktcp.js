@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('dev02')
+        .setName('dev03')
         .setDescription('view'),
     execute: async function (interaction) {
         let url = args[0];
