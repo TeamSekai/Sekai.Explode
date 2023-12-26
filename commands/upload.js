@@ -45,6 +45,7 @@ module.exports = {
             const form = new FormData()
             let filename = interaction.options.get("filename")?.value;
             let isPrivate = interaction.options.get("private")?.value == true;
+			console.log(`isPrivate?: ${isPrivate}`)
             form.append('file', res.data, filename || file.name)
             let res2 = await axios.post(config.cdnUploadURL, form, {
                 params: {
