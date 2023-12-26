@@ -56,7 +56,7 @@ module.exports = {
 			console.log(res)
 			console.log("==========")
 			console.log(res2)
-            interaction.editReply((isPrivate ? " /private/" : "") + `/${res2.data.fileName} としてアップロードしました！`);
+            interaction.editReply((isPrivate ? " /private/" : "") + "${res2.data.fileName} としてアップロードしました！`);
             const user = interaction.user;
             const dmChannel = await user.createDM();
             dmChannel.send({
