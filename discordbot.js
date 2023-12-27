@@ -275,9 +275,11 @@ client.on('messageCreate', async (message) => {
                 const collector = message.createReactionCollector({ filter, time: 30000 });
 
                 collector.on('collect', async (reaction, user) => {
+					console.log(`Before: ${url}`)
 					if (url.includes('vt.tiktok.com')) {
 						url = getRedirectUrl(url)
 					}
+					console.log(`After: ${url}`)
 					if (url.includes('Error')) {
 						message.channel.send("処理中にエラーが発生しました。\n" + "```" + url + "\n```")
 					}
