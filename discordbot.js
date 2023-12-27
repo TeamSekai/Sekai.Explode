@@ -22,15 +22,13 @@ let commands = [];
 
 async function getRedirectUrl(shortUrl) {
     try {
-        const response = await axios.head(shortUrl, { maxRedirects: 0 });
-        if (response.status === 301 || response.status === 302) {
-            const redirectUrl = response.headers.location;
-            console.log('Redirect URL:', redirectUrl);
-            return redirectUrl;
-        } else {
-            console.log('Unexpected status code:', response.status);
-			return `Error: ${response.status}`
-        }
+        const response = await axios.head(shortUrl, {
+			maxRedirects: 0,
+			 validateStatus: (status) => status == 301 || status == 302
+		});
+        const redirectUrl = response.headers.location;
+        console.log('Redirect URL:', redirectUrl);
+        return redirectUrl;
     } catch (error) {
         console.error('Error:', error.message);
 		return `Error: ${error.message}`
