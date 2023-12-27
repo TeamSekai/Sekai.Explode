@@ -6,10 +6,12 @@ const path = require("path");
 const { token, linkPort, linkDomain, guildId } = require('./config.json');
 const express = require("express");
 const app = express();
+const axios = require('axios');
 const server = require("http").Server(app);
 const activity = require('./internal/activity');
 const { Player } = require('discord-player');
 const { crypto_kx_client_session_keys } = require('libsodium-wrappers');
+const internal = require('stream');
 process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
 
 const creset = '\x1b[0m';
@@ -17,6 +19,24 @@ const cgreen = '\x1b[32m';
 const cred = '\x1b[31m';
 
 let commands = [];
+
+async function getRedirectUrl(shortUrl) {
+    try {
+        const response = await axios.head(shortUrl, { maxRedirects: 0 });
+        if (response.status === 301 || response.status === 302) {
+            const redirectUrl = response.headers.location;
+            console.log('Redirect URL:', redirectUrl);
+            return redirectUrl;
+        } else {
+            console.log('Unexpected status code:', response.status);
+			return `Error: ${response.status}`
+        }
+    } catch (error) {
+        console.error('Error:', error.message);
+		return `Error: ${error.message}`
+    }
+}
+
 
 let oWrite = process.stdout.write;
 process.stdout.write = function () {
@@ -210,7 +230,7 @@ client.on('messageCreate', async (message) => {
 		message.reply("https://soreha.so/")
 		return;
 	}
-    const urls = message.content.match(/https?:\/\/[^\s]+/g);
+    let urls = message.content.match(/https?:\/\/[^\s]+/g);
 
     if (urls) {
         for (const url of urls) {
@@ -225,6 +245,43 @@ client.on('messageCreate', async (message) => {
 
                 collector.on('collect', async (reaction, user) => {
                     const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
+					let fxmsg = `Requested by:${user.username}\n${modifiedURL}`
+					message.channel.send(fxmsg)
+						.then(sentmsg => {
+							message.reactions.removeAll().catch(e => {
+								console.error(`reaction.removeAll error: ${e.code}`)
+								let errmsg = `\n> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${e.code})`
+								sentmsg.edit(`${fxmsg}${errmsg}`);
+							})
+						})
+		
+					collector.stop();
+                });
+
+                collector.on('end', (collected, reason) => {
+                    if (reason === 'time') {
+                        // TIMEOUT
+                        message.reactions.removeAll();
+                    }
+                });
+            }
+			if (url.includes('vt.tiktok.com') || url.includes('www.tiktok.com')) {
+				if (url.includes('vxtiktok.com')) { 
+					return;
+				}
+                await message.react('🔗'); // リアクションを追加
+
+				const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
+                const collector = message.createReactionCollector({ filter, time: 30000 });
+
+                collector.on('collect', async (reaction, user) => {
+					if (url.includes('vt.tiktok.com')) {
+						url = getRedirectUrl(url)
+					}
+					if (url.includes("Error:")) {
+						message.channel.send("処理中にエラーが発生しました。\n" + "```" + url + "\n```")
+					}
+                    const modifiedURL = url.replace('www.tiktok.com', 'vxtiktok.com');
 					let fxmsg = `Requested by:${user.username}\n${modifiedURL}`
 					message.channel.send(fxmsg)
 						.then(sentmsg => {
