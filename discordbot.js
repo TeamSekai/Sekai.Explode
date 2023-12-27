@@ -24,6 +24,12 @@ process.stdout.write = function () {
     fs.appendFileSync("discordbot.log", arguments[0] || "")
 }
 
+let oWrite2 = process.stdout.write;
+process.stderr.write = function () {
+    oWrite2.apply(this, arguments);
+    fs.appendFileSync("discordbot.log", arguments[0] || "")
+}
+
 console.log('Starting Discord.js bot...')
 
 fs.readdirSync(path.join(__dirname, "commands"), {
