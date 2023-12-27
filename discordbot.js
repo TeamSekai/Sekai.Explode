@@ -200,6 +200,9 @@ app.get("/:linkCode", async (req, res) => {
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
 
+	if (message.content.includes("それはそう")) {
+		message.channel.reply("https://soreha.so/")
+	}
     const urls = message.content.match(/https?:\/\/[^\s]+/g);
 
     if (urls) {
