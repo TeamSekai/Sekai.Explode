@@ -202,6 +202,7 @@ client.on('messageCreate', async (message) => {
 
 	if (message.content.includes("それはそう")) {
 		message.channel.reply("https://soreha.so/")
+		return;
 	}
     const urls = message.content.match(/https?:\/\/[^\s]+/g);
 
