@@ -233,7 +233,7 @@ client.on('messageCreate', async (message) => {
     let urls = message.content.match(/https?:\/\/[^\s]+/g);
 
     if (urls) {
-        for (const url of urls) {
+        for (let url of urls) {
             if (url.includes('twitter.com') || url.includes('x.com')) {
 				if (url.includes('vxtwitter.com') || url.includes('fxtwitter.com')) { //ignore vxtwitter.com and fxtwitter.com
 					return;
