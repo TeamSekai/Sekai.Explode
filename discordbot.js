@@ -230,7 +230,7 @@ client.on('messageCreate', async (message) => {
 		message.reply("https://soreha.so/")
 		return;
 	}
-    let urls = message.content.match(/https?:\/\/[^\s]+/g);
+    const urls = message.content.match(/https?:\/\/[^\s]+/g);
 
     if (urls) {
         for (let url of urls) {
@@ -278,7 +278,7 @@ client.on('messageCreate', async (message) => {
 					if (url.includes('vt.tiktok.com')) {
 						url = getRedirectUrl(url)
 					}
-					if (url.includes("Error:")) {
+					if (url.includes('Error')) {
 						message.channel.send("処理中にエラーが発生しました。\n" + "```" + url + "\n```")
 					}
                     const modifiedURL = url.replace('www.tiktok.com', 'vxtiktok.com');
