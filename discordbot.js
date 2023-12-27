@@ -277,7 +277,7 @@ client.on('messageCreate', async (message) => {
                 collector.on('collect', async (reaction, user) => {
 					console.log(`Before: ${url}`)
 					if (url.includes('vt.tiktok.com')) {
-						url = getRedirectUrl(url)
+						url = await getRedirectUrl(url);
 					}
 					console.log(`After: ${url}`)
 					if (url.includes('Error')) {
