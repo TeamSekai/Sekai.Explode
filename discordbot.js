@@ -22,7 +22,7 @@ let commands = [];
 
 async function getRedirectUrl(shortUrl) {
     try {
-        const response = await axios.head(shortUrl, { maxRedirects: 10 });
+        const response = await axios.head(shortUrl, { maxRedirects: 0 });
         if (response.status === 301 || response.status === 302) {
             const redirectUrl = response.headers.location;
             console.log('Redirect URL:', redirectUrl);
