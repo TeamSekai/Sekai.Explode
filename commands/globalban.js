@@ -74,7 +74,7 @@ module.exports = {
 		
 		} else if (subcommand === 'dev-rm') {
 			// userIdをデータベースから削除
-			await interaction.reply('ねえエラーでたんだけど?\n```' + error + "\n```");
+			const user = interaction.options.getUser('user');
 			try {
 				await mongodb.connection.collection('globalBans').deleteOne({ userId: user.id });
 				await interaction.reply(`${user.tag}をグローバルBANリストから削除しました。`);
