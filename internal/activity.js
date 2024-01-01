@@ -1,7 +1,7 @@
 const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 
 
-console.log('Loaded activity.js')
+console.log('Called internal activity system')
 
 
 // 10秒毎に更新

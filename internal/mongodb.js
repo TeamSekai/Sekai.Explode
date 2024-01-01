@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 const config = require('../config.json');
-connectMongoose().catch(err => console.log(err));
+
+
+console.log('Called mongodb internal system.')
+connectMongoose()
 
 async function connectMongoose() {
-	await mongoose.connect(`mongodb://${config.mongoDBuser}:${config.mongoDBpass}@${config.mongoDBhost}:${config.mongoDBport}/${config.mongoDBdatabase}`);
+	try {
+		await mongoose.connect(`mongodb://${config.mongoDBuser}:${config.mongoDBpass}@${config.mongoDBhost}:${config.mongoDBport}/${config.mongoDBdatabase}`);
+	} catch (e) {
+		console.log(e)
+	}
 }
 
 
