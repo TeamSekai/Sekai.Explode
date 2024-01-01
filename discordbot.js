@@ -10,7 +10,6 @@ const axios = require('axios');
 const server = require("http").Server(app);
 const activity = require('./internal/activity');
 const { Player } = require('discord-player');
-const { crypto_kx_client_session_keys } = require('libsodium-wrappers');
 const internal = require('stream');
 process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
 
