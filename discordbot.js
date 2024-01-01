@@ -75,6 +75,7 @@ fs.readdirSync(path.join(__dirname, "commands"), {
     if (!file.isFile() || path.extname(file.name) != ".js")
         return;
     let cmds = require(path.join(__dirname, "commands", file.name));
+	console.log(`${cgreen}Loading ${file.name}...\e[0m`)
     if (Array.isArray(cmds))
         commands = [...commands, ...cmds];
     else
