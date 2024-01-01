@@ -41,6 +41,7 @@ module.exports = {
 					option
 						.setName("user")
 						.setDescription("enter id")
+						.setRequired(true)
 				))
 		)
 		.addSubcommand(subcommand => 
