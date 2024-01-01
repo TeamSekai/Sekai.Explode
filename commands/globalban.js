@@ -47,7 +47,6 @@ module.exports = {
 			subcommand
 				.setName('dev-view')
 				.setDescription('admin only')
-				.setRequired(false)
 		),
     execute: async function (interaction) {
 		const executorID = interaction.user.id; // executed by
