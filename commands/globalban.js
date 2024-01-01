@@ -20,12 +20,18 @@ module.exports = {
 						.setDescription("ユーザーを指定します。")
 						.setRequired(true)
 				))
+		)
+		.addSubcommand(subcommand => 
+			subcommand
+				.setName('dev')
+				.setDescription('admin only')
 		),
     execute: async function (interaction) {
-        await interaction.reply(`作成中...`) //!完成したら削除すること
 		const subcommand = interaction.options.getSubcommand()
-		if (subcommand === 'sync') {
-			//TODO: do yourself
+		if (subcommand === 'dev') {
+			
+		} else {
+			return await interaction.reply("Soon")
 		}
 		
     }
