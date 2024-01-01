@@ -1,17 +1,20 @@
 //* Discord.js Bot - by ringoXD -
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
-const { Client, Events, GatewayIntentBits, Status, ActivityType, ActivityPlatform } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
-const { token, linkPort, linkDomain, guildId } = require('./config.json');
+const { token, linkPort, linkDomain } = require('./config.json');
 const express = require("express");
 const app = express();
 const axios = require('axios');
 const server = require("http").Server(app);
-const activity = require('./internal/activity');
 const { Player } = require('discord-player');
 const internal = require('stream');
 process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
+
+//!Load Internal dir code
+const activity = require('./internal/activity');
+const mongodb = require('./internal/mongodb')
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
