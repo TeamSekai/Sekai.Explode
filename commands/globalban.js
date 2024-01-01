@@ -83,7 +83,7 @@ module.exports = {
 			}
 		} else if (subcommand === 'dev-view') {
 			try {
-				const userCollection = mongodb.connection.collection('users'); // usersは適切なコレクション名に変更してください
+				const userCollection = mongodb.connection.collection('globalBans'); // usersは適切なコレクション名に変更してください
 				const userIds = await userCollection.distinct('userId');
 				
 				if (userIds.length > 0) {
