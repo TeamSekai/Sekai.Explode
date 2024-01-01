@@ -19,7 +19,7 @@ module.exports = {
 					option
 						.setName("user")
 						.setDescription("ユーザーを指定します。")
-						.setRequired(false)
+						.setRequired(true)
 				))
 		)
 		.addSubcommand(subcommand => 
@@ -30,7 +30,7 @@ module.exports = {
 					option
 						.setName("user")
 						.setDescription("enter id")
-						.setRequired(false)
+						.setRequired(true)
 				))
 		)
 		.addSubcommand(subcommand => 
@@ -41,7 +41,6 @@ module.exports = {
 					option
 						.setName("user")
 						.setDescription("enter id")
-						.setRequired(false)
 				))
 		)
 		.addSubcommand(subcommand => 
