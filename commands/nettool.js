@@ -49,9 +49,9 @@ module.exports = {
 		),
 		
     execute: async function (interaction) {
-		const subcommand = interaction.options.getSubcommand().replace(/@/g, '@\u200B');
+		const subcommand = interaction.options.getSubcommand()
 		if (subcommand === 'isproxy') {
-			let ip = interaction.options.getString("ip")
+			let ip = interaction.options.getString("ip").replace(/@/g, '@\u200B');
 			try {
 				ipInfo = (await axios.get(`http://ip-api.com/json/${encodeURI(ip)}?fields=status,country,regionName,city,isp,proxy,hosting`)).data;
 			} catch (e) {

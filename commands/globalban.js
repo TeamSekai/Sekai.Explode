@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const mongodb = require('../internal/mongodb') //*MongoDB
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,6 +22,8 @@ module.exports = {
 				))
 		),
     execute: async function (interaction) {
-        await interaction.reply(`ふぁっきゅー`)
+        await interaction.reply(`作成中...`) //!完成したら削除すること
+		const subcommand = interaction.options.getSubcommand()
+		
     }
 };
