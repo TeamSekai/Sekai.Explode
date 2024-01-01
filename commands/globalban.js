@@ -24,6 +24,9 @@ module.exports = {
     execute: async function (interaction) {
         await interaction.reply(`作成中...`) //!完成したら削除すること
 		const subcommand = interaction.options.getSubcommand()
+		if (subcommand === 'sync') {
+			//TODO: do yourself
+		}
 		
     }
 };
