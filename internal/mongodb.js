@@ -7,7 +7,7 @@ connectMongoose()
 
 async function connectMongoose() {
 	try {
-		await mongoose.connect(`mongodb://${config.mongoDBuser}:${config.mongoDBpass}@${config.mongoDBhost}:${config.mongoDBport}/${config.mongoDBdatabase}`);
+		await mongoose.connect(`mongodb://${config.mongoDBuser}:${config.mongoDBpass}@${config.mongoDBhost}:${config.mongoDBport}/${config.mongoDBdatabase}?authSource=admin`);
 	} catch (e) {
 		console.log(e)
 	}
