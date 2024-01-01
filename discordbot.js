@@ -20,6 +20,19 @@ const cred = '\x1b[31m';
 
 let commands = [];
 
+//!LOGGER
+let oWrite = process.stdout.write;
+process.stdout.write = function () {
+    oWrite.apply(this, arguments);
+    fs.appendFileSync("discordbot.log", arguments[0] || "")
+}
+
+let oWrite2 = process.stdout.write;
+process.stderr.write = function () {
+    oWrite2.apply(this, arguments);
+    fs.appendFileSync("discordbot.log", arguments[0] || "")
+}
+//!function
 async function getRedirectUrl(shortUrl) {
     try {
         const response = await axios.head(shortUrl, {
@@ -34,19 +47,23 @@ async function getRedirectUrl(shortUrl) {
 		return `Error: ${error.message}`
     }
 }
+function unicodeEscape(str) {
+	if (!String.prototype.repeat) {
+		String.prototype.repeat = function (digit) {
+			var result = '';
+			for (var i = 0; i < Number(digit); i++) result += str;
+			return result;
+		};
+	}
+	var strs = str.split(''), hex, result = '';
+	for (var i = 0, len = strs.length; i < len; i++) {
+		hex = strs[i].charCodeAt(0).toString(16);
+		result += '\\u' + ('0'.repeat(Math.abs(hex.length - 4))) + hex;
+	}
+	return result;
+};
 
-
-let oWrite = process.stdout.write;
-process.stdout.write = function () {
-    oWrite.apply(this, arguments);
-    fs.appendFileSync("discordbot.log", arguments[0] || "")
-}
-
-let oWrite2 = process.stdout.write;
-process.stderr.write = function () {
-    oWrite2.apply(this, arguments);
-    fs.appendFileSync("discordbot.log", arguments[0] || "")
-}
+//!RUN=======================
 
 console.log('Starting Discord.js bot...')
 
@@ -74,35 +91,13 @@ const options = {
 };
 
 const client = new Client(options);
-// this is the entrypoint for discord-player based application
 console.log('Loading Discord-Player')
 const player = new Player(client);
-
-// Now, lets load all the default extractors, except 'YouTubeExtractor'. You can remove the filter if you want to load all the extractors.
 player.extractors.loadDefault();
-
-// this event is emitted whenever discord-player starts to play a track
-player.events.on('playerStart', (queue, track) => {
-    // we will later define queue.metadata object while creating the queue
-    // queue.metadata.channel.send(`**${track.title}**を再生中`);
-    queue.metadata.channel.send({
-		embeds: [{
-			title: `**${track.title}**を再生中!`,
-			thumbnail: {
-				url: track.thumbnail
-			},
-			footer: {
-				text: `リクエスト者: ${queue.currentTrack.requestedBy.tag}`
-			},
-			color: 0x5865f2,
-		}]
-	})
-});
-
 console.log('OK')
-
 activity.setupActivity(client);
-
+console.log('Called setupActivity')
+//?Ignore this
 setInterval(() => {
 	if (!client.templinks) return;
 	client.templinks = client.templinks.filter((link) => {
@@ -114,6 +109,7 @@ setInterval(() => {
 		}
 	});
 }, 1000);
+//?=
 
 client.on('ready', async () => {
 	client.templinks = [];
@@ -156,70 +152,7 @@ client.on("interactionCreate", async interaction => {
 
 client.login(token);
 
-function unicodeEscape(str) {
-	if (!String.prototype.repeat) {
-		String.prototype.repeat = function (digit) {
-			var result = '';
-			for (var i = 0; i < Number(digit); i++) result += str;
-			return result;
-		};
-	}
 
-	var strs = str.split(''), hex, result = '';
-
-	for (var i = 0, len = strs.length; i < len; i++) {
-		hex = strs[i].charCodeAt(0).toString(16);
-		result += '\\u' + ('0'.repeat(Math.abs(hex.length - 4))) + hex;
-	}
-
-	return result;
-};
-
-app.get("/oembed/:linkCode", async (req, res) => {
-	if (!client.templinks) return res.sendStatus(500);
-	let link = client.templinks.find(x => x.id == req.params.linkCode);
-	if (!link) {
-		return res.sendStatus(404);
-	}
-	res.json({
-		"version": "1.0",
-		"title": `${link.url}`,
-		"type": "link",
-		"author_name": "省略リンク\nリンク先:",
-		"provider_name": "MCSV Discord BOT",
-		"provider_url": "https://mcsv.life",
-		"url": link.url
-	});
-});
-
-
-app.get("/", async (req, res) => {
-	if (!client.templinks) return res.sendStatus(500);
-	let link = client.templinks.find(x => x.id == req.params.linkCode);
-	if (!link) {
-		return res.status(404).send(`<center><h1>どこ見てんじゃい</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
-	}
-	res.send()
-});
-
-app.get("/:linkCode", async (req, res) => {
-
-	let remoteIp = req.headers["cf-connecting-ip"];
-	let logPath = path.join(__dirname, "accesslog.txt");
-	if (!fs.existsSync(logPath))
-		fs.writeFileSync(logPath, "Access Log================\n");
-	fs.appendFileSync(logPath, `IP: ${remoteIp} | ${req.originalUrl}\n`)
-
-	if (!client.templinks) return res.sendStatus(500);
-	let link = client.templinks.find(x => x.id == req.params.linkCode);
-	if (!link) {
-		return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
-	}
-	res.send(
-		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
-		`\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.id}" />`
-	)
-});
 
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
@@ -306,11 +239,80 @@ client.on('messageCreate', async (message) => {
     }
 });
 
+
+//!link
+app.get("/oembed/:linkCode", async (req, res) => {
+	if (!client.templinks) return res.sendStatus(500);
+	let link = client.templinks.find(x => x.id == req.params.linkCode);
+	if (!link) {
+		return res.sendStatus(404);
+	}
+	res.json({
+		"version": "1.0",
+		"title": `${link.url}`,
+		"type": "link",
+		"author_name": "省略リンク\nリンク先:",
+		"provider_name": "MCSV Discord BOT",
+		"provider_url": "https://mcsv.life",
+		"url": link.url
+	});
+});
+
+
+app.get("/", async (req, res) => {
+	if (!client.templinks) return res.sendStatus(500);
+	let link = client.templinks.find(x => x.id == req.params.linkCode);
+	if (!link) {
+		return res.status(404).send(`<center><h1>どこ見てんじゃい</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
+	}
+	res.send()
+});
+
+app.get("/:linkCode", async (req, res) => {
+
+	let remoteIp = req.headers["cf-connecting-ip"];
+	let logPath = path.join(__dirname, "accesslog.txt");
+	if (!fs.existsSync(logPath))
+		fs.writeFileSync(logPath, "Access Log================\n");
+	fs.appendFileSync(logPath, `IP: ${remoteIp} | ${req.originalUrl}\n`)
+
+	if (!client.templinks) return res.sendStatus(500);
+	let link = client.templinks.find(x => x.id == req.params.linkCode);
+	if (!link) {
+		return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
+	}
+	res.send(
+		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
+		`\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.id}" />`
+	)
+});
+
+//!EVENTS
+player.events.on('playerStart', (queue, track) => {
+    // we will later define queue.metadata object while creating the queue
+    // queue.metadata.channel.send(`**${track.title}**を再生中`);
+    queue.metadata.channel.send({
+		embeds: [{
+			title: `**${track.title}**を再生中!`,
+			thumbnail: {
+				url: track.thumbnail
+			},
+			footer: {
+				text: `リクエスト者: ${queue.currentTrack.requestedBy.tag}`
+			},
+			color: 0x5865f2,
+		}]
+	})
+});
+
+player.on("error", () => console.log("ねぇ吐血したんだけど??"));
+
+
 process.on('uncaughtException', function (err) {
 	console.error(err);
 });
 
-player.on("error", () => console.log("ねぇ吐血したんだけど??"));
+
 
 server.listen(linkPort, () => {
 	console.log(`[TempLink] ポート${linkPort} (${linkDomain}) でlistenしました`)
