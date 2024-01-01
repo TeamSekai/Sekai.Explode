@@ -27,4 +27,8 @@ db.on("disconnecting", function () {
 db.on("disconnected", function () {
     console.log(`[MongoDB] Disconnected!`)
 });
-export { db as connection, mongoose };
+
+module.exports = {
+	connection: db,
+	mongoose: mongoose
+};
