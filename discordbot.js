@@ -75,7 +75,7 @@ fs.readdirSync(path.join(__dirname, "commands"), {
     if (!file.isFile() || path.extname(file.name) != ".js")
         return;
     let cmds = require(path.join(__dirname, "commands", file.name));
-	console.log(`${cgreen}Loading ${file.name}...\e[0m`)
+	console.log(`${cgreen}Loading ${file.name}...${creset}`)
     if (Array.isArray(cmds))
         commands = [...commands, ...cmds];
     else
@@ -94,12 +94,11 @@ const options = {
 };
 
 const client = new Client(options);
-console.log('Loading Discord-Player')
+console.log('Loading Discord-Player...')
 const player = new Player(client);
 player.extractors.loadDefault();
-console.log('OK')
+console.log('Callin setupActivity')
 activity.setupActivity(client);
-console.log('Called setupActivity')
 //?Ignore this
 setInterval(() => {
 	if (!client.templinks) return;
@@ -127,7 +126,7 @@ client.on('ready', async () => {
 	});
 	console.log(`Registering commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
-	console.log(`${cgreen}Ready!`);
+	console.log(`${cgreen}Ready!${creset}`);
 	let SyslogChannel = client.channels.cache.get("1151139585791901746");
 	SyslogChannel.send('Discord.js Bot is Ready!')
 })
