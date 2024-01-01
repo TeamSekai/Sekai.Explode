@@ -6,8 +6,6 @@ const { useMainPlayer, QueryType } = require('discord-player');
 // const yts = require('yt-search'); 検索機能？要らんやろ
 //
 
-
-console.log("Loaded play.js")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('play')

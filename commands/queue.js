@@ -1,7 +1,6 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const { useQueue } = require('discord-player');
 
-console.log("Loaded queue.js")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('queue')

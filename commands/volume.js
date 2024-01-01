@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { useQueue } = require('discord-player');
 
-console.log("Loaded volume.js")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('volume')

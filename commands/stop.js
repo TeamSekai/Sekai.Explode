@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { useQueue } = require('discord-player');
 
-console.log("Loaded stop.js")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('stop')
