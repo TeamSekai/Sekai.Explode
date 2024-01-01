@@ -49,12 +49,6 @@ module.exports = {
 						.setDescription("enter user")
 						.setRequired(false)
 				))
-				.addStringOption(option => (
-					option
-						.setName("id")
-						.setDescription("enter id")
-						.setRequired(false)
-				))
 		)
 		.addSubcommand(subcommand => 
 			subcommand
@@ -74,22 +68,10 @@ module.exports = {
 		}
 
 		if (subcommand === 'dev-add') {
-			let userid = null;
-			let username = null;
-			if (interaction.options.getUser('user')) {
-				let usr = interaction.options.getUser('user')
-				userid = usr.id
-				username = usr.tag
-			} else if (interaction.options.getString('id')) {
-				let usr = interaction.options.getString('id')
-				userid = usr
-				username = `<@${usr}>`
-			} else {
-				return await interaction.reply('ユーザー、もしくはユーザーIDを指定してください!')
-			}
+			const user = interaction.options.getUser('user');
 			try {
-				await mongodb.connection.collection('globalBans').insertOne({ userId: userid });
-				await interaction.reply(`${username}をグローバルBANリストに追加しました。`);
+				await mongodb.connection.collection('globalBans').insertOne({ userId: user.id });
+				await interaction.reply(`${user.tag}をグローバルBANリストに追加しました。`);
 			} catch (error) {
 				console.error(error);
 				await interaction.reply('ねえエラーでたんだけど?\n```' + error + "\n```");
@@ -97,22 +79,10 @@ module.exports = {
 		
 		} else if (subcommand === 'dev-rm') {
 			// userIdをデータベースから削除
-			let userid = null;
-			let username = null;
-			if (interaction.options.getUser('user')) {
-				let usr = interaction.options.getUser('user')
-				userid = usr.id
-				username = usr.tag
-			} else if (interaction.options.getString('id')) {
-				let usr = interaction.options.getString('id')
-				userid = usr
-				username = `<@${usr}>`
-			} else {
-				return await interaction.reply('ユーザー、もしくはユーザーIDを指定してください!')
-			}
+			const user = interaction.options.getUser('user');
 			try {
-				await mongodb.connection.collection('globalBans').deleteOne({ userId: userid });
-				await interaction.reply(`${username}をグローバルBANリストから削除しました。`);
+				await mongodb.connection.collection('globalBans').deleteOne({ userId: user.id });
+				await interaction.reply(`${user.tag}をグローバルBANリストから削除しました。`);
 			} catch (error) {
 				console.error(error);
 				await interaction.reply('ねえエラーでたんだけど?\n```' + error + "\n```");
