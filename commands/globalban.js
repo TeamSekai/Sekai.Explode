@@ -72,17 +72,28 @@ module.exports = {
                 // ユーザー情報をログに表示
                 await interaction.editReply('データベースと同期中...');
 				const bans = await interaction.guild.bans.fetch()
+				let banscount = 0;
                 allUsers.forEach(user => {
                     console.log(`Banning user: ${user.userName} (${user.userId}), Reason: ${user.reason || 'Not provided'}`);
 					let usrid = user.userId
 					if (!bans.has.usrid) {
 						let reason = `${user.reason || '理由なし'}`
 						interaction.guild.members.ban(user.userId, { reason: `グローバルBAN: ${reason}` });
+						banscount++;
 					}
 					
                 });
 
-                await interaction.editReply('データベースと同期しました。');
+                return await interaction.editReply({
+					embeds: [{
+						title: "データベースと同期しました。",
+						description: `BANされたユーザー: ${banscount}人`,
+						color: 0xff0000,
+						footer: {
+							text: "Sekai.Explode"
+						}
+					}]
+				});
             } catch (error) {
                 console.error(error);
                 await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
@@ -102,7 +113,7 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
-				await interaction.editReply(`${user.tag}をグローバルBANリストに追加しました。`);
+				return await interaction.editReply(`${user.tag}をグローバルBANリストに追加しました。`);
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
@@ -116,7 +127,7 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
-				await interaction.editReply(`${user.tag}をグローバルBANリストから削除しました。`);
+				return await interaction.editReply(`${user.tag}をグローバルBANリストから削除しました。`);
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
@@ -140,7 +151,7 @@ module.exports = {
 						}
                     };
 
-                    await interaction.editReply({ embeds: [embed] });
+                    return await interaction.editReply({ embeds: [embed] });
 				} else {
 					return await interaction.editReply({
 						embeds: [{
