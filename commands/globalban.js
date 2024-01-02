@@ -62,6 +62,27 @@ module.exports = {
 			return await interaction.reply('ねえサブコマンド指定して?')
 		}
 
+		if (subcommand === 'sync') {
+            try {
+                // データベースから全てのユーザーを取得
+                const userCollection = mongodb.connection.collection('globalBans');
+                const allUsers = await userCollection.find({}).toArray();
+
+                // ユーザー情報をログに表示
+                await interaction.reply('データベースと同期中...');
+				const bans = await interaction.guild.fetchBans();
+                allUsers.forEach(user => {
+                    // console.log(`Banning user: ${user.userName} (${user.userId}), Reason: ${user.reason || 'Not provided'}`);
+					let reason = `${user.reason || '理由なし'}`
+					interaction.guild.ban(user.userId, { reason: `グローバルBAN: ${reason}` });
+                });
+
+                await interaction.editReply('データベースと同期しました。');
+            } catch (error) {
+                console.error(error);
+                await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
+            }
+		}
 		let user = null;
 		let reason = null;
 		if (subcommand === 'add' || subcommand === 'remove') {
