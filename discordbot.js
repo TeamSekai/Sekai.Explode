@@ -68,14 +68,14 @@ function unicodeEscape(str) {
 //!RUN=======================
 
 console.log('Starting Discord.js bot...')
-
+let cmdscount = 0;
 fs.readdirSync(path.join(__dirname, "commands"), {
     withFileTypes: true
 }).forEach((file) => {
     if (!file.isFile() || path.extname(file.name) != ".js")
         return;
     let cmds = require(path.join(__dirname, "commands", file.name));
-	console.log(`${cgreen}Loading ${file.name}...${creset}`)
+	cmdscount++;
     if (Array.isArray(cmds))
         commands = [...commands, ...cmds];
     else
@@ -93,6 +93,7 @@ const options = {
 	// ws: { properties: { $browser: "Discord iOS" }}
 };
 
+console.log(`${cgreen}Loaded ${cmdscount} commands!${creset}`)
 const client = new Client(options);
 console.log('Loading Discord-Player...')
 const player = new Player(client);
