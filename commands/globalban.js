@@ -73,7 +73,7 @@ module.exports = {
                 await interaction.editReply('データベースと同期中...');
 				const bans = await interaction.guild.bans.fetch()
                 allUsers.forEach(user => {
-                    // console.log(`Banning user: ${user.userName} (${user.userId}), Reason: ${user.reason || 'Not provided'}`);
+                    console.log(`Banning user: ${user.userName} (${user.userId}), Reason: ${user.reason || 'Not provided'}`);
 					if (!bans.has.user.userId) {
 						let reason = `${user.reason || '理由なし'}`
 						interaction.guild.ban(user.userId, { reason: `グローバルBAN: ${reason}` });
