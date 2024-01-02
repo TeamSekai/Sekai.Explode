@@ -85,6 +85,7 @@ module.exports = {
             } catch (error) {
                 console.error(error);
                 await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
+				return;
             }
 		}
 		let user = null;
@@ -104,6 +105,7 @@ module.exports = {
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
+				return;
 			}
 		
 		} else if (subcommand === 'remove') {
@@ -117,6 +119,7 @@ module.exports = {
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
+				return;
 			}
 		} else if (subcommand === 'list') {
 			try {
@@ -138,7 +141,7 @@ module.exports = {
 
                     await interaction.editReply({ embeds: [embed] });
 				} else {
-					await interaction.editReply({
+					return await interaction.editReply({
 						embeds: [{
 							title: "エラー",
 							description: `BANリストにユーザーが存在しません。`,
@@ -152,7 +155,7 @@ module.exports = {
 			} catch (error) {
 				console.error(error);
 				
-				await interaction.editReply({
+				return await interaction.editReply({
 					embeds: [{
 						title: "エラー",
 						description: `内部エラー: ${error}`,
