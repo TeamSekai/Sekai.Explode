@@ -71,7 +71,7 @@ module.exports = {
 
                 // ユーザー情報をログに表示
                 await interaction.editReply('データベースと同期中...');
-				const bans = await interaction.guild.fetchBans();
+				const bans = await interaction.guild.bans.fetch()
                 allUsers.forEach(user => {
                     // console.log(`Banning user: ${user.userName} (${user.userId}), Reason: ${user.reason || 'Not provided'}`);
 					if (!bans.has.user.userId) {
