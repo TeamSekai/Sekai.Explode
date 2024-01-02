@@ -34,8 +34,8 @@ function addPingValue(ping) {
 				const avgPing = wspingValues.reduce((sum, value) => sum + value, 0) / wspingValues.length;
 				client.user.setPresence({
 					activities: [{
-						name: `Sekai`,
-						state: `Ping: ${client.ws.ping}ms(avg: ${avgPing}ms)`,
+						name: `Sekai - Added GlobalBan System`,
+						state: `Ping: ${client.ws.ping}ms | Created by ringoXD`,
 						type: ActivityType.Watching,
 					}],
 					status: `online`,
