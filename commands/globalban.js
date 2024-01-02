@@ -111,6 +111,10 @@ module.exports = {
 		//*add/rm
 		if (subcommand === 'add') {
 			try {
+				const existingBan = await mongodb.connection.collection('globalBans').findOne({ userId: user.id });
+        		if (existingBan) {
+        		    return await interaction.editReply(`${user.tag}は既にグローバルBAN済みです!`);
+        		}
 				await mongodb.connection.collection('globalBans').insertOne({
 					userId: user.id,
 					userName: user.tag,
