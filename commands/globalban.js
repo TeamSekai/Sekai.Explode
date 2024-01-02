@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const mongodb = require('../internal/mongodb') //*MongoDB
 const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
 
@@ -99,12 +99,14 @@ module.exports = {
 				const bans = await userCollection.find({}).toArray();
 				
 				if (bans.length > 0) {
-					const embed = new MessageEmbed()
-                        .setTitle('グローバルBANリスト')
-                        .setColor('#ff0000');
-
-                    const formattedBans = bans.map(ban => `**${ban.userName} (${ban.userId})**: ${ban.reason || '理由なし'}`);
-                    embed.addField("ユーザーリスト", formattedBans.join('\n'));
+					const embed = {
+                        title: 'グローバルBANリスト',
+                        color: '#ff0000',
+                        fields: [{
+                            name: "ユーザー名: 理由",
+                            value: bans.map(ban => `**${ban.userName} (${ban.userId})**: ${ban.reason || '理由なし'}`).join('\n')
+                        }]
+                    };
 
                     await interaction.reply({ embeds: [embed] });
 				} else {
