@@ -53,7 +53,8 @@ module.exports = {
 
 		await interaction.deferReply();
 		if (subcommand === 'sync') {
-			if (!interaction.user.pemissions.has(PermissionsBitField.Flags.BanMembers) || interaction.user.pemissions.has(PermissionsBitField.Flags.Administrator)) {
+			const member = interaction.guild.members.cache.get(interaction.user.id);
+			if (!member.pemissions.has(PermissionsBitField.Flags.BanMembers) || member.pemissions.has(PermissionsBitField.Flags.Administrator)) {
 				return await interaction.editReply({ content: 'このコマンドを使用する権限がありません。使用するためには`ユーザーのBAN権限`、または`管理者`権限が必要です。', ephemeral: true });
 			}
             try {
