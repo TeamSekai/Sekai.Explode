@@ -103,7 +103,7 @@ module.exports = {
                         title: 'グローバルBANリスト',
                         color: 0xde2323,
                         fields: [{
-                            name: "ユーザー名: 理由",
+                            name: "GBAN済ユーザーの一覧",
                             value: bans.map(ban => `**${ban.userName} (${ban.userId})**: ${ban.reason || '理由なし'}`).join('\n')
                         }]
                     };
