@@ -89,7 +89,7 @@ module.exports = {
 						description: `内部エラー: ${e.response.statusText}(${e.response.status})`,
 						color: 0xff0000,
 						footer: {
-							text: "ringoXD's Discord.js Bot"
+							text: "Sekai.Explode"
 						}
 					}]
 				})

@@ -62,6 +62,7 @@ module.exports = {
 			return await interaction.reply('ねえサブコマンド指定して?')
 		}
 
+		await interaction.deferReply();
 		if (subcommand === 'sync') {
             try {
                 // データベースから全てのユーザーを取得
@@ -69,12 +70,15 @@ module.exports = {
                 const allUsers = await userCollection.find({}).toArray();
 
                 // ユーザー情報をログに表示
-                await interaction.reply('データベースと同期中...');
+                await interaction.editReply('データベースと同期中...');
 				const bans = await interaction.guild.fetchBans();
                 allUsers.forEach(user => {
                     // console.log(`Banning user: ${user.userName} (${user.userId}), Reason: ${user.reason || 'Not provided'}`);
-					let reason = `${user.reason || '理由なし'}`
-					interaction.guild.ban(user.userId, { reason: `グローバルBAN: ${reason}` });
+					if (!bans.has.user.userId) {
+						let reason = `${user.reason || '理由なし'}`
+						interaction.guild.ban(user.userId, { reason: `グローバルBAN: ${reason}` });
+					}
+					
                 });
 
                 await interaction.editReply('データベースと同期しました。');
@@ -96,10 +100,10 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
-				await interaction.reply(`${user.tag}をグローバルBANリストに追加しました。`);
+				await interaction.editReply(`${user.tag}をグローバルBANリストに追加しました。`);
 			} catch (error) {
 				console.error(error);
-				await interaction.reply('ねえエラーでたんだけど?\n```' + error + "\n```");
+				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
 			}
 		
 		} else if (subcommand === 'remove') {
@@ -109,10 +113,10 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
-				await interaction.reply(`${user.tag}をグローバルBANリストから削除しました。`);
+				await interaction.editReply(`${user.tag}をグローバルBANリストから削除しました。`);
 			} catch (error) {
 				console.error(error);
-				await interaction.reply('ねえエラーでたんだけど?\n```' + error + "\n```");
+				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
 			}
 		} else if (subcommand === 'list') {
 			try {
@@ -126,19 +130,41 @@ module.exports = {
                         fields: [{
                             name: "GBAN済ユーザーの一覧",
                             value: bans.map(ban => `**${ban.userName} (${ban.userId})**: ${ban.reason || '理由なし'}`).join('\n')
-                        }]
+                        }],
+						footer: {
+							text: `Sekai.Explode Global Ban System`
+						}
                     };
 
-                    await interaction.reply({ embeds: [embed] });
+                    await interaction.editReply({ embeds: [embed] });
 				} else {
-					await interaction.reply('グローバルBANリストにはユーザーが登録されていません。');
+					await interaction.editReply({
+						embeds: [{
+							title: "エラー",
+							description: `BANリストにユーザーが存在しません。`,
+							color: 0xff0000,
+							footer: {
+								text: "Sekai.Explode"
+							}
+						}]
+					});
 				}
 			} catch (error) {
 				console.error(error);
-				await interaction.reply('ねえエラーでたんだけど?\n```' + error + "\n```");
+				
+				await interaction.editReply({
+					embeds: [{
+						title: "エラー",
+						description: `内部エラー: ${error}`,
+						color: 0xff0000,
+						footer: {
+							text: "Sekai.Explode"
+						}
+					}]
+				});
 			}
 		} else {
-			return await interaction.reply('Something Went Wrong')
+			return await interaction.editReply('Something Went Wrong')
 		}
 		
     }
