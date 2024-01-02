@@ -130,8 +130,9 @@ module.exports = {
 						}
 					}
 				})
+				await interaction.editReply(`${user.tag}をグローバルBANリストに追加しました。`);
 				console.log(`Success: ${done} / Fail: ${fail}`)
-				return await interaction.editReply(`${user.tag}をグローバルBANリストに追加しました。`);
+				return;
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
@@ -162,8 +163,9 @@ module.exports = {
 						}
 					}
 				})
+				await interaction.editReply(`${user.tag}をグローバルBANリストから削除しました。`);
 				console.log(`Success: ${done} / Fail: ${fail}`)
-				return await interaction.editReply(`${user.tag}をグローバルBANリストから削除しました。`);
+				return;
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
