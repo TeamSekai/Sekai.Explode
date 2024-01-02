@@ -21,11 +21,17 @@ module.exports = {
 						.setDescription("ユーザーを指定します。")
 						.setRequired(true)
 				))
+				.addStringOption(option => (
+					option
+						.setName("reason")
+						.setDescription("理由の記入")
+						.setRequired(false)
+				))
 		)
 		.addSubcommand(subcommand => 
 			subcommand
-				.setName('dev-add')
-				.setDescription('admin only')
+				.setName('remove')
+				.setDescription('グローバルBANリストからユーザーを削除します。')
 				.addUserOption(option => (
 					option
 						.setName("user")
@@ -34,26 +40,15 @@ module.exports = {
 				))
 				.addStringOption(option => (
 					option
-						.setName("id")
-						.setDescription("enter id")
+						.setName("reason")
+						.setDescription("理由の記入")
 						.setRequired(false)
 				))
 		)
 		.addSubcommand(subcommand => 
 			subcommand
-				.setName('dev-rm')
-				.setDescription('admin only')
-				.addUserOption(option => (
-					option
-						.setName("user")
-						.setDescription("enter user")
-						.setRequired(false)
-				))
-		)
-		.addSubcommand(subcommand => 
-			subcommand
-				.setName('dev-view')
-				.setDescription('admin only')
+				.setName('list')
+				.setDescription('グローバルBANリストの一覧を表示します。')
 		),
     execute: async function (interaction) {
 		const executorID = interaction.user.id; // executed by
@@ -67,36 +62,53 @@ module.exports = {
 			return await interaction.reply('ねえサブコマンド指定して?')
 		}
 
-		if (subcommand === 'dev-add') {
-			const user = interaction.options.getUser('user');
+		let user = null;
+		let reason = null;
+		if (subcommand === 'add' || subcommand === 'remove') {
+			user = interaction.options.getUser('user');
+			reason = interaction.options.getString('reason')
+		}
+		if (subcommand === 'add') {
 			try {
-				await mongodb.connection.collection('globalBans').insertOne({ userId: user.id });
+				await mongodb.connection.collection('globalBans').insertOne({
+					userId: user.id,
+					userName: user.tag,
+					reason: reason
+				});
 				await interaction.reply(`${user.tag}をグローバルBANリストに追加しました。`);
 			} catch (error) {
 				console.error(error);
 				await interaction.reply('ねえエラーでたんだけど?\n```' + error + "\n```");
 			}
 		
-		} else if (subcommand === 'dev-rm') {
-			// userIdをデータベースから削除
-			const user = interaction.options.getUser('user');
+		} else if (subcommand === 'remove') {
 			try {
-				await mongodb.connection.collection('globalBans').deleteOne({ userId: user.id });
+				await mongodb.connection.collection('globalBans').deleteOne({
+					userId: user.id,
+					userName: user.tag,
+					reason: reason
+				});
 				await interaction.reply(`${user.tag}をグローバルBANリストから削除しました。`);
 			} catch (error) {
 				console.error(error);
 				await interaction.reply('ねえエラーでたんだけど?\n```' + error + "\n```");
 			}
-		} else if (subcommand === 'dev-view') {
+		} else if (subcommand === 'list') {
 			try {
-				const userCollection = mongodb.connection.collection('globalBans'); // usersは適切なコレクション名に変更してください
-				const userIds = await userCollection.distinct('userId');
+				const userCollection = mongodb.connection.collection('globalBans');
+				const bans = await userCollection.find({}).toArray();
 				
-				if (userIds.length > 0) {
-					const formattedUserIds = userIds.map(id => `<@${id}>`).join(', '); // ユーザーIDをメンション形式に変換
-					await interaction.reply(`ユーザーIDのリスト:\n${formattedUserIds}`);
+				if (bans.length > 0) {
+					const embed = new MessageEmbed()
+                        .setTitle('グローバルBANリスト')
+                        .setColor('#ff0000');
+
+                    const formattedBans = bans.map(ban => `**${ban.userName} (${ban.userId})**: ${ban.reason || '理由なし'}`);
+                    embed.addField("ユーザーリスト", formattedBans.join('\n'));
+
+                    await interaction.reply({ embeds: [embed] });
 				} else {
-					await interaction.reply('ユーザーIDが見つかりませんでした。');
+					await interaction.reply('グローバルBANリストにはユーザーが登録されていません。');
 				}
 			} catch (error) {
 				console.error(error);
