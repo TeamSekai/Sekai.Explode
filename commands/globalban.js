@@ -116,7 +116,7 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
-				client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
+				interaction.client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
 					try {
 						g.members.ban(gbanId, { reason: `グローバルBAN: ${reason}` }) // メンバーをBAN
 						console.log(g.name + `-> Success`); // 成功したらコンソールに出す
@@ -138,7 +138,7 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
-				client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
+				interaction.client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
 					try {
 						g.members.ban(gbanId) // メンバーをBAN
 						console.log(g.name + `-> Success`); // 成功したらコンソールに出す
