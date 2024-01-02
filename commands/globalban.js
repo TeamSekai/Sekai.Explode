@@ -69,7 +69,7 @@ module.exports = {
                 allUsers.forEach(user => {
                     console.log(`Banning user: ${user.userName} (${user.userId}), Reason: ${user.reason || 'Not provided'}`);
 					let usrid = user.userId
-					if (!bans.has.usrid) {
+					if (!bans.has(usrid)) {
 						let reason = `${user.reason || '理由なし'}`
 						interaction.guild.members.ban(user.userId, { reason: `グローバルBAN: ${reason}` });
 						banscount++;
