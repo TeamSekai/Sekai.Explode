@@ -98,7 +98,7 @@ const client = new Client(options);
 console.log('Loading Discord-Player...')
 const player = new Player(client);
 player.extractors.loadDefault();
-console.log('Callin setupActivity')
+console.log('Calling setupActivity')
 activity.setupActivity(client);
 //?Ignore this
 setInterval(() => {
