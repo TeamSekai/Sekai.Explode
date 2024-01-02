@@ -123,7 +123,11 @@ module.exports = {
 						done++;
 					} catch(e) {
 						fail++;
-						console.log(g.name + "-> Failed\n" + e); // エラーが出たとき
+						if (e.code) {
+							console.error(`Missing Perm/Unknown Error in ${g.name}. (Code: ${e.code})`)
+						} else {
+							console.log(g.name + "-> Failed\n" + e); // エラーが出たとき
+						}
 					}
 				})
 				console.log(`Success: ${done} / Fail: ${fail}`)
@@ -142,14 +146,23 @@ module.exports = {
         		}
 
         		await mongodb.connection.collection('globalBans').deleteOne({ userId: user.id });
+				let done = 0;
+				let fail = 0;
 				await interaction.client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
 					try {
 						g.members.unban(user.id) // メンバーをBAN
 						console.log(g.name + `-> Success`); // 成功したらコンソールに出す
+						done++;
 					} catch(e) {
-						console.log(g.name + "-> Failed\n" + e); // エラーが出たとき
+						fail++;
+						if (e.code) {
+							console.error(`Missing Perm/Unknown Error in ${g.name}. (Code: ${e.code})`)
+						} else {
+							console.log(g.name + "-> Failed\n" + e); // エラーが出たとき
+						}
 					}
 				})
+				console.log(`Success: ${done} / Fail: ${fail}`)
 				return await interaction.editReply(`${user.tag}をグローバルBANリストから削除しました。`);
 			} catch (error) {
 				console.error(error);
