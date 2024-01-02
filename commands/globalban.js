@@ -116,14 +116,18 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
+				let done = 0;
+				let fail = 0;
 				interaction.client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
 					try {
-						g.members.ban(gbanId, { reason: `グローバルBAN: ${reason}` }) // メンバーをBAN
-						console.log(g.name + `-> Success`); // 成功したらコンソールに出す
+						g.members.ban(user.id, { reason: `グローバルBAN: ${reason}` }) // メンバーをBAN
+						done++;
 					} catch(e) {
+						fail++;
 						console.log(g.name + "-> Failed\n" + e); // エラーが出たとき
 					}
 				})
+				console.log(`Success: ${done} / Fail: ${fail}`)
 				return await interaction.editReply(`${user.tag}をグローバルBANリストに追加しました。`);
 			} catch (error) {
 				console.error(error);
@@ -140,7 +144,7 @@ module.exports = {
 				});
 				interaction.client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
 					try {
-						g.members.ban(gbanId) // メンバーをBAN
+						g.members.ban(user.id) // メンバーをBAN
 						console.log(g.name + `-> Success`); // 成功したらコンソールに出す
 					} catch(e) {
 						console.log(g.name + "-> Failed\n" + e); // エラーが出たとき
