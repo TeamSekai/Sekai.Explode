@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const mongodb = require('../internal/mongodb') //*MongoDB
 const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
 
@@ -53,7 +53,7 @@ module.exports = {
 
 		await interaction.deferReply();
 		if (subcommand === 'sync') {
-			if (!interaction.memberPermissions.has('BAN_MEMBERS') || interaction.memberPermissions.has('ADMINISTRATOR')) {
+			if (!interaction.user.has(PermissionsBitField.Flags.BanMembers) || interaction.user.has(PermissionsBitField.Flags.Administrator)) {
 				return await interaction.editReply({ content: 'このコマンドを使用する権限がありません。使用するためには`ユーザーのBAN権限`、または`管理者`権限が必要です。', ephemeral: true });
 			}
             try {
