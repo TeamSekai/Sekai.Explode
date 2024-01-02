@@ -36,13 +36,7 @@ module.exports = {
 					option
 						.setName("user")
 						.setDescription("enter user")
-						.setRequired(false)
-				))
-				.addStringOption(option => (
-					option
-						.setName("reason")
-						.setDescription("理由の記入")
-						.setRequired(false)
+						.setRequired(true)
 				))
 		)
 		.addSubcommand(subcommand => 
@@ -52,11 +46,6 @@ module.exports = {
 		),
     execute: async function (interaction) {
 		const executorID = interaction.user.id; // executed by
-
-		// checkid
-		if (!AdminuserIDs.includes(executorID)) {
-    		return await interaction.reply('あ、未完成っす。ごめんね。');
-    	}
 		const subcommand = interaction.options.getSubcommand()
 		if (!subcommand) {
 			return await interaction.reply('ねえサブコマンド指定して?')
@@ -64,6 +53,9 @@ module.exports = {
 
 		await interaction.deferReply();
 		if (subcommand === 'sync') {
+			if (!interaction.memberPermissions.has('BAN_MEMBERS') || interaction.memberPermissions.has('ADMINISTRATOR')) {
+				return await interaction.reply({ content: 'このコマンドを使用する権限がありません。使用するためには`ユーザーのBAN権限`、または`管理者`権限が必要です。', ephemeral: true });
+			}
             try {
                 // データベースから全てのユーザーを取得
                 const userCollection = mongodb.connection.collection('globalBans');
@@ -103,6 +95,9 @@ module.exports = {
 		let user = null;
 		let reason = null;
 		if (subcommand === 'add' || subcommand === 'remove') {
+			if (!AdminuserIDs.includes(executorID)) {
+				return await interaction.reply({ content: 'このBotの管理者のみが使用できます。', ephemeral: true });
+			}
 			user = interaction.options.getUser('user');
 			reason = interaction.options.getString('reason')
 		}
