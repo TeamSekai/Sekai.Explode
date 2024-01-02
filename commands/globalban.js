@@ -74,7 +74,8 @@ module.exports = {
 				const bans = await interaction.guild.bans.fetch()
                 allUsers.forEach(user => {
                     console.log(`Banning user: ${user.userName} (${user.userId}), Reason: ${user.reason || 'Not provided'}`);
-					if (!bans.has.user.userId) {
+					let usrid = user.userId
+					if (!bans.has.usrid) {
 						let reason = `${user.reason || '理由なし'}`
 						interaction.guild.ban(user.userId, { reason: `グローバルBAN: ${reason}` });
 					}
