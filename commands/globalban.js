@@ -54,7 +54,7 @@ module.exports = {
 		await interaction.deferReply();
 		if (subcommand === 'sync') {
 			if (!interaction.memberPermissions.has('BAN_MEMBERS') || interaction.memberPermissions.has('ADMINISTRATOR')) {
-				return await interaction.reply({ content: 'このコマンドを使用する権限がありません。使用するためには`ユーザーのBAN権限`、または`管理者`権限が必要です。', ephemeral: true });
+				return await interaction.editReply({ content: 'このコマンドを使用する権限がありません。使用するためには`ユーザーのBAN権限`、または`管理者`権限が必要です。', ephemeral: true });
 			}
             try {
                 // データベースから全てのユーザーを取得
