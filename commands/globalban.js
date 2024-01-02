@@ -136,11 +136,7 @@ module.exports = {
 		
 		} else if (subcommand === 'remove') {
 			try {
-				await mongodb.connection.collection('globalBans').deleteOne({
-					userId: user.id,
-					userName: user.tag,
-					reason: reason
-				});
+				await mongodb.connection.collection('globalBans').deleteOne({ userId: user.id });
 				await interaction.client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
 					try {
 						g.members.unban(user.id) // メンバーをBAN
