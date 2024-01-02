@@ -106,6 +106,9 @@ module.exports = {
 			user = interaction.options.getUser('user');
 			reason = interaction.options.getString('reason')
 		}
+
+
+		//*add/rm
 		if (subcommand === 'add') {
 			try {
 				await mongodb.connection.collection('globalBans').insertOne({
@@ -113,6 +116,14 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
+				client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
+					try {
+						g.members.ban(gbanId, { reason: `グローバルBAN: ${reason}` }) // メンバーをBAN
+						console.log(g.name + `-> Success`); // 成功したらコンソールに出す
+					} catch(e) {
+						console.log(g.name + "-> Failed\n" + e); // エラーが出たとき
+					}
+				})
 				return await interaction.editReply(`${user.tag}をグローバルBANリストに追加しました。`);
 			} catch (error) {
 				console.error(error);
@@ -127,12 +138,25 @@ module.exports = {
 					userName: user.tag,
 					reason: reason
 				});
+				client.guilds.cache.forEach(g => { // Botが参加しているすべてのサーバーで実行
+					try {
+						g.members.ban(gbanId) // メンバーをBAN
+						console.log(g.name + `-> Success`); // 成功したらコンソールに出す
+					} catch(e) {
+						console.log(g.name + "-> Failed\n" + e); // エラーが出たとき
+					}
+				})
 				return await interaction.editReply(`${user.tag}をグローバルBANリストから削除しました。`);
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply('ねえエラーでたんだけど?\n```' + error + "\n```");
 				return;
 			}
+		
+
+
+
+		//*LIST
 		} else if (subcommand === 'list') {
 			try {
 				const userCollection = mongodb.connection.collection('globalBans');
