@@ -101,7 +101,7 @@ module.exports = {
 				if (bans.length > 0) {
 					const embed = {
                         title: 'グローバルBANリスト',
-                        color: '#ff0000',
+                        color: 0xde2323,
                         fields: [{
                             name: "ユーザー名: 理由",
                             value: bans.map(ban => `**${ban.userName} (${ban.userId})**: ${ban.reason || '理由なし'}`).join('\n')
