@@ -97,7 +97,7 @@ module.exports = {
 		let reason = null;
 		if (subcommand === 'add' || subcommand === 'remove') {
 			if (!AdminuserIDs.includes(executorID)) {
-				return await interaction.reply({ content: 'このBotの管理者のみが使用できます。', ephemeral: true });
+				return await interaction.editReply({ content: 'このBotの管理者のみが使用できます。', ephemeral: true });
 			}
 			user = interaction.options.getUser('user');
 			reason = interaction.options.getString('reason')
