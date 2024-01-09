@@ -56,7 +56,7 @@ module.exports = {
 			// console.log(res)
 			console.log("==========")
 			// console.log(res2)
-            interaction.editReply((isPrivate ? " /private" : "") + "/${res2.data.fileName} としてアップロードしました！`)");
+            interaction.editReply((isPrivate ? " /private" : "") + `/${res2.data.fileName} としてアップロードしました！)`);
             const user = interaction.user;
             const dmChannel = await user.createDM();
             dmChannel.send({
@@ -65,7 +65,7 @@ module.exports = {
                     color: 0x5865f2,
                     fields: [{
                         name: "URL",
-                        value: "```" + "https://cdn.mcsv.life/" + (isPrivate ? " private/" : "") + res2.data.fileName + "```" + `\n[Click to copy!](https://paste-pgpj.onrender.com/?p=` + "https://cdn.mcsv.life/" + (isPrivate ? " private/" : "") + + res2.data.fileName,
+                        value: "```" + "https://cdn.mcsv.life/" + (isPrivate ? " private/" : "") + res2.data.fileName + "```" + "\n[Click to copy!](https://paste-pgpj.onrender.com/?p=" + "https://cdn.mcsv.life/" + (isPrivate ? " private/" : "") + res2.data.fileName + ")",
                     }]
                 }]
             });
