@@ -11,6 +11,6 @@ module.exports = {
 		const roles = member.roles.cache
 		const sortedRoles = roles.sort((a, b) => b.position - a.position);
 		const topRole = sortedRoles.first();
-		await interaction.reply(`Result: ${topRole}`)
+		await interaction.reply(`Result: ${topRole.name}`)
     }
 };
