@@ -8,7 +8,7 @@ module.exports = {
 		/** @type {import("discord.js").CommandInteraction} */
         const usr = interaction.user.id
 		const member = await interaction.guild.members.fetch(usr)
-		const roles = mmeber.roles.cache
+		const roles = member.roles.cache
 		const sortedRoles = roles.sort((a, b) => b.position - a.position);
 		const topRole = sortedRoles.first();
 		await interaction.reply(`Result: ${topRole}`)
