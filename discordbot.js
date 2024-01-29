@@ -255,8 +255,8 @@ app.get("/oembed/:linkCode", async (req, res) => {
 		"title": `${link.url}`,
 		"type": "link",
 		"author_name": "省略リンク\nリンク先:",
-		"provider_name": "MCSV Discord BOT",
-		"provider_url": "https://mcsv.life",
+		"provider_name": "Sekai.Explode",
+		"provider_url": "https://ringoxd.dev/",
 		"url": link.url
 	});
 });
