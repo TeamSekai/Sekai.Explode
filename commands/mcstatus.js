@@ -1,51 +1,31 @@
 const { SlashCommandBuilder } = require('discord.js');
 const axios = require("axios");
 
-let servers = {
-	main: {
-		name: "メインサーバー",
-		url: "https://api.mcsv.life/v1/server/status"
-	},
-	mcsv: {
-		name: "MCSV(プロキシー)",
-		ip: "play.mcsv.life",
-		be: false
-	},
-	hive: {
-		name: "The Hive",
-		ip: "geo.hivebedrock.network",
-		be: true
-	},
-	hypixel: {
-		name: "Hypixel",
-		ip: "hypixel.net",
-		be: false
-	}
-};
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("status")
+		.setName("mcstatus")
 		.setDescription("サーバーの状態を確認します。")
 		.addStringOption(option =>
 			option
-				.setName("server")
+				.setName("server_ip")
 				.setDescription("サーバーを指定します。")
 				.setRequired(true) //trueで必須、falseで任意
-				.addChoices(...Object.entries(servers).map(([key, value]) => {
-					return {
-						name: value.name,
-						value: key
-					}
-				}))
+		)
+		.addBooleanOption(option =>
+			option
+				.setName('bedrock_server')
+				.setDescription('統合版サーバーかどうか')
+				.setRequired(false) // 任意のオプション
 		),
 	execute: async function (/** @type {import("discord.js").CommandInteraction} */ interaction) {
-		const target = interaction.options.getString("server");
+		let server = interaction.options.getString("server_ip");
+		let isbedrock = interaction.options.getBoolean("bedrock_server")
 		await interaction.deferReply();
 		try {
-			let server = servers[target];
-			if (server.ip) {
-				let res = await axios.get("https://api.mcsrvstat.us/" + (server.be ? "bedrock/" : "") + "3/" + server.ip);
+//			let target_server = server_ip
+			if (server) {
+				let res = await axios.get("https://api.mcsrvstat.us/" + (isbedrock ? "bedrock/" : "") + "3/" + server);
 				if (res.data?.online) {
 					let motd = res.data.motd.raw.join("\n")
 						.replace(/\u00A70/g, "\x1B[30m")
@@ -74,7 +54,7 @@ module.exports = {
 						motd = "オンライン";
 					await interaction.editReply({
 						embeds: [{
-							"title": `${server.name}は**オンライン**です!`,
+							"title": `${server}は**オンライン**です!`,
 							"description": "```ansi\n" + motd + "\n```",
 							color: 0x42d4f5,
 							fields: [{
@@ -85,18 +65,18 @@ module.exports = {
 								value: res.data.version
 							}],
 							...(res.data.icon && {
-								thumbnail: { url: "https://api.mcsrvstat.us/icon/" + server.ip }
+								thumbnail: { url: "https://api.mcsrvstat.us/icon/" + server }
 							})
 						}]
 					});
 				} else {
-					await interaction.editReply(`${server.name}はオフラインです`);
+					await interaction.editReply(`${server}はオフラインです`);
 				}
 				return;
 			}
 			let res = await axios.get(server.url);
 			if (res?.data?.status == "online") {
-				await interaction.editReply(`${server.name}は ** オンライン ** です!`);
+				await interaction.editReply(`${server}は ** オンライン ** です!`);
 			} else {
 				await interaction.editReply("接続に失敗しました!");
 			}
@@ -108,7 +88,7 @@ module.exports = {
 						description: `内部エラー: ${e.response.statusText}(${e.response.status})`,
 						color: 0xff0000,
 						footer: {
-							text: "ringoXD's Discord.js Bot"
+							text: "Sekai.Explode"
 						}
 					}]
 				})
