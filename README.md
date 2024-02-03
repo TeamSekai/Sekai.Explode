@@ -34,7 +34,7 @@ discord.js@v14を使用した、多機能botです。
 ## コマンドを登録する
 `commands`ディレクトリにファイルを作成するだけで、起動時に自動で読み込まれます。
 
-### Example:
+### 例:
 ```js
 const { SlashCommandBuilder } = require('discord.js');
 
