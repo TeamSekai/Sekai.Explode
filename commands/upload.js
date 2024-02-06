@@ -54,7 +54,7 @@ module.exports = {
                 headers: form.getHeaders()
             });
 			// console.log(res)
-			console.log("==========")
+			// console.log("==========")
 			// console.log(res2)
             interaction.editReply('アップロードしました!\nhttps://cdn.ringoxd.dev'(isPrivate ? " /private" : "") + `/${res2.data.fileName}`);
             const user = interaction.user;
