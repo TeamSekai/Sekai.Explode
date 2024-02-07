@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
+const { AdminUserIDs } = require('../config.json');
 const childprocess = require('child_process');
 const path = require("path");
 const color = require("colors");
@@ -12,7 +12,7 @@ module.exports = {
 	const executorID = interaction.user.id; // 実行者のユーザーID
 
 	// checkid
-	if (!AdminuserIDs.includes(executorID)) {
+	if (!AdminUserIDs.includes(executorID)) {
     	await interaction.reply('このコマンドはBotの管理者のみ使えます。');
     	return;
     }
