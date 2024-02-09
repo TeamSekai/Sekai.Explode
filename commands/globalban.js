@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const mongodb = require('../internal/mongodb') //*MongoDB
-const AdminuserIDs = ['1063527758292070591', '1126422758696427552'];
+const { AdminUserIDs } = require("../config.json");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -96,7 +96,7 @@ module.exports = {
 		let user = null;
 		let reason = null;
 		if (subcommand === 'add' || subcommand === 'remove') {
-			if (!AdminuserIDs.includes(executorID)) {
+			if (!AdminUserIDs.includes(executorID)) {
 				return await interaction.editReply('このBotの管理者のみが使用できます。');
 			}
 			user = interaction.options.getUser('user');
