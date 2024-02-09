@@ -8,6 +8,7 @@
 	"linkPort": 8264,
 	"cdnUploadURL": "http://192.168.1.255/upload-discord",
 	"cdnUploadURL2": "http://192.168.1.255/upload-discord",
+	"cdnRootURL": "https://cdn.ringoxd.dev/",
 	"uploadAllowUsers": ["00000000000","16326412825651210244096"],
 	"applicationId": "000000",
 	"cfToken": "ORIMOTOKAIRUNDHUAUNDHUAUN",

@@ -56,7 +56,8 @@ module.exports = {
 			// console.log(res)
 			// console.log("==========")
 			// console.log(res2)
-            interaction.editReply('アップロードしました!\nhttps://cdn.ringoxd.dev'(isPrivate ? " /private" : "") + `/${res2.data.fileName}`);
+            const cdnURL = config.cdnRootURL + (isPrivate ? "private/" : "") + res2.data.fileName;
+            interaction.editReply('アップロードしました!\n' + cdnURL);
             const user = interaction.user;
             const dmChannel = await user.createDM();
             dmChannel.send({
@@ -65,7 +66,7 @@ module.exports = {
                     color: 0x5865f2,
                     fields: [{
                         name: "URL",
-                        value: "```" + "https://cdn.ringoxd.dev/" + (isPrivate ? " private/" : "") + res2.data.fileName + "```" + "\n[Click to copy!](https://paste-pgpj.onrender.com/?p=" + "https://cdn.ringoxd.dev/" + (isPrivate ? " private/" : "") + `${res2.data.fileName})`,
+                        value: "```" + cdnURL + "```" + "\n[Click to copy!](https://paste-pgpj.onrender.com/?p=" + encodeURIComponent(cdnURL) + ")",
                     }]
                 }]
             });
