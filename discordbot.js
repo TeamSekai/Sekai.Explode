@@ -3,7 +3,7 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
-const { token, linkPort, linkDomain } = require('./config.json');
+const { token, linkPort, linkDomain, syslogChannel } = require('./config.json');
 const express = require("express");
 const app = express();
 const axios = require('axios');
@@ -128,7 +128,7 @@ client.on('ready', async () => {
 	console.log(`Registering commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
 	console.log(`${cgreen}Ready!${creset}`);
-	let SyslogChannel = client.channels.cache.get("1151139585791901746");
+	let SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send('Discord.js Bot is Ready!')
 })
 
