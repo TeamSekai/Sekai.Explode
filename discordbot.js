@@ -128,7 +128,7 @@ client.on('ready', async () => {
 	console.log(`Registering commands...`)
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
 	console.log(`${cgreen}Ready!${creset}`);
-	let SyslogChannel = client.channels.cache.get(syslogChannel);
+	let SyslogChannel = client.channels.cache.get(config.syslogChannel);
 	SyslogChannel.send('Discord.js Bot is Ready!')
 })
 
