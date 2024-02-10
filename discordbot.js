@@ -4,6 +4,7 @@ const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
 const { token, linkPort, linkDomain, syslogChannel } = require('./config.json');
+const config = require('./config.json')
 const express = require("express");
 const app = express();
 const axios = require('axios');
