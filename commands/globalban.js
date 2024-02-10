@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const mongodb = require('../internal/mongodb') //*MongoDB
 const { AdminUserIDs } = require("../config.json");
+const Pager = require("../util/pager");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -181,33 +182,25 @@ module.exports = {
 			try {
 				const userCollection = mongodb.connection.collection('globalBans');
 				const bans = await userCollection.find({}).toArray();
-				
-				if (bans.length > 0) {
-					const embed = {
-                        title: 'グローバルBANリスト',
-                        color: 0xde2323,
-                        fields: [{
-                            name: "GBAN済ユーザーの一覧",
-                            value: bans.map(ban => `**${ban.userName} (${ban.userId})**: ${ban.reason || '理由なし'}`).join('\n')
-                        }],
-						footer: {
-							text: `Sekai.Explode Global Ban System`
+				const pager = new Pager(bans.map(ban => `**${ban.userName} (${ban.userId})**: ${ban.reason || '理由なし'}`), {
+					title:     pager => !pager.isEmpty() ? 'グローバルBANリスト' : 'エラー',
+					color:     pager => !pager.isEmpty() ? 0xde2323 : 0xff0000,
+					fieldName: pager => !pager.isEmpty() ? 'GBAN済ユーザーの一覧' : null,
+					emptyMessage: 'BANリストにユーザーが存在しません。',
+					footer(pager) {
+						if (pager.isEmpty()) {
+							return {
+								text: 'Sekai.Explode'
+							};
 						}
-                    };
-
-                    return await interaction.editReply({ embeds: [embed] });
-				} else {
-					return await interaction.editReply({
-						embeds: [{
-							title: "エラー",
-							description: `BANリストにユーザーが存在しません。`,
-							color: 0xff0000,
-							footer: {
-								text: "Sekai.Explode"
-							}
-						}]
-					});
-				}
+						return {
+							text: "Sekai.Explode Global Ban System | " + 
+									`${pager.page + 1}/${pager.pageCount}ページ | ` +
+									`${pager.items.length}件中${pager.start + 1}件目から${pager.end}件目`
+						};
+					}
+				});
+				pager.replyTo(interaction);
 			} catch (error) {
 				console.error(error);
 				
