@@ -25,7 +25,7 @@ module.exports = {
             title: `${queue.tracks.size}件の曲がキューに入っています!`,
             emptyMessage: '**キューに曲がありません！**',
             footer: pager => ({  // 丸括弧を付けないとブロックとして解釈されてしまうという罠
-                text: `${pager.page + 1}ページ目 | ${queue.tracks.size}曲`
+                text: `${pager.page + 1}ページ目 | ${pager.items.length}曲`
             })
         })
         pager.replyTo(interaction);
