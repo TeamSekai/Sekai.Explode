@@ -1,0 +1,25 @@
+{
+    "discordbot": {
+        "ready": {
+            "sysLog": "Discord.js Bot is Ready!"
+        },
+        "interactionCreate": {
+            "commandError": "コマンド実行時にエラーになりました。"
+        },
+        "messageCreate": {
+            "requestedBy": "Requested by:${0}",
+            "reactionRemoveError": "> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${0})",
+            "processError": "処理中にエラーが発生しました。"
+        },
+        "linkGet": {
+            "authorName": "省略リンク\nリンク先:",
+            "providerName": "Sekai.Explode",
+            "rootContent": "<center><h1>どこ見てんじゃい</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>",
+            "notFoundContent": "<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>"
+        },
+        "playerStart": {
+            "playingTrack": "**${0}**を再生中!",
+            "requestedBy": "リクエスト者: ${0}"
+        }
+    }
+}

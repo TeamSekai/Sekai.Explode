@@ -24,5 +24,6 @@
 	"rconhost1": "192.168.1.255",
 	"rconport1": "25575",
 	"rconpass1": "yourpassword1234",
-	"syslogChannel": "1151139585791901746"
+	"syslogChannel": "1151139585791901746",
+	"language": "default"
 }
