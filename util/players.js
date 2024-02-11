@@ -1,4 +1,5 @@
-const { useQueue } = require('discord-player');
+const { useQueue, Track } = require('discord-player');
+const Timespan = require('./timespan');
 
 /**
  * 音楽プレイヤーに関わるユーティリティ関数群。
@@ -31,6 +32,15 @@ module.exports = {
             return queue;
 
         return null;
+    },
+
+    /**
+     * トラックの長さを求める。
+     * @param {Track<unknown>} track トラック
+     * @returns トラックの長さ
+     */
+    getDuration(track) {
+        return new Timespan({ millis: track.durationMS });
     }
 
 };

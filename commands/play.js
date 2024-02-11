@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { useMainPlayer, QueryType } = require('discord-player');
-const { getPlayableVoiceChannelId } = require('../util/players');
+const { getPlayableVoiceChannelId, getDuration } = require('../util/players');
+const Timespan = require('../util/timespan');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 //
@@ -49,9 +50,10 @@ module.exports = {
     		  },
     		});
 
+			const duration = getDuration(res.track);
 			const message = res.track.playlist
-				? `**${res.track.playlist.title}**をキューに追加しました！`
-				: `**${res.track.author} - ${res.track.title}**をキューに追加しました！`;
+				? `**${res.track.playlist.title} (${duration})**をキューに追加しました！`
+				: `**${res.track.author} - ${res.track.title} (${duration})**をキューに追加しました！`;
 
 			return interaction.followUp({
 				embeds: [{
