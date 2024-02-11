@@ -14,7 +14,8 @@ process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
 
 //!Load Internal dir code
 const activity = require('./internal/activity');
-const mongodb = require('./internal/mongodb')
+const mongodb = require('./internal/mongodb');
+const { getDuration } = require('./util/players');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -296,7 +297,7 @@ player.events.on('playerStart', (queue, track) => {
     // queue.metadata.channel.send(`**${track.title}**を再生中`);
     queue.metadata.channel.send({
 		embeds: [{
-			title: `**${track.title}**を再生中!`,
+			title: `**${track.title} (${getDuration(track)})**を再生中!`,
 			thumbnail: {
 				url: track.thumbnail
 			},
