@@ -1,13 +1,13 @@
 const path = require('path');
 const config = require('../config.json');
-const defaultMSG = require('../language/default.json');
+const LANG = require('../language/default.json');
 
 /**
  * @type {typeof import('../language/default.json')}
  */
-const LANG = require(path.join(__dirname, '..', 'language', (config.language ?? 'default') + '.json'));
+const configLANG = require(path.join(__dirname, '..', 'language', (config.language ?? 'default') + '.json'));
 
-Object.assign(LANG, defaultMSG);
+Object.assign(LANG, configLANG);
 
 class FormatSyntaxError extends SyntaxError {
     /**
