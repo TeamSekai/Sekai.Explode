@@ -141,6 +141,7 @@ class Pager {
         const fieldName = this.getFieldName();
         const description = this.getDescription();
         embedBuilder.setTitle(this.getTitle());
+        embedBuilder.setColor(this.getColor());
         if (fieldName == null) {
             embedBuilder.setDescription(description);
         } else {
