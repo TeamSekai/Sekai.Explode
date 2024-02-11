@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { joinVoiceChannel } = require('@discordjs/voice');
-const { VoiceChannel } = require('discord.js');
 const { useMainPlayer, QueryType } = require('discord-player');
+const { getPlayableVoiceChannelId } = require('../util/players');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 //
@@ -17,20 +16,12 @@ module.exports = {
 				.setRequired(true)
 		),
     execute: async function (interaction) {
+		const voiceChannelId = getPlayableVoiceChannelId(interaction);
+		if (voiceChannelId == null)
+            return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
+
 		const player = useMainPlayer();
 		const query = interaction.options.get("query").value;
-		const member = interaction.member;
-		const channel = member.voice.channel;
-
-        if (!channel) {
-            return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
-        }
-
-		if (
-			interaction.guild.members.me.voice.channelId &&
-			interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId
-		)
-			return await interaction.reply({ content: 'えー実行したくないなぁー...だってVCに君が居ないんだもん...', ephemeral: true });
 
 		await interaction.deferReply();
 
@@ -40,7 +31,7 @@ module.exports = {
     		if (!searchResult || searchResult.tracks.length == 0 || !searchResult.tracks) {
     		  return interaction.followUp('うわーん！曲が見つからなかったよぉ...');
     		}
-    		const res = await player.play(interaction.member.voice.channel.id, searchResult, {
+    		const res = await player.play(voiceChannelId, searchResult, {
     		  nodeOptions: {
     		    metadata: {
     		      channel: interaction.channel,
