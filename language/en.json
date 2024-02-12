@@ -16,7 +16,7 @@
             "providerName": "Sekai.Explode",
             "rootContentTitle": "You can find nothing here",
             "notFoundContentTitle": "The shortened link was not found",
-            "contentFooter": "${server} (${os})"
+            "contentFooter": ""
         },
         "playerStart": {
             "playingTrack": "Playing **${0}**!",

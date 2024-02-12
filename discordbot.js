@@ -270,11 +270,7 @@ app.get("/", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
-		const footer = strFormat(LANG.discordbot.linkGet.contentFooter, {
-			server: res.getHeader('Server'),
-			os: os.version
-		});
-		return res.status(404).send(`<center><h1>${LANG.discordbot.linkGet.rootContentTitle}</h1>\n<hr>\n${footer}</center>`);
+		return res.status(404).send(`<center><h1>${LANG.discordbot.linkGet.rootContentTitle}</h1>\n<hr>\n${LANG.discordbot.linkGet.contentFooter}</center>`);
 	}
 	res.send()
 });
@@ -290,7 +286,7 @@ app.get("/:linkCode", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
-		return res.status(404).send(LANG.discordbot.linkGet.notFoundContent);
+		return res.status(404).send(`<center><h1>${LANG.discordbot.linkGet.notFoundContentTitle}</h1>\n<hr>\n${LANG.discordbot.linkGet.contentFooter}</center>`);
 	}
 	res.send(
 		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
