@@ -11,10 +11,12 @@ const server = require("http").Server(app);
 const { Player } = require('discord-player');
 const internal = require('stream');
 process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
+const os = require('os');
 
 //!Load Internal dir code
 const activity = require('./internal/activity');
 const mongodb = require('./internal/mongodb');
+
 const { LANG, strFormat } = require('./util/languages');
 
 const creset = '\x1b[0m';
@@ -267,7 +269,11 @@ app.get("/", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
-		return res.status(404).send(LANG.discordbot.linkGet.rootContent);
+		const footer = strFormat(LANG.discordbot.linkGet.contentFooter, {
+			serverVersion: res.getHeader('Server'),
+			osVersion: os.version()
+		});
+		return res.status(404).send(`<center><h1>${LANG.discordbot.linkGet.rootContentTitle}</h1>\n<hr>\n${footer}</center>`);
 	}
 	res.send()
 });

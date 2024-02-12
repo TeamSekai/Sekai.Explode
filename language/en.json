@@ -14,8 +14,9 @@
         "linkGet": {
             "authorName": "Shortened link\ndestination:",
             "providerName": "Sekai.Explode",
-            "rootContent": "<center><h1>You can find nothing here</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>",
-            "notFoundContent": "<center><h1>The shortened link was not found</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>"
+            "rootContentTitle": "You can find nothing here",
+            "notFoundContentTitle": "The shortened link was not found",
+            "contentFooter": "${server} (${os})"
         },
         "playerStart": {
             "playingTrack": "Playing **${0}**!",

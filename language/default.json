@@ -14,8 +14,9 @@
         "linkGet": {
             "authorName": "省略リンク\nリンク先:",
             "providerName": "Sekai.Explode",
-            "rootContent": "<center><h1>どこ見てんじゃい</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>",
-            "notFoundContent": "<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>"
+            "rootContentTitle": "どこ見てんじゃい",
+            "notFoundContentTitle": "省略リンクが見つかりませんでした",
+            "contentFooter": "niggasex/82.64 (UwUntu)"
         },
         "playerStart": {
             "playingTrack": "**${0}**を再生中!",
