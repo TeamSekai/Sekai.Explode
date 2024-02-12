@@ -1,0 +1,26 @@
+{
+    "discordbot": {
+        "ready": {
+            "sysLog": "Discord.js Bot is Ready!"
+        },
+        "interactionCreate": {
+            "commandError": "An error occurs while executing a command."
+        },
+        "messageCreate": {
+            "requestedBy": "Requested by: ${0}",
+            "reactionRemoveError": "> ⚠ Failed to remove reactions! (Please make sure of the permissions!) (APIError: ${0})",
+            "processError": "An error occurred"
+        },
+        "linkGet": {
+            "authorName": "Shortened link\ndestination:",
+            "providerName": "Sekai.Explode",
+            "rootContentTitle": "You can find nothing here",
+            "notFoundContentTitle": "The shortened link was not found",
+            "contentFooter": "${server} (${os})"
+        },
+        "playerStart": {
+            "playingTrack": "Playing **${0}**!",
+            "requestedBy": "Requested by: ${0}"
+        }
+    }
+}

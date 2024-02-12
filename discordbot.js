@@ -11,11 +11,14 @@ const server = require("http").Server(app);
 const { Player } = require('discord-player');
 const internal = require('stream');
 process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
+const os = require('os');
 
 //!Load Internal dir code
 const activity = require('./internal/activity');
 const mongodb = require('./internal/mongodb');
+
 const { getDuration } = require('./util/players');
+const { LANG, strFormat } = require('./util/languages');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -130,7 +133,7 @@ client.on('ready', async () => {
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
 	console.log(`${cgreen}Ready!${creset}`);
 	let SyslogChannel = client.channels.cache.get(syslogChannel);
-	SyslogChannel.send('Discord.js Bot is Ready!')
+	SyslogChannel.send(LANG.discordbot.ready.sysLog);
 })
 
 
@@ -146,9 +149,9 @@ client.on("interactionCreate", async interaction => {
 		await command.execute(interaction);
 	} catch (error) {
 		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+			await interaction.followUp({ content: LANG.discordbot.interactionCreate.commandError, ephemeral: true });
 		} else {
-			await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+			await interaction.reply({ content: LANG.discordbot.interactionCreate.commandError, ephemeral: true });
 		}
 		throw error;
 	}
@@ -180,12 +183,12 @@ client.on('messageCreate', async (message) => {
 
                 collector.on('collect', async (reaction, user) => {
                     const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
-					let fxmsg = `Requested by:${user.username}\n${modifiedURL}`
+					let fxmsg = strFormat(LANG.discordbot.messageCreate.requestedBy, [user.username]) + `\n${modifiedURL}`;
 					message.channel.send(fxmsg)
 						.then(sentmsg => {
 							message.reactions.removeAll().catch(e => {
 								console.error(`reaction.removeAll error: ${e.code}`)
-								let errmsg = `\n> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${e.code})`
+								let errmsg = '\n' + strFormat(LANG.discordbot.messageCreate.reactionRemoveError, [e.code]);
 								sentmsg.edit(`${fxmsg}${errmsg}`);
 							})
 						})
@@ -216,7 +219,7 @@ client.on('messageCreate', async (message) => {
 					}
 					console.log(`After: ${url}`)
 					if (url.includes('Error')) {
-						message.channel.send("処理中にエラーが発生しました。\n" + "```" + url + "\n```")
+						message.channel.send(LANG.discordbot.messageCreate.processError + "\n" + "```" + url + "\n```")
 					}
                     const modifiedURL = url.replace('www.tiktok.com', 'vxtiktok.com');
 					let fxmsg = `Requested by:${user.username}\n${modifiedURL}`
@@ -224,7 +227,7 @@ client.on('messageCreate', async (message) => {
 						.then(sentmsg => {
 							message.reactions.removeAll().catch(e => {
 								console.error(`reaction.removeAll error: ${e.code}`)
-								let errmsg = `\n> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${e.code})`
+								let errmsg = '\n' + strFormat(LANG.discordbot.messageReply.reactionRemoveError, [e.code]);
 								sentmsg.edit(`${fxmsg}${errmsg}`);
 							})
 						})
@@ -255,8 +258,8 @@ app.get("/oembed/:linkCode", async (req, res) => {
 		"version": "1.0",
 		"title": `${link.url}`,
 		"type": "link",
-		"author_name": "省略リンク\nリンク先:",
-		"provider_name": "Sekai.Explode",
+		"author_name": LANG.discordbot.linkGet.authorName,
+		"provider_name": LANG.discordbot.linkGet.providerName,
 		"provider_url": "https://ringoxd.dev/",
 		"url": link.url
 	});
@@ -267,7 +270,11 @@ app.get("/", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
-		return res.status(404).send(`<center><h1>どこ見てんじゃい</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
+		const footer = strFormat(LANG.discordbot.linkGet.contentFooter, {
+			serverVersion: res.getHeader('Server'),
+			osVersion: os.version()
+		});
+		return res.status(404).send(`<center><h1>${LANG.discordbot.linkGet.rootContentTitle}</h1>\n<hr>\n${footer}</center>`);
 	}
 	res.send()
 });
@@ -283,7 +290,7 @@ app.get("/:linkCode", async (req, res) => {
 	if (!client.templinks) return res.sendStatus(500);
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
-		return res.status(404).send(`<center><h1>省略リンクが見つかりませんでした</h1>\n<hr>\nniggasex/82.64 (UwUntu)</center>`);
+		return res.status(404).send(LANG.discordbot.linkGet.notFoundContent);
 	}
 	res.send(
 		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
@@ -297,12 +304,12 @@ player.events.on('playerStart', (queue, track) => {
     // queue.metadata.channel.send(`**${track.title}**を再生中`);
     queue.metadata.channel.send({
 		embeds: [{
-			title: `**${track.title} (${getDuration(track)})**を再生中!`,
+			title: strFormat(LANG.discordbot.playerStart.playingTrack, [track.title + ` (${getDuration(track)})`]),
 			thumbnail: {
 				url: track.thumbnail
 			},
 			footer: {
-				text: `リクエスト者: ${queue.currentTrack.requestedBy.tag}`
+				text: strFormat(LANG.discordbot.playerStart.requestedBy, [queue.currentTrack.requestedBy.tag])
 			},
 			color: 0x5865f2,
 		}]
