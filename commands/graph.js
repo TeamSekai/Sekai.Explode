@@ -2,85 +2,86 @@ const { SlashCommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 const { createCanvas, loadImage } = require('canvas');
 const fs = require('fs');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('graph')
-		.setDescription('グラフを描画します。')
+		.setName(LANG.commands.graph.name)
+		.setDescription(LANG.commands.graph.description)
 		.addStringOption(option =>
 			option
-				.setName("values")
-				.setDescription("値を入力(それぞれの値は1, 2, 3のようにコンマで区切ること。)")
+				.setName(LANG.commands.graph.options.values.name)
+				.setDescription(LANG.common.optionDescription.graphValues)
 				.setRequired(true)
 		)
 		.addStringOption(option =>
 			option
-				.setName("label")
-				.setDescription("値のラベル(例: 個数) (未入力の場合はvalueとなります)")
+				.setName(LANG.commands.graph.options.label.name)
+				.setDescription(strFormat(LANG.common.optionDescription.graphLabel, [LANG.common.defaultValues.graphLabel]))
 				.setRequired(false)
 		)
 		.addStringOption(option =>
 			option
-				.setName('title')
-				.setDescription(`タイトルを入力(未入力の場合はuser's graphとなります`)
+				.setName(LANG.commands.graph.options.title.name)
+				.setDescription(strFormat(LANG.common.optionDescription.graphTitle, [LANG.common.defaultValues.graphTitle]))
 				.setRequired(false)
 		)
 		.addStringOption(option => (
 			option
 				.setName('line_color')
-				.setDescription('線の色を選択')
+				.setDescription(LANG.commands.graph.options.lineColor.name)
 				.setRequired(false)
-				.addChoices({name:"Red",value:'rgb(255, 0, 0)'})
-				.addChoices({name:"Green",value:'rgb(0, 255, 0)'})
-				.addChoices({name:"Pink",value:'rgb(255, 0, 255)'})
-				.addChoices({name:"White",value:'rgb(255, 255, 255)'})
-				.addChoices({name:"Black",value:'rgb(0, 0, 0)'})
-				.addChoices({name:"Orange",value:'rgb(255, 128, 0)'})
+				.addChoices({name:LANG.commands.graph.options.lineColor.choices.red,value:'rgb(255, 0, 0)'})
+				.addChoices({name:LANG.commands.graph.options.lineColor.choices.green,value:'rgb(0, 255, 0)'})
+				.addChoices({name:LANG.commands.graph.options.lineColor.choices.pink,value:'rgb(255, 0, 255)'})
+				.addChoices({name:LANG.commands.graph.options.lineColor.choices.white,value:'rgb(255, 255, 255)'})
+				.addChoices({name:LANG.commands.graph.options.lineColor.choices.black,value:'rgb(0, 0, 0)'})
+				.addChoices({name:LANG.commands.graph.options.lineColor.choices.orange,value:'rgb(255, 128, 0)'})
 		))
 		.addStringOption(option => (
 			option
-				.setName('background_theme')
-				.setDescription('背景の色を選択')
+				.setName(LANG.commands.graph.options.backgroundTheme.name)
+				.setDescription(LANG.commands.graph.options.backgroundTheme.description)
 				.setRequired(false)
-				.addChoices({name:"Dark",value:"#01010e"})
-				.addChoices({name:"Light",value:"#F3F3F6"})
+				.addChoices({name:LANG.commands.graph.options.backgroundTheme.choices.dark,value:"#01010e"})
+				.addChoices({name:LANG.commands.graph.options.backgroundTheme.choices.light,value:"#F3F3F6"})
 		))
 		.addBooleanOption(option =>
 			option
-				.setName('begin_at_zero')
-				.setDescription('グラフの最小値を0に固定するか(デフォルト: false)')
+				.setName(LANG.commands.graph.options.beginAtZero.name)
+				.setDescription(LANG.commands.graph.options.beginAtZero.description)
 				.setRequired(false) // 任意のオプション
 		),
 	execute: async function(interaction) {
 
 
 		let linergb = 'rgb(75, 192, 192)'
-		if (interaction.options.getString('line_color')) {
-			linergb = interaction.options.getString('line_color');
+		if (interaction.options.getString(LANG.commands.graph.options.lineColor.name)) {
+			linergb = interaction.options.getString(LANG.commands.graph.options.lineColor.name);
 		}
 
 		let bgtheme = "#01010e"
-		if (interaction.options.getString('background_theme')) {
-			bgtheme = interaction.options.getString('background_theme');
+		if (interaction.options.getString(LANG.commands.graph.options.backgroundTheme.name)) {
+			bgtheme = interaction.options.getString(LANG.commands.graph.options.backgroundTheme.name);
 		}
 
 		const nickname = interaction.member.nickname || interaction.user.username;
-		let graphtitle = `${nickname}'s graph`
-		if (interaction.options.getString('title')) {
-			graphtitle = interaction.options.getString('title');
+		let graphtitle = strFormat(LANG.common.defaultValues.graphTitle, [nickname]);
+		if (interaction.options.getString(LANG.commands.graph.options.title.name)) {
+			graphtitle = interaction.options.getString(LANG.commands.graph.options.title.name);
 		}
 
-		let label = `value`
-		if (interaction.options.getString('label')) {
-			label = interaction.options.getString('label');
+		let label = LANG.common.defaultValues.graphLabel;
+		if (interaction.options.getString(LANG.commands.graph.options.label.name)) {
+			label = interaction.options.getString(LANG.commands.graph.options.label.name);
 		}
 
 		let AtZero = false;
-		if (interaction.options.getBoolean('begin_at_zero')) {
-			AtZero = interaction.options.getBoolean('begin_at_zero')
+		if (interaction.options.getBoolean(LANG.commands.graph.options.beginAtZero.name)) {
+			AtZero = interaction.options.getBoolean(LANG.commands.graph.options.beginAtZero.name);
 		}
 
-		const valuesString = interaction.options.getString('values');
+		const valuesString = interaction.options.getString(LANG.commands.graph.options.values.name);
 		console.log(valuesString)
 		const values = valuesString.split(',').map(val => parseInt(val.trim()));
 		console.log(values)

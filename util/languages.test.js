@@ -1,6 +1,44 @@
-const { strFormat, FormatSyntaxError } = require("./languages");
+const { strFormat, FormatSyntaxError, assignDeep } = require("./languages");
 
-test('format', () => {
+test('assignDeep', () => {
+    expect(assignDeep(
+        {
+            a: {
+                b: "bbb",
+                c: "ccc"
+            },
+            e: "eee",
+            f: "fff",
+        },
+        {
+            a: {
+                c: "CCC",
+                d: "DDD"
+            },
+            f: "FFF",
+            g: "GGG",
+            h: {
+                j: "JJJ"
+            }
+        }
+    )).toStrictEqual(
+        {
+            a: {
+                b: "bbb",
+                c: "CCC",
+                d: "DDD"
+            },
+            e: "eee",
+            f: "FFF",
+            g: "GGG",
+            h: {
+                j: "JJJ"
+            }
+        }
+    );
+});
+
+test('strFormat', () => {
     expect(strFormat("text ${a} abc", { a: 123 })).toBe("text 123 abc");
     expect(strFormat("text \\${a} abc", { a: 123 })).toBe("text ${a} abc");
     expect(strFormat("text $\\{a} abc", { a: 123 })).toBe("text ${a} abc");
@@ -13,4 +51,4 @@ test('format', () => {
     expect(strFormat("ab\\")).toBe("ab\\");
     expect(strFormat("ab\\c")).toBe("ab\\c");
     expect(() => strFormat("abc${key")).toThrow(FormatSyntaxError);
-})
+});

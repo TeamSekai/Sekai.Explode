@@ -1,13 +1,33 @@
 {
     "discordbot": {
+        "getRedirectUrl": {
+            "redirectURL": "Redirect URL:",
+            "error": "Error:"
+        },
+        "main": {
+            "botStarting": "Starting Discord.js bot...",
+            "commandsLoaded": "Loaded ${0} commands!",
+            "playerLoading": "Loading Discord-Player...",
+            "setupActivityCalling": "Calling setupActivity"
+        },
+        "interval": {
+            "linkExpired": "[TempLink] link: ${0} has expired"
+        },
         "ready": {
-            "sysLog": "Discord.js Bot is Ready!"
+            "sysLog": "Discord.js Bot is Ready!",
+            "loggedIn": "${cgreen}Logged in as${creset} ${tag}",
+            "presenceNameLoading": "Loading...",
+            "presenceStateLoading": "Sekai.explode is now loading...",
+            "commandsRegistering": "Registering commands...",
+            "commandsReady": "Ready!"
         },
         "interactionCreate": {
-            "commandError": "An error occurs while executing a command."
+            "unsupportedCommandError": "A command named ${0} is not supported.",
+            "commandError": "An error occurred while executing a command."
         },
         "messageCreate": {
             "requestedBy": "Requested by: ${0}",
+            "reactionRemoveErrorConsole": "reaction.removeAll error: ${0}",
             "reactionRemoveError": "> ⚠ Failed to remove reactions! (Please make sure of the permissions!) (APIError: ${0})",
             "processError": "An error occurred"
         },
@@ -21,6 +41,26 @@
         "playerStart": {
             "playingTrack": "Playing **${0}**!",
             "requestedBy": "Requested by: ${0}"
+        },
+        "playerError": {
+            "message": "An error occurred"
+        },
+        "serverListen": {
+            "tempLinkReady": "[TempLink] Started listening to port ${linkPort} (${linkDomain})"
+        }
+    },
+    "internal": {
+        "activity": {
+            "called": "Called internal activity system",
+            "presenceName": "Sekai - Added GlobalBan System",
+            "presenceState": "Ping: ${0}ms | Created by ringoXD"
+        },
+        "mongodb": {
+            "called": "Called mongodb internal system.",
+            "dbConnecting": "[MongoDB] Connecting...",
+            "dbConnected": "[MongoDB] Connected!",
+            "dbDisconnecting": "[MongoDB] Disconnecting...",
+            "dbDisconnected": "[MongoDB] Disconnected!"
         }
     }
 }
