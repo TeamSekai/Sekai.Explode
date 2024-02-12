@@ -12,8 +12,8 @@ module.exports = {
 				.setRequired(true)
         ),
     execute: async function (interaction) {
-        let domainName = "_minecraft._tcp." + interaction.options.getString("domain");
-		let result = {};
+        const domain = interaction.options.getString("domain");
+        const domainName = "_minecraft._tcp." + domain;
 		try {
             dns.resolveSrv(domainName, (err, records) => {
                 if (err) {
