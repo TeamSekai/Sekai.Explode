@@ -46,11 +46,11 @@ async function getRedirectUrl(shortUrl) {
 			 validateStatus: (status) => status == 301 || status == 302
 		});
         const redirectUrl = response.headers.location;
-        console.log('Redirect URL:', redirectUrl);
+        console.log(LANG.discordbot.getRedirectUrl.redirectURL, redirectUrl);
         return redirectUrl;
     } catch (error) {
-        console.error('Error:', error.message);
-		return `Error: ${error.message}`
+        console.error(LANG.discordbot.getRedirectUrl.error, error.message);
+		return `${LANG.discordbot.getRedirectUrl.error} ${error.message}`
     }
 }
 function unicodeEscape(str) {
@@ -71,7 +71,7 @@ function unicodeEscape(str) {
 
 //!RUN=======================
 
-console.log('Starting Discord.js bot...')
+console.log(LANG.discordbot.main.botStarting);
 let cmdscount = 0;
 fs.readdirSync(path.join(__dirname, "commands"), {
     withFileTypes: true
@@ -97,19 +97,19 @@ const options = {
 	// ws: { properties: { $browser: "Discord iOS" }}
 };
 
-console.log(`${cgreen}Loaded ${cmdscount} commands!${creset}`)
+console.log(cgreen + strFormat(LANG.discordbot.main.commandsLoaded, [cmdscount]) + creset);
 const client = new Client(options);
-console.log('Loading Discord-Player...')
+console.log(LANG.discordbot.main.playerLoading);
 const player = new Player(client);
 player.extractors.loadDefault();
-console.log('Calling setupActivity')
+console.log(LANG.discordbot.main.setupActivityCalling);
 activity.setupActivity(client);
 //?Ignore this
 setInterval(() => {
 	if (!client.templinks) return;
 	client.templinks = client.templinks.filter((link) => {
 		if ((Date.now() - link.createdAt.valueOf()) > link.period) {
-			console.log(`[TempLink] リンク: ${link.id} が期限切れになりました`)
+			console.log(strFormat(LANG.discordbot.interval.linkExpired, [link.id]));
 			return false;
 		} else {
 			return true;
@@ -120,18 +120,18 @@ setInterval(() => {
 
 client.on('ready', async () => {
 	client.templinks = [];
-	console.log(`${cgreen}Logged in as${creset} ${client.user.tag}`);
+	console.log(strFormat(LANG.discordbot.ready.loggedIn, { cgreen, creset, tag: client.user.tag }));
 	client.user.setPresence({
 		activities: [{
-			name: `Loading...`,
-			state: `Sekai.explode is now loading...`,
+			name: LANG.discordbot.ready.presenceNameLoading,
+			state: LANG.discordbot.ready.presenceStateLoading,
 			type: ActivityType.Playing,
 		}],
 		status: "dnd",
 	});
-	console.log(`Registering commands...`)
+	console.log(LANG.discordbot.ready.commandsRegistering);
 	await client.application.commands.set(commands.map(x => x.data.toJSON()));
-	console.log(`${cgreen}Ready!${creset}`);
+	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
 	let SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
 })
@@ -142,7 +142,7 @@ client.on("interactionCreate", async interaction => {
 
 	let command = commands.find(x => x.data.name == interaction.commandName);
 	if (!command) {
-		console.error(`${interaction.commandName}というコマンドには対応していません。`);
+		console.error(strFormat(LANG.discordbot.interactionCreate.unsupportedCommandError, [interaction.commandName]));
 		return;
 	}
 	try {
@@ -187,7 +187,7 @@ client.on('messageCreate', async (message) => {
 					message.channel.send(fxmsg)
 						.then(sentmsg => {
 							message.reactions.removeAll().catch(e => {
-								console.error(`reaction.removeAll error: ${e.code}`)
+								console.error(strFormat(LANG.discordbot.messageCreate.reactionRemoveErrorConsole, [e.code]));
 								let errmsg = '\n' + strFormat(LANG.discordbot.messageCreate.reactionRemoveError, [e.code]);
 								sentmsg.edit(`${fxmsg}${errmsg}`);
 							})
@@ -213,20 +213,20 @@ client.on('messageCreate', async (message) => {
                 const collector = message.createReactionCollector({ filter, time: 30000 });
 
                 collector.on('collect', async (reaction, user) => {
-					console.log(`Before: ${url}`)
+					console.log(strFormat(LANG.discordbot.messageCreate.beforeUrl, [url]));
 					if (url.includes('vt.tiktok.com')) {
 						url = await getRedirectUrl(url);
 					}
-					console.log(`After: ${url}`)
+					console.log(strFormat(LANG.discordbot.messageCreate.afterUrl, [url]));
 					if (url.includes('Error')) {
 						message.channel.send(LANG.discordbot.messageCreate.processError + "\n" + "```" + url + "\n```")
 					}
                     const modifiedURL = url.replace('www.tiktok.com', 'vxtiktok.com');
-					let fxmsg = `Requested by:${user.username}\n${modifiedURL}`
+					let fxmsg = strFormat(LANG.discordbot.messageCreate.requestedBy, [user.username]) + `\n${modifiedURL}`;
 					message.channel.send(fxmsg)
 						.then(sentmsg => {
 							message.reactions.removeAll().catch(e => {
-								console.error(`reaction.removeAll error: ${e.code}`)
+								console.error(strFormat(LANG.discordbot.messageCreate.reactionRemoveErrorConsole, [e.code]));
 								let errmsg = '\n' + strFormat(LANG.discordbot.messageReply.reactionRemoveError, [e.code]);
 								sentmsg.edit(`${fxmsg}${errmsg}`);
 							})
@@ -312,7 +312,7 @@ player.events.on('playerStart', (queue, track) => {
 	})
 });
 
-player.on("error", () => console.log("ねぇ吐血したんだけど??"));
+player.on("error", () => console.log(LANG.discordbot.playerError.message));
 
 
 process.on('uncaughtException', function (err) {
@@ -322,5 +322,5 @@ process.on('uncaughtException', function (err) {
 
 
 server.listen(linkPort, () => {
-	console.log(`[TempLink] ポート${linkPort} (${linkDomain}) でlistenしました`)
-})
+	console.log(strFormat(LANG.discordbot.serverListen.tempLinkReady, { linkPort, linkDomain }));
+});

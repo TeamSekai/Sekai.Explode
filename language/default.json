@@ -1,15 +1,37 @@
 {
     "discordbot": {
+        "getRedirectUrl": {
+            "redirectURL": "Redirect URL:",
+            "error": "Error:"
+        },
+        "main": {
+            "botStarting": "Starting Discord.js bot...",
+            "commandsLoaded": "Loaded ${0} commands!",
+            "playerLoading": "Loading Discord-Player...",
+            "setupActivityCalling": "Calling setupActivity"
+        },
+        "interval": {
+            "linkExpired": "[TempLink] リンク: ${0} が期限切れになりました"
+        },
         "ready": {
-            "sysLog": "Discord.js Bot is Ready!"
+            "sysLog": "Discord.js Bot is Ready!",
+            "loggedIn": "${cgreen}Logged in as${creset} ${tag}",
+            "presenceNameLoading": "Loading...",
+            "presenceStateLoading": "Sekai.explode is now loading...",
+            "commandsRegistering": "Registering commands...",
+            "commandsReady": "Ready!"
         },
         "interactionCreate": {
+            "unsupportedCommandError": "${0}というコマンドには対応していません。",
             "commandError": "コマンド実行時にエラーになりました。"
         },
         "messageCreate": {
             "requestedBy": "Requested by:${0}",
+            "reactionRemoveErrorConsole": "reaction.removeAll error: ${0}",
             "reactionRemoveError": "> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${0})",
-            "processError": "処理中にエラーが発生しました。"
+            "processError": "処理中にエラーが発生しました。",
+            "beforeUrl": "Before: ${0}",
+            "afterUrl": "After: ${0}"
         },
         "linkGet": {
             "authorName": "省略リンク\nリンク先:",
@@ -21,6 +43,12 @@
         "playerStart": {
             "playingTrack": "**${0}**を再生中!",
             "requestedBy": "リクエスト者: ${0}"
+        },
+        "playerError": {
+            "message": "ねぇ吐血したんだけど??"
+        },
+        "serverListen": {
+            "tempLinkReady": "[TempLink] ポート${linkPort} (${linkDomain}) でlistenしました"
         }
     }
 }

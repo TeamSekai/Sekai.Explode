@@ -7,7 +7,19 @@ const LANG = require('../language/default.json');
  */
 const configLANG = require(path.join(__dirname, '..', 'language', (config.language ?? 'default') + '.json'));
 
-Object.assign(LANG, configLANG);
+function assignDeep(target, source) {
+    for (const [key, value] of Object.entries(source)) {
+        if (target[key] instanceof Object)
+            assignDeep(target[key], value);
+        else if (value instanceof Object)
+            target[key] = assignDeep({}, value);
+        else
+            target[key] = value;
+    }
+    return target;
+}
+
+assignDeep(LANG, configLANG);
 
 class FormatSyntaxError extends SyntaxError {
     /**
@@ -105,4 +117,4 @@ function strFormat(str, values) {
     return result;
 }
 
-module.exports = { LANG, FormatSyntaxError, strFormat };
+module.exports = { LANG, FormatSyntaxError, strFormat, assignDeep };
