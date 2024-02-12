@@ -48,5 +48,19 @@
         "serverListen": {
             "tempLinkReady": "[TempLink] Started listening to port ${linkPort} (${linkDomain})"
         }
+    },
+    "internal": {
+        "activity": {
+            "called": "Called internal activity system",
+            "presenceName": "Sekai - Added GlobalBan System",
+            "presenceState": "Ping: ${0}ms | Created by ringoXD"
+        },
+        "mongodb": {
+            "called": "Called mongodb internal system.",
+            "dbConnecting": "[MongoDB] Connecting...",
+            "dbConnected": "[MongoDB] Connected!",
+            "dbDisconnecting": "[MongoDB] Disconnecting...",
+            "dbDisconnected": "[MongoDB] Disconnected!"
+        }
     }
 }

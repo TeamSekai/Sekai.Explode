@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const config = require('../config.json');
+const { LANG } = require('../util/languages');
 
 
-console.log('Called mongodb internal system.')
+console.log(LANG.internal.mongodb.called);
 connectMongoose()
 
 async function connectMongoose() {
@@ -16,16 +17,16 @@ async function connectMongoose() {
 
 const db = mongoose.connection;
 db.on("connecting", function () {
-    console.log(`[MongoDB] Connecting...`)
+    console.log(LANG.internal.mongodb.dbConnecting);
 });
 db.on("connected", function () {
-    console.log(`[MongoDB] Connected!`)
+    console.log(LANG.internal.mongodb.dbConnected);
 });
 db.on("disconnecting", function () {
-    console.log(`[MongoDB] Disconnecting...`)
+    console.log(LANG.internal.mongodb.dbDisconnecting);
 });
 db.on("disconnected", function () {
-    console.log(`[MongoDB] Disconnected!`)
+    console.log(LANG.internal.mongodb.dbDisconnected);
 });
 
 module.exports = {

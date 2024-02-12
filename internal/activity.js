@@ -1,7 +1,8 @@
 const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
 
 
-console.log('Called internal activity system')
+console.log(LANG.internal.activity.called);
 
 
 // 10秒毎に更新
@@ -34,8 +35,8 @@ function addPingValue(ping) {
 				const avgPing = wspingValues.reduce((sum, value) => sum + value, 0) / wspingValues.length;
 				client.user.setPresence({
 					activities: [{
-						name: `Sekai - Added GlobalBan System`,
-						state: `Ping: ${client.ws.ping}ms | Created by ringoXD`,
+						name: LANG.internal.activity.presenceName,
+						state: strFormat(LANG.internal.activity.presenceState, [client.ws.ping]),
 						type: ActivityType.Watching,
 					}],
 					status: `online`,
