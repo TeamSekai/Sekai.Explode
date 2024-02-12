@@ -271,8 +271,8 @@ app.get("/", async (req, res) => {
 	let link = client.templinks.find(x => x.id == req.params.linkCode);
 	if (!link) {
 		const footer = strFormat(LANG.discordbot.linkGet.contentFooter, {
-			serverVersion: res.getHeader('Server'),
-			osVersion: os.version
+			server: res.getHeader('Server'),
+			os: os.version
 		});
 		return res.status(404).send(`<center><h1>${LANG.discordbot.linkGet.rootContentTitle}</h1>\n<hr>\n${footer}</center>`);
 	}
