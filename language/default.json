@@ -64,5 +64,226 @@
             "dbDisconnecting": "[MongoDB] Disconnecting...",
             "dbDisconnected": "[MongoDB] Disconnected!"
         }
+    },
+    "common": {
+        "optionDescription": {
+            "ipAddress": "IPアドレスを入力",
+            "graphValues": "値を入力(それぞれの値は1, 2, 3のようにコンマで区切ること。)",
+            "graphLabel": "値のラベル(例: 個数) (未入力の場合は${0}となります)",
+            "graphTitle": "タイトルを入力(未入力の場合は${0}となります",
+            "userPlaceholder": "user"
+        },
+        "message": {
+            "checking": "チェックしています...",
+            "dataFor":  "Data for ${0} :",
+            "result": "結果:"
+        },
+        "defaultValues": {
+            "graphLabel": "value",
+            "graphTitle": "${0}'s graph"
+        }
+    },
+    "commands": {
+        "checkping": {
+            "name": "checkping",
+            "description": "Ping Checker",
+            "options": {
+                "ip": {
+                    "name": "ip"
+                }
+            },
+            "invalidIpError": "IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。"
+        },
+        "checktcp": {
+            "name": "dev03",
+            "description": "Ping Checker",
+            "options": {
+                "ip": {
+                    "name": "ip"
+                }
+            },
+            "invalidUrlError": "URLが間違っています"
+        },
+        "discordinfo": {
+            "name": "info",
+            "description": "Lookup Server/User Info",
+            "subcommands": {
+                "user": {
+                    "name": "user",
+                    "description": "ユーザーの情報を調べます!",
+                    "options": {
+                        "target": {
+                            "name": "target",
+                            "description": "ユーザーを指定します。"
+                        }
+                    },
+                    "title": "${0}の情報",
+                    "userId": "ユーザーID",
+                    "userIdValue": "${userid} - ${copyLink}",
+                    "copy": "Copy",
+                    "createdAt": "アカウント作成日",
+                    "joinDate": "サーバー参加日",
+                    "roles": "ロール(${0})"
+                },
+                "server": {
+                    "name": "server",
+                    "description": "サーバーの情報を調べます!",
+                    "title": "${0}の情報",
+                    "memberCount": "サーバー人数",
+                    "createdAt": "サーバー作成日",
+                    "channelCount": "チャンネル数",
+                    "textChannelCount": "テキストチャンネル: ${0}",
+                    "voiceChannelCount": "ボイスチャンネル: ${0}",
+                    "roleCount": "ロール数",
+                    "boosted": "ブーストの有無",
+                    "boostedValue": {
+                        "yes": "あり(${0} ブースト）",
+                        "no": "なし"
+                    }
+                }
+            }
+        },
+        "dm": {
+            "name": "dm",
+            "description": "ユーザーにDMを送信します",
+            "options": {
+                "user": {
+                    "name": "user",
+                    "description": "ユーザーを指定します。"
+                },
+                "text": {
+                    "name": "text",
+                    "description": "送りたい文章を入力"
+                }
+            },
+            "cooldown": "このコマンドを使うには、あと${0}秒待ってください!",
+            "messageTitle": "${0}からのメッセージ",
+            "messageFieldName": "メッセージ",
+            "dmSent": "${0}にDMを送信しました!"
+        },
+        "fake": {
+            "freeNitro": {
+                "name": "freenitro",
+                "description": "ニトロをげっちゅ",
+                "linkText": "Click to GET"
+            },
+            "hackAdmin": {
+                "name": "adminを乗っ取る",
+                "description": "管理者権限を奪いましょう",
+                "message": "権限を奪うには${0}",
+                "linkText": "こちらをクリック"
+            }
+        },
+        "globalban": {
+            "name": "gban",
+            "description": "作成中",
+            "subcommands": {
+                "sync": {
+                    "name": "sync",
+                    "description": "データベースとの同期を行います。(BANされていないユーザーが居た場合には自動BANを行います。",
+                    "permissionError": "このコマンドを使用する権限がありません。使用するためには`ユーザーのBAN権限`、または`管理者`権限が必要です。",
+                    "synchronizingWithDatabase": "データベースと同期中...",
+                    "userBanning": "Banning user: ${name} (${id}), Reason: ${reason}",
+                    "reasonNotProvided": "Not provided",
+                    "synchronizedWithDatabase": "データベースと同期しました。",
+                    "bannedUsers": "BANされたユーザー: ${0}人",
+                    "serviceProvider": "Sekai.Explode"
+                },
+                "add": {
+                    "name": "add",
+                    "description": "グローバルBANリストにユーザーを追加します.",
+                    "options": {
+                        "user": {
+                            "description": "ユーザーを指定します。"
+                        },
+                        "reason": {
+                            "description": "理由の記入"
+                        }
+                    },
+                    "alreadyExists": "${0}は既にグローバルBAN済みです!",
+                    "userAdded": "${0}をグローバルBANリストに追加しました。"
+                },
+                "remove": {
+                    "name": "remove",
+                    "description": "グローバルBANリストからユーザーを削除します。",
+                    "options": {
+                        "user": {
+                            "description": "enter user"
+                        }
+                    },
+                    "doNotExist": "${0}はグローバルBANリストに登録されていません。",
+                    "userRemoved": "${0}をグローバルBANリストから削除しました。"
+                },
+                "list": {
+                    "name": "list",
+                    "description": "グローバルBANリストの一覧を表示します。",
+                    "title": "グローバルBANリスト",
+                    "fieldName": "GBAN済ユーザーの一覧",
+                    "record": "${user}: ${reason}",
+                    "recordUser": "${name} (${id})",
+                    "emptyMessage": "BANリストにユーザーが存在しません。",
+                    "footer": "Sekai.Explode Global Ban System | ${page}/${pageCount}ページ | ${length}件中${start}件目から${end}件目",
+                    "errorTitle": "エラー",
+                    "errorFooter": "Sekai.Explode",
+                    "errorDescription": "内部エラー: ${0}"
+                }
+            },
+            "addRemoveOptionNames": {
+                "user": "user",
+                "reason": "reason"
+            },
+            "subcommandUnspecifiedError": "ねえサブコマンド指定して?",
+            "globalBanReason": "グローバルBAN: ${0}",
+            "permissionError": "このBotの管理者のみが使用できます。",
+            "noReason": "理由なし",
+            "operationSucceeded": "${guildName}-> Success",
+            "operationFailed": "${guildName}-> Failed",
+            "operationFailedWithCode": "Missing Perm/Unknown Error in ${guildName}. (Code: ${code})",
+            "operationResult": "Success: ${done} / Fail: ${fail}",
+            "generalError": "ねえエラーでたんだけど?",
+            "unsupportedSubcommandError": "Something Went Wrong"
+        },
+        "graph": {
+            "name": "graph",
+            "description": "グラフを描画します。",
+            "options": {
+                "values": {
+                    "name": "values"
+                },
+                "label": {
+                    "name": "label"
+                },
+                "title": {
+                    "name": "title"
+                },
+                "lineColor": {
+                    "name": "line_color",
+                    "description": "線の色を選択",
+                    "choices": {
+                        "red": "Red",
+                        "green": "Green",
+                        "pink": "Pink",
+                        "white": "White",
+                        "black": "Black",
+                        "orange": "Orange"
+                    }
+                },
+                "backgroundTheme": {
+                    "name": "background_theme",
+                    "description": "背景の色を選択",
+                    "choices": {
+                        "dark": "Dark",
+                        "light": "Light"
+                    }
+                },
+                "beginAtZero": {
+                    "name": "begin_at_zero",
+                    "description": "グラフの最小値を0に固定するか(デフォルト: false)"
+                }
+            }
+        },
+        "mcSrvlookup": {
+            "name": "mcsrv_record"
+        }
     }
 }

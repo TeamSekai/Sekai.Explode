@@ -1,20 +1,21 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
 const cooldowns = new Map();
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('dm')
-        .setDescription('ユーザーにDMを送信します')
+        .setName(LANG.commands.dm.name)
+        .setDescription(LANG.commands.dm.description)
 		.addUserOption(option =>
 			option
-				.setName("user")
-				.setDescription("ユーザーを指定します。")
+				.setName(LANG.commands.dm.options.user.name)
+				.setDescription(LANG.commands.dm.options.user.description)
 				.setRequired(true)
 		)
 		.addStringOption(option =>
 			option
-				.setName("text")
-				.setDescription("送りたい文章を入力")
+				.setName(LANG.commands.dm.options.text.name)
+				.setDescription(LANG.commands.dm.options.text.description)
 				.setRequired(true)
 		),
 		/* .addBooleanOption(option =>
@@ -34,7 +35,7 @@ module.exports = {
 
 			const remainingTime = Math.ceil((expirationTime - currTime) / 1000);
 			if (remainingTime > 0) {
-				return interaction.reply(`このコマンドを使うには、あと${remainingTime}秒待ってください!`);
+				return interaction.reply(strFormat(LANG.commands.dm.cooldown, [remainingTime]));
 
 			}
 		}
@@ -43,27 +44,27 @@ module.exports = {
 		if (interaction.options.getBoolean('silent')) {
 			isSilent = interaction.options.getBoolean('silent')
 		}
-		const msg = interaction.options.getString('text');
+		const msg = interaction.options.getString(LANG.commands.dm.options.text.name);
 
-		const userId = interaction.options.getUser('user')
+		const userId = interaction.options.getUser(LANG.commands.dm.options.user.name);
 		const dmChannel = await userId.createDM();
 
 		dmChannel.send({
 			embeds: [{
-				title: `${interaction.user.username}からのメッセージ`,
+				title: strFormat(LANG.commands.dm.messageTitle, [interaction.user.username]),
 				thumbnail: {
 					url: interaction.user.displayAvatarURL()
 				},
 				color: 0x5865f2,
 				fields: [{
-					name: "メッセージ",
+					name: LANG.commands.dm.messageFieldName,
 					value: msg,
 				}]
 			}]
 		});
 		
 		const userName = userId.username
-		await interaction.reply(`${userName}にDMを送信しました!`)
+		await interaction.reply(strFormat(LANG.commands.dm.dmSent, [userName]))
 		
 
 		const expirationTime = Date.now() + cooldownTime * 1000;

@@ -1,29 +1,30 @@
 const { SlashCommandBuilder, ChannelType, RoleSelectMenuComponent } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('info')
-        .setDescription('Lookup Server/User Info')
+        .setName(LANG.commands.discordinfo.name)
+        .setDescription(LANG.commands.discordinfo.description)
 		.addSubcommand(subcommand =>
             subcommand
-                .setName('user')
-				.setDescription('ユーザーの情報を調べます!')
+                .setName(LANG.commands.discordinfo.subcommands.user.name)
+				.setDescription(LANG.commands.discordinfo.subcommands.user.description)
 				.addUserOption(option => (
 					option
-						.setName("target")
-						.setDescription("ユーザーを指定します。")
+						.setName(LANG.commands.discordinfo.subcommands.user.options.target.name)
+						.setDescription(LANG.commands.discordinfo.subcommands.user.options.target.description)
 						.setRequired(true)
 				))
 		)
 		.addSubcommand(subcommand =>
             subcommand
-                .setName('server')
-				.setDescription('サーバーの情報を調べます!')
+                .setName(LANG.commands.discordinfo.subcommands.server.name)
+				.setDescription(LANG.commands.discordinfo.subcommands.server.description)
 		),
 		execute: async function (interaction) {
 			const subcommand = interaction.options.getSubcommand();
-			if (subcommand === 'user') {
-				const user = interaction.options.getUser('target')
+			if (subcommand === LANG.commands.discordinfo.subcommands.user.name) {
+				const user = interaction.options.getUser(LANG.commands.discordinfo.subcommands.user.options.target.name);
 				const member = await interaction.guild.members.fetch(user.id)
 				const username = user.username
 				const userid = user.id
@@ -37,40 +38,43 @@ module.exports = {
 				const roleCount = member.roles.cache
 					.filter(role => role.id !== interaction.guild.roles.everyone.id)
 					.size; //*ChatGPT again
+				const copyLink = `[Copy](https://paste-pgpj.onrender.com/?p=${userid})`;
 				await interaction.reply({
 					embeds: [{
-						title: `${username}の情報`,
+						title: strFormat(LANG.commands.discordinfo.subcommands.user.title, [username]),
 						thumbnail: {
 							url: user.displayAvatarURL({ dynamic: true })
 						},
 						color: 0x77e4a6,
 						fields: [{
-							name: "ユーザーID",
-							value: `${userid} - [Copy](https://paste-pgpj.onrender.com/?p=${userid})`
+							name: LANG.commands.discordinfo.subcommands.user.userId,
+							value: strFormat(LANG.commands.discordinfo.subcommands.user.userIdValue, { userid, copyLink })
 						}, {
-							name: "アカウント作成日",
+							name: LANG.commands.discordinfo.subcommands.user.createdAt,
 							value: createdAt,
 							inline: true
 						}, {
-							name: "サーバー参加日",
+							name: LANG.commands.discordinfo.subcommands.user.joinDate,
 							value: joinDate,
 							inline: true
 						}, {
-							name: `ロール(${roleCount})`,
+							name: strFormat(LANG.commands.discordinfo.subcommands.user.roles, [roleCount]),
 							value: roles
 						}]
 					}]
 				})
 
 			}
-			if (subcommand === 'server') {
+			if (subcommand === LANG.commands.discordinfo.subcommands.server.name) {
 				const guild = interaction.guild;
 				const guildname = guild.name
 				const gmembers = guild.memberCount;
 				const gchannels = guild.channels.cache.size;
 				const gvoicechannels = guild.channels.cache.filter(channel => channel.type === ChannelType.GuildVoice).size;
 				const groles = guild.roles.cache.size;
-				const boostStatus = guild.premiumSubscriptionCount > 0 ? `あり(${guild.premiumSubscriptionCount} ブースト）` : 'なし';
+				const boostStatus = guild.premiumSubscriptionCount > 0
+					? strFormat(LANG.commands.discordinfo.subcommands.server.boostedValue.yes, [guild.premiumSubscriptionCount])
+					: LANG.commands.discordinfo.subcommands.server.boostedValue.no;
 				const createdAt = `<t:${Math.floor(guild.createdTimestamp / 1000)}:R>`;
 				let guildIcon = guild.iconURL({ dynamic: true })
 				if (!guildIcon) {
@@ -79,27 +83,28 @@ module.exports = {
 
 				await interaction.reply({
 					embeds: [{
-						title: `${guildname}の情報`,
+						title: strFormat(LANG.commands.discordinfo.subcommands.server.title, [guildname]),
 						thumbnail: {
 							url: guildIcon
 						},
 						color: 0x52c9e0,
 						fields: [{
-							name: "サーバー人数",
+							name: LANG.commands.discordinfo.subcommands.server.memberCount,
 							value: gmembers,
 							inline: true
 						}, {
-							name: "サーバー作成日",
+							name: LANG.commands.discordinfo.subcommands.server.createdAt,
 							value: createdAt,
 							inline: true
 						}, {
-							name: "チャンネル数",
-							value: `テキストチャンネル: ${gchannels}\n` + `ボイスチャンネル: ${gvoicechannels}`
+							name: LANG.commands.discordinfo.subcommands.server.channelCount,
+							value: strFormat(LANG.commands.discordinfo.subcommands.server.textChannelCount, [gchannels]) + '\n' +
+								   strFormat(LANG.commands.discordinfo.subcommands.server.voiceChannelCount, [gvoicechannels])
 						}, {
-							name: "ロール数",
+							name: LANG.commands.discordinfo.subcommands.server.roleCount,
 							value: groles
 						}, {
-							name: "ブーストの有無",
+							name: LANG.commands.discordinfo.subcommands.server.boosted,
 							value: boostStatus
 						}]
 					}]

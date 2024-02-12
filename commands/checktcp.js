@@ -1,18 +1,19 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { LANG } = require('../util/languages');
 const axios = require('axios').default;
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('dev03')
-        .setDescription('Ping Checker')
+        .setName(LANG.commands.checktcp.name)
+        .setDescription(LANG.commands.checktcp.description)
 		.addStringOption(option => (
 			option
-			.setName('ip')
-			.setDescription('IPアドレスを入力')
+			.setName(LANG.commands.checktcp.options.ip.name)
+			.setDescription(LANG.common.optionDescription.ipAddress)
 			.setRequired(true)
 		)),
     execute: async function (interaction) {
-        let url = interaction.options.getString('ip');
-        try { new URL(url) } catch { return interaction.reply("URLが間違っています") };
+        let url = interaction.options.getString(LANG.commands.checktcp.options.ip);
+        try { new URL(url) } catch { return interaction.reply(LANG.commands.checktcp.invalidUrlError) };
         let res = await axios.get("https://check-host.net/check-ping", {
             params: {
                 host: url,
@@ -22,7 +23,7 @@ module.exports = {
                 "Accept": "application/json"
             }
         })
-        let msg = await interaction.reply("チェックしています...");
+        let msg = await interaction.reply(LANG.common.message.checking);
         let checkCount = 0;
         let checkResult = async () => {
             checkCount++;
@@ -31,12 +32,12 @@ module.exports = {
             let str = Object.entries(res2.data).map(([key, value]) => {
                 let nodeName = key.replace(".node.check-host.net", "");
                 let data = value?.[0];
-		console.log("Data for", nodeName, ":", data);
+		console.log(strFormat(LANG.common.message.dataFor, [nodeName]), data);
                 if (!value || !data) return `[${nodeName}] Timeout`;
                 return `[${nodeName}] ${data[3] || "Error"}/${data[2]} | Ping: ${Math.floor(data[1] * 1000)}ms`;
             }).filter(x => !!x).join("\n");
             msg.edit({
-                content: "結果:",
+                content: LANG.common.message.result,
                 files: [{
                     attachment: Buffer.from(str),
                     name: "result.txt"
