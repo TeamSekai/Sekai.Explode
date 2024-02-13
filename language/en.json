@@ -29,7 +29,9 @@
             "requestedBy": "Requested by: ${0}",
             "reactionRemoveErrorConsole": "reaction.removeAll error: ${0}",
             "reactionRemoveError": "> ⚠ Failed to remove reactions! (Please make sure of the permissions!) (APIError: ${0})",
-            "processError": "An error occurred"
+            "processError": "An error occurred",
+            "beforeUrl": "Before: ${0}",
+            "afterUrl": "After: ${0}"
         },
         "linkGet": {
             "authorName": "Shortened link\ndestination:",
@@ -61,6 +63,539 @@
             "dbConnected": "[MongoDB] Connected!",
             "dbDisconnecting": "[MongoDB] Disconnecting...",
             "dbDisconnected": "[MongoDB] Disconnected!"
+        }
+    },
+    "common": {
+        "optionDescription": {
+            "ipAddress": "Enter the IP address",
+            "graphValues": "Enter the values (Separate the values with commas; e.g. 1, 2, 3)",
+            "graphLabel": "The label of values, defaults to ${0} (e.g. number)",
+            "graphTitle": "Enter the title of graph",
+            "userPlaceholder": "user"
+        },
+        "message": {
+            "checking": "Checking...",
+            "dataFor":  "Data for ${0} :",
+            "result": "Result:",
+            "notPlayableError": "Join the VC to execute the command!",
+            "playerTrack": "${title} (${duration})",
+            "noTracksPlayed": "There are no tracks played!"
+        },
+        "defaultValues": {
+            "graphLabel": "value"
+        }
+    },
+    "commands": {
+        "checkping": {
+            "name": "checkping",
+            "description": "Ping Checker",
+            "options": {
+                "ip": {
+                    "name": "ip"
+                }
+            },
+            "invalidIpError": "The IP address is invalid. (Only IPv4 and domains supported.)"
+        },
+        "checktcp": {
+            "name": "dev03",
+            "description": "Ping Checker",
+            "options": {
+                "ip": {
+                    "name": "ip"
+                }
+            },
+            "invalidUrlError": "The URL is invalid"
+        },
+        "discordinfo": {
+            "name": "info",
+            "description": "Lookup Server/User Info",
+            "subcommands": {
+                "user": {
+                    "name": "user",
+                    "description": "Checks user information!",
+                    "options": {
+                        "target": {
+                            "name": "target",
+                            "description": "Specify the user."
+                        }
+                    },
+                    "title": "${0}'s Information",
+                    "userId": "User ID",
+                    "userIdValue": "${userid} - ${copyLink}",
+                    "copy": "Copy",
+                    "createdAt": "Created At",
+                    "joinDate": "Joined At",
+                    "roles": "${0} Role(s)"
+                },
+                "server": {
+                    "name": "server",
+                    "description": "Checks server information!",
+                    "title": "${0}'s Information",
+                    "memberCount": "Members",
+                    "createdAt": "Created At",
+                    "channelCount": "Channels",
+                    "textChannelCount": "Text channels: ${0}",
+                    "voiceChannelCount": "Voice channels: ${0}",
+                    "roleCount": "Roles",
+                    "boosted": "Boosted?",
+                    "boostedValue": {
+                        "yes": "yes (${0} boosts)",
+                        "no": "no"
+                    }
+                }
+            }
+        },
+        "dm": {
+            "name": "dm",
+            "description": "Sends a DM to a user",
+            "options": {
+                "user": {
+                    "name": "user",
+                    "description": "Specify the user."
+                },
+                "text": {
+                    "name": "text",
+                    "description": "Enter the text to send"
+                }
+            },
+            "cooldown": "Wait ${0} second(s) to use this command!",
+            "messageTitle": "Message from ${0}",
+            "messageFieldName": "Message",
+            "dmSent": "Sent a DM to ${0}!"
+        },
+        "fake": {
+            "freeNitro": {
+                "name": "freenitro",
+                "description": "Gets nitro for free",
+                "linkText": "Click to GET"
+            },
+            "hackAdmin": {
+                "name": "hackadmin",
+                "description": "Lets you take away admin's role",
+                "message": "${0} to take away the role",
+                "linkText": "Click here"
+            }
+        },
+        "globalban": {
+            "name": "gban",
+            "description": "Under development",
+            "subcommands": {
+                "sync": {
+                    "name": "sync",
+                    "description": "Synchronizes with the database. (Bans the users automatically if they are not banned)",
+                    "permissionError": "You have not permission to use this command. You need a `Ban users` or`Admin` permission.",
+                    "synchronizingWithDatabase": "Synchronizing with the database...",
+                    "userBanning": "Banning user: ${name} (${id}), Reason: ${reason}",
+                    "reasonNotProvided": "Not provided",
+                    "synchronizedWithDatabase": "Synchronized with the database",
+                    "bannedUsers": "Banned users: ${0}",
+                    "serviceProvider": "Sekai.Explode"
+                },
+                "add": {
+                    "name": "add",
+                    "description": "Adds a user to the global-ban list.",
+                    "options": {
+                        "user": {
+                            "description": "Specify the user."
+                        },
+                        "reason": {
+                            "description": "Fill in the reason"
+                        }
+                    },
+                    "alreadyExists": "${0} is already global-banned!",
+                    "userAdded": "Added ${0} to the global-ban list."
+                },
+                "remove": {
+                    "name": "remove",
+                    "description": "Removes a user from the global-ban list.",
+                    "options": {
+                        "user": {
+                            "description": "Enter a user"
+                        }
+                    },
+                    "doNotExist": "${0} is not in the global-ban list.",
+                    "userRemoved": "Removed ${0} from the global-ban list."
+                },
+                "list": {
+                    "name": "list",
+                    "description": "Shows the global-ban list.",
+                    "title": "Global-Ban List",
+                    "fieldName": "Global-Banned User",
+                    "record": "${user}: ${reason}",
+                    "recordUser": "${name} (${id})",
+                    "emptyMessage": "There are no users in the ban list.",
+                    "footer": "Sekai.Explode Global Ban System | page ${page}/${pageCount} | ${start} - ${end} of ${length}",
+                    "errorTitle": "Error",
+                    "errorFooter": "Sekai.Explode",
+                    "errorDescription": "internal error: ${0}"
+                }
+            },
+            "addRemoveOptionNames": {
+                "user": "user",
+                "reason": "reason"
+            },
+            "subcommandUnspecifiedError": "Please specify the subcommand.",
+            "globalBanReason": "Global-ban: ${0}",
+            "permissionError": "Only admins of this bot can use.",
+            "noReason": "No reason",
+            "operationSucceeded": "${guildName}-> Succeeded",
+            "operationFailed": "${guildName}-> Failed",
+            "operationFailedWithCode": "Missing Perm/Unknown Error in ${guildName}. (Code: ${code})",
+            "operationResult": "Success: ${done} / Fail: ${fail}",
+            "generalError": "An error occured",
+            "unsupportedSubcommandError": "Something Went Wrong"
+        },
+        "graph": {
+            "name": "graph",
+            "description": "Draws a graph.",
+            "options": {
+                "values": {
+                    "name": "values"
+                },
+                "label": {
+                    "name": "label"
+                },
+                "title": {
+                    "name": "title"
+                },
+                "lineColor": {
+                    "name": "line_color",
+                    "description": "Select the line color",
+                    "choices": {
+                        "red": "Red",
+                        "green": "Green",
+                        "pink": "Pink",
+                        "white": "White",
+                        "black": "Black",
+                        "orange": "Orange"
+                    }
+                },
+                "backgroundTheme": {
+                    "name": "background_theme",
+                    "description": "Select the background color",
+                    "choices": {
+                        "dark": "Dark",
+                        "light": "Light"
+                    }
+                },
+                "beginAtZero": {
+                    "name": "begin_at_zero",
+                    "description": "Whether fixes the minimum value of graph to 0 (default: false)"
+                }
+            },
+            "defaultTitle": "${0}'s graph"
+        },
+        "mcSrvlookup": {
+            "name": "mcsrv_record",
+            "description": "Lookup SRV Record",
+            "options": {
+                "domain": {
+                    "name": "domain",
+                    "description": "Specify the domain"
+                }
+            },
+            "resolutionError": "An error occured while resolving SRV records for ${domain}: ${message}",
+            "notFoundError": "No SRV records found for ${0}",
+            "result": {
+                "title": "SRV Record #${0}:",
+                "priority": "Priority: ${0}",
+                "weight": "Weight: ${0}",
+                "port": "Port: ${0}",
+                "target": "Target: ${0}"
+            },
+            "serviceProvider": "ringoXD's Discord.js Bot",
+            "generalError": "An error occurred: ${0}"
+        },
+        "mcstatus": {
+            "name": "mcstatus",
+            "description": "Checks server status",
+            "options": {
+                "serverIp": {
+                    "name": "server_ip",
+                    "description": "Specify the server."
+                },
+                "bedrockServer": {
+                    "name": "bedrock_server",
+                    "description": "Whether the server is bedrock edition"
+                }
+            },
+            "online": "online",
+            "serverIsOnline": "${server} is ${online}!",
+            "playerCount": "Players",
+            "playerCountValue": "${online} / ${max}",
+            "version": "Version",
+            "serverIsOffline": "${0} is offline",
+            "connectionFailed": "Failed to connect!",
+            "errorResult": {
+                "title": "Error",
+                "description": "Internal error: ${statusText}(${status})",
+                "footer": "Sekai.Explode"
+            }
+        },
+        "nettool": {
+            "name": "net_tool",
+            "description": "A command related with networks",
+            "subcommands": {
+                "isProxy": {
+                    "name": "isproxy",
+                    "description": "checks IP address using ip-api.com",
+                    "options": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "Target IP"
+                        }
+                    },
+                    "error": "An error occurred (error: ${0})",
+                    "detectionResult": {
+                        "title": "Hey, this IP is suspicious",
+                        "description": "${0} is an IP of proxy or hosting!",
+                        "country": "Country",
+                        "isp": "ISP",
+                        "isProxyOrHosting": "isProxy/Hosting",
+                        "isProxyValue": "isProxy? -> ${0}",
+                        "isHostingValue": "isHosting? -> ${0}"
+                    },
+                    "safeResult": "${0} is a safe IP"
+                },
+                "ipInfo": {
+                    "name": "ipinfo",
+                    "description": "IPInfo Lookup",
+                    "options": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "Specify the IP address"
+                        }
+                    },
+                    "invalidIpError": "The IP address is invalid",
+                    "targetLog": "Target: ${0}",
+                    "statusLog": "Status: ${0}",
+                    "result": {
+                        "title": "${0}'s IPInfo",
+                        "target": "Target",
+                        "country": "Country",
+                        "city": "City",
+                        "region": "Region",
+                        "org": "org"
+                    }
+                },
+                "nsLookup": {
+                    "name": "nslookup",
+                    "description": "DNS Lookup!",
+                    "options": {
+                        "domain": {
+                            "name": "domain",
+                            "description": "Specify the domain."
+                        }
+                    },
+                    "mxRecord": "- ${exchange} (priority: ${priority})",
+                    "record": "- ${record}${isCloudFlare}",
+                    "isCloudFlare": {
+                        "yes": " (CloudFlare)",
+                        "no": ""
+                    },
+                    "domainDoesNotExist": "The domain does not exist"
+                }
+            },
+            "ipListFetchError": "Failed to fetch IP list from CloudFlare",
+            "errorTitle": "Error",
+            "resultFooter": "ringoXD's Discord.js Bot"
+        },
+        "omikuzi": {
+            "name": "omikuji",
+            "description": "Try your luck",
+            "badLuck": "Bad luck",
+            "goodLuck": "Good luck",
+            "slightGoodLuck": "Slight good luck",
+            "moderateGoodLuck": "Moderate good luck",
+            "greatGoodLuck": "Great good luck",
+            "assertionError": "Error(function result: ${0}) - The bot has gone up into flames"
+        },
+        "pieChart": {
+            "name": "piechart",
+            "description": "Generates a pie chart.",
+            "options": {
+                "values": {
+                    "name": "values"
+                },
+                "label": {
+                    "name": "label"
+                },
+                "title": {
+                    "name": "title"
+                }
+            },
+            "defaultTitle": "${0}'s pie chart"
+        },
+        "ping": {
+            "name": "ping",
+            "description": "show ping",
+            "graphLabel": "Ping",
+            "title": "Last ping: ${0}ms"
+        },
+        "play": {
+            "name": "play",
+            "description": "Plays music!",
+            "options": {
+                "query": {
+                    "name": "query",
+                    "description": "A link to YouTube or SoundCloud, or words to search by"
+                }
+            },
+            "notFound": "No tracks have found!",
+            "trackAdded": "Added ${0} to the queue!",
+            "authorAndTrack": "${author} - ${track}",
+            "requestedBy": "Requested by: ${0}",
+            "generalError": "An error occured! ${0}"
+        },
+        "queue": {
+            "name": "queue",
+            "description": "Looks up the queue",
+            "queueItem": "${index} ${value}",
+            "queueIndex": "${0})",
+            "result": {
+                "title": "There are ${count} track(s) in the queue! (Estimated duration: ${duration})",
+                "emptyMessage": "There are no tracks in the queue!",
+                "footer": "page ${page} | ${length} tracks"
+            }
+        },
+        "randomnum": {
+            "name": "random_num",
+            "description": "Random number generator",
+            "options": {
+                "minValue": {
+                    "name": "min_value",
+                    "description": "Specify the minimum value (default: 0)"
+                },
+                "maxValue": {
+                    "name": "max_value",
+                    "description": "Specify the maximum value (default: 100)"
+                }
+            },
+            "result": {
+                "title": "Generated a random number!",
+                "description": "Minimum value: ${min}, Maximum value: ${max}",
+                "footer": "Executed by: ${0}"
+            }
+        },
+        "skip": {
+            "name": "skip",
+            "description": "Skips a track!",
+            "trackSkipped": "Skipped ${0}!",
+            "generalError": ["An error (${0}) occurred during the execution of process."]
+        },
+        "stop": {
+            "name": "stop",
+            "description": "Stops playing music.",
+            "playerStopped": "Stopped playing music 👋"
+        },
+        "templink": {
+            "name": "templink",
+            "description": "Generates a link available for 5 minutes only",
+            "options": {
+                "url": {
+                    "name": "url",
+                    "description": "The link destination"
+                }
+            },
+            "internalError": "Internal error",
+            "invalidUrlError": ["The URL is invalid.", "Enter the URL including https://"],
+            "linkCreated": "[TempLink] Link: ${id} has generated. Link destination: ${url}",
+            "result": {
+                "title": "Generated a TempLink!",
+                "description": "Available for 5 minutes only",
+                "link": "Link"
+            }
+        },
+        "testx": {
+            "name": "dev01",
+            "description": "view",
+            "message": "Hello, world!"
+        },
+        "testx2": {
+            "name": "idk",
+            "description": "code test",
+            "message": "Result: ${0}"
+        },
+        "unicode": {
+            "name": "unicode",
+            "description": "Unicode conversion tool",
+            "options": {
+                "mode": {
+                    "name": "mode",
+                    "description": "Select the mode",
+                    "choices": {
+                        "encode": "text -> Unicode",
+                        "decode": "Unicode -> text"
+                    }
+                },
+                "text": {
+                    "name": "text",
+                    "description": "Input the string to convert"
+                }
+            },
+            "textEncoded": "Encoded the text!",
+            "textDecoded": "Decoded the text!"
+        },
+        "updater": {
+            "name": "update",
+            "description": "git pull",
+            "permissionError": "Only admins of the bot can use this command.",
+            "updating": "⤴️ Updating...",
+            "timeout": "Forced to quit because the process did not end in 3 minutes",
+            "restarting": ["✅ Done", "Restarting the bot"]
+        },
+        "upload": {
+            "name": "upload",
+            "description": "Uploads a file to the CDN",
+            "options": {
+                "file": {
+                    "name": "file",
+                    "description": "The file to upload"
+                },
+                "filename": {
+                    "name": "filename",
+                    "description": "The filename"
+                },
+                "private": {
+                    "name": "private",
+                    "description": "Private"
+                }
+            },
+            "internalError": "Internal error (missing config.json)",
+            "permissionError": "You have not permission to use this command!",
+            "isPrivateLog": "isPrivate?: ${0}",
+            "fileUploaded": "Uploaded!",
+            "result": {
+                "title": "${filename} has uploaded! ${isPrivate}",
+                "isPrivate": {
+                    "yes": " (Private)",
+                    "no": ""
+                },
+                "url": "URL",
+                "clickToCopy": "Click to copy!"
+            },
+            "errorResult": {
+                "title": "Error",
+                "description": "Internal Error: ${statusText}(${status})",
+                "footer": "ringoXD's Discord.js Bot"
+            }
+        },
+        "version": {
+            "name": "version",
+            "description": "Shows the versions",
+            "message": "Running on Node.js ${process} | ${os}"
+        },
+        "volume": {
+            "name": "volume",
+            "description": "Controls the volume.",
+            "options": {
+                "volume": {
+                    "name": "volume",
+                    "description": "Set the volume (1-100)"
+                }
+            },
+            "volumeSet": "Set the volume to ${0}!",
+            "error": "An error occurred"
         }
     }
 }
