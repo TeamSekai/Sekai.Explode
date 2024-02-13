@@ -1,68 +1,68 @@
 {
     "discordbot": {
         "getRedirectUrl": {
-            "redirectURL": "Redirect URL:",
-            "error": "Error:"
+            "redirectURL": "リダイレクト URL:",
+            "error": "エラー:"
         },
         "main": {
-            "botStarting": "Starting Discord.js bot...",
-            "commandsLoaded": "Loaded ${0} commands!",
-            "playerLoading": "Loading Discord-Player...",
-            "setupActivityCalling": "Calling setupActivity"
+            "botStarting": "Discord.js bot を起動中…",
+            "commandsLoaded": "${0} 個のコマンドをロードました!",
+            "playerLoading": "Discord-Player をロード中…",
+            "setupActivityCalling": "setupActivity を呼び出し中"
         },
         "interval": {
             "linkExpired": "[TempLink] リンク: ${0} が期限切れになりました"
         },
         "ready": {
-            "sysLog": "Discord.js Bot is Ready!",
-            "loggedIn": "${cgreen}Logged in as${creset} ${tag}",
-            "presenceNameLoading": "Loading...",
-            "presenceStateLoading": "Sekai.explode is now loading...",
-            "commandsRegistering": "Registering commands...",
-            "commandsReady": "Ready!"
+            "sysLog": "Discord.js Bot が起動しました!",
+            "loggedIn": "${tag} ${cgreen}としてログインしました${creset}",
+            "presenceNameLoading": "ロード中…",
+            "presenceStateLoading": "Sekai.explode はロード中です…",
+            "commandsRegistering": "コマンドを登録中…",
+            "commandsReady": "完了!"
         },
         "interactionCreate": {
             "unsupportedCommandError": "${0}というコマンドには対応していません。",
             "commandError": "コマンド実行時にエラーになりました。"
         },
         "messageCreate": {
-            "requestedBy": "Requested by:${0}",
+            "requestedBy": "リクエスト者: ${0}",
             "reactionRemoveErrorConsole": "reaction.removeAll error: ${0}",
             "reactionRemoveError": "> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${0})",
             "processError": "処理中にエラーが発生しました。",
-            "beforeUrl": "Before: ${0}",
-            "afterUrl": "After: ${0}"
+            "beforeUrl": "処理前: ${0}",
+            "afterUrl": "処理後: ${0}"
         },
         "linkGet": {
             "authorName": ["省略リンク", "リンク先:"],
             "providerName": "Sekai.Explode",
-            "rootContentTitle": "どこ見てんじゃい",
+            "rootContentTitle": "ここには何もありません！",
             "notFoundContentTitle": "省略リンクが見つかりませんでした",
-            "contentFooter": "niggasex/82.64 (UwUntu)"
+            "contentFooter": ""
         },
         "playerStart": {
             "playingTrack": "${0}を再生中!",
             "requestedBy": "リクエスト者: ${0}"
         },
         "playerError": {
-            "message": "ねぇ吐血したんだけど??"
+            "message": "エラーが発生しました"
         },
         "serverListen": {
-            "tempLinkReady": "[TempLink] ポート${linkPort} (${linkDomain}) でlistenしました"
+            "tempLinkReady": "[TempLink] ポート${linkPort} (${linkDomain}) で待ち受けました"
         }
     },
     "internal": {
         "activity": {
-            "called": "Called internal activity system",
-            "presenceName": "Sekai - Added GlobalBan System",
+            "called": "内部動作氏システムを呼び出しました",
+            "presenceName": "Sekai - GlobalBan システムを追加",
             "presenceState": "Ping: ${0}ms | Created by ringoXD"
         },
         "mongodb": {
-            "called": "Called mongodb internal system.",
-            "dbConnecting": "[MongoDB] Connecting...",
-            "dbConnected": "[MongoDB] Connected!",
-            "dbDisconnecting": "[MongoDB] Disconnecting...",
-            "dbDisconnected": "[MongoDB] Disconnected!"
+            "called": "MongoDB 内部システムを呼び出しました。",
+            "dbConnecting": "[MongoDB] 接続中…",
+            "dbConnected": "[MongoDB] 接続しました！",
+            "dbDisconnecting": "[MongoDB] 切断中…",
+            "dbDisconnected": "[MongoDB] 切断しました！"
         }
     },
     "common": {
@@ -70,14 +70,14 @@
             "ipAddress": "IPアドレスを入力",
             "graphValues": "値を入力(それぞれの値は1, 2, 3のようにコンマで区切ること。)",
             "graphLabel": "値のラベル(例: 個数) (未入力の場合は${0}となります)",
-            "graphTitle": "タイトルを入力(未入力の場合は${0}となります",
+            "graphTitle": "タイトルを入力(未入力の場合は${0}となります)",
             "userPlaceholder": "user"
         },
         "message": {
-            "checking": "チェックしています...",
-            "dataFor":  "Data for ${0} :",
+            "checking": "チェックしています…",
+            "dataFor":  "${0} のデータ:",
             "result": "結果:",
-            "notPlayableError": "えー実行したくないなぁー...だってVCに君が居ないんだもん...",
+            "notPlayableError": "えー実行したくないなぁー…だってVCに君が居ないんだもん…",
             "playerTrack": "${title} (${duration})",
             "noTracksPlayed": "再生されている曲がありません！"
         },
@@ -88,17 +88,17 @@
     "commands": {
         "checkping": {
             "name": "checkping",
-            "description": "Ping Checker",
+            "description": "Ping を確認",
             "options": {
                 "ip": {
                     "name": "ip"
                 }
             },
-            "invalidIpError": "IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。"
+            "invalidIpError": "IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。)"
         },
         "checktcp": {
             "name": "dev03",
-            "description": "Ping Checker",
+            "description": "Ping を確認",
             "options": {
                 "ip": {
                     "name": "ip"
@@ -108,7 +108,7 @@
         },
         "discordinfo": {
             "name": "info",
-            "description": "Lookup Server/User Info",
+            "description": "サーバーまたはユーザーの情報を調べます",
             "subcommands": {
                 "user": {
                     "name": "user",
@@ -167,7 +167,7 @@
             "freeNitro": {
                 "name": "freenitro",
                 "description": "ニトロをげっちゅ",
-                "linkText": "Click to GET"
+                "linkText": "入手するにはクリック"
             },
             "hackAdmin": {
                 "name": "adminを乗っ取る",
@@ -182,11 +182,11 @@
             "subcommands": {
                 "sync": {
                     "name": "sync",
-                    "description": "データベースとの同期を行います。(BANされていないユーザーが居た場合には自動BANを行います。",
+                    "description": "データベースとの同期を行います。(BANされていないユーザーが居た場合には自動BANを行います。)",
                     "permissionError": "このコマンドを使用する権限がありません。使用するためには`ユーザーのBAN権限`、または`管理者`権限が必要です。",
-                    "synchronizingWithDatabase": "データベースと同期中...",
-                    "userBanning": "Banning user: ${name} (${id}), Reason: ${reason}",
-                    "reasonNotProvided": "Not provided",
+                    "synchronizingWithDatabase": "データベースと同期中…",
+                    "userBanning": "ユーザーを BAN 中: ${name} (${id}), 理由: ${reason}",
+                    "reasonNotProvided": "未提供",
                     "synchronizedWithDatabase": "データベースと同期しました。",
                     "bannedUsers": "BANされたユーザー: ${0}人",
                     "serviceProvider": "Sekai.Explode"
@@ -210,7 +210,7 @@
                     "description": "グローバルBANリストからユーザーを削除します。",
                     "options": {
                         "user": {
-                            "description": "enter user"
+                            "description": "ユーザーを入力"
                         }
                     },
                     "doNotExist": "${0}はグローバルBANリストに登録されていません。",
@@ -234,16 +234,16 @@
                 "user": "user",
                 "reason": "reason"
             },
-            "subcommandUnspecifiedError": "ねえサブコマンド指定して?",
+            "subcommandUnspecifiedError": "サブコマンド指定してください。",
             "globalBanReason": "グローバルBAN: ${0}",
             "permissionError": "このBotの管理者のみが使用できます。",
             "noReason": "理由なし",
-            "operationSucceeded": "${guildName}-> Success",
-            "operationFailed": "${guildName}-> Failed",
-            "operationFailedWithCode": "Missing Perm/Unknown Error in ${guildName}. (Code: ${code})",
-            "operationResult": "Success: ${done} / Fail: ${fail}",
-            "generalError": "ねえエラーでたんだけど?",
-            "unsupportedSubcommandError": "Something Went Wrong"
+            "operationSucceeded": "${guildName}-> 成功",
+            "operationFailed": "${guildName}-> 失敗",
+            "operationFailedWithCode": "${guildName} で権限がない、または未知のエラーが発生しました。 (コード: ${code})",
+            "operationResult": "成功: ${done} / 失敗: ${fail}",
+            "generalError": "エラーが発生しました",
+            "unsupportedSubcommandError": "問題が発生しました"
         },
         "graph": {
             "name": "graph",
@@ -262,20 +262,20 @@
                     "name": "line_color",
                     "description": "線の色を選択",
                     "choices": {
-                        "red": "Red",
-                        "green": "Green",
-                        "pink": "Pink",
-                        "white": "White",
-                        "black": "Black",
-                        "orange": "Orange"
+                        "red": "赤色",
+                        "green": "緑色",
+                        "pink": "桃色",
+                        "white": "白色",
+                        "black": "黒色",
+                        "orange": "橙色"
                     }
                 },
                 "backgroundTheme": {
                     "name": "background_theme",
                     "description": "背景の色を選択",
                     "choices": {
-                        "dark": "Dark",
-                        "light": "Light"
+                        "dark": "ダーク",
+                        "light": "ライト"
                     }
                 },
                 "beginAtZero": {
@@ -283,28 +283,28 @@
                     "description": "グラフの最小値を0に固定するか(デフォルト: false)"
                 }
             },
-            "defaultTitle": "${0}'s graph"
+            "defaultTitle": "${0}のグラフ"
         },
         "mcSrvlookup": {
             "name": "mcsrv_record",
-            "description": "Lookup SRV Record",
+            "description": "SRV レコードを調べます",
             "options": {
                 "domain": {
                     "name": "domain",
                     "description": "ドメインを指定します。"
                 }
             },
-            "resolutionError": "Error resolving SRV records for ${domain}: ${message}",
-            "notFoundError": "No SRV records found for ${0}",
+            "resolutionError": "${domain} の SRV レコードを解決する際にエラーが発生しました: ${message}",
+            "notFoundError": "${0} の SRV レコードが見つかりませんでした",
             "result": {
-                "title": "SRV Record #${0}:",
-                "priority": "Priority: ${0}",
-                "weight": "Weight: ${0}",
-                "port": "Port: ${0}",
-                "target": "Target: ${0}"
+                "title": "SRV レコード #${0}:",
+                "priority": "優先度: ${0}",
+                "weight": "重み: ${0}",
+                "port": "ポート: ${0}",
+                "target": "ターゲット: ${0}"
             },
             "serviceProvider": "ringoXD's Discord.js Bot",
-            "generalError": "An error occurred: ${0}"
+            "generalError": "エラーが発生しました: ${0}"
         },
         "mcstatus": {
             "name": "mcstatus",
@@ -338,28 +338,28 @@
             "subcommands": {
                 "isProxy": {
                     "name": "isproxy",
-                    "description": "check IP address using ip-api.com",
+                    "description": "ip-api.com を用いて IP アドレスを確認します",
                     "options": {
                         "ip": {
                             "name": "ip",
-                            "description": "Target IP"
+                            "description": "対象の IP アドレス"
                         }
                     },
-                    "error": "ねぇなんでなんでなんでなんでエラー出るの(error: ${0})",
+                    "error": "エラーが発生しました (error: ${0})",
                     "detectionResult": {
                         "title": "ねぇ、このIP怪しいよ",
-                        "description": "${0}はproxy、またはhostingのIPです!",
-                        "country": "Country",
-                        "isp": "ISP",
-                        "isProxyOrHosting": "isProxy/Hosting",
-                        "isProxyValue": "isProxy? -> ${0}",
-                        "isHostingValue": "isHosting? -> ${0}"
+                        "description": "${0}はプロキシ、またはホスティングのIPです!",
+                        "country": "国",
+                        "isp": "プロバイダ",
+                        "isProxyOrHosting": "プロキシ / ホスティング",
+                        "isProxyValue": "プロキシ？ -> ${0}",
+                        "isHostingValue": "ホスティング？ -> ${0}"
                     },
                     "safeResult": "${0}は安全なIPです"
                 },
                 "ipInfo": {
                     "name": "ipinfo",
-                    "description": "IPInfo Lookup",
+                    "description": "IP 情報を調べます",
                     "options": {
                         "ip": {
                             "name": "ip",
@@ -367,20 +367,20 @@
                         }
                     },
                     "invalidIpError": "IPアドレスが間違っています",
-                    "targetLog": "Target: ${0}",
-                    "statusLog": "Status: ${0}",
+                    "targetLog": "対象: ${0}",
+                    "statusLog": "ステータス: ${0}",
                     "result": {
-                        "title": "${0}'s IPInfo",
-                        "target": "Target",
-                        "country": "Country",
-                        "city": "City",
-                        "region": "Region",
-                        "org": "org"
+                        "title": "${0} の IP 情報",
+                        "target": "対象",
+                        "country": "国",
+                        "city": "都市",
+                        "region": "地域",
+                        "org": "企業"
                     }
                 },
                 "nsLookup": {
                     "name": "nslookup",
-                    "description": "DNS Lookup!",
+                    "description": "DNS を調べます！",
                     "options": {
                         "domain": {
                             "name": "domain",
@@ -408,7 +408,7 @@
             "slightGoodLuck": "小吉",
             "moderateGoodLuck": "中吉",
             "greatGoodLuck": "大吉",
-            "assertionError": "エラー(function result: ${0}) - ボットが燃えました"
+            "assertionError": "エラー(関数の結果: ${0}) - ボットが燃えました"
         },
         "pieChart": {
             "name": "piechart",
@@ -424,13 +424,13 @@
                     "name": "title"
                 }
             },
-            "defaultTitle": "${0}'s pie chart"
+            "defaultTitle": "${0}の円グラフ"
         },
         "ping": {
             "name": "ping",
-            "description": "show ping",
+            "description": "Ping を表示します",
             "graphLabel": "Ping",
-            "title": "Last ping: ${0}ms"
+            "title": "直近の ping: ${0}ms"
         },
         "play": {
             "name": "play",
@@ -441,11 +441,11 @@
                     "description": "YouTubeやSoundCloudのリンク、または検索したいワード"
                 }
             },
-            "notFound": "うわーん！曲が見つからなかったよぉ...",
+            "notFound": "曲が見つかりませんでした",
             "trackAdded": "${0}をキューに追加しました！",
             "authorAndTrack": "${author} - ${track}",
             "requestedBy": "リクエスト者: ${0}",
-            "generalError": "ばーか! ${0}"
+            "generalError": "エラーが発生しました！ ${0}"
         },
         "queue": {
             "name": "queue",
@@ -481,7 +481,7 @@
             "name": "skip",
             "description": "音楽をスキップします！",
             "trackSkipped": "${0}をスキップしました!",
-            "generalError": ["はぁ？処理の実行中にエラー(${0})が発生してるんだけど？", "コードもまともに書けないなんてどうしようもないクズね..."]
+            "generalError": ["処理の実行中にエラー(${0})が発生しました。"]
         },
         "stop": {
             "name": "stop",
@@ -509,12 +509,12 @@
         "testx": {
             "name": "dev01",
             "description": "view",
-            "message": "ふぁっきゅー"
+            "message": "Hello, world!"
         },
         "testx2": {
             "name": "idk",
-            "description": "shitcord code test",
-            "message": "Result: ${0}"
+            "description": "code test",
+            "message": "結果: ${0}"
         },
         "unicode": {
             "name": "unicode",
@@ -540,9 +540,9 @@
             "name": "update",
             "description": "git pull",
             "permissionError": "このコマンドはBotの管理者のみ使えます。",
-            "updating": "<a:loading:1071641234310955129> 更新中...",
+            "updating": "⤴ 更新中...",
             "timeout": "3分経っても処理が完了しなかったため、強制終了しました",
-            "restarting": ["<:check:962405846002847754> 完了", "BOTを再起動します"]
+            "restarting": ["✅ 完了", "BOTを再起動します"]
         },
         "upload": {
             "name": "upload",
@@ -562,8 +562,8 @@
                 }
             },
             "internalError": "内部エラー (missing config.json)",
-            "permissionError": "ねえ君権限ないよ？ざぁこざぁこ♡www権限ないのに好奇心でコマンド実行しちゃうなんてかわいいね",
-            "isPrivateLog": "isPrivate?: ${0}",
+            "permissionError": "このコマンドを使用する権限がありません！",
+            "isPrivateLog": "プライベート？: ${0}",
             "fileUploaded": "アップロードしました!",
             "result": {
                 "title": "${filename}がアップロードされました!${isPrivate}",
@@ -572,7 +572,7 @@
                     "no": ""
                 },
                 "url": "URL",
-                "clickToCopy": "Click to copy!"
+                "clickToCopy": "クリックしてコピー！"
             },
             "errorResult": {
                 "title": "エラー",
@@ -583,7 +583,7 @@
         "version": {
             "name": "version",
             "description": "バージョン表示",
-            "message": "Running in Node.女子小学生(js) ${process} | ${os}"
+            "message": "Node.js で実行 ${process} | ${os}"
         },
         "volume": {
             "name": "volume",
@@ -595,7 +595,7 @@
                 }
             },
             "volumeSet": "音量を${0}に設定しました!",
-            "error": "うわーん！吐血しちゃったよぉ..."
+            "error": "エラーが発生しました"
         }
     }
 }
