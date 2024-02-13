@@ -38,7 +38,7 @@ module.exports = {
 				}]
 			})
 		} catch (e) {
-			interaction.reply(strFormat(LANG.commands.skip.generalError, [e]));
+			interaction.reply(LANG.commands.skip.generalError.map(s => strFormat(s, [e])).join('\n'));
 		}
     }
 };

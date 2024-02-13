@@ -34,14 +34,14 @@
             "afterUrl": "After: ${0}"
         },
         "linkGet": {
-            "authorName": "省略リンク\nリンク先:",
+            "authorName": ["省略リンク", "リンク先:"],
             "providerName": "Sekai.Explode",
             "rootContentTitle": "どこ見てんじゃい",
             "notFoundContentTitle": "省略リンクが見つかりませんでした",
             "contentFooter": "niggasex/82.64 (UwUntu)"
         },
         "playerStart": {
-            "playingTrack": "**${0}**を再生中!",
+            "playingTrack": "${0}を再生中!",
             "requestedBy": "リクエスト者: ${0}"
         },
         "playerError": {
@@ -481,7 +481,7 @@
             "name": "skip",
             "description": "音楽をスキップします！",
             "trackSkipped": "${0}をスキップしました!",
-            "generalError": "はぁ？処理の実行中にエラー(${0})が発生してるんだけど？\nコードもまともに書けないなんてどうしようもないクズね..."
+            "generalError": ["はぁ？処理の実行中にエラー(${0})が発生してるんだけど？", "コードもまともに書けないなんてどうしようもないクズね..."]
         },
         "stop": {
             "name": "stop",

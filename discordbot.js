@@ -258,7 +258,7 @@ app.get("/oembed/:linkCode", async (req, res) => {
 		"version": "1.0",
 		"title": `${link.url}`,
 		"type": "link",
-		"author_name": LANG.discordbot.linkGet.authorName,
+		"author_name": LANG.discordbot.linkGet.authorName.join('\n'),
 		"provider_name": LANG.discordbot.linkGet.providerName,
 		"provider_url": "https://ringoxd.dev/",
 		"url": link.url
@@ -300,7 +300,10 @@ player.events.on('playerStart', (queue, track) => {
     // queue.metadata.channel.send(`**${track.title}**を再生中`);
     queue.metadata.channel.send({
 		embeds: [{
-			title: strFormat(LANG.discordbot.playerStart.playingTrack, [track.title + ` (${getDuration(track)})`]),
+			title: strFormat(LANG.discordbot.playerStart.playingTrack, ['**' + strFormat(LANG.common.message.playerTrack, {
+				title: track.title,
+				duration: getDuration(track)
+			}) + '**']),
 			thumbnail: {
 				url: track.thumbnail
 			},
