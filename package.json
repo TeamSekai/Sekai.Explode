@@ -28,7 +28,7 @@
   "main": "index.js",
   "repository": "https://github.com/ringo360/Discord.js_Bot.git",
   "author": "ringo360",
-  "license": "KAIRUNBANNED(かいるんにはこのソースコードの存在を知ることが禁じられています)",
+  "license": "GPL-3.0-only",
   "devDependencies": {
     "jest": "^29.7.0"
   },
