@@ -1,6 +1,3 @@
-#Please rename to config.json
-#And Delete this message (because JSON doesn't support commentout)
-
 {
 	"kairun": 8264,
 	"token": "YourDiscordBotTokenHere",
