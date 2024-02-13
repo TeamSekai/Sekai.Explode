@@ -23,7 +23,8 @@ module.exports = {
 		.addStringOption(option =>
 			option
 				.setName(LANG.commands.graph.options.title.name)
-				.setDescription(strFormat(LANG.common.optionDescription.graphTitle, [LANG.common.defaultValues.graphTitle]))
+				.setDescription(strFormat(LANG.common.optionDescription.graphTitle, [
+					strFormat(LANG.commands.graph.defaultTitle, [LANG.common.optionDescription.userPlaceholder])]))
 				.setRequired(false)
 		)
 		.addStringOption(option => (
@@ -66,12 +67,12 @@ module.exports = {
 		}
 
 		const nickname = interaction.member.nickname || interaction.user.username;
-		let graphtitle = strFormat(LANG.common.defaultValues.graphTitle, [nickname]);
+		let graphtitle = strFormat(LANG.commands.graph.defaultTitle, [nickname]);
 		if (interaction.options.getString(LANG.commands.graph.options.title.name)) {
 			graphtitle = interaction.options.getString(LANG.commands.graph.options.title.name);
 		}
 
-		let label = LANG.common.defaultValues.graphLabel;
+		let label = LANG.commands.graph.defaultTitle;
 		if (interaction.options.getString(LANG.commands.graph.options.label.name)) {
 			label = interaction.options.getString(LANG.commands.graph.options.label.name);
 		}

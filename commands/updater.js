@@ -3,22 +3,23 @@ const { AdminUserIDs } = require('../config.json');
 const childprocess = require('child_process');
 const path = require("path");
 const color = require("colors");
+const { LANG } = require('../util/languages');
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('update')
-    .setDescription('git pull'),
+    .setName(LANG.commands.updater.name)
+    .setDescription(LANG.commands.updater.description),
   execute: async function(interaction) {
 
 	const executorID = interaction.user.id; // 実行者のユーザーID
 
 	// checkid
 	if (!AdminUserIDs.includes(executorID)) {
-    	await interaction.reply('このコマンドはBotの管理者のみ使えます。');
+    	await interaction.reply(LANG.commands.updater.permissionError);
     	return;
     }
 
 	let msg = ">".yellow + " git pull\n".green;
-    await interaction.reply("<a:loading:1071641234310955129> 更新中...\n" + "```ansi\n" + msg + "\n```");
+    await interaction.reply(LANG.commands.updater.updating + "\n" + "```ansi\n" + msg + "\n```");
     let lock = false;
     let lockTimeout = null;
     let gitProcess = childprocess.spawn("git", ["-c", "color.ui=always", "pull"], {
@@ -26,12 +27,12 @@ module.exports = {
     });
     let timeout = setTimeout(() => {
         gitProcess.kill();
-        interaction.editReply(`3分経っても処理が完了しなかったため、強制終了しました`);
+        interaction.editReply(LANG.commands.updater.timeout);
     }, 1000 * 60 * 3);
     gitProcess.stdout.on("data", data => {
         msg += data.toString().replace(/\x1b\[m/g, "\x1b[0m");
         if (!lock) {
-            interaction.editReply("<a:loading:1071641234310955129> 更新中...\n" + "```ansi\n" + msg + "\n```");
+            interaction.editReply(LANG.commands.updater.updating + "\n" + "```ansi\n" + msg + "\n```");
             lock = true;
         }
         if (lockTimeout)
@@ -45,7 +46,7 @@ module.exports = {
     })
     gitProcess.on("close", async () => {
         clearTimeout(timeout);
-        await interaction.editReply("```ansi\n" + msg + "\n```\n" + "<:check:962405846002847754> 完了\nBOTを再起動します");
+        await interaction.editReply("```ansi\n" + msg + "\n```\n" + LANG.commands.updater.restarting.join('\n'));
         setTimeout(() => {
             process.exit(0);
         }, 5000);

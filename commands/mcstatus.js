@@ -1,26 +1,27 @@
 const { SlashCommandBuilder } = require('discord.js');
 const axios = require("axios");
+const { LANG, strFormat } = require('../util/languages');
 
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("mcstatus")
-		.setDescription("サーバーの状態を確認します。")
+		.setName(LANG.commands.mcstatus.name)
+		.setDescription(LANG.commands.mcstatus.description)
 		.addStringOption(option =>
 			option
-				.setName("server_ip")
-				.setDescription("サーバーを指定します。")
+				.setName(LANG.commands.mcstatus.options.serverIp.name)
+				.setDescription(LANG.commands.mcstatus.options.serverIp.description)
 				.setRequired(true) //trueで必須、falseで任意
 		)
 		.addBooleanOption(option =>
 			option
-				.setName('bedrock_server')
-				.setDescription('統合版サーバーかどうか')
+				.setName(LANG.commands.mcstatus.options.bedrockServer.name)
+				.setDescription(LANG.commands.mcstatus.options.bedrockServer.description)
 				.setRequired(false) // 任意のオプション
 		),
 	execute: async function (/** @type {import("discord.js").CommandInteraction} */ interaction) {
-		let server = interaction.options.getString("server_ip");
-		let isbedrock = interaction.options.getBoolean("bedrock_server")
+		let server = interaction.options.getString(LANG.commands.mcstatus.options.serverIp.name);
+		let isbedrock = interaction.options.getBoolean(LANG.commands.mcstatus.options.bedrockServer.name);
 		await interaction.deferReply();
 		try {
 //			let target_server = server_ip
@@ -51,17 +52,24 @@ module.exports = {
 						.replace(/\u00A7o/g, "\x1B[3m")
 						.replace(/\u00A7r/g, "\x1B[0m");
 					if (motd.length == 0)
-						motd = "オンライン";
+						motd = LANG.commands.mcstatus.online;
 					await interaction.editReply({
 						embeds: [{
 							"title": `${server}は**オンライン**です!`,
+							"title": strFormat(LANG.commands.mcstatus.serverIsOnline, {
+								server,
+								online: '**' + LANG.commands.mcstatus.online + '**'
+							}),
 							"description": "```ansi\n" + motd + "\n```",
 							color: 0x42d4f5,
 							fields: [{
-								name: "人数",
-								value: `${res.data.players.online} / ${res.data.players.max}`
+								name: LANG.commands.mcstatus.playerCount,
+								value: strFormat(LANG.commands.mcstatus.playerCountValue, {
+									online: res.data.players.online,
+									max: res.data.players.max
+								})
 							}, {
-								name: "バージョン",
+								name: LANG.commands.mcstatus.version,
 								value: res.data.version
 							}],
 							...(res.data.icon && {
@@ -76,19 +84,25 @@ module.exports = {
 			}
 			let res = await axios.get(server.url);
 			if (res?.data?.status == "online") {
-				await interaction.editReply(`${server}は ** オンライン ** です!`);
+				await interaction.editReply(strFormat(LANG.commands.mcstatus.serverIsOnline, {
+					server,
+					online: ' ** ' + LANG.commands.mcstatus.online + ' ** '
+				}));
 			} else {
-				await interaction.editReply("接続に失敗しました!");
+				await interaction.editReply(LANG.commands.mcstatus.connectionFailed);
 			}
 		} catch (e) {
 			if (e?.name == "AxiosError" && e?.response?.status) {
 				await interaction.editReply({
 					embeds: [{
-						title: "エラー",
-						description: `内部エラー: ${e.response.statusText}(${e.response.status})`,
+						title: LANG.commands.mcstatus.errorResult.title,
+						description: strFormat(LANG.commands.mcstatus.errorResult.description, {
+							statusText: e.response.statusText,
+							status: e.response.status
+						}),
 						color: 0xff0000,
 						footer: {
-							text: "Sekai.Explode"
+							text: LANG.commands.mcstatus.errorResult.footer
 						}
 					}]
 				})

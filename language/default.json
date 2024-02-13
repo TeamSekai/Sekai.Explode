@@ -76,11 +76,13 @@
         "message": {
             "checking": "チェックしています...",
             "dataFor":  "Data for ${0} :",
-            "result": "結果:"
+            "result": "結果:",
+            "notPlayableError": "えー実行したくないなぁー...だってVCに君が居ないんだもん...",
+            "playerTrack": "${title} (${duration})",
+            "noTracksPlayed": "再生されている曲がありません！"
         },
         "defaultValues": {
-            "graphLabel": "value",
-            "graphTitle": "${0}'s graph"
+            "graphLabel": "value"
         }
     },
     "commands": {
@@ -280,10 +282,320 @@
                     "name": "begin_at_zero",
                     "description": "グラフの最小値を0に固定するか(デフォルト: false)"
                 }
-            }
+            },
+            "defaultTitle": "${0}'s graph"
         },
         "mcSrvlookup": {
-            "name": "mcsrv_record"
+            "name": "mcsrv_record",
+            "description": "Lookup SRV Record",
+            "options": {
+                "domain": {
+                    "name": "domain",
+                    "description": "ドメインを指定します。"
+                }
+            },
+            "resolutionError": "Error resolving SRV records for ${domain}: ${message}",
+            "notFoundError": "No SRV records found for ${0}",
+            "result": {
+                "title": "SRV Record #${0}:",
+                "priority": "Priority: ${0}",
+                "weight": "Weight: ${0}",
+                "port": "Port: ${0}",
+                "target": "Target: ${0}"
+            },
+            "serviceProvider": "ringoXD's Discord.js Bot",
+            "generalError": "An error occurred: ${0}"
+        },
+        "mcstatus": {
+            "name": "mcstatus",
+            "description": "サーバーの状態を確認します。",
+            "options": {
+                "serverIp": {
+                    "name": "server_ip",
+                    "description": "サーバーを指定します。"
+                },
+                "bedrockServer": {
+                    "name": "bedrock_server",
+                    "description": "統合版サーバーかどうか"
+                }
+            },
+            "online": "オンライン",
+            "serverIsOnline": "${server}は${online}です!",
+            "playerCount": "人数",
+            "playerCountValue": "${online} / ${max}",
+            "version": "バージョン",
+            "serverIsOffline": "${0}はオフラインです",
+            "connectionFailed": "接続に失敗しました!",
+            "errorResult": {
+                "title": "エラー",
+                "description": "内部エラー: ${statusText}(${status})",
+                "footer": "Sekai.Explode"
+            }
+        },
+        "nettool": {
+            "name": "net_tool",
+            "description": "ネットワーク関連のコマンド",
+            "subcommands": {
+                "isProxy": {
+                    "name": "isproxy",
+                    "description": "check IP address using ip-api.com",
+                    "options": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "Target IP"
+                        }
+                    },
+                    "error": "ねぇなんでなんでなんでなんでエラー出るの(error: ${0})",
+                    "detectionResult": {
+                        "title": "ねぇ、このIP怪しいよ",
+                        "description": "${0}はproxy、またはhostingのIPです!",
+                        "country": "Country",
+                        "isp": "ISP",
+                        "isProxyOrHosting": "isProxy/Hosting",
+                        "isProxyValue": "isProxy? -> ${0}",
+                        "isHostingValue": "isHosting? -> ${0}"
+                    },
+                    "safeResult": "${0}は安全なIPです"
+                },
+                "ipInfo": {
+                    "name": "ipinfo",
+                    "description": "IPInfo Lookup",
+                    "options": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "IPアドレスを指定します"
+                        }
+                    },
+                    "invalidIpError": "IPアドレスが間違っています",
+                    "targetLog": "Target: ${0}",
+                    "statusLog": "Status: ${0}",
+                    "result": {
+                        "title": "${0}'s IPInfo",
+                        "target": "Target",
+                        "country": "Country",
+                        "city": "City",
+                        "region": "Region",
+                        "org": "org"
+                    }
+                },
+                "nsLookup": {
+                    "name": "nslookup",
+                    "description": "DNS Lookup!",
+                    "options": {
+                        "domain": {
+                            "name": "domain",
+                            "description": "ドメインを指定します。"
+                        }
+                    },
+                    "mxRecord": "- ${exchange} (優先度:${priority})",
+                    "record": "- ${record}${isCloudFlare}",
+                    "isCloudFlare": {
+                        "yes": " (CloudFlare)",
+                        "no": ""
+                    },
+                    "domainDoesNotExist": "ドメインが存在しません"
+                }
+            },
+            "ipListFetchError": "CloudflareのIPリストの取得に失敗しました",
+            "errorTitle": "エラー",
+            "resultFooter": "ringoXD's Discord.js Bot"
+        },
+        "omikuzi": {
+            "name": "おみくじ",
+            "description": "何が出るかな",
+            "badLuck": "凶",
+            "goodLuck": "吉",
+            "slightGoodLuck": "小吉",
+            "moderateGoodLuck": "中吉",
+            "greatGoodLuck": "大吉",
+            "assertionError": "エラー(function result: ${0}) - ボットが燃えました"
+        },
+        "pieChart": {
+            "name": "piechart",
+            "description": "円グラフを生成します。",
+            "options": {
+                "values": {
+                    "name": "values"
+                },
+                "label": {
+                    "name": "label"
+                },
+                "title": {
+                    "name": "title"
+                }
+            },
+            "defaultTitle": "${0}'s pie chart"
+        },
+        "ping": {
+            "name": "ping",
+            "description": "show ping",
+            "graphLabel": "Ping",
+            "title": "Last ping: ${0}ms"
+        },
+        "play": {
+            "name": "play",
+            "description": "音楽を再生します!",
+            "options": {
+                "query": {
+                    "name": "query",
+                    "description": "YouTubeやSoundCloudのリンク、または検索したいワード"
+                }
+            },
+            "notFound": "うわーん！曲が見つからなかったよぉ...",
+            "trackAdded": "${0}をキューに追加しました！",
+            "authorAndTrack": "${author} - ${track}",
+            "requestedBy": "リクエスト者: ${0}",
+            "generalError": "ばーか! ${0}"
+        },
+        "queue": {
+            "name": "queue",
+            "description": "キュー一覧を確認します。",
+            "queueItem": "${index} ${value}",
+            "queueIndex": "${0})",
+            "result": {
+                "title": "${count}件の曲がキューに入っています! (推定時間: ${duration})",
+                "emptyMessage": "キューに曲がありません！",
+                "footer": "${page}ページ目 | ${length}曲"
+            }
+        },
+        "randomnum": {
+            "name": "random_num",
+            "description": "乱数生成",
+            "options": {
+                "minValue": {
+                    "name": "min_value",
+                    "description": "最小値を指定(デフォルト: 0)"
+                },
+                "maxValue": {
+                    "name": "max_value",
+                    "description": "最大値を指定(デフォルト: 100)"
+                }
+            },
+            "result": {
+                "title": "乱数を生成しました!",
+                "description": "最小値: ${min}, 最大値: ${max}",
+                "footer": "実行者: ${0}"
+            }
+        },
+        "skip": {
+            "name": "skip",
+            "description": "音楽をスキップします！",
+            "trackSkipped": "${0}をスキップしました!",
+            "generalError": "はぁ？処理の実行中にエラー(${0})が発生してるんだけど？\nコードもまともに書けないなんてどうしようもないクズね..."
+        },
+        "stop": {
+            "name": "stop",
+            "description": "音楽を停止します。",
+            "playerStopped": "音楽を停止しました👋"
+        },
+        "templink": {
+            "name": "templink",
+            "description": "5分間のみ使用できる一時リンクを生成します",
+            "options": {
+                "url": {
+                    "name": "url",
+                    "description": "リンク先"
+                }
+            },
+            "internalError": "内部エラー",
+            "invalidUrlError": ["URLが間違っています。", "https:// までを含めたURLを入力してください"],
+            "linkCreated": "[TempLink] リンク: ${id} が生成されました リンク先: ${url}",
+            "result": {
+                "title": "TempLinkを生成しました!",
+                "description": "5分間のみ使用できます。",
+                "link": "リンク"
+            }
+        },
+        "testx": {
+            "name": "dev01",
+            "description": "view",
+            "message": "ふぁっきゅー"
+        },
+        "testx2": {
+            "name": "idk",
+            "description": "shitcord code test",
+            "message": "Result: ${0}"
+        },
+        "unicode": {
+            "name": "unicode",
+            "description": "unicode変換ツール",
+            "options": {
+                "mode": {
+                    "name": "mode",
+                    "description": "モード選択",
+                    "choices": {
+                        "encode": "テキスト -> Unicode",
+                        "decode": "Unicode -> テキスト"
+                    }
+                },
+                "text": {
+                    "name": "text",
+                    "description": "変換したい文字列を入力"
+                }
+            },
+            "textEncoded": "テキストをエンコードしました!",
+            "textDecoded": "テキストをエンコードしました!"
+        },
+        "updater": {
+            "name": "update",
+            "description": "git pull",
+            "permissionError": "このコマンドはBotの管理者のみ使えます。",
+            "updating": "<a:loading:1071641234310955129> 更新中...",
+            "timeout": "3分経っても処理が完了しなかったため、強制終了しました",
+            "restarting": ["<:check:962405846002847754> 完了", "BOTを再起動します"]
+        },
+        "upload": {
+            "name": "upload",
+            "description": "ファイルをcdnにアップロード",
+            "options": {
+                "file": {
+                    "name": "file",
+                    "description": "アップロードするファイル"
+                },
+                "filename": {
+                    "name": "filename",
+                    "description": "ファイル名"
+                },
+                "private": {
+                    "name": "private",
+                    "description": "プライベート"
+                }
+            },
+            "internalError": "内部エラー (missing config.json)",
+            "permissionError": "ねえ君権限ないよ？ざぁこざぁこ♡www権限ないのに好奇心でコマンド実行しちゃうなんてかわいいね",
+            "isPrivateLog": "isPrivate?: ${0}",
+            "fileUploaded": "アップロードしました!",
+            "result": {
+                "title": "${filename}がアップロードされました!${isPrivate}",
+                "isPrivate": {
+                    "yes": " (プライベート)",
+                    "no": ""
+                },
+                "url": "URL",
+                "clickToCopy": "Click to copy!"
+            },
+            "errorResult": {
+                "title": "エラー",
+                "description": "内部エラー: ${statusText}(${status})",
+                "footer": "ringoXD's Discord.js Bot"
+            }
+        },
+        "version": {
+            "name": "version",
+            "description": "バージョン表示",
+            "message": "Running in Node.女子小学生(js) ${process} | ${os}"
+        },
+        "volume": {
+            "name": "volume",
+            "description": "音量を調節します。",
+            "options": {
+                "volume": {
+                    "name": "volume",
+                    "description": "音量を設定(1~100)"
+                }
+            },
+            "volumeSet": "音量を${0}に設定しました!",
+            "error": "うわーん！吐血しちゃったよぉ..."
         }
     }
 }
