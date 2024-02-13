@@ -39,6 +39,7 @@ module.exports = {
     		      client: interaction.guild.members.me,
     		      requestedBy: interaction.user,
     		    },
+				// volume: 5,
     		    bufferingTimeout: 15000,
     		    leaveOnStop: true,
     		    leaveOnStopCooldown: 5000,
