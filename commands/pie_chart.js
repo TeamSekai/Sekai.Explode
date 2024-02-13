@@ -2,27 +2,29 @@ const { SlashCommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
 const { createCanvas, loadImage } = require('canvas');
 const fs = require('fs');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('piechart')
-		.setDescription('円グラフを生成します。')
+		.setName(LANG.commands.pieChart.name)
+		.setDescription(LANG.commands.pieChart.description)
 		.addStringOption(option =>
 			option
-				.setName("values")
-				.setDescription("値を入力(それぞれの値は1, 2, 3のようにコンマで区切ること。)")
+				.setName(LANG.commands.pieChart.options.values.name)
+				.setDescription(LANG.common.optionDescription.graphValues)
 				.setRequired(true)
 		)
 		.addStringOption(option =>
 			option
-				.setName("label")
-				.setDescription("値のラベル(例: 個数) (未入力の場合はvalueとなります)")
+				.setName(LANG.commands.pieChart.options.label.name)
+				.setDescription(strFormat(LANG.common.optionDescription.graphLabel, [LANG.common.defaultValues.graphLabel]))
 				.setRequired(false)
 		)
 		.addStringOption(option =>
 			option
-				.setName('title')
-				.setDescription(`タイトルを入力(未入力の場合はuser's graphとなります`)
+				.setName(LANG.commands.pieChart.options.title.name)
+				.setDescription(strFormat(LANG.common.optionDescription.graphTitle, [
+					strFormat(LANG.commands.pieChart.defaultTitle, [LANG.common.optionDescription.userPlaceholder])]))
 				.setRequired(false)
 		),
 	execute: async function(interaction) {
@@ -33,17 +35,17 @@ module.exports = {
 		let bgtheme = "#b0cdff"
 
 		const nickname = interaction.member.nickname || interaction.user.username;
-		let graphtitle = `${nickname}'s pie chart`
-		if (interaction.options.getString('title')) {
-			graphtitle = interaction.options.getString('title');
+		let graphtitle = strFormat(LANG.commands.pieChart.defaultTitle, [nickname]);
+		if (interaction.options.getString(LANG.commands.pieChart.options.title.name)) {
+			graphtitle = interaction.options.getString(LANG.commands.pieChart.options.title.name);
 		}
 
-		let label = `value`
-		if (interaction.options.getString('label')) {
-			label = interaction.options.getString('label');
+		let label = LANG.common.defaultValues.graphLabel;
+		if (interaction.options.getString(LANG.commands.pieChart.options.label.name)) {
+			label = interaction.options.getString(LANG.commands.pieChart.options.label.name);
 		}
 
-		const valuesString = interaction.options.getString('values');
+		const valuesString = interaction.options.getString(LANG.commands.pieChart.options.values.name);
 		console.log(valuesString)
 		const values = valuesString.split(',').map(val => parseInt(val.trim()));
 		console.log(values)

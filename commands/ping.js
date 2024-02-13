@@ -3,6 +3,7 @@ const { createCanvas, loadImage } = require('canvas');
 const { MessageEmbed, MessageAttachment, SlashCommandBuilder } = require('discord.js');
 const fs = require('fs');
 const activityModule = require('../internal/activity');
+const { LANG, strFormat } = require("../util/languages");
 const wspingValues = activityModule.getPingValues();
 
 // いいかんじに
@@ -21,8 +22,8 @@ module.exports = {
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('ping')
-		.setDescription('show ping'),
+		.setName(LANG.commands.ping.name)
+		.setDescription(LANG.commands.ping.description),
 	execute: async function(interaction) {
 		const data = wspingValues.slice(-30).concat(new Array(30 - Math.min(30, wspingValues.length)).fill(0)).reverse(); // データを取得し、0で補完して逆順に並べ替え
 		const width = 800;
@@ -35,7 +36,7 @@ module.exports = {
 			data: {
 				labels: data.map((_, index) => index + 1),
 				datasets: [{
-					label: 'Ping',
+					label: LANG.commands.ping.graphLabel,
 					data: data,
 					fill: false,
 					borderColor: 'rgb(75, 192, 192)',
@@ -58,7 +59,7 @@ module.exports = {
 			  name:"chart.png"
 			}],
 			embeds:[{
-			  title: `Last ping: ${interaction.client.ws.ping}ms`,
+			  title: strFormat(LANG.commands.ping.title, [interaction.client.ws.ping]),
 			  image: {
 				 "url": "attachment://chart.png"
 			  }

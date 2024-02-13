@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { linkDomain } = require("../config.json");
+const { LANG, strFormat } = require('../util/languages');
 
 function makeid(length) {
     let result = '';
@@ -15,30 +16,30 @@ function makeid(length) {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('templink')
-        .setDescription('5分間のみ使用できる一時リンクを生成します')
+        .setName(LANG.commands.templink.name)
+        .setDescription(LANG.commands.templink.description)
         .addStringOption(option =>
             option
-                .setName("url")
-                .setDescription("リンク先")
+                .setName(LANG.commands.templink.options.url.name)
+                .setDescription(LANG.commands.templink.options.url.description)
                 .setRequired(true)
         ),
     execute: async function (interaction) {
         if (!interaction.client.templinks) {
-            return interaction.reply("内部エラー");
+            return interaction.reply(LANG.commands.templink.internalError);
         }
-        let url = interaction.options.get("url").value;
+        let url = interaction.options.get(LANG.commands.templink.options.url.name).value;
         try {
             new URL(url);
         } catch {
             await interaction.reply({
-                content: "URLが間違っています。\nhttps:// までを含めたURLを入力してください",
+                content: LANG.commands.templink.invalidUrlError.join('\n'),
                 ephemeral: true
             });
             return;
         }
         let id = makeid(5);
-        console.log(`[TempLink] リンク: ${id} が生成されました リンク先: ${url}`)
+        console.log(strFormat(LANG.commands.templink.linkCreated, { id, url }));
         interaction.client.templinks.push({
             id: id,
             url: url,
@@ -48,10 +49,10 @@ module.exports = {
         interaction.reply({
             content: null,
             embeds: [{
-                title: "TempLinkを生成しました!",
-				description: "5分間のみ使用できます。",
+                title: LANG.commands.templink.result.title,
+				description: LANG.commands.templink.result.description,
 				fields: [{
-					name: "リンク",
+					name: LANG.commands.templink.result.link,
 					value: `https://${linkDomain}/${id}`
 				}]
             }]

@@ -1,0 +1,601 @@
+{
+    "discordbot": {
+        "getRedirectUrl": {
+            "redirectURL": "リダイレクト URL:",
+            "error": "エラー:"
+        },
+        "main": {
+            "botStarting": "Discord.js bot を起動中…",
+            "commandsLoaded": "${0} 個のコマンドをロードました!",
+            "playerLoading": "Discord-Player をロード中…",
+            "setupActivityCalling": "setupActivity を呼び出し中"
+        },
+        "interval": {
+            "linkExpired": "[TempLink] リンク: ${0} が期限切れになりました"
+        },
+        "ready": {
+            "sysLog": "Discord.js Bot が起動しました!",
+            "loggedIn": "${tag} ${cgreen}としてログインしました${creset}",
+            "presenceNameLoading": "ロード中…",
+            "presenceStateLoading": "Sekai.explode はロード中です…",
+            "commandsRegistering": "コマンドを登録中…",
+            "commandsReady": "完了!"
+        },
+        "interactionCreate": {
+            "unsupportedCommandError": "${0}というコマンドには対応していません。",
+            "commandError": "コマンド実行時にエラーになりました。"
+        },
+        "messageCreate": {
+            "requestedBy": "リクエスト者: ${0}",
+            "reactionRemoveErrorConsole": "reaction.removeAll error: ${0}",
+            "reactionRemoveError": "> ⚠ リアクションを削除できませんでした!(権限を確認してください!) (APIError: ${0})",
+            "processError": "処理中にエラーが発生しました。",
+            "beforeUrl": "処理前: ${0}",
+            "afterUrl": "処理後: ${0}"
+        },
+        "linkGet": {
+            "authorName": ["省略リンク", "リンク先:"],
+            "providerName": "Sekai.Explode",
+            "rootContentTitle": "ここには何もありません！",
+            "notFoundContentTitle": "省略リンクが見つかりませんでした",
+            "contentFooter": ""
+        },
+        "playerStart": {
+            "playingTrack": "${0}を再生中!",
+            "requestedBy": "リクエスト者: ${0}"
+        },
+        "playerError": {
+            "message": "エラーが発生しました"
+        },
+        "serverListen": {
+            "tempLinkReady": "[TempLink] ポート${linkPort} (${linkDomain}) で待ち受けました"
+        }
+    },
+    "internal": {
+        "activity": {
+            "called": "内部動作氏システムを呼び出しました",
+            "presenceName": "Sekai - GlobalBan システムを追加",
+            "presenceState": "Ping: ${0}ms | Created by ringoXD"
+        },
+        "mongodb": {
+            "called": "MongoDB 内部システムを呼び出しました。",
+            "dbConnecting": "[MongoDB] 接続中…",
+            "dbConnected": "[MongoDB] 接続しました！",
+            "dbDisconnecting": "[MongoDB] 切断中…",
+            "dbDisconnected": "[MongoDB] 切断しました！"
+        }
+    },
+    "common": {
+        "optionDescription": {
+            "ipAddress": "IPアドレスを入力",
+            "graphValues": "値を入力(それぞれの値は1, 2, 3のようにコンマで区切ること。)",
+            "graphLabel": "値のラベル(例: 個数) (未入力の場合は${0}となります)",
+            "graphTitle": "タイトルを入力(未入力の場合は${0}となります)",
+            "userPlaceholder": "user"
+        },
+        "message": {
+            "checking": "チェックしています…",
+            "dataFor":  "${0} のデータ:",
+            "result": "結果:",
+            "notPlayableError": "えー実行したくないなぁー…だってVCに君が居ないんだもん…",
+            "playerTrack": "${title} (${duration})",
+            "noTracksPlayed": "再生されている曲がありません！"
+        },
+        "defaultValues": {
+            "graphLabel": "value"
+        }
+    },
+    "commands": {
+        "checkping": {
+            "name": "checkping",
+            "description": "Ping を確認",
+            "options": {
+                "ip": {
+                    "name": "ip"
+                }
+            },
+            "invalidIpError": "IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。)"
+        },
+        "checktcp": {
+            "name": "dev03",
+            "description": "Ping を確認",
+            "options": {
+                "ip": {
+                    "name": "ip"
+                }
+            },
+            "invalidUrlError": "URLが間違っています"
+        },
+        "discordinfo": {
+            "name": "info",
+            "description": "サーバーまたはユーザーの情報を調べます",
+            "subcommands": {
+                "user": {
+                    "name": "user",
+                    "description": "ユーザーの情報を調べます!",
+                    "options": {
+                        "target": {
+                            "name": "target",
+                            "description": "ユーザーを指定します。"
+                        }
+                    },
+                    "title": "${0}の情報",
+                    "userId": "ユーザーID",
+                    "userIdValue": "${userid} - ${copyLink}",
+                    "copy": "Copy",
+                    "createdAt": "アカウント作成日",
+                    "joinDate": "サーバー参加日",
+                    "roles": "ロール(${0})"
+                },
+                "server": {
+                    "name": "server",
+                    "description": "サーバーの情報を調べます!",
+                    "title": "${0}の情報",
+                    "memberCount": "サーバー人数",
+                    "createdAt": "サーバー作成日",
+                    "channelCount": "チャンネル数",
+                    "textChannelCount": "テキストチャンネル: ${0}",
+                    "voiceChannelCount": "ボイスチャンネル: ${0}",
+                    "roleCount": "ロール数",
+                    "boosted": "ブーストの有無",
+                    "boostedValue": {
+                        "yes": "あり(${0} ブースト）",
+                        "no": "なし"
+                    }
+                }
+            }
+        },
+        "dm": {
+            "name": "dm",
+            "description": "ユーザーにDMを送信します",
+            "options": {
+                "user": {
+                    "name": "user",
+                    "description": "ユーザーを指定します。"
+                },
+                "text": {
+                    "name": "text",
+                    "description": "送りたい文章を入力"
+                }
+            },
+            "cooldown": "このコマンドを使うには、あと${0}秒待ってください!",
+            "messageTitle": "${0}からのメッセージ",
+            "messageFieldName": "メッセージ",
+            "dmSent": "${0}にDMを送信しました!"
+        },
+        "fake": {
+            "freeNitro": {
+                "name": "freenitro",
+                "description": "ニトロをげっちゅ",
+                "linkText": "入手するにはクリック"
+            },
+            "hackAdmin": {
+                "name": "adminを乗っ取る",
+                "description": "管理者権限を奪いましょう",
+                "message": "権限を奪うには${0}",
+                "linkText": "こちらをクリック"
+            }
+        },
+        "globalban": {
+            "name": "gban",
+            "description": "作成中",
+            "subcommands": {
+                "sync": {
+                    "name": "sync",
+                    "description": "データベースとの同期を行います。(BANされていないユーザーが居た場合には自動BANを行います。)",
+                    "permissionError": "このコマンドを使用する権限がありません。使用するためには`ユーザーのBAN権限`、または`管理者`権限が必要です。",
+                    "synchronizingWithDatabase": "データベースと同期中…",
+                    "userBanning": "ユーザーを BAN 中: ${name} (${id}), 理由: ${reason}",
+                    "reasonNotProvided": "未提供",
+                    "synchronizedWithDatabase": "データベースと同期しました。",
+                    "bannedUsers": "BANされたユーザー: ${0}人",
+                    "serviceProvider": "Sekai.Explode"
+                },
+                "add": {
+                    "name": "add",
+                    "description": "グローバルBANリストにユーザーを追加します.",
+                    "options": {
+                        "user": {
+                            "description": "ユーザーを指定します。"
+                        },
+                        "reason": {
+                            "description": "理由の記入"
+                        }
+                    },
+                    "alreadyExists": "${0}は既にグローバルBAN済みです!",
+                    "userAdded": "${0}をグローバルBANリストに追加しました。"
+                },
+                "remove": {
+                    "name": "remove",
+                    "description": "グローバルBANリストからユーザーを削除します。",
+                    "options": {
+                        "user": {
+                            "description": "ユーザーを入力"
+                        }
+                    },
+                    "doNotExist": "${0}はグローバルBANリストに登録されていません。",
+                    "userRemoved": "${0}をグローバルBANリストから削除しました。"
+                },
+                "list": {
+                    "name": "list",
+                    "description": "グローバルBANリストの一覧を表示します。",
+                    "title": "グローバルBANリスト",
+                    "fieldName": "GBAN済ユーザーの一覧",
+                    "record": "${user}: ${reason}",
+                    "recordUser": "${name} (${id})",
+                    "emptyMessage": "BANリストにユーザーが存在しません。",
+                    "footer": "Sekai.Explode Global Ban System | ${page}/${pageCount}ページ | ${length}件中${start}件目から${end}件目",
+                    "errorTitle": "エラー",
+                    "errorFooter": "Sekai.Explode",
+                    "errorDescription": "内部エラー: ${0}"
+                }
+            },
+            "addRemoveOptionNames": {
+                "user": "user",
+                "reason": "reason"
+            },
+            "subcommandUnspecifiedError": "サブコマンド指定してください。",
+            "globalBanReason": "グローバルBAN: ${0}",
+            "permissionError": "このBotの管理者のみが使用できます。",
+            "noReason": "理由なし",
+            "operationSucceeded": "${guildName}-> 成功",
+            "operationFailed": "${guildName}-> 失敗",
+            "operationFailedWithCode": "${guildName} で権限がない、または未知のエラーが発生しました。 (コード: ${code})",
+            "operationResult": "成功: ${done} / 失敗: ${fail}",
+            "generalError": "エラーが発生しました",
+            "unsupportedSubcommandError": "問題が発生しました"
+        },
+        "graph": {
+            "name": "graph",
+            "description": "グラフを描画します。",
+            "options": {
+                "values": {
+                    "name": "values"
+                },
+                "label": {
+                    "name": "label"
+                },
+                "title": {
+                    "name": "title"
+                },
+                "lineColor": {
+                    "name": "line_color",
+                    "description": "線の色を選択",
+                    "choices": {
+                        "red": "赤色",
+                        "green": "緑色",
+                        "pink": "桃色",
+                        "white": "白色",
+                        "black": "黒色",
+                        "orange": "橙色"
+                    }
+                },
+                "backgroundTheme": {
+                    "name": "background_theme",
+                    "description": "背景の色を選択",
+                    "choices": {
+                        "dark": "ダーク",
+                        "light": "ライト"
+                    }
+                },
+                "beginAtZero": {
+                    "name": "begin_at_zero",
+                    "description": "グラフの最小値を0に固定するか(デフォルト: false)"
+                }
+            },
+            "defaultTitle": "${0}のグラフ"
+        },
+        "mcSrvlookup": {
+            "name": "mcsrv_record",
+            "description": "SRV レコードを調べます",
+            "options": {
+                "domain": {
+                    "name": "domain",
+                    "description": "ドメインを指定します。"
+                }
+            },
+            "resolutionError": "${domain} の SRV レコードを解決する際にエラーが発生しました: ${message}",
+            "notFoundError": "${0} の SRV レコードが見つかりませんでした",
+            "result": {
+                "title": "SRV レコード #${0}:",
+                "priority": "優先度: ${0}",
+                "weight": "重み: ${0}",
+                "port": "ポート: ${0}",
+                "target": "ターゲット: ${0}"
+            },
+            "serviceProvider": "ringoXD's Discord.js Bot",
+            "generalError": "エラーが発生しました: ${0}"
+        },
+        "mcstatus": {
+            "name": "mcstatus",
+            "description": "サーバーの状態を確認します。",
+            "options": {
+                "serverIp": {
+                    "name": "server_ip",
+                    "description": "サーバーを指定します。"
+                },
+                "bedrockServer": {
+                    "name": "bedrock_server",
+                    "description": "統合版サーバーかどうか"
+                }
+            },
+            "online": "オンライン",
+            "serverIsOnline": "${server}は${online}です!",
+            "playerCount": "人数",
+            "playerCountValue": "${online} / ${max}",
+            "version": "バージョン",
+            "serverIsOffline": "${0}はオフラインです",
+            "connectionFailed": "接続に失敗しました!",
+            "errorResult": {
+                "title": "エラー",
+                "description": "内部エラー: ${statusText}(${status})",
+                "footer": "Sekai.Explode"
+            }
+        },
+        "nettool": {
+            "name": "net_tool",
+            "description": "ネットワーク関連のコマンド",
+            "subcommands": {
+                "isProxy": {
+                    "name": "isproxy",
+                    "description": "ip-api.com を用いて IP アドレスを確認します",
+                    "options": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "対象の IP アドレス"
+                        }
+                    },
+                    "error": "エラーが発生しました (error: ${0})",
+                    "detectionResult": {
+                        "title": "ねぇ、このIP怪しいよ",
+                        "description": "${0}はプロキシ、またはホスティングのIPです!",
+                        "country": "国",
+                        "isp": "プロバイダ",
+                        "isProxyOrHosting": "プロキシ / ホスティング",
+                        "isProxyValue": "プロキシ？ -> ${0}",
+                        "isHostingValue": "ホスティング？ -> ${0}"
+                    },
+                    "safeResult": "${0}は安全なIPです"
+                },
+                "ipInfo": {
+                    "name": "ipinfo",
+                    "description": "IP 情報を調べます",
+                    "options": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "IPアドレスを指定します"
+                        }
+                    },
+                    "invalidIpError": "IPアドレスが間違っています",
+                    "targetLog": "対象: ${0}",
+                    "statusLog": "ステータス: ${0}",
+                    "result": {
+                        "title": "${0} の IP 情報",
+                        "target": "対象",
+                        "country": "国",
+                        "city": "都市",
+                        "region": "地域",
+                        "org": "企業"
+                    }
+                },
+                "nsLookup": {
+                    "name": "nslookup",
+                    "description": "DNS を調べます！",
+                    "options": {
+                        "domain": {
+                            "name": "domain",
+                            "description": "ドメインを指定します。"
+                        }
+                    },
+                    "mxRecord": "- ${exchange} (優先度:${priority})",
+                    "record": "- ${record}${isCloudFlare}",
+                    "isCloudFlare": {
+                        "yes": " (CloudFlare)",
+                        "no": ""
+                    },
+                    "domainDoesNotExist": "ドメインが存在しません"
+                }
+            },
+            "ipListFetchError": "CloudflareのIPリストの取得に失敗しました",
+            "errorTitle": "エラー",
+            "resultFooter": "ringoXD's Discord.js Bot"
+        },
+        "omikuzi": {
+            "name": "おみくじ",
+            "description": "何が出るかな",
+            "badLuck": "凶",
+            "goodLuck": "吉",
+            "slightGoodLuck": "小吉",
+            "moderateGoodLuck": "中吉",
+            "greatGoodLuck": "大吉",
+            "assertionError": "エラー(関数の結果: ${0}) - ボットが燃えました"
+        },
+        "pieChart": {
+            "name": "piechart",
+            "description": "円グラフを生成します。",
+            "options": {
+                "values": {
+                    "name": "values"
+                },
+                "label": {
+                    "name": "label"
+                },
+                "title": {
+                    "name": "title"
+                }
+            },
+            "defaultTitle": "${0}の円グラフ"
+        },
+        "ping": {
+            "name": "ping",
+            "description": "Ping を表示します",
+            "graphLabel": "Ping",
+            "title": "直近の ping: ${0}ms"
+        },
+        "play": {
+            "name": "play",
+            "description": "音楽を再生します!",
+            "options": {
+                "query": {
+                    "name": "query",
+                    "description": "YouTubeやSoundCloudのリンク、または検索したいワード"
+                }
+            },
+            "notFound": "曲が見つかりませんでした",
+            "trackAdded": "${0}をキューに追加しました！",
+            "authorAndTrack": "${author} - ${track}",
+            "requestedBy": "リクエスト者: ${0}",
+            "generalError": "エラーが発生しました！ ${0}"
+        },
+        "queue": {
+            "name": "queue",
+            "description": "キュー一覧を確認します。",
+            "queueItem": "${index} ${value}",
+            "queueIndex": "${0})",
+            "result": {
+                "title": "${count}件の曲がキューに入っています! (推定時間: ${duration})",
+                "emptyMessage": "キューに曲がありません！",
+                "footer": "${page}ページ目 | ${length}曲"
+            }
+        },
+        "randomnum": {
+            "name": "random_num",
+            "description": "乱数生成",
+            "options": {
+                "minValue": {
+                    "name": "min_value",
+                    "description": "最小値を指定(デフォルト: 0)"
+                },
+                "maxValue": {
+                    "name": "max_value",
+                    "description": "最大値を指定(デフォルト: 100)"
+                }
+            },
+            "result": {
+                "title": "乱数を生成しました!",
+                "description": "最小値: ${min}, 最大値: ${max}",
+                "footer": "実行者: ${0}"
+            }
+        },
+        "skip": {
+            "name": "skip",
+            "description": "音楽をスキップします！",
+            "trackSkipped": "${0}をスキップしました!",
+            "generalError": ["処理の実行中にエラー(${0})が発生しました。"]
+        },
+        "stop": {
+            "name": "stop",
+            "description": "音楽を停止します。",
+            "playerStopped": "音楽を停止しました👋"
+        },
+        "templink": {
+            "name": "templink",
+            "description": "5分間のみ使用できる一時リンクを生成します",
+            "options": {
+                "url": {
+                    "name": "url",
+                    "description": "リンク先"
+                }
+            },
+            "internalError": "内部エラー",
+            "invalidUrlError": ["URLが間違っています。", "https:// までを含めたURLを入力してください"],
+            "linkCreated": "[TempLink] リンク: ${id} が生成されました リンク先: ${url}",
+            "result": {
+                "title": "TempLinkを生成しました!",
+                "description": "5分間のみ使用できます。",
+                "link": "リンク"
+            }
+        },
+        "testx": {
+            "name": "dev01",
+            "description": "view",
+            "message": "Hello, world!"
+        },
+        "testx2": {
+            "name": "idk",
+            "description": "code test",
+            "message": "結果: ${0}"
+        },
+        "unicode": {
+            "name": "unicode",
+            "description": "unicode変換ツール",
+            "options": {
+                "mode": {
+                    "name": "mode",
+                    "description": "モード選択",
+                    "choices": {
+                        "encode": "テキスト -> Unicode",
+                        "decode": "Unicode -> テキスト"
+                    }
+                },
+                "text": {
+                    "name": "text",
+                    "description": "変換したい文字列を入力"
+                }
+            },
+            "textEncoded": "テキストをエンコードしました!",
+            "textDecoded": "テキストをデコードしました!"
+        },
+        "updater": {
+            "name": "update",
+            "description": "git pull",
+            "permissionError": "このコマンドはBotの管理者のみ使えます。",
+            "updating": "⤴ 更新中...",
+            "timeout": "3分経っても処理が完了しなかったため、強制終了しました",
+            "restarting": ["✅ 完了", "BOTを再起動します"]
+        },
+        "upload": {
+            "name": "upload",
+            "description": "ファイルをcdnにアップロード",
+            "options": {
+                "file": {
+                    "name": "file",
+                    "description": "アップロードするファイル"
+                },
+                "filename": {
+                    "name": "filename",
+                    "description": "ファイル名"
+                },
+                "private": {
+                    "name": "private",
+                    "description": "プライベート"
+                }
+            },
+            "internalError": "内部エラー (missing config.json)",
+            "permissionError": "このコマンドを使用する権限がありません！",
+            "isPrivateLog": "プライベート？: ${0}",
+            "fileUploaded": "アップロードしました!",
+            "result": {
+                "title": "${filename}がアップロードされました!${isPrivate}",
+                "isPrivate": {
+                    "yes": " (プライベート)",
+                    "no": ""
+                },
+                "url": "URL",
+                "clickToCopy": "クリックしてコピー！"
+            },
+            "errorResult": {
+                "title": "エラー",
+                "description": "内部エラー: ${statusText}(${status})",
+                "footer": "ringoXD's Discord.js Bot"
+            }
+        },
+        "version": {
+            "name": "version",
+            "description": "バージョン表示",
+            "message": "Node.js で実行 ${process} | ${os}"
+        },
+        "volume": {
+            "name": "volume",
+            "description": "音量を調節します。",
+            "options": {
+                "volume": {
+                    "name": "volume",
+                    "description": "音量を設定(1~100)"
+                }
+            },
+            "volumeSet": "音量を${0}に設定しました!",
+            "error": "エラーが発生しました"
+        }
+    }
+}
