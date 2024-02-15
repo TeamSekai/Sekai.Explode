@@ -592,9 +592,14 @@
                 "volume": {
                     "name": "volume",
                     "description": "Set the volume (1-100)"
+                },
+                "keep": {
+                    "name": "keep",
+                    "description": "Whether to set the volume as the default value of the server"
                 }
             },
             "volumeSet": "Set the volume to ${0}!",
+            "volumeSave": "Set the volume to ${0} as the default value of the server!",
             "error": "An error occurred"
         }
     }

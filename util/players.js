@@ -1,5 +1,6 @@
 const { useQueue, Track } = require('discord-player');
 const Timespan = require('./timespan');
+const mongodb = require('../internal/mongodb');
 
 /**
  * 音楽プレイヤーに関わるユーティリティ関数群。
@@ -41,6 +42,38 @@ module.exports = {
      */
     getDuration(track) {
         return new Timespan({ millis: track.durationMS });
+    },
+
+    /**
+     * サーバーでの音量設定を保存する。
+     * @param {string} guildId ギルド ID
+     * @param {number} volume 音量
+     */
+    async saveVolumeSetting(guildId, volume) {
+        const volumeCollection = mongodb.connection.collection('volumes');
+        await volumeCollection.updateOne(
+            { guild: guildId },
+            {
+                $set: {
+                    guild: guildId,
+                    volume: volume
+                }
+            },
+            { upsert: true }
+        );
+    },
+
+    /**
+     * サーバーでの音量設定を取得する。
+     * @param {string} guildId ギルド ID
+     * @returns {Promise<number | undefined>} 音量
+     */
+    async loadVolumeSetting(guildId) {
+        const volumeCollection = mongodb.connection.collection('volumes');
+        const result = await volumeCollection.findOne({ guild: guildId });
+        if (result != null) {
+            return result.volume;
+        }
     }
 
 };

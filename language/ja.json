@@ -592,9 +592,14 @@
                 "volume": {
                     "name": "volume",
                     "description": "音量を設定(1~100)"
+                },
+                "keep": {
+                    "name": "keep",
+                    "description": "サーバーのデフォルト値として設定するか"
                 }
             },
             "volumeSet": "音量を${0}に設定しました!",
+            "volumeSave": "サーバーの規定値として音量を${0}に設定しました!",
             "error": "エラーが発生しました"
         }
     }
