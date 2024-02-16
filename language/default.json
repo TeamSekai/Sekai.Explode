@@ -590,7 +590,7 @@
             "description": "音量を調節します。",
             "options": {
                 "volume": {
-                    "name": "volume",
+                    "name": "set_volume",
                     "description": "音量を設定(1~100)"
                 },
                 "keep": {
