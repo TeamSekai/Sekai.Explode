@@ -1,12 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { LANG } = require('../util/languages');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('idk')
-        .setDescription('shitcord code test')
-		.addStringOption(option => option.setName('title').setDescription('Pollのタイトル').setRequired(true)),
+        .setName(LANG.commands.poll.name)
+        .setDescription(LANG.commands.poll.description),
     execute: async function (interaction) {
-		/** @type {import("discord.js").CommandInteraction} */
-		await interaction.reply(`soon`)
+        // await interaction.reply(LANG.commands.poll.message)
     }
 };
