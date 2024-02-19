@@ -499,7 +499,7 @@
             },
             "internalError": "Internal error",
             "invalidUrlError": ["The URL is invalid.", "Enter the URL including https://"],
-            "linkCreated": "[TempLink] Link: ${id} has generated. Link destination: ${url}",
+            "linkCreated": "[TempLink] Link: ${id} has been generated. Link destination: ${url}",
             "result": {
                 "title": "Generated a TempLink!",
                 "description": "Available for 5 minutes only",
