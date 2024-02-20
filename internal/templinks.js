@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -11,6 +10,8 @@ const {
     linkPort,
     linkDomain
 } = require('../config.json');
+
+// 内部 TempLink サーバー
 
 /**
  * @typedef {Object} TempLink
@@ -37,7 +38,10 @@ class InvalidURLError extends TypeError {
 /** @type {TempLink[] | null} */
 let tempLinks = null;
 
-setInterval(() => {
+/**
+ * 1秒おきに呼び出されて古いリンクを削除する。
+ */
+function clearExpiredTempLinks() {
     if (!tempLinks) return;
     tempLinks = tempLinks.filter((link) => {
         if (Date.now() - link.createdAt.valueOf() > link.period) {
@@ -49,9 +53,14 @@ setInterval(() => {
             return true;
         }
     });
-}, 1000);
+}
 
-app.get('/oembed/:linkCode', async (req, res) => {
+/**
+ * エンドポイント /oembed/:linkCode
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+async function oEmbedHandler(req, res) {
     if (!tempLinks) return res.sendStatus(500);
     let link = tempLinks.find((x) => x.id == req.params.linkCode);
     if (!link) {
@@ -66,9 +75,14 @@ app.get('/oembed/:linkCode', async (req, res) => {
         provider_url: 'https://ringoxd.dev/',
         url: link.url
     });
-});
+}
 
-app.get('/', async (req, res) => {
+/**
+ * エンドポイント /
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+async function rootHandler(req, res) {
     if (!tempLinks) return res.sendStatus(500);
     let link = tempLinks.find((x) => x.id == req.params.linkCode);
     if (!link) {
@@ -79,7 +93,7 @@ app.get('/', async (req, res) => {
             );
     }
     res.send();
-});
+}
 
 function unicodeEscape(str) {
     if (!String.prototype.repeat) {
@@ -99,7 +113,12 @@ function unicodeEscape(str) {
     return result;
 }
 
-app.get('/:linkCode', async (req, res) => {
+/**
+ * エンドポイント /:linkCode
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+function linkHandler(req, res) {
     let remoteIp = req.headers['cf-connecting-ip'];
     let logPath = path.join(__dirname, 'accesslog.txt');
     if (!fs.existsSync(logPath))
@@ -119,28 +138,6 @@ app.get('/:linkCode', async (req, res) => {
         `<script>location.href="${unicodeEscape(link.url)}"</script>` +
             `\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.id}" />`
     );
-});
-
-function enableTempLinks() {
-    if (tempLinkSrvToken) {
-        return;
-    }
-
-    tempLinks = [];
-
-    const server = new http.Server(app);
-    server.listen(linkPort, () => {
-        console.log(
-            strFormat(LANG.discordbot.serverListen.tempLinkReady, {
-                linkPort,
-                linkDomain
-            })
-        );
-    });
-}
-
-function areTempLinksEnabled() {
-    return tempLinks != null || !!tempLinkSrvToken;
 }
 
 function makeId(length) {
@@ -169,6 +166,8 @@ function createTempLinkInternal(url, period) {
     return Promise.resolve({ id, link: `https://${linkDomain}/${id}` });
 }
 
+// 外部 TempLink サーバー
+
 const axiosInstance = axios.create({
     headers: {
         Authorization: `Bearer ${tempLinkSrvToken}`,
@@ -182,11 +181,44 @@ async function createTempLinkOnSrv(url, period) {
         destination: url,
         expiration_time: period
     });
-    const { id, link } = res.data.ok;
-    return { id, link };
+    return res.data.ok;
 }
 
 /**
+ * TempLink サーバーを有効化する。
+ */
+function enableTempLinks() {
+    if (tempLinkSrvToken) {
+        return;
+    }
+
+    tempLinks = [];
+    const app = express();
+    setInterval(clearExpiredTempLinks, 1000);
+    app.get('/oembed/:linkCode', oEmbedHandler);
+    app.get('/', rootHandler);
+    app.get('/:linkCode', linkHandler);
+
+    const server = new http.Server(app);
+    server.listen(linkPort, () => {
+        console.log(
+            strFormat(LANG.discordbot.serverListen.tempLinkReady, {
+                linkPort,
+                linkDomain
+            })
+        );
+    });
+}
+
+/**
+ * @returns 内部・外部いずれかの TempLink サーバーが有効化されているか
+ */
+function areTempLinksEnabled() {
+    return tempLinks != null || !!tempLinkSrvToken;
+}
+
+/**
+ * 設定に応じて内部または外部のサーバーで一時リンクを作成する。
  * @param {string} url リンク先
  * @param {number} period リンクの有効期間 (ミリ秒)
  */
