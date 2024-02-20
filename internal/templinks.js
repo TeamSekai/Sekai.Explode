@@ -3,8 +3,14 @@ const app = express();
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios').default;
 const { LANG, strFormat } = require('../util/languages');
-const { linkPort, linkDomain } = require('../config.json');
+const {
+    tempLinkSrvToken,
+    tempLinkSrvPostURL,
+    linkPort,
+    linkDomain
+} = require('../config.json');
 
 /**
  * @typedef {Object} TempLink
@@ -12,12 +18,6 @@ const { linkPort, linkDomain } = require('../config.json');
  * @property {string} url リンク先
  * @property {Date} createdAt リンクの作成日時
  * @property {number} period リンクの有効期間 (ミリ秒)
- */
-
-/**
- * @typedef {Object} TempLinkInfo
- * @property {string} id リンク ID
- * @property {string} link リンクの URL
  */
 
 class InvalidURLError extends TypeError {
@@ -122,6 +122,10 @@ app.get('/:linkCode', async (req, res) => {
 });
 
 function enableTempLinks() {
+    if (tempLinkSrvToken) {
+        return;
+    }
+
     tempLinks = [];
 
     const server = new http.Server(app);
@@ -136,7 +140,7 @@ function enableTempLinks() {
 }
 
 function areTempLinksEnabled() {
-    return tempLinks != null;
+    return tempLinks != null || !!tempLinkSrvToken;
 }
 
 function makeId(length) {
@@ -154,24 +158,49 @@ function makeId(length) {
     return result;
 }
 
-/**
- * @param {string} url リンク先
- * @returns {TempLinkInfo} 作成されたリンクの情報
- */
-function createTempLink(url) {
-    try {
-        new URL(url);
-    } catch (e) {
-        throw new InvalidURLError(e);
-    }
+function createTempLinkInternal(url, period) {
     const id = makeId(5);
     tempLinks.push({
         id,
         url,
         createdAt: new Date(),
-        period: 1000 * 300
+        period
     });
-    return { id, link: `https://${linkDomain}/${id}` };
+    return Promise.resolve({ id, link: `https://${linkDomain}/${id}` });
+}
+
+const axiosInstance = axios.create({
+    headers: {
+        Authorization: `Bearer ${tempLinkSrvToken}`,
+        'Content-Type': 'application/json'
+    },
+    responseType: 'json'
+});
+
+async function createTempLinkOnSrv(url, period) {
+    const res = await axiosInstance.post(tempLinkSrvPostURL, {
+        destination: url,
+        expiration_time: period
+    });
+    const { id, link } = res.data.ok;
+    return { id, link };
+}
+
+/**
+ * @param {string} url リンク先
+ * @param {number} period リンクの有効期間 (ミリ秒)
+ */
+function createTempLink(url, period) {
+    try {
+        new URL(url);
+    } catch (e) {
+        throw new InvalidURLError(e);
+    }
+    if (tempLinkSrvToken) {
+        return createTempLinkOnSrv(url, period);
+    } else {
+        return createTempLinkInternal(url, period);
+    }
 }
 
 module.exports = {

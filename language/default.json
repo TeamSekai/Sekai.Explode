@@ -504,7 +504,8 @@
                 "title": "TempLinkを生成しました!",
                 "description": "5分間のみ使用できます。",
                 "link": "リンク"
-            }
+            },
+            "httpError": "エラーが発生しました: ${0}"
         },
         "testx": {
             "name": "dev01",

@@ -504,7 +504,8 @@
                 "title": "Generated a TempLink!",
                 "description": "Available for 5 minutes only",
                 "link": "Link"
-            }
+            },
+            "httpError": "An error occurred: ${0}"
         },
         "testx": {
             "name": "dev01",
