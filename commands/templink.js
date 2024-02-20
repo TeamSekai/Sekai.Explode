@@ -62,9 +62,10 @@ module.exports = {
                 });
             } else {
                 await interaction.reply({
-                    content: 'Unknown error',
+                    content: LANG.commands.templink.generalError,
                     ephemeral: true
                 });
+                console.error(e);
             }
         }
     }

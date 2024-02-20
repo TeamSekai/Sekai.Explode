@@ -505,7 +505,8 @@
                 "description": "Available for 5 minutes only",
                 "link": "Link"
             },
-            "httpError": "An error occurred: ${0}"
+            "httpError": "An error occurred: ${0}",
+            "generalError": "An unknown error occurred"
         },
         "testx": {
             "name": "dev01",
