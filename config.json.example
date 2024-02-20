@@ -2,7 +2,7 @@
 	"kairun": 8264,
 	"token": "YourDiscordBotTokenHere",
 	"tempLinkSrvToken": "Tl0_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-	"tempLinkSrvApiUrl": "https://link.example.com/api",
+	"tempLinkSrvPostURL": "https://link.example.com/api/links",
 	"linkDomain": "link.yourdomain.com",
 	"linkPort": 8264,
 	"cdnUploadURL": "http://192.168.1.255/upload-discord",
