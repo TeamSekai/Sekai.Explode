@@ -1,61 +1,72 @@
-const { SlashCommandBuilder } = require('discord.js');
-const { linkDomain } = require("../config.json");
+const { SlashCommandBuilder, CommandInteraction } = require('discord.js');
 const { LANG, strFormat } = require('../util/languages');
-
-function makeid(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        counter += 1;
-    }
-    return result;
-}
+const {
+    areTempLinksEnabled,
+    createTempLink,
+    InvalidURLError
+} = require('../internal/templinks');
+const { AxiosError } = require('axios');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName(LANG.commands.templink.name)
         .setDescription(LANG.commands.templink.description)
-        .addStringOption(option =>
+        .addStringOption((option) =>
             option
                 .setName(LANG.commands.templink.options.url.name)
                 .setDescription(LANG.commands.templink.options.url.description)
                 .setRequired(true)
         ),
-    execute: async function (interaction) {
-        if (!interaction.client.templinks) {
+    execute: async function (/** @type {CommandInteraction} */ interaction) {
+        if (!areTempLinksEnabled()) {
             return interaction.reply(LANG.commands.templink.internalError);
         }
-        let url = interaction.options.get(LANG.commands.templink.options.url.name).value;
+        let url = interaction.options.get(
+            LANG.commands.templink.options.url.name
+        ).value;
         try {
-            new URL(url);
-        } catch {
-            await interaction.reply({
-                content: LANG.commands.templink.invalidUrlError.join('\n'),
-                ephemeral: true
+            const { id, link } = await createTempLink(url, 1000 * 300);
+            console.log(
+                strFormat(LANG.commands.templink.linkCreated, { id, url })
+            );
+            interaction.reply({
+                content: null,
+                embeds: [
+                    {
+                        title: LANG.commands.templink.result.title,
+                        description: LANG.commands.templink.result.description,
+                        fields: [
+                            {
+                                name: LANG.commands.templink.result.link,
+                                value: link
+                            }
+                        ]
+                    }
+                ]
             });
-            return;
+        } catch (e) {
+            if (e instanceof InvalidURLError) {
+                await interaction.reply({
+                    content: LANG.commands.templink.invalidUrlError.join('\n'),
+                    ephemeral: true
+                });
+            } else if (e instanceof AxiosError) {
+                await interaction.reply({
+                    content:
+                        strFormat(LANG.commands.templink.httpError, [
+                            e.response?.status
+                        ]) +
+                        '\n' +
+                        e.response?.data?.error?.description,
+                    ephemeral: true
+                });
+            } else {
+                await interaction.reply({
+                    content: LANG.commands.templink.generalError,
+                    ephemeral: true
+                });
+                console.error(e);
+            }
         }
-        let id = makeid(5);
-        console.log(strFormat(LANG.commands.templink.linkCreated, { id, url }));
-        interaction.client.templinks.push({
-            id: id,
-            url: url,
-            createdAt: new Date(),
-            period: 1000 * 300
-        });
-        interaction.reply({
-            content: null,
-            embeds: [{
-                title: LANG.commands.templink.result.title,
-				description: LANG.commands.templink.result.description,
-				fields: [{
-					name: LANG.commands.templink.result.link,
-					value: `https://${linkDomain}/${id}`
-				}]
-            }]
-        })
     }
 };
