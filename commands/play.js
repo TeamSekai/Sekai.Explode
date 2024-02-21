@@ -1,7 +1,8 @@
 const { SlashCommandBuilder, CommandInteraction } = require('discord.js');
-const { useMainPlayer, QueryType } = require('discord-player');
+const { useMainPlayer, QueryType, Track } = require('discord-player');
 const { getPlayableVoiceChannelId, getDuration, loadVolumeSetting } = require('../util/players');
 const { LANG, strFormat } = require('../util/languages');
+const Timespan = require('../util/timespan');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 //
@@ -54,13 +55,7 @@ module.exports = {
                 },
             });
 
-            const duration = getDuration(res.track);
-            const message = strFormat(LANG.commands.play.trackAdded, ['**' + (res.track.playlist
-                ? strFormat(LANG.common.message.playerTrack, { title: res.track.playlist.title, duration })
-                : strFormat(LANG.commands.play.authorAndTrack, {
-                    author: res.track.author,
-                    track: strFormat(LANG.common.message.playerTrack, { title: res.track.title, duration })
-                })) + '**']);
+            const message = toTrackAddedMessage(res.track);
 
             return interaction.followUp({
                 embeds: [{
@@ -80,3 +75,32 @@ module.exports = {
 
     }
 };
+
+/**
+ * @param {Track} track
+ */
+function toTrackAddedMessage(track) {
+    const message = strFormat(LANG.commands.play.trackAdded, ['**' + trackToString(track) + '**']);
+    return message;
+}
+
+/**
+ * @param {Track} track
+ */
+function trackToString(track) {
+    const playlist = track.playlist;
+    if (playlist) {
+        return strFormat(LANG.common.message.playerTrack, {
+            title: track.playlist.title,
+            duration: new Timespan({ millis: playlist.estimatedDuration })
+        });
+    } else {
+        return strFormat(LANG.commands.play.authorAndTrack, {
+            author: track.author,
+            track: strFormat(LANG.common.message.playerTrack, {
+                title: track.title,
+                duration: getDuration(track)
+            })
+        });
+    }
+}
