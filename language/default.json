@@ -602,10 +602,10 @@
             "volumeSave": "サーバーの規定値として音量を${0}に設定しました!",
             "error": "うわーん！吐血しちゃったよぉ..."
         },
-		"poll": {
-            "name": "poll",
-            "description": "Pollを作成します!",
-            "message": "コードかくのめんどくさーい"
+		"result": {
+            "title": "awa",
+            "url": "a",
+            "clickToCopy": "a"
         }
     }
 }
