@@ -33,4 +33,4 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
       - name: Deploy Sekai
         run: |
-          ssh -i ~/id_rsa -t -t -o "StrictHostKeyChecking=no" ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SSH_PORT }} "bash -x deploysekai.sh"
+          ssh -i .ssh/id_rsa -t -t -o "StrictHostKeyChecking=no" ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SSH_PORT }} "bash -x deploysekai.sh"
