@@ -22,15 +22,16 @@ jobs:
           cp config.json.example config.json
           npm test
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: test
     steps:
+      - name: Setup Cloudflared and key
+        run: |
+          curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+          echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared focal main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+          sudo apt-get update && sudo apt-get install cloudflared
+          echo "${{ secrets.SSH_KEY }}" > ~/id_rsa
+
       - name: Deploy Sekai
-        uses: npgy/cloudflared-ssh-action@v2.0
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          private_key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          commands: cd Sekai.Explode; git pull; npm i; pm2 restart discordbot;
-        
+        run: |
+          ssh -i ~/id_rsa -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.SERVER_HOST }}" ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "bash -x deploysekai.sh"
