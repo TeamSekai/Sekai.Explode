@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../config.json');
 const { LANG } = require('../util/languages');
+const { onShutdown } = require('./schedules');
 
 
 console.log(LANG.internal.mongodb.called);
@@ -28,6 +29,8 @@ db.on("disconnecting", function () {
 db.on("disconnected", function () {
     console.log(LANG.internal.mongodb.dbDisconnected);
 });
+
+onShutdown(() => db.close());
 
 module.exports = {
 	connection: db,

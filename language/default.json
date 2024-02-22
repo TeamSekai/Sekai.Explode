@@ -21,6 +21,10 @@
             "commandsRegistering": "Registering commands...",
             "commandsReady": "Ready!"
         },
+        "shutdown": {
+            "sysLog": "Discord.js Bot is shutting down!",
+            "loggedOut": "Logged out"
+        },
         "interactionCreate": {
             "unsupportedCommandError": "${0}というコマンドには対応していません。",
             "commandError": "コマンド実行時にエラーになりました。"
@@ -55,7 +59,9 @@
         "activity": {
             "called": "Called internal activity system",
             "presenceName": "Sekai - Added GlobalBan System",
-            "presenceState": "Ping: ${0}ms | Created by ringoXD"
+            "presenceState": "Ping: ${0}ms | Created by ringoXD",
+            "presenceNameShuttingDown": "Shutting down...",
+            "presenceStateShuttingDown": "Sekai.explode is now shutting down..."
         },
         "mongodb": {
             "called": "Called mongodb internal system.",
@@ -63,6 +69,12 @@
             "dbConnected": "[MongoDB] Connected!",
             "dbDisconnecting": "[MongoDB] Disconnecting...",
             "dbDisconnected": "[MongoDB] Disconnected!"
+        },
+        "schedules": {
+            "processExiting": "プロセスを終了します"
+        },
+        "templinks": {
+            "shutdown": "[TempLink] サーバーを閉じました"
         }
     },
     "common": {

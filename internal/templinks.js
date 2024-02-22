@@ -10,6 +10,7 @@ const {
     linkPort,
     linkDomain
 } = require('../config.json');
+const { onShutdown } = require('./schedules');
 
 // 内部 TempLink サーバー
 
@@ -194,7 +195,7 @@ function enableTempLinks() {
 
     tempLinks = [];
     const app = express();
-    setInterval(clearExpiredTempLinks, 1000);
+    const intervalId = setInterval(clearExpiredTempLinks, 1000);
     app.get('/oembed/:linkCode', oEmbedHandler);
     app.get('/', rootHandler);
     app.get('/:linkCode', linkHandler);
@@ -207,6 +208,26 @@ function enableTempLinks() {
                 linkDomain
             })
         );
+    });
+
+    onShutdown(async () => {
+        clearInterval(intervalId);
+        for (const link of tempLinks) {
+            console.log(
+                strFormat(LANG.discordbot.interval.linkExpired, [link.id])
+            );
+        }
+        tempLinks = [];
+        await new Promise((resolve, reject) => {
+        server.close(err => {
+            if (!err) {
+                console.log(LANG.internal.templinks.shutdown);
+                resolve();
+            } else {
+                reject(err);
+            }
+        });
+        });
     });
 }
 
