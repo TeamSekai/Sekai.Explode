@@ -25,17 +25,13 @@ module.exports = {
             }
         })
         let msg = await interaction.reply(LANG.common.message.checking);
-        let checkCount = 0;
         let res2;
-        do {
+        for (let checkCount = 1 ; checkCount < 8 ; checkCount++) {
             await setTimeout(2000);
-            checkCount++;
             res2 = await axios.get("https://check-host.net/check-result/" + res.data.request_id)
-            if (checkCount < 8 && (Object.values(res2.data).filter(x => x?.length != 0)).length < (res.data.nodes.length * 0.8))
-                continue;
-            else
+            if ((Object.values(res2.data).filter(x => x?.length != 0)).length >= (res.data.nodes.length * 0.8))
                 break;
-        } while (true);
+        }
         let str = Object.entries(res2.data).map(([key, value]) => {
             let nodeName = key.replace(".node.check-host.net", "");
             let data = value?.[0];
