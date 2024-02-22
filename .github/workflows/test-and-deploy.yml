@@ -1,0 +1,39 @@
+name: code-tester
+
+on:
+  push:
+    branches: v14-dev
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Unit test
+        run: |
+          node -v
+          npm install
+          cp config.json.example config.json
+          npm test
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Deploy Sekai
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+           cd Sekai.Explode
+           git pull
+           npm install
+           pm2 restart discordbot

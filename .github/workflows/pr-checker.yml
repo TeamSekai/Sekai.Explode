@@ -1,17 +1,13 @@
-name: code-tester
-
 on:
   pull_request:
-    branches: v14
-  push:
-    branches: v14
+    types: [opened]
+
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
+    test:
+      runs-on: ubuntu-latest
+      steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Nodejs
         uses: actions/setup-node@v4
         with:
