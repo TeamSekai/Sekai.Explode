@@ -12,6 +12,7 @@ process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
 const os = require('os');
 
 //!Load Internal dir code
+const { onShutdown } = require('./internal/schedules');
 const activity = require('./internal/activity');
 const mongodb = require('./internal/mongodb');
 
@@ -104,6 +105,13 @@ client.on('ready', async () => {
 	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
 	let SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
+});
+
+
+onShutdown(async () => {
+	const SyslogChannel = client.channels.cache.get(syslogChannel);
+	await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
+	await client.destroy();
 });
 
 
