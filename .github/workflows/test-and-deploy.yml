@@ -35,4 +35,4 @@ jobs:
 
       - name: Deploy Sekai
         run: |
-          ssh -i ~/id_rsa -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.SERVER_HOST }}" -o StrictHostKeyChecking=no -t ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p 22 "bash -x deploysekai.sh"
+          ssh -i ~/id_rsa -o StrictHostKeyChecking=no -t ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SSH_PORT }} "bash -x deploysekai.sh"
