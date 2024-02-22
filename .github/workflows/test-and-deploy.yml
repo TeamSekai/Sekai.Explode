@@ -25,8 +25,12 @@ jobs:
     runs-on: ubuntu-22.04
     needs: test
     steps:
+      - name: Generate key
+        run: |
+          mkdir -p .ssh && chmod 700 .ssh
+          echo "$SSH_KEY" > .ssh/id_rsa && chmod 600 .ssh/id_rsa
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
       - name: Deploy Sekai
         run: |
-          echo "${{ secrets.SSH_KEY }}" > ~/id_rsa
-          chmod 600 ~/id_rsa
-          ssh -i ~/id_rsa -o StrictHostKeyChecking=no -t -t ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SSH_PORT }} "bash -x deploysekai.sh"
+          ssh -i ~/id_rsa -t -t -o "StrictHostKeyChecking=no" ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SSH_PORT }} "bash -x deploysekai.sh"
