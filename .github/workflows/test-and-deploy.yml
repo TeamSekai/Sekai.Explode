@@ -31,8 +31,10 @@ jobs:
           echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared focal main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
           sudo apt-get update && sudo apt-get install cloudflared
           echo "${{ secrets.SSH_KEY }}" > ~/id_rsa
+          echo "sshd:ALL" > /etc/hosts.allow
           chmod 600 ~/id_rsa
+          cat known_hosts
 
       - name: Deploy Sekai
         run: |
-          ssh -i ~/id_rsa -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.SERVER_HOST }}" -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p 22 "bash -x deploysekai.sh"
+          ssh -i ~/id_rsa -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.SERVER_HOST }}" -o StrictHostKeyChecking=no -t ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p 22 "bash -x deploysekai.sh"
