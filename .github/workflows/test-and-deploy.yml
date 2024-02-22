@@ -28,9 +28,7 @@ jobs:
       - name: Generate key
         run: |
           mkdir -p .ssh && chmod 700 .ssh
-          echo "$SSH_KEY" > .ssh/id_rsa && chmod 600 .ssh/id_rsa
-        env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
+          echo "${{ secrets.SSH_KEY }}" > .ssh/id_rsa && chmod 600 .ssh/id_rsa
       - name: Deploy Sekai
         run: |
           ssh -i .ssh/id_rsa -t -t -o "StrictHostKeyChecking=no" ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SSH_PORT }} "bash -x deploysekai.sh"
