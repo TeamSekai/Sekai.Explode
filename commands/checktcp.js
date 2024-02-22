@@ -13,9 +13,9 @@ module.exports = {
                 .setRequired(true)
         )),
     execute: async function (interaction) {
-        let url = interaction.options.getString(LANG.commands.checktcp.options.ip.name);
+        const url = interaction.options.getString(LANG.commands.checktcp.options.ip.name);
         try { new URL(url) } catch { return interaction.reply(LANG.commands.checktcp.invalidUrlError) };
-        let res = await axios.get("https://check-host.net/check-ping", {
+        const res = await axios.get("https://check-host.net/check-ping", {
             params: {
                 host: url,
                 max_nodes: 40
@@ -24,7 +24,7 @@ module.exports = {
                 "Accept": "application/json"
             }
         })
-        let msg = await interaction.reply(LANG.common.message.checking);
+        const msg = await interaction.reply(LANG.common.message.checking);
         let res2;
         for (let checkCount = 1 ; checkCount < 8 ; checkCount++) {
             await setTimeout(2000);
@@ -32,9 +32,9 @@ module.exports = {
             if ((Object.values(res2.data).filter(x => x?.length != 0)).length >= (res.data.nodes.length * 0.8))
                 break;
         }
-        let str = Object.entries(res2.data).map(([key, value]) => {
-            let nodeName = key.replace(".node.check-host.net", "");
-            let data = value?.[0];
+        const str = Object.entries(res2.data).map(([key, value]) => {
+            const nodeName = key.replace(".node.check-host.net", "");
+            const data = value?.[0];
             console.log(strFormat(LANG.common.message.dataFor, [nodeName]), data);
             if (!value || !data) return `[${nodeName}] Timeout`;
             return `[${nodeName}] ${data[3] || "Error"}/${data[2]} | Ping: ${Math.floor(data[1] * 1000)}ms`;
