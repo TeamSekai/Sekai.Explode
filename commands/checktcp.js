@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { LANG } = require('../util/languages');
+const { LANG, strFormat } = require('../util/languages');
 const axios = require('axios').default;
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,7 +12,7 @@ module.exports = {
 			.setRequired(true)
 		)),
     execute: async function (interaction) {
-        let url = interaction.options.getString(LANG.commands.checktcp.options.ip);
+        let url = interaction.options.getString(LANG.commands.checktcp.options.ip.name);
         try { new URL(url) } catch { return interaction.reply(LANG.commands.checktcp.invalidUrlError) };
         let res = await axios.get("https://check-host.net/check-ping", {
             params: {
