@@ -32,7 +32,6 @@ jobs:
           sudo apt-get update && sudo apt-get install cloudflared
           echo "${{ secrets.SSH_KEY }}" > ~/id_rsa
           chmod 600 ~/id_rsa
-          cat known_hosts
 
       - name: Deploy Sekai
         run: |
