@@ -4,6 +4,8 @@ const childprocess = require('child_process');
 const path = require("path");
 const color = require("colors");
 const { LANG } = require('../util/languages');
+const { shutdown } = require('../internal/schedules');
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName(LANG.commands.updater.name)
@@ -47,9 +49,7 @@ module.exports = {
     gitProcess.on("close", async () => {
         clearTimeout(timeout);
         await interaction.editReply("```ansi\n" + msg + "\n```\n" + LANG.commands.updater.restarting.join('\n'));
-        setTimeout(() => {
-            process.exit(0);
-        }, 5000);
+        shutdown();
     })
 
   },

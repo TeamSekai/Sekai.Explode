@@ -3,17 +3,16 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = '1';
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const fs = require("fs");
 const path = require("path");
-const { token, linkPort, linkDomain, syslogChannel } = require('./config.json');
-const express = require("express");
-const app = express();
+const { token, syslogChannel } = require('./config.json');
+const { enableTempLinks } = require('./internal/templinks');
 const axios = require('axios');
-const server = require("http").Server(app);
 const { Player } = require('discord-player');
 const internal = require('stream');
 process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
 const os = require('os');
 
 //!Load Internal dir code
+const { onShutdown } = require('./internal/schedules');
 const activity = require('./internal/activity');
 const mongodb = require('./internal/mongodb');
 
@@ -53,21 +52,6 @@ async function getRedirectUrl(shortUrl) {
 		return `${LANG.discordbot.getRedirectUrl.error} ${error.message}`
     }
 }
-function unicodeEscape(str) {
-	if (!String.prototype.repeat) {
-		String.prototype.repeat = function (digit) {
-			var result = '';
-			for (var i = 0; i < Number(digit); i++) result += str;
-			return result;
-		};
-	}
-	var strs = str.split(''), hex, result = '';
-	for (var i = 0, len = strs.length; i < len; i++) {
-		hex = strs[i].charCodeAt(0).toString(16);
-		result += '\\u' + ('0'.repeat(Math.abs(hex.length - 4))) + hex;
-	}
-	return result;
-};
 
 //!RUN=======================
 
@@ -104,22 +88,9 @@ const player = new Player(client);
 player.extractors.loadDefault();
 console.log(LANG.discordbot.main.setupActivityCalling);
 activity.setupActivity(client);
-//?Ignore this
-setInterval(() => {
-	if (!client.templinks) return;
-	client.templinks = client.templinks.filter((link) => {
-		if ((Date.now() - link.createdAt.valueOf()) > link.period) {
-			console.log(strFormat(LANG.discordbot.interval.linkExpired, [link.id]));
-			return false;
-		} else {
-			return true;
-		}
-	});
-}, 1000);
-//?=
 
 client.on('ready', async () => {
-	client.templinks = [];
+	enableTempLinks();
 	console.log(strFormat(LANG.discordbot.ready.loggedIn, { cgreen, creset, tag: client.user.tag }));
 	client.user.setPresence({
 		activities: [{
@@ -134,7 +105,15 @@ client.on('ready', async () => {
 	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
 	let SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
-})
+});
+
+
+onShutdown(async () => {
+	const SyslogChannel = client.channels.cache.get(syslogChannel);
+	await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
+	await client.destroy();
+	console.log(cgreen + LANG.discordbot.shutdown.loggedOut + creset);
+});
 
 
 client.on("interactionCreate", async interaction => {
@@ -247,53 +226,6 @@ client.on('messageCreate', async (message) => {
 });
 
 
-//!link
-app.get("/oembed/:linkCode", async (req, res) => {
-	if (!client.templinks) return res.sendStatus(500);
-	let link = client.templinks.find(x => x.id == req.params.linkCode);
-	if (!link) {
-		return res.sendStatus(404);
-	}
-	res.json({
-		"version": "1.0",
-		"title": `${link.url}`,
-		"type": "link",
-		"author_name": LANG.discordbot.linkGet.authorName.join('\n'),
-		"provider_name": LANG.discordbot.linkGet.providerName,
-		"provider_url": "https://ringoxd.dev/",
-		"url": link.url
-	});
-});
-
-
-app.get("/", async (req, res) => {
-	if (!client.templinks) return res.sendStatus(500);
-	let link = client.templinks.find(x => x.id == req.params.linkCode);
-	if (!link) {
-		return res.status(404).send(`<center><h1>${LANG.discordbot.linkGet.rootContentTitle}</h1>\n<hr>\n${LANG.discordbot.linkGet.contentFooter}</center>`);
-	}
-	res.send()
-});
-
-app.get("/:linkCode", async (req, res) => {
-
-	let remoteIp = req.headers["cf-connecting-ip"];
-	let logPath = path.join(__dirname, "accesslog.txt");
-	if (!fs.existsSync(logPath))
-		fs.writeFileSync(logPath, "Access Log================\n");
-	fs.appendFileSync(logPath, `IP: ${remoteIp} | ${req.originalUrl}\n`)
-
-	if (!client.templinks) return res.sendStatus(500);
-	let link = client.templinks.find(x => x.id == req.params.linkCode);
-	if (!link) {
-		return res.status(404).send(`<center><h1>${LANG.discordbot.linkGet.notFoundContentTitle}</h1>\n<hr>\n${LANG.discordbot.linkGet.contentFooter}</center>`);
-	}
-	res.send(
-		`<script>location.href="${unicodeEscape(link.url)}"</script>` +
-		`\n<link rel="alternate" type="application/json+oembed" href="https://${linkDomain}/oembed/${link.id}" />`
-	)
-});
-
 //!EVENTS
 player.events.on('playerStart', (queue, track) => {
     // we will later define queue.metadata object while creating the queue
@@ -322,8 +254,3 @@ process.on('uncaughtException', function (err) {
 	console.error(err);
 });
 
-
-
-server.listen(linkPort, () => {
-	console.log(strFormat(LANG.discordbot.serverListen.tempLinkReady, { linkPort, linkDomain }));
-});

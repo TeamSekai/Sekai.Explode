@@ -1,5 +1,6 @@
 const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 const { LANG, strFormat } = require('../util/languages');
+const { onShutdown } = require('./schedules');
 
 
 console.log(LANG.internal.activity.called);
@@ -26,9 +27,12 @@ function addPingValue(ping) {
   }
   
   module.exports = {
+	/**
+	 * @param {Client<boolean>} client
+	 */
 	setupActivity(client){
 		client.on('ready', async () => {
-			setInterval(() => {
+			const intervalId = setInterval(() => {
 				const wsping = client.ws.ping;
 				addPingValue(wsping)
 				// avg
@@ -41,7 +45,18 @@ function addPingValue(ping) {
 					}],
 					status: `online`,
 				});
-			}, 40000)
+			}, 40000);
+			onShutdown(() => {
+				clearInterval(intervalId);
+				client.user.setPresence({
+					activities: [{
+						name: LANG.internal.activity.presenceNameShuttingDown,
+						state: LANG.internal.activity.presenceStateShuttingDown,
+						type: ActivityType.Watching,
+					}],
+					status: 'idle',
+				})
+			});
 		})
 	},
 	addPingValue,

@@ -21,6 +21,10 @@
             "commandsRegistering": "Registering commands...",
             "commandsReady": "Ready!"
         },
+        "shutdown": {
+            "sysLog": "Discord.js Bot is shutting down!",
+            "loggedOut": "Logged out"
+        },
         "interactionCreate": {
             "unsupportedCommandError": "A command named ${0} is not supported.",
             "commandError": "An error occurred while executing a command."
@@ -34,7 +38,7 @@
             "afterUrl": "After: ${0}"
         },
         "linkGet": {
-            "authorName": "Shortened link\ndestination:",
+            "authorName": ["Shortened link", "destination:"],
             "providerName": "Sekai.Explode",
             "rootContentTitle": "You can find nothing here",
             "notFoundContentTitle": "The shortened link was not found",
@@ -55,7 +59,9 @@
         "activity": {
             "called": "Called internal activity system",
             "presenceName": "Sekai - Added GlobalBan System",
-            "presenceState": "Ping: ${0}ms | Created by ringoXD"
+            "presenceState": "Ping: ${0}ms | Created by ringoXD",
+            "presenceNameShuttingDown": "Shutting down...",
+            "presenceStateShuttingDown": "Sekai.explode is now shutting down..."
         },
         "mongodb": {
             "called": "Called mongodb internal system.",
@@ -63,6 +69,12 @@
             "dbConnected": "[MongoDB] Connected!",
             "dbDisconnecting": "[MongoDB] Disconnecting...",
             "dbDisconnected": "[MongoDB] Disconnected!"
+        },
+        "schedules": {
+            "processExiting": "Exiting the process"
+        },
+        "templinks": {
+            "shutdown": "[TempLink] Server closed"
         }
     },
     "common": {
@@ -499,12 +511,14 @@
             },
             "internalError": "Internal error",
             "invalidUrlError": ["The URL is invalid.", "Enter the URL including https://"],
-            "linkCreated": "[TempLink] Link: ${id} has generated. Link destination: ${url}",
+            "linkCreated": "[TempLink] Link: ${id} has been generated. Link destination: ${url}",
             "result": {
                 "title": "Generated a TempLink!",
                 "description": "Available for 5 minutes only",
                 "link": "Link"
-            }
+            },
+            "httpError": "An error occurred: ${0}",
+            "generalError": "An unknown error occurred"
         },
         "testx": {
             "name": "dev01",
