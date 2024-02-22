@@ -31,4 +31,4 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > .ssh/id_rsa && chmod 600 .ssh/id_rsa
       - name: Deploy Sekai
         run: |
-          ssh -i .ssh/id_rsa -t -t -o "StrictHostKeyChecking=no" ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SSH_PORT }} "source .bashrc && bash -x deploysekai.sh"
+          ssh -i .ssh/id_rsa -o "StrictHostKeyChecking=no" ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SSH_PORT }} "bash -x deploysekai.sh"
