@@ -1,3 +1,5 @@
+name: Pull Request Checker
+
 on:
   pull_request:
     types: [opened]

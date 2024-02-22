@@ -1,4 +1,4 @@
-name: code-tester
+name: Code Test and Deploy
 
 on:
   push:
