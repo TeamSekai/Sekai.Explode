@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: test
     steps:
-      - name: Generate key
+      - name: Generate key and set path
         run: |
           mkdir -p .ssh && chmod 700 .ssh
           echo "${{ secrets.SSH_KEY }}" > .ssh/id_rsa && chmod 600 .ssh/id_rsa
