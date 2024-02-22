@@ -22,7 +22,8 @@
             "commandsReady": "Ready!"
         },
         "shutdown": {
-            "sysLog": "Discord.js Bot is shutting down!"
+            "sysLog": "Discord.js Bot is shutting down!",
+            "loggedOut": "Logged out"
         },
         "interactionCreate": {
             "unsupportedCommandError": "A command named ${0} is not supported.",

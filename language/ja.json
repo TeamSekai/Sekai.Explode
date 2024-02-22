@@ -22,7 +22,8 @@
             "commandsReady": "完了!"
         },
         "shutdown": {
-            "sysLog": "Discord.js Bot を終了しています!"
+            "sysLog": "Discord.js Bot を終了しています!",
+            "loggedOut": "ログアウトしました"
         },
         "interactionCreate": {
             "unsupportedCommandError": "${0}というコマンドには対応していません。",

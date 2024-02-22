@@ -112,6 +112,7 @@ onShutdown(async () => {
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
 	await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
 	await client.destroy();
+	console.log(cgreen + LANG.discordbot.shutdown.loggedOut + creset);
 });
 
 
