@@ -4,7 +4,7 @@ const { LANG } = require('../util/languages');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('poll')
-		.setDescription(LANG.commands.poll.description)
+		.setDescription('soon')
 		.addStringOption(option=>option.setName('title').setDescription('Pollのタイトル').setRequired(true))
 		.addStringOption(option=>option.setName('choice1').setDescription('選択肢を入力...').setRequired(true))
 		.addStringOption(option=>option.setName('choice2').setDescription('選択肢を入力...').setRequired(true))
