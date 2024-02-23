@@ -19,7 +19,7 @@ module.exports = {
         }
         const request = await CheckHostRequest.get(CHECK_TCP, url, 40);
         const msg = await interaction.reply(LANG.common.message.checking);
-        const resultMap = await request.checkResult();
+        const resultMap = await request.checkResult(1.0, 7);
         const table = [...resultMap.entries()].map(([node, result]) => {
             const nodeName = node.name.replace(".node.check-host.net", "");
             const prefix = `[${nodeName}]`;
