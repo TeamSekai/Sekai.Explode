@@ -1,6 +1,9 @@
+// @ts-check
+
 const { useQueue, Track } = require('discord-player');
 const Timespan = require('./timespan');
 const mongodb = require('../internal/mongodb');
+const { GuildMember } = require('discord.js');
 
 /**
  * 音楽プレイヤーに関わるユーティリティ関数群。
@@ -9,12 +12,16 @@ module.exports = {
 
     /**
      * 対話を起こしたメンバーが接続していて、この bot が参加しているか参加できるボイスチャンネルの ID を取得する。
-     * @param {import('discord.js').Interaction<import('discord.js').CacheType} interaction 対話オブジェクト
+     * @param {import('discord.js').Interaction} interaction 対話オブジェクト
      * @returns メンバーが接続しているボイスチャンネルの ID。この bot が接続できる状態にない場合は null
      */
     getPlayableVoiceChannelId(interaction) {
-        const /** @type {string | null} */ memberVC = interaction.member.voice.channelId;
-        const /** @type {string | null} */ myVC = interaction.guild.members.me.voice.channelId;
+        const member = interaction.member;
+        if (!(member instanceof GuildMember)) {
+            return null;
+        }
+        const memberVC = member.voice.channelId;
+        const myVC = interaction?.guild?.members?.me?.voice.channelId;
 
         if (memberVC != null && (myVC === memberVC || myVC == null))
             return memberVC;
@@ -24,11 +31,15 @@ module.exports = {
 
     /**
      * 対話が起こったサーバーで再生されている楽曲のキューを取得する。
-     * @param {import("discord.js").Interaction<import("discord.js").CacheType>} interaction 対話オブジェクト
+     * @param {import("discord.js").Interaction} interaction 対話オブジェクト
      * @returns 楽曲を再生している場合、楽曲のキュー。再生していない場合、null
      */
     getPlayingQueue(interaction) {
-        const queue = useQueue(interaction.guildId);
+        const guildId = interaction.guild;
+        if (guildId == null) {
+            return null;
+        }
+        const queue = useQueue(guildId);
         if (queue?.isPlaying())
             return queue;
 
