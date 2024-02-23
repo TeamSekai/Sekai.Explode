@@ -198,6 +198,8 @@ class CheckHostResult {
     }
 }
 
+// check-ping
+
 class CheckPingResult extends CheckHostResult {
     /** 
      * @param {'ok' | 'error' | 'processing'} state 
@@ -242,4 +244,68 @@ const CHECK_PING = {
     }
 };
 
-module.exports = { CheckHostRequest, CheckPingResult, CheckPingOk, CHECK_PING };
+// check-tcp
+
+class CheckTcpResult extends CheckHostResult {
+    /**
+     * @param {'ok' | 'error' | 'processing'} state
+     */
+    constructor(state) {
+        super(state);
+    }
+}
+
+class CheckTcpOk extends CheckTcpResult {
+    /** @type {number} */
+    time;
+
+    /** @type {string} */
+    address;
+
+    /**
+     * @param {any} payload
+     */
+    constructor(payload) {
+        super('ok');
+        this.time = payload.time;
+        this.address = payload.address;
+    }
+}
+
+class CheckTcpError extends CheckTcpResult {
+    description;
+
+    /**
+     * @param {string} description
+     */
+    constructor(description) {
+        super('error');
+        this.description = description;
+    }
+}
+
+/** @type {CheckHostType<CheckTcpResult>} */
+const CHECK_TCP = {
+    name: 'tcp',
+    castResult(/** @type {any} */ data) {
+        if (data == null) {
+            return new CheckTcpResult('processing');
+        }
+        const payload = data[0];
+        if ('error' in payload) {
+            return new CheckTcpError(payload.error);
+        }
+        return new CheckTcpOk(payload);
+    }
+}
+
+module.exports = {
+    CheckHostRequest,
+    CheckPingResult,
+    CheckPingOk,
+    CHECK_PING,
+    CheckTcpResult,
+    CheckTcpOk,
+    CheckTcpError,
+    CHECK_TCP
+};
