@@ -1,9 +1,7 @@
 const { SlashCommandBuilder, CommandInteraction } = require('discord.js');
 const { LANG, strFormat } = require('../util/languages');
-const { CheckHostRequest, CHECK_PING, CheckPingOk } = require('../util/check-host');
+const { CheckHostRequest, CHECK_PING, CheckPingOk, isValidHostname } = require('../util/check-host');
 const { formatTable } = require('../util/strings');
-
-const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,13 +15,9 @@ module.exports = {
         )),
     execute: async function (/** @type {CommandInteraction} */ interaction) {
         let url = interaction.options.getString(LANG.commands.checkping.options.ip.name);
-        if (!ipv4Regex.test(url)) {
-            try {
-                new URL(url)
-            } catch {
-                return interaction.reply(LANG.commands.checkping.invalidIpError);
-            }
-            // return interaction.reply("IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。");
+        if (!isValidHostname(url)) {
+            // IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。
+            return await interaction.reply(LANG.commands.checkping.invalidIpError);
         }
         const request = await CheckHostRequest.get(CHECK_PING, url, 40);
         const msg = await interaction.reply(LANG.common.message.checking);

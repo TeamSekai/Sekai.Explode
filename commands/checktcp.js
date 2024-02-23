@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { LANG, strFormat } = require('../util/languages');
-const { CheckHostRequest, CHECK_TCP, CheckTcpOk, CheckTcpError } = require('../util/check-host');
+const { CheckHostRequest, CHECK_TCP, CheckTcpOk, CheckTcpError, isValidHostname } = require('../util/check-host');
 const { formatTable } = require('../util/strings');
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,7 +14,9 @@ module.exports = {
         )),
     execute: async function (interaction) {
         const url = interaction.options.getString(LANG.commands.checktcp.options.ip.name);
-        try { new URL(url) } catch { return interaction.reply(LANG.commands.checktcp.invalidUrlError) };
+        if (!isValidHostname(url)) {
+            return await interaction.reply(LANG.commands.checktcp.invalidUrlError);
+        }
         const request = await CheckHostRequest.get(CHECK_TCP, url, 40);
         const msg = await interaction.reply(LANG.common.message.checking);
         const resultMap = await request.checkResult();

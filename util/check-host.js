@@ -299,6 +299,22 @@ const CHECK_TCP = {
     }
 }
 
+// util
+
+const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
+
+function isValidHostname(str) {
+    if (!ipv4Regex.test(str)) {
+        try {
+            new URL(str);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+    return true;
+}
+
 module.exports = {
     CheckHostRequest,
     CheckPingResult,
@@ -307,5 +323,6 @@ module.exports = {
     CheckTcpResult,
     CheckTcpOk,
     CheckTcpError,
-    CHECK_TCP
+    CHECK_TCP,
+    isValidHostname
 };
