@@ -2,7 +2,6 @@ const { SlashCommandBuilder, CommandInteraction } = require('discord.js');
 const { LANG, strFormat } = require('../util/languages');
 const { CheckHostRequest, CHECK_PING, CheckPingOk } = require('../util/check-host');
 const { formatTable } = require('../util/strings');
-const axios = require('axios').default;
 
 const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
 
