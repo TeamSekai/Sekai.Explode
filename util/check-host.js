@@ -132,7 +132,7 @@ class CheckHostRequest {
             for (const [key, value] of Object.entries(res.data)) {
                 result.set(await getCheckHostNode(key), this.checkType.castResult(value));
             }
-            if (result.ok() >= successThreshold) {
+            if (result.ok() + result.error() >= successThreshold) {
                 break;
             }
         }
