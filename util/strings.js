@@ -11,6 +11,7 @@
  * @param {FormatTableOption} options オプション
  */
 function formatTable(table, options = {}) {
+    table = table.map(row => row.map(cell => String(cell)));
     const /** @type {number[]} */ maxWidths = [];
     for (const row of table) {
         const length = row.length;
