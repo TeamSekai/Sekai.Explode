@@ -1,6 +1,6 @@
 // @ts-check
 
-const { GuildMember, User } = require('discord.js');
+const { GuildMember, User, BaseInteraction } = require('discord.js');
 const { useQueue, Track, GuildQueue, useMainPlayer, Player } = require('discord-player');
 const { Collection } = require('mongoose');
 const Timespan = require('./timespan');
@@ -16,6 +16,7 @@ const mongodb = require('../internal/mongodb');
  * @typedef {Object} GuildQueueSchema guild_queue コレクションのドキュメント
  * @property {string} _id ギルド ID
  * @property {string | null} voiceChannel キューのボイスチャンネルの ID
+ * @property {boolean} is_paused 一時停止中か
  * @property {ReturnType<typeof Track.prototype.serialize> | null} current_track このキューの現在の曲
  * @property {number | null} current_time 曲の現在の再生位置 (ミリ秒)
  * @property {string | null} textChannel コマンドが実行されたテキストチャンネルの ID
@@ -38,10 +39,10 @@ const mongodb = require('../internal/mongodb');
  */
 
 /**
- * データベースから読み出したドキュメントを元にキューの再生を再開する。
+ * データベースから読み出したドキュメントを元にキューの復元する。
  * @param {Player} player
  * @param {GuildQueueSchema} guildQueueDocument
- * @returns キューの再生が再開されたか
+ * @returns キューが復元されたか
  */
 async function restoreQueue(player, guildQueueDocument) {
     const currentTrackSerialized = guildQueueDocument.current_track;
@@ -53,7 +54,8 @@ async function restoreQueue(player, guildQueueDocument) {
 
     const client = player.client;
     const voiceChannel = await client.channels.fetch(voiceChannelId);
-    if (voiceChannel == null || !voiceChannel.isVoiceBased() || voiceChannel.members.size == 0) {
+    const isPaused = guildQueueDocument.is_paused;
+    if (voiceChannel == null || !voiceChannel.isVoiceBased() || (!isPaused && voiceChannel.members.size == 0)) {
         return false;
     }
 
@@ -74,10 +76,15 @@ async function restoreQueue(player, guildQueueDocument) {
     await queue.connect(voiceChannelId);
     await queue.play(currentTrack, {
         audioPlayerOptions: {
-            seek: currentTime
+            seek: currentTime,
         },
-        nodeOptions
+        nodeOptions: {
+            ...nodeOptions
+        }
     });
+    if (guildQueueDocument.is_paused) {
+        queue.dispatcher?.on('start', resource => resource.audioPlayer?.pause());
+    }
     queue.addTrack(await functions.getSavedTracks(player, guild.id));
     return true;
 }
@@ -89,7 +96,7 @@ const functions = {
 
     /**
      * 対話を起こしたメンバーが接続していて、この bot が参加しているか参加できるボイスチャンネルの ID を取得する。
-     * @param {import('discord.js').Interaction} interaction 対話オブジェクト
+     * @param {BaseInteraction} interaction 対話オブジェクト
      * @returns メンバーが接続しているボイスチャンネルの ID。この bot が接続できる状態にない場合は null
      */
     getPlayableVoiceChannelId(interaction) {
@@ -108,7 +115,7 @@ const functions = {
 
     /**
      * 対話が起こったサーバーで再生されている楽曲のキューを取得する。
-     * @param {import("discord.js").Interaction} interaction 対話オブジェクト
+     * @param {BaseInteraction} interaction 対話オブジェクト
      * @returns 楽曲を再生している場合、楽曲のキュー。再生していない場合、null
      */
     getPlayingQueue(interaction) {
@@ -116,7 +123,7 @@ const functions = {
         if (guildId == null) {
             return null;
         }
-        const queue = useQueue(guildId);
+        const queue = /** @type {GuildQueue<QueueMetadata>} */ (useQueue(guildId));
         if (queue?.isPlaying())
             return queue;
 
@@ -217,6 +224,7 @@ const functions = {
         await guildQueueCollection.insertOne({
             _id: guild,
             voiceChannel: queue.channel?.id ?? null,
+            is_paused: queue.node.isPaused(),
             current_track: queue.currentTrack?.serialize() ?? null,
             current_time: queue.node.estimatedPlaybackTime,
             textChannel: metadata.channel?.id ?? null,

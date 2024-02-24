@@ -422,6 +422,12 @@
             "greatGoodLuck": "大吉",
             "assertionError": "エラー(function result: ${0}) - ボットが燃えました"
         },
+        "pause": {
+            "name": "pause",
+            "description": "音楽を一時停止します。",
+            "playerPaused": "音楽を一時停止しました！",
+            "pauseFailed": "一時停止できませんでした"
+        },
         "pieChart": {
             "name": "piechart",
             "description": "円グラフを生成します。",
