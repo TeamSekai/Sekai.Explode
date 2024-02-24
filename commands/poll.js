@@ -20,11 +20,10 @@ module.exports = {
 	execute: async function (interaction) {
 		await interaction.deferReply();
 		const { channel } = await interaction;
-		const options = await interaction.options.data();
+		const options = await interaction.options.data;
 		const emojis=['1⃣','2⃣','3⃣','4⃣','5⃣','6⃣','7⃣','8⃣','9⃣','🔟'];
 		const poll = new EmbedBuilder()
 		poll.setColor(0x2aa198)
-		poll.setTitle(options.title)
 		for(let i=1;i<options.length;i++){
 			const emoji=emojis[i-1];
 			const option = options[i];
@@ -37,8 +36,6 @@ module.exports = {
 			const emoji=emojis[i-1];
 			await message.react(emoji);
 		};
-		const completedMessage=await interaction.editReply('<:owo_megumin:1199672472476340316> 作成しました！');
-		await setTimeout(3000);
-        await completedMessage.delete();
+		return await interaction.editReply(`**${options[0].value}**`);
 	},
 };
