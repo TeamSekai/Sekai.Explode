@@ -1,8 +1,9 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { LANG } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
+		//TODO: i18n support
 		.setName('poll')
 		.setDescription('soon')
 		.addStringOption(option=>option.setName('title').setDescription('Pollのタイトル').setRequired(true))
@@ -20,7 +21,24 @@ module.exports = {
 		await interaction.deferReply();
 		const { channel } = await interaction;
 		const options = await interaction.options.data();
-		await interaction.editReply('soon')
-		// await interaction.reply(LANG.commands.poll.message)
-	}
+		const emojis=['1⃣','2⃣','3⃣','4⃣','5⃣','6⃣','7⃣','8⃣','9⃣','🔟'];
+		const poll = new EmbedBuilder()
+		poll.setColor(0x2aa198)
+		poll.setTitle(options.title)
+		for(let i=1;i<options.length;i++){
+			const emoji=emojis[i-1];
+			const option = options[i];
+			poll.addFields({name:`${emoji} **${option.value}**`,value:' '});
+		};
+		poll.setTimestamp();
+		poll.setFooter({text:`Sekai.Explode - (Poll Created by ${interaction.user.displayName})`,iconURL:"https://github.com/TeamSekai/Sekai.Explode/raw/v14-dev/assets/images/icon.webp"});
+		const message=await channel.send({embeds:[poll]});
+		for(let i=1;i<options.length;i++){
+			const emoji=emojis[i-1];
+			await message.react(emoji);
+		};
+		const completedMessage=await interaction.editReply('<:owo_megumin:1199672472476340316> 作成しました！');
+		await setTimeout(3000);
+        await completedMessage.delete();
+	},
 };
