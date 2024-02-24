@@ -36,6 +36,6 @@ module.exports = {
 			const emoji=emojis[i-1];
 			await message.react(emoji);
 		};
-		return await interaction.editReply(`${options[0].value}`);
+		return await interaction.editReply(`**${options[0].value}**`);
 	},
 };
