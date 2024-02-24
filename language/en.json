@@ -422,6 +422,12 @@
             "greatGoodLuck": "Great good luck",
             "assertionError": "Error(function result: ${0}) - The bot has gone up into flames"
         },
+        "pause": {
+            "name": "pause",
+            "description": "Pauses the player",
+            "playerPaused": "Paused the player!",
+            "pauseFailed": "Failed to pause the player"
+        },
         "pieChart": {
             "name": "piechart",
             "description": "Generates a pie chart.",
@@ -488,6 +494,12 @@
                 "description": "Minimum value: ${min}, Maximum value: ${max}",
                 "footer": "Executed by: ${0}"
             }
+        },
+        "resume": {
+            "name": "resume",
+            "description": "Resumes the player",
+            "playerResumed": "Resuming the player!",
+            "resumeFailed": "Failed to resume the player"
         },
         "skip": {
             "name": "skip",
