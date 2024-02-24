@@ -192,13 +192,13 @@ const functions = {
         const volume = await functions.loadVolumeSetting(guild);
         return {
             metadata,
-            bufferingTimeout: 15000,
+            bufferingTimeout: 15_000,
             leaveOnStop: true,
-            leaveOnStopCooldown: 5000,
+            leaveOnStopCooldown: 5_000,
             leaveOnEnd: true,
-            leaveOnEndCooldown: 15000,
+            leaveOnEndCooldown: 15_000,
             leaveOnEmpty: true,
-            leaveOnEmptyCooldown: 1000, // 300_000 に戻す
+            leaveOnEmptyCooldown: 300_000,
             volume
         }
     },
