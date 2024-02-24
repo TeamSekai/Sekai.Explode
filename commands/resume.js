@@ -1,14 +1,14 @@
 // @ts-check
 
-const { SlashCommandBuilder } = require("discord.js");
-const { LANG } = require("../util/languages");
-const { getPlayableVoiceChannelId, getPlayingQueue } = require("../util/players");
+const { SlashCommandBuilder } = require('discord.js');
+const { LANG } = require('../util/languages');
+const { getPlayableVoiceChannelId, getPlayingQueue } = require('../util/players');
 
 /** @type {import("../util/types").Command} */
-const commandPause = {
+const commandResume = {
     data: new SlashCommandBuilder()
-        .setName(LANG.commands.pause.name)
-        .setDescription(LANG.commands.pause.description),
+        .setName(LANG.commands.resume.name)
+        .setDescription(LANG.commands.resume.description),
 
     async execute(interaction) {
         if (getPlayableVoiceChannelId(interaction) == null) {
@@ -22,13 +22,13 @@ const commandPause = {
             return;
         }
 
-        const success = queue.node.pause();
+        const success = queue.node.resume();
         if (success) {
-            await interaction.reply(LANG.commands.pause.playerPaused);
+            await interaction.reply(LANG.commands.resume.playerResumed);
         } else {
-            await interaction.reply(LANG.commands.pause.pauseFailed);
+            await interaction.reply(LANG.commands.resume.resumeFailed);
         }
     }
 };
 
-module.exports = commandPause;
+module.exports = commandResume;
