@@ -422,6 +422,12 @@
             "greatGoodLuck": "大吉",
             "assertionError": "エラー(関数の結果: ${0}) - ボットが燃えました"
         },
+        "pause": {
+            "name": "pause",
+            "description": "音楽を一時停止します。",
+            "playerPaused": "音楽を一時停止しました！",
+            "pauseFailed": "一時停止できませんでした"
+        },
         "pieChart": {
             "name": "piechart",
             "description": "円グラフを生成します。",
@@ -488,6 +494,12 @@
                 "description": "最小値: ${min}, 最大値: ${max}",
                 "footer": "実行者: ${0}"
             }
+        },
+        "resume": {
+            "name": "resume",
+            "description": "音楽の再生を再開します",
+            "playerResumed": "音楽を再生します！",
+            "resumeFailed": "音楽を再生できませんでした"
         },
         "skip": {
             "name": "skip",

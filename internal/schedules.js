@@ -7,10 +7,14 @@ const { LANG } = require('../util/languages');
 const closeListeners = [];
 
 async function shutdown() {
-    await Promise.all([
-        ...closeListeners.map(closeListener => closeListener()),
-        setTimeout(5000)
-    ]);
+    try {
+        await Promise.race([
+            Promise.all(closeListeners.map(closeListener => closeListener())),
+            setTimeout(5000)
+        ]);
+    } catch (e) {
+        console.error(e);
+    }
     console.log(LANG.internal.schedules.processExiting);
     process.exit(0);
 }
