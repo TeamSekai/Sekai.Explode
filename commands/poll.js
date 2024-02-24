@@ -20,7 +20,7 @@ module.exports = {
 	execute: async function (interaction) {
 		await interaction.deferReply();
 		const { channel } = await interaction;
-		const options = await interaction.options.data();
+		const options = await interaction.options.data;
 		const emojis=['1⃣','2⃣','3⃣','4⃣','5⃣','6⃣','7⃣','8⃣','9⃣','🔟'];
 		const poll = new EmbedBuilder()
 		poll.setColor(0x2aa198)
