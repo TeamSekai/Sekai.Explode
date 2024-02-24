@@ -2,26 +2,14 @@
 
 const { SlashCommandBuilder } = require("discord.js");
 const { LANG } = require("../util/languages");
-const { getPlayableVoiceChannelId, getPlayingQueue } = require("../util/players");
+const { PlayerCommand } = require("../common/PlayerCommand");
 
-/** @type {import("../util/types").Command} */
-const commandPause = {
-    data: new SlashCommandBuilder()
+module.exports = new PlayerCommand(
+    new SlashCommandBuilder()
         .setName(LANG.commands.pause.name)
         .setDescription(LANG.commands.pause.description),
 
-    async execute(interaction) {
-        if (getPlayableVoiceChannelId(interaction) == null) {
-            await interaction.reply({ content: LANG.common.message.notPlayableError, ephemeral: true });
-            return;
-        }
-
-        const queue = getPlayingQueue(interaction);
-        if (!queue) {
-            await interaction.reply({ content: LANG.common.message.noTracksPlayed, ephemeral: true });
-            return;
-        }
-
+    async function(interaction, queue) {
         const success = queue.node.pause();
         if (success) {
             await interaction.reply(LANG.commands.pause.playerPaused);
@@ -29,6 +17,4 @@ const commandPause = {
             await interaction.reply(LANG.commands.pause.pauseFailed);
         }
     }
-};
-
-module.exports = commandPause;
+);

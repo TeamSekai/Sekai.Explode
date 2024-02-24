@@ -1,21 +1,18 @@
+// @ts-check
+
 const { SlashCommandBuilder } = require('discord.js');
 const Pager = require('../util/pager');
-const { getPlayableVoiceChannelId, getPlayingQueue, getDuration } = require('../util/players');
+const { getDuration } = require('../util/players');
 const Timespan = require('../util/timespan');
 const { LANG, strFormat } = require('../util/languages');
+const { PlayerCommand } = require('../common/PlayerCommand');
 
-module.exports = {
-    data: new SlashCommandBuilder()
+module.exports = new PlayerCommand(
+    new SlashCommandBuilder()
         .setName(LANG.commands.queue.name)
         .setDescription(LANG.commands.queue.description),
-    execute: async function (interaction) {
-        if (getPlayableVoiceChannelId(interaction) == null)
-            return await interaction.reply({ content: LANG.common.message.notPlayableError, ephemeral: true });
 
-        const queue = getPlayingQueue(interaction);
-        if (!queue)
-            return await interaction.reply({ content: LANG.common.message.noTracksPlayed, ephemeral: true });
-
+    async function(interaction, queue) {
         const queuedTracks = queue.tracks.toArray();
         const tracks = queuedTracks.map((track, idx) => strFormat(LANG.commands.queue.queueItem, {
             index: '**' + strFormat(LANG.commands.queue.queueIndex, [idx + 1]) + '**',
@@ -43,5 +40,5 @@ module.exports = {
             })
         })
         pager.replyTo(interaction);
-    },
-};
+    }
+);
