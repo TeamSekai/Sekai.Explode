@@ -16,7 +16,7 @@ const { onShutdown } = require('./internal/schedules');
 const activity = require('./internal/activity');
 const mongodb = require('./internal/mongodb');
 
-const { getDuration } = require('./util/players');
+const { getDuration, saveQueue, deleteSavedQueues, restoreQueues } = require('./util/players');
 const { LANG, strFormat } = require('./util/languages');
 
 const creset = '\x1b[0m';
@@ -105,14 +105,23 @@ client.on('ready', async () => {
 	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
 	let SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
+	restoreQueues(player);
 });
 
 
 onShutdown(async () => {
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
 	await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
-	await client.destroy();
-	console.log(cgreen + LANG.discordbot.shutdown.loggedOut + creset);
+	console.log('Saving queues');
+	for (const [ guildId, queue ] of player.nodes.cache) {
+		console.log(guildId);
+		await saveQueue(queue);
+	}
+	await player.destroy();
+	await Promise.all([
+		client.destroy().then(() => console.log(cgreen + LANG.discordbot.shutdown.loggedOut + creset)),
+		mongodb.connection.close()
+	]);
 });
 
 
@@ -246,6 +255,9 @@ player.events.on('playerStart', (queue, track) => {
 		}]
 	})
 });
+
+player.events.on('playerFinish', queue => deleteSavedQueues(queue.guild.id));
+player.events.on('queueDelete', queue => deleteSavedQueues(queue.guild.id));
 
 player.on("error", () => console.log(LANG.discordbot.playerError.message));
 
