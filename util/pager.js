@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, BaseInteraction } = require('discord.js');
 
 /**
  * @typedef {Object} OptionSet Pager のコンストラクタに渡すことができるオプション
@@ -230,7 +230,7 @@ class Pager {
 
     /**
      * この Pager をリプライとして表示する。
-     * @param {import("discord.js").Interaction<import("discord.js").CacheType} interaction 対話オブジェクト
+     * @param {BaseInteraction} interaction 対話オブジェクト
      */
     async replyTo(interaction) {
         if (!interaction.isRepliable()) {
