@@ -627,6 +627,12 @@
             "volumeSet": "Set the volume to ${0}!",
             "volumeSave": "Set the volume to ${0} as the default value of the server!",
             "error": "An error occurred"
+        },
+		"poll": {
+            "name": "poll",
+            "description": "Create a new poll.",
+            "polltitle": "Type your title!",
+			"pollchoices": "Type your choices..."
         }
     }
 }
