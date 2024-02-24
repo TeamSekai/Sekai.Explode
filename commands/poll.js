@@ -24,7 +24,7 @@ module.exports = {
 		const emojis=['1⃣','2⃣','3⃣','4⃣','5⃣','6⃣','7⃣','8⃣','9⃣','🔟'];
 		const poll = new EmbedBuilder()
 		poll.setColor(0x2aa198)
-		poll.setTitle(options.title)
+		poll.setTitle(`${options[0].value}`)
 		for(let i=1;i<options.length;i++){
 			const emoji=emojis[i-1];
 			const option = options[i];
