@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, CommandInteraction } = require('discord.js');
 const { useMainPlayer, QueryType, Track } = require('discord-player');
-const { getPlayableVoiceChannelId, getDuration, loadVolumeSetting } = require('../util/players');
+const { getPlayableVoiceChannelId, getDuration, play, deleteSavedQueues } = require('../util/players');
 const { LANG, strFormat } = require('../util/languages');
 const Timespan = require('../util/timespan');
 // const ytdl = require('ytdl-core'); さよなら!!!
@@ -28,32 +28,20 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const vol = await loadVolumeSetting(interaction.guildId);
-
             const searchResult = await player.search(query, { requestedBy: interaction.user, searchEngine: QueryType.AUTO });
 
             if (!searchResult || searchResult.tracks.length == 0 || !searchResult.tracks) {
                 return interaction.followUp(LANG.commands.play.notFound);
             }
-            const res = await player.play(voiceChannelId, searchResult, {
-                nodeOptions: {
-                    metadata: {
-                        channel: interaction.channel,
-                        client: interaction.guild.members.me,
-                        requestedBy: interaction.user,
-                    },
-                    // volume: 5,
-                    bufferingTimeout: 15000,
-                    leaveOnStop: true,
-                    leaveOnStopCooldown: 5000,
-                    leaveOnEnd: true,
-                    leaveOnEndCooldown: 15000,
-                    leaveOnEmpty: true,
-                    leaveOnEmptyCooldown: 300000,
-                    skipOnNoStream: true,
-                    volume: vol
-                },
-            });
+            await deleteSavedQueues(interaction.guildId);
+            const res = await play(
+                interaction.guildId, voiceChannelId, searchResult,
+                /** @type {import('../util/players').QueueMetadata} */({
+                    channel: interaction.channel,
+                    client: interaction.guild.members.me,
+                    requestedBy: interaction.user,
+                })
+            );
 
             const message = toTrackAddedMessage(res.track);
 
