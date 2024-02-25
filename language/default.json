@@ -344,6 +344,13 @@
                 "footer": "Sekai.Explode"
             }
         },
+        "nyanpass": {
+            "name": "nyanpass",
+            "description": "にゃんぱすーカウントを取得",
+            "title": "にゃんぱすーカウント",
+            "footer": "${0} 時点",
+            "button": "にゃんぱすーボタン"
+        },
         "nettool": {
             "name": "net_tool",
             "description": "ネットワーク関連のコマンド",

@@ -344,6 +344,13 @@
                 "footer": "Sekai.Explode"
             }
         },
+        "nyanpass": {
+            "name": "nyanpass",
+            "description": "Gets Nyanpass count",
+            "title": "Nyanpass Count",
+            "footer": "as of ${0}",
+            "button": "Nyanpass Button"
+        },
         "nettool": {
             "name": "net_tool",
             "description": "A command related with networks",
