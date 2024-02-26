@@ -6,7 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
 		//TODO: i18n
         .setName('follow_announcements')
-        .setDescription('Sekai.Explode開発者からのアナウンスを受信します!')
+        .setDescription('Sekai.Explodeの最新情報をフォローします!')
 		.addChannelOption(option => option
 			.setName('channel')
 			.setDescription('受信するチャンネルを指定します。')
