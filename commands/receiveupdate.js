@@ -12,9 +12,9 @@ module.exports = {
 			.addChannelTypes(ChannelType.GuildText)
 			.setRequired(true)
 		),
-    execute: async function (interaction) {
+    execute: async function (interaction, client) {
 		const targetchannel = interaction.options.getChannel('channel');
-		targetchannel.addFollower('1211685593025609749', `${interaction.user.displayName} created announcements!`)
+		client.channels.resolve("1211685593025609749").addFollower(targetchannel.id)
 			.then(() =>
 				console.log(`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`),
 				interaction.reply(`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`)

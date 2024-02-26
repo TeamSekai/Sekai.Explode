@@ -134,7 +134,7 @@ client.on("interactionCreate", async interaction => {
 		return;
 	}
 	try {
-		await command.execute(interaction);
+		await command.execute(interaction, client);
 	} catch (error) {
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ content: LANG.discordbot.interactionCreate.commandError, ephemeral: true });
