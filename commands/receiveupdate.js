@@ -14,13 +14,14 @@ module.exports = {
 		),
     execute: async function (interaction) {
 		const targetchannel = interaction.options.getChannel('channel');
-		try {
-			await targetchannel.addFollower('1211685593025609749', `${interaction.user.displayName} created announcements!`)
-			console.log(`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`)
-		} catch (e) {
-			console.log(e)
-			return await interaction.reply(`失敗しました！エラー: ${e}`)
-		}
-		return await interaction.reply(`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`)
+		targetchannel.addFollower('1211685593025609749', `${interaction.user.displayName} created announcements!`)
+			.then(() =>
+				console.log(`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`),
+				interaction.reply(`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`)
+			)
+			.catch(
+				console.log(e),
+				interaction.reply(`失敗しました！エラー: ${e}`)
+			)
     }
 };
