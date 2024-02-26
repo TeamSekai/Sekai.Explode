@@ -15,7 +15,7 @@ module.exports = {
 		),
     execute: async function (interaction, client) {
 		const targetchannel = interaction.options.getChannel('channel');
-		client.channels.resolve("1211685593025609749").addFollower(targetchannel.id) //TODO: config.jsonで編集可能に?
+		client.channels.resolve("1211695901760819281").addFollower(targetchannel.id) //TODO: config.jsonで編集可能に?
 			.then(() =>
 				console.log(`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`),
 				interaction.reply(`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`)
