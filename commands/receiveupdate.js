@@ -4,11 +4,11 @@ const { LANG } = require('../util/languages');
 // いいかんじに
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName(LANG.commands.version.name)
-        .setDescription(LANG.commands.version.description)
+        .setName('follow_announcements')
+        .setDescription('Sekai.Explode開発者からのアナウンスを受信します!')
 		.addChannelOption(option => option
 			.setName('channel')
-			.setDescription('チャンネルを指定します。')
+			.setDescription('受信するチャンネルを指定します。')
 			.addChannelTypes(ChannelType.GuildText)
 			.setRequired(true)
 		),
