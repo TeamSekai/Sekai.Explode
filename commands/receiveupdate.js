@@ -17,7 +17,10 @@ module.exports = {
 		try {
 			await targetchannel.addFollower('1211685593025609749', `${interaction.user.displayName} created announcements!`)
 			console.log(`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`)
-		} catch (e) { console.log(e) }
+		} catch (e) {
+			console.log(e)
+			return await interaction.reply(`失敗しました！エラー: ${e}`)
+		}
 		return await interaction.reply(`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`)
     }
 };
