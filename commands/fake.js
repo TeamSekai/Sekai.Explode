@@ -15,7 +15,7 @@ module.exports = [
             .setName(LANG.commands.fake.hackAdmin.name)
             .setDescription(LANG.commands.fake.hackAdmin.description),
         execute: async function (interaction) {
-            await interaction.reply(strFormat(LANG.commands.fake.hackAdmin.message, `[${LANG.commands.fake.hackAdmin.linkText}](${rickurl})`));
+            await interaction.reply(strFormat(LANG.commands.fake.hackAdmin.message, [`[${LANG.commands.fake.hackAdmin.linkText}](${rickurl})`]));
         },
     }
 ];

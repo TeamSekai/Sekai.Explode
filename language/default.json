@@ -344,6 +344,13 @@
                 "footer": "Sekai.Explode"
             }
         },
+        "nyanpass": {
+            "name": "nyanpass",
+            "description": "にゃんぱすーカウントを取得",
+            "title": "にゃんぱすーカウント",
+            "footer": "${0} 時点",
+            "button": "にゃんぱすーボタン"
+        },
         "nettool": {
             "name": "net_tool",
             "description": "ネットワーク関連のコマンド",
@@ -628,10 +635,11 @@
             "volumeSave": "サーバーの規定値として音量を${0}に設定しました!",
             "error": "うわーん！吐血しちゃったよぉ..."
         },
-		"result": {
-            "title": "awa",
-            "url": "a",
-            "clickToCopy": "a"
+		"poll": {
+            "name": "poll",
+            "description": "pollを作成します。",
+            "polltitle": "Pollのタイトル",
+			"pollchoices": "選択肢を入力..."
         }
     }
 }
