@@ -1,3 +1,5 @@
+// @ts-check
+
 const path = require('path');
 const config = require('../config.json');
 const LANG = require('../language/default.json');
@@ -30,17 +32,13 @@ class FormatSyntaxError extends SyntaxError {
     }
 }
 
-// enum like in Java?!
-/**
- * @enum {State} format 関数で用いる有限オートマトンの状態。
- */
-class State {
-    constructor() {}
-    static PLAIN = new State();
-    static ESCAPED = new State();
-    static AFTER_DOLLAR = new State();
-    static IN_PLACEHOLDER = new State();
-}
+/** @enum {number} format 関数で用いる有限オートマトンの状態。 */
+const State = {
+    PLAIN: 0,
+    ESCAPED: 1,
+    AFTER_DOLLAR: 2,
+    IN_PLACEHOLDER: 3
+};
 
 /**
  * 文字列中のプレースホルダを指定された値で置き換える。
@@ -60,9 +58,9 @@ class State {
  * ```
  * 
  * @param {string} str 文字列のフォーマット
- * @param {Object=} values プレースホルダを置き換える値
+ * @param {Object=} map プレースホルダを置き換える値
  */
-function strFormat(str, values) {
+function strFormat(str, map) {
     let result = '';
     let placeholder = '';
 
@@ -99,7 +97,7 @@ function strFormat(str, values) {
                 break;
             case State.IN_PLACEHOLDER:
                 if (c == '}') {
-                    result += values?.[placeholder.trim()];
+                    result += map?.[placeholder.trim()];
                     placeholder = '';
                     state = State.PLAIN;
                 } else {
