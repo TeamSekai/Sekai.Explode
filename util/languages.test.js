@@ -51,4 +51,6 @@ test('strFormat', () => {
     expect(strFormat("ab\\")).toBe("ab\\");
     expect(strFormat("ab\\c")).toBe("ab\\c");
     expect(() => strFormat("abc${key")).toThrow(FormatSyntaxError);
+    expect(strFormat("text ${0} abc", [123])).toBe("text 123 abc");
+    expect(strFormat("text ${0} abc", 123)).toBe("text 123 abc");
 });

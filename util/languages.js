@@ -44,23 +44,30 @@ const State = {
  * 文字列中のプレースホルダを指定された値で置き換える。
  * 
  * `str` は `"${"` と `"}"` に囲まれたプレースホルダを含むことができる。
- * 文字列 `placeholder` について、 `str` 中の `"${" + placeholder + "}"` は
+ * 文字列 `placeholder` について、
+ * values の要素数が 1 であり、その要素が Object であるとき、
+ * `str` 中の `"${" + placeholder + "}"` は
+ * `values[0]?.[placeholder.trim()]` に置き換えられる。
+ * values の要素が複数個であるか、Object でない要素が含まれるとき、
  * `values?.[placeholder.trim()]` に置き換えられる。
  * ただし、`placeholder.trim()` は `placeholder` の先頭と末尾の空白文字を除いた文字列である。
  * プレースホルダ外において、`"\\\\""`, `"\\$", `"\\{" はそれぞれ `"\\"`, `"$"`, `"{"` に置き換えられる。
  * 
  * 例:
  * ```
- * format("text ${a} abc", { a: 123 });    // == "text 123 abc"
- * format("text ${ a } abc", { a: 123 });  // == "text 123 abc"
- * format("text \\${a} abc", { a: 123 });  // == "text ${a} abc"
- * format("text $\\{a} abc", { a: 123 });  // == "text ${a} abc"
+ * strFormat("text ${a} abc", { a: 123 });    // == "text 123 abc"
+ * strFormat("text ${ a } abc", { a: 123 });  // == "text 123 abc"
+ * strFormat("text \\${a} abc", { a: 123 });  // == "text ${a} abc"
+ * strFormat("text $\\{a} abc", { a: 123 });  // == "text ${a} abc"
+ * strFormat("text ${0} abc", [123]);         // == "text 123 abc"
+ * strFormat("text ${0} abc", 123);           // == "text 123 abc"
  * ```
  * 
  * @param {string} str 文字列のフォーマット
- * @param {Object=} map プレースホルダを置き換える値
+ * @param {unknown[]} values プレースホルダを置き換える値
  */
-function strFormat(str, map) {
+function strFormat(str, ...values) {
+    const map = toMap(values);
     let result = '';
     let placeholder = '';
 
@@ -113,6 +120,19 @@ function strFormat(str, map) {
         throw new FormatSyntaxError("Unexpected end of input; '}' expected")
 
     return result;
+}
+
+/**
+ * @param  {unknown[]} values
+ */
+function toMap(values) {
+    if (values.length == 0) {
+        return null;
+    }
+    if (values.length == 1 && values[0] instanceof Object) {
+        return values[0];
+    }
+    return values;
 }
 
 module.exports = { LANG, FormatSyntaxError, strFormat, assignDeep };
