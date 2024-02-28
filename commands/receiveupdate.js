@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, ChannelType, PermissionsBitField } = require('discord.js');
 const config = require('../config.json')
 const { LANG } = require('../util/languages');
 
@@ -14,6 +14,9 @@ module.exports = {
 			.setRequired(true)
 		),
     execute: async function (interaction, client) {
+		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+			return await interaction.reply('権限がありません!(管理者権限が必要です。)')
+		}
 		const targetchannel = interaction.options.getChannel('channel');
 		client.channels.resolve("1211695901760819281").addFollower(targetchannel.id) //TODO: config.jsonで編集可能に?
 			.then(() =>
