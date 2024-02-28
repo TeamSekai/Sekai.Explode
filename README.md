@@ -1,6 +1,6 @@
 # Sekai.explode - Simple Discord Bot w/discord.js@v14
 
-![Alt](https://repobeats.axiom.co/api/embed/311b4b48a85f36c1f2ded96d8cf8a8329860574c.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/b7fc33791d3233660e7c02524ace22c31b66e890.svg "Repobeats analytics image")
 
 
 ## What's this?
