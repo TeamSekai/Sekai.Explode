@@ -502,6 +502,46 @@
                 "footer": "実行者: ${0}"
             }
         },
+        "reply": {
+            "name": "reply",
+            "description": "自動応答をカスタマイズします。",
+            "subcommands": {
+                "add": {
+                    "name": "add",
+                    "description": "自動応答を追加します。",
+                    "options": {
+                        "message": {
+                            "name": "message",
+                            "description": "反応するメッセージ内容"
+                        },
+                        "reply": {
+                            "name": "reply",
+                            "description": "返信内容"
+                        },
+                        "perfectMatching": {
+                            "name": "perfect_matching",
+                            "description": "完全一致"
+                        },
+                        "regularExpression": {
+                            "name": "regexp",
+                            "description": "正規表現を用いる"
+                        }
+                    }
+                },
+                "remove": {
+                    "name": "remove",
+                    "description": "自動応答を削除します。",
+                    "options": {
+                        "name": "message",
+                        "description": "反応するメッセージ内容"
+                    }
+                },
+                "list": {
+                    "name": "list",
+                    "description": "自動応答の一覧を表示します。"
+                }
+            }
+        },
         "resume": {
             "name": "resume",
             "description": "音楽の再生を再開します",
