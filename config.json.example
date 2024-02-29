@@ -15,7 +15,7 @@
 	"cfPurgeUrl": "https://cdn.yourdomain.com/",
 	"AdminRoleID": "00000000000",
 	"AdminUserIDs": ["1063527758292070591", "1126422758696427552"],
-	"replyEditionAllowedUsers": ["00000000000","16326412825651210244096"],
+	"replyCustomizeAllowedUsers": ["00000000000","16326412825651210244096"],
 	"mongoDBhost": "127.0.0.1",
 	"mongoDBport": "27017",
 	"mongoDBuser": "admin",

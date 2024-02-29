@@ -120,7 +120,7 @@ const commandReply = {
  * @param {ChatInputCommandInteraction} interaction
  */
 async function checkPermission(interaction) {
-    if (!config.replyEditionAllowedUsers?.includes(interaction.user.id)) {
+    if (!config.replyCustomizeAllowedUsers?.includes(interaction.user.id)) {
         await interaction.reply({
             content: LANG.commands.reply.permissionError,
             ephemeral: true,
