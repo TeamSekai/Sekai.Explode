@@ -36,7 +36,6 @@ const { Collection } = require("mongoose");
  * @property {string} message 反応するメッセージ内容
  * @property {string} reply 返信内容
  * @property {boolean} perfectMatching 完全一致する必要があるか
- * @property {boolean} regularExpression 正規表現を用いるか
  */
 
 /** @type {Collection<ReplyGuildSchema>} */
@@ -110,7 +109,6 @@ class ReplyPattern {
             message: message,
             reply: this.reply,
             perfectMatching: this.perfectMatching,
-            regularExpression: false
         };
     }
 

@@ -28,11 +28,6 @@ const commandReply = {
                     option
                         .setName(LANG.commands.reply.subcommands.add.options.perfectMatching.name)
                         .setDescription(LANG.commands.reply.subcommands.add.options.perfectMatching.description)
-                        .setRequired(false))
-                .addBooleanOption(option =>
-                    option
-                        .setName(LANG.commands.reply.subcommands.add.options.regularExpression.name)
-                        .setDescription(LANG.commands.reply.subcommands.add.options.regularExpression.description)
                         .setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand

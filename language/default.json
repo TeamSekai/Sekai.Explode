@@ -528,10 +528,6 @@
                         "perfectMatching": {
                             "name": "perfect_matching",
                             "description": "完全一致"
-                        },
-                        "regularExpression": {
-                            "name": "regexp",
-                            "description": "正規表現を用いる"
                         }
                     },
                     "succeeded": "メッセージに対する応答を設定しました！",
