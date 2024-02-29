@@ -18,6 +18,7 @@ const mongodb = require('./internal/mongodb');
 
 const { getDuration, saveQueue, deleteSavedQueues, restoreQueues } = require('./util/players');
 const { LANG, strFormat } = require('./util/languages');
+const { ClientMessageHandler } = require('./internal/messages');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -88,8 +89,10 @@ const player = new Player(client);
 player.extractors.loadDefault();
 console.log(LANG.discordbot.main.setupActivityCalling);
 activity.setupActivity(client);
+/** @type {ClientMessageHandler | undefined} */
+let messageHandler;
 
-client.on('ready', async () => {
+client.on('ready', async (readyClient) => {
 	enableTempLinks();
 	console.log(strFormat(LANG.discordbot.ready.loggedIn, { cgreen, creset, tag: client.user.tag }));
 	client.user.setPresence({
@@ -106,6 +109,7 @@ client.on('ready', async () => {
 	let SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
 	restoreQueues(player);
+	messageHandler = new ClientMessageHandler(readyClient);
 });
 
 
@@ -152,10 +156,11 @@ client.login(token);
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
 
-	if (message.content.includes("それはそう")) {
-		message.reply("https://soreha.so/")
+	const done = await messageHandler?.handleMessage(message);
+	if (done) {
 		return;
 	}
+
     const urls = message.content.match(/https?:\/\/[^\s]+/g);
 
     if (urls) {
