@@ -38,11 +38,20 @@ const { Collection } = require("mongoose");
  * @property {boolean} perfectMatching 完全一致する必要があるか
  */
 
-/** @type {Collection<ReplyGuildSchema>} */
-const replyGuildCollection = mongodb.connection.collection('replyGuilds');
+/**
+ * @return {Collection<ReplyGuildSchema>}
+ */
+function getReplyGuildCollection() {
+    return mongodb.connection.collection('replyGuilds');
+}
 
-/** @type {Collection<ReplySchema>} */
-const replyCollection = mongodb.connection.collection('replies');
+/**
+ * @return {Collection<ReplySchema>}
+ */
+function getReplyCollection() {
+    return mongodb.connection.collection('replies');
+}
+
 
 /**
  * 自動応答のパターン。
@@ -192,7 +201,7 @@ class GuildMessageHandler {
             return false;
         }
         replyPatterns.set(replyPattern.message, replyPattern);
-        await replyCollection.insertOne(
+        await getReplyCollection().insertOne(
             replyPattern.serialize(this.client.user.id, this.guildId)
         );
         return true;
@@ -210,7 +219,7 @@ class GuildMessageHandler {
             return null;
         }
         replyPatterns.delete(message);
-        await replyCollection.deleteOne({
+        await getReplyCollection().deleteOne({
             client: this.client.user.id,
             guild: this.guildId,
             message,
@@ -303,6 +312,8 @@ const defaultReplyPatterns = [new ReplyPattern('それはそう', 'https://soreh
  * @param {string} guildId サーバー ID
  */
 async function loadReplies(clientUserId, guildId) {
+    const replyGuildCollection = getReplyGuildCollection();
+    const replyCollection = getReplyCollection();
     const replyGuildDocument = await replyGuildCollection.findOne({
         client: clientUserId,
         guild: guildId
