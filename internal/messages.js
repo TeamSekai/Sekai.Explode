@@ -125,8 +125,8 @@ class ReplyPattern {
 
     toString() {
         return strFormat(LANG.internal.messages.replyPattern, {
-            message: this.message,
-            reply: this.reply,
+            message: '`' + this.message + '`',
+            reply: '`' + this.reply + '`',
             perfectMatching: this.perfectMatching
                 ? LANG.internal.messages.perfectMatching.yes
                 : LANG.internal.messages.perfectMatching.no

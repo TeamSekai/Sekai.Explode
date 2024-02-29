@@ -64,7 +64,7 @@
             "presenceStateShuttingDown": "Sekai.explode is now shutting down..."
         },
         "messages": {
-            "replyPattern": "${message} -> ${reply}${perfectMatching}",
+            "replyPattern": "${message}: ${reply}${perfectMatching}",
             "perfectMatching": {
                 "yes": " (完全一致)",
                 "no": ""
