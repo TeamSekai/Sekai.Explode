@@ -20,16 +20,30 @@
 const { Client, Message } = require("discord.js");
 const axios = require('axios').default;
 const { strFormat, LANG } = require("../util/languages");
+const mongodb = require('./mongodb');
+const { Collection } = require("mongoose");
+
+/**
+ * @typedef {Object} ReplyGuildSchema replyGuilds のドキュメント。
+ * @property {string} client クライアントのユーザー ID
+ * @property {string} guild サーバー ID
+ */
 
 /**
  * @typedef {Object} ReplySchema replies コレクションのドキュメント。
- * @property {string} client
- * @property {string} guild
- * @property {string} message
- * @property {string} reply
- * @property {boolean} perfectMatching
- * @property {boolean} regularExpression
+ * @property {string} client クライアントのユーザー ID
+ * @property {string} guild サーバー ID
+ * @property {string} message 反応するメッセージ内容
+ * @property {string} reply 返信内容
+ * @property {boolean} perfectMatching 完全一致する必要があるか
+ * @property {boolean} regularExpression 正規表現を用いるか
  */
+
+/** @type {Collection<ReplyGuildSchema>} */
+const replyGuildCollection = mongodb.connection.collection('replyGuilds');
+
+/** @type {Collection<ReplySchema>} */
+const replyCollection = mongodb.connection.collection('replies');
 
 /**
  * 自動応答のパターン。
@@ -61,7 +75,7 @@ class ReplyPattern {
     constructor(messagePattern, reply, perfectMatching = false) {
         this.messagePattern = messagePattern;
         this.reply = reply;
-        this.perfectMatching = perfectMatching
+        this.perfectMatching = perfectMatching;
     }
 
     /**
@@ -99,6 +113,15 @@ class ReplyPattern {
             regularExpression: false
         };
     }
+
+    /**
+     * replies コレクションからのデータを ReplyPattern に変換する。
+     * @param {ReplySchema} replyDocument replies コレクションのドキュメント
+     */
+    static deserialize(replyDocument)  {
+        const { message, reply, perfectMatching } = replyDocument;
+        return new ReplyPattern(message, reply, perfectMatching);
+    }
 }
 
 /**
@@ -118,9 +141,9 @@ class GuildMessageHandler {
     guildId;
 
     /**
-     * @type {ReplyPattern[]}
+     * @type {Promise<ReplyPattern[]>}
      */
-    replyPatterns = [new ReplyPattern('それはそう', 'https://soreha.so/')];
+    replyPatternsPromise;
 
     /**
      * @param {Client<true>} client ログイン済みのクライアント
@@ -129,6 +152,7 @@ class GuildMessageHandler {
     constructor(client, guildId) {
         this.client = client;
         this.guildId = guildId;
+        this.replyPatternsPromise = loadReplies(client.user.id, guildId);
     }
 
     /**
@@ -138,7 +162,7 @@ class GuildMessageHandler {
      */
     async handleMessage(message) {
         const messageContent = message.content;
-        for (const replyPattern of this.replyPatterns) {
+        for (const replyPattern of await this.replyPatternsPromise) {
             const replyContent = replyPattern.apply(messageContent);
             if (replyContent != null) {
                 await message.reply(replyContent);
@@ -208,6 +232,39 @@ class ClientMessageHandler {
 
         await replyAlternativeUrl(message);
     }
+}
+
+const defaultReplyPatterns = [new ReplyPattern('それはそう', 'https://soreha.so/')];
+
+/**
+ * サーバーの自動応答パターンを取得する。
+ * @param {string} clientUserId クライアントのユーザー ID
+ * @param {string} guildId サーバー ID
+ */
+async function loadReplies(clientUserId, guildId) {
+    const replyGuildDocument = await replyGuildCollection.findOne({
+        client: clientUserId,
+        guild: guildId
+    });
+    if (replyGuildDocument == null) {
+        await replyGuildCollection.insertOne({
+            client: clientUserId,
+            guild: guildId
+        });
+        // デフォルトのパターンで初期化
+        await replyCollection.insertMany(defaultReplyPatterns.map(pattern =>
+            pattern.serialize(clientUserId, guildId)));
+    }
+    /** @type {ReplyPattern[]} */
+    const result = [];
+    const replyDocuments = replyCollection.find({
+        client: clientUserId,
+        guild: guildId
+    });
+    for await (const replyDocument of replyDocuments) {
+        result.push(ReplyPattern.deserialize(replyDocument));
+    }
+    return result;
 }
 
 /**
