@@ -197,6 +197,26 @@ class GuildMessageHandler {
         );
         return true;
     }
+
+    /**
+     * 自動応答のパターンを削除する。
+     * @param {string} message 反応するメッセージ内容
+     * @returns 削除した ReplyPattern または、存在しなかった場合 null
+     */
+    async removeReplyPattern(message) {
+        const replyPatterns = await this.replyPatternsPromise;
+        const replyPattern = replyPatterns.get(message);
+        if (replyPattern == null) {
+            return null;
+        }
+        replyPatterns.delete(message);
+        await replyCollection.deleteOne({
+            client: this.client.user.id,
+            guild: this.guildId,
+            message,
+        });
+        return replyPattern;
+    }
 }
 
 /**

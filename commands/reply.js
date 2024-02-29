@@ -35,8 +35,8 @@ const commandReply = {
                 .setDescription(LANG.commands.reply.subcommands.remove.description)
                 .addStringOption(option =>
                     option
-                        .setName(LANG.commands.reply.subcommands.remove.name)
-                        .setDescription(LANG.commands.reply.subcommands.remove.description)
+                        .setName(LANG.commands.reply.subcommands.remove.options.message.name)
+                        .setDescription(LANG.commands.reply.subcommands.remove.options.message.description)
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
@@ -57,7 +57,7 @@ const commandReply = {
         const guildMessageHandler = clientMessageHandler.getGuildMessageHandler(guild.id);
 
         switch (subcommand) {
-            case LANG.commands.reply.subcommands.add.name:
+            case LANG.commands.reply.subcommands.add.name: {
                 const replyPattern = new ReplyPattern(
                     interaction.options.getString(LANG.commands.reply.subcommands.add.options.message.name, true),
                     interaction.options.getString(LANG.commands.reply.subcommands.add.options.reply.name, true),
@@ -73,7 +73,23 @@ const commandReply = {
                     });
                 }
                 return;
-            case LANG.commands.reply.subcommands.remove.name:
+            }
+
+            case LANG.commands.reply.subcommands.remove.name: {
+                const replyPattern = await guildMessageHandler.removeReplyPattern(
+                    interaction.options.getString(LANG.commands.reply.subcommands.remove.options.message.name, true)
+                );
+                if (replyPattern != null) {
+                    await interaction.reply(LANG.commands.reply.subcommands.remove.succeeded + '\n' + replyPattern);
+                } else {
+                    await interaction.reply({
+                        content: LANG.commands.reply.subcommands.remove.doNotExist,
+                        ephemeral: true,
+                    });
+                }
+                return;
+            }
+
             case LANG.commands.reply.subcommands.list.name:
             default:
                 assert.fail(subcommand);

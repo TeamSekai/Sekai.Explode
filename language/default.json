@@ -537,9 +537,13 @@
                     "name": "remove",
                     "description": "自動応答を削除します。",
                     "options": {
-                        "name": "message",
-                        "description": "反応するメッセージ内容"
-                    }
+                        "message": {
+                            "name": "message",
+                            "description": "反応するメッセージ内容"
+                        }
+                    },
+                    "succeeded": "メッセージに対する応答を削除しました！",
+                    "doNotExist": "そのメッセージに対する応答は設定されていません！"
                 },
                 "list": {
                     "name": "list",
