@@ -217,6 +217,15 @@ class GuildMessageHandler {
         });
         return replyPattern;
     }
+
+    /**
+     * 自動応答のパターンを全て取得する。
+     * @returns {Promise<ReplyPattern[]>} {@link ReplyPattern} の配列
+     */
+    async getReplyPatterns() {
+        const replyPatterns = await this.replyPatternsPromise;
+        return [...replyPatterns.values()];
+    }
 }
 
 /**

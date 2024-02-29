@@ -4,6 +4,7 @@ const assert = require('assert');
 const { SlashCommandBuilder } = require("discord.js");
 const { LANG } = require("../util/languages");
 const { ClientMessageHandler, ReplyPattern } = require("../internal/messages");
+const Pager = require('../util/pager');
 
 /** @type {import("../util/types").Command} */
 const commandReply = {
@@ -90,7 +91,17 @@ const commandReply = {
                 return;
             }
 
-            case LANG.commands.reply.subcommands.list.name:
+            case LANG.commands.reply.subcommands.list.name: {
+                const replyPatterns = await guildMessageHandler.getReplyPatterns();
+                const pager = new Pager(replyPatterns.map(pattern => `- ${pattern}`), {
+                    title: '自動応答メッセージ',
+                    color: 'Green',
+                    emptyMessage: 'メッセージが設定されていません'
+                });
+                await pager.replyTo(interaction);
+                return;
+            }
+
             default:
                 assert.fail(subcommand);
         }
