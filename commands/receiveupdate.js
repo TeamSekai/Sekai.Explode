@@ -24,7 +24,7 @@ module.exports = {
 				console.log(`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`),
 				interaction.editReply(`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`)
 			)
-			.catch(
+			.catch((e) =>
 				console.log(`Something Went wrong. ${e}`),
 				interaction.editReply(`失敗しました！エラー: ${e}`)
 			)
