@@ -53,7 +53,7 @@ class ReplyPattern {
      * @readonly
      * @type {string}
      */
-    messagePattern;
+    message;
 
     /**
      * @readonly
@@ -73,7 +73,7 @@ class ReplyPattern {
      * @param {boolean=} perfectMatching 完全一致する必要があるか
      */
     constructor(messagePattern, reply, perfectMatching = false) {
-        this.messagePattern = messagePattern;
+        this.message = messagePattern;
         this.reply = reply;
         this.perfectMatching = perfectMatching;
     }
@@ -85,11 +85,11 @@ class ReplyPattern {
      */
     apply(message) {
         if (this.perfectMatching) {
-            if (message == this.messagePattern) {
+            if (message == this.message) {
                 return this.reply;
             }
         } else {
-            if (message.includes(this.messagePattern)) {
+            if (message.includes(this.message)) {
                 return this.reply;
             }
         }
@@ -103,11 +103,11 @@ class ReplyPattern {
      * @returns {ReplySchema}
      */
     serialize(clientUserId, guildId) {
-        const messagePattern = this.messagePattern;
+        const message = this.message;
         return {
             client: clientUserId,
             guild: guildId,
-            message: messagePattern,
+            message: message,
             reply: this.reply,
             perfectMatching: this.perfectMatching,
             regularExpression: false
@@ -125,7 +125,7 @@ class ReplyPattern {
 
     toString() {
         return strFormat(LANG.internal.messages.replyPattern, {
-            message: this.messagePattern,
+            message: this.message,
             reply: this.reply,
             perfectMatching: this.perfectMatching
                 ? LANG.internal.messages.perfectMatching.yes
@@ -189,11 +189,11 @@ class GuildMessageHandler {
      */
     async addReplyPattern(replyPattern) {
         const replyPatterns = await this.replyPatternsPromise;
-        const addingMessagePattern = replyPattern.messagePattern;
-        if (replyPatterns.has(addingMessagePattern)) {
+        const message = replyPattern.message;
+        if (replyPatterns.has(message)) {
             return false;
         }
-        replyPatterns.set(replyPattern.messagePattern, replyPattern);
+        replyPatterns.set(replyPattern.message, replyPattern);
         await replyCollection.insertOne(
             replyPattern.serialize(this.client.user.id, this.guildId)
         );
@@ -297,7 +297,7 @@ async function loadReplies(clientUserId, guildId) {
     });
     for await (const replyDocument of replyDocuments) {
         const replyPattern = ReplyPattern.deserialize(replyDocument);
-        result.set(replyPattern.messagePattern, replyPattern);
+        result.set(replyPattern.message, replyPattern);
     }
     return result;
 }
