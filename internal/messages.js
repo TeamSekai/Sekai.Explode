@@ -151,7 +151,7 @@ class GuildMessageHandler {
     guildId;
 
     /**
-     * @type {Promise<ReplyPattern[]>}
+     * @type {Promise<Map<string, ReplyPattern>>}
      */
     replyPatternsPromise;
 
@@ -172,7 +172,7 @@ class GuildMessageHandler {
      */
     async handleMessage(message) {
         const messageContent = message.content;
-        for (const replyPattern of await this.replyPatternsPromise) {
+        for (const replyPattern of (await this.replyPatternsPromise).values()) {
             const replyContent = replyPattern.apply(messageContent);
             if (replyContent != null) {
                 await message.reply(replyContent);
@@ -190,10 +190,10 @@ class GuildMessageHandler {
     async addReplyPattern(replyPattern) {
         const replyPatterns = await this.replyPatternsPromise;
         const addingMessagePattern = replyPattern.messagePattern;
-        if (replyPatterns.find(({ messagePattern }) => messagePattern == addingMessagePattern)) {
+        if (replyPatterns.has(addingMessagePattern)) {
             return false;
         }
-        replyPatterns.push(replyPattern);
+        replyPatterns.set(replyPattern.messagePattern, replyPattern);
         await replyCollection.insertOne(
             replyPattern.serialize(this.client.user.id, this.guildId)
         );
@@ -289,14 +289,15 @@ async function loadReplies(clientUserId, guildId) {
         await replyCollection.insertMany(defaultReplyPatterns.map(pattern =>
             pattern.serialize(clientUserId, guildId)));
     }
-    /** @type {ReplyPattern[]} */
-    const result = [];
+    /** @type {Map<string, ReplyPattern>} */
+    const result = new Map();
     const replyDocuments = replyCollection.find({
         client: clientUserId,
         guild: guildId
     });
     for await (const replyDocument of replyDocuments) {
-        result.push(ReplyPattern.deserialize(replyDocument));
+        const replyPattern = ReplyPattern.deserialize(replyDocument);
+        result.set(replyPattern.messagePattern, replyPattern);
     }
     return result;
 }
