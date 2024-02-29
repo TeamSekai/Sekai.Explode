@@ -63,6 +63,13 @@
             "presenceNameShuttingDown": "Shutting down...",
             "presenceStateShuttingDown": "Sekai.explode is now shutting down..."
         },
+        "messages": {
+            "replyPattern": "${message} -> ${reply}${perfectMatching}",
+            "perfectMatching": {
+                "yes": " (完全一致)",
+                "no": ""
+            }
+        },
         "mongodb": {
             "called": "Called mongodb internal system.",
             "dbConnecting": "[MongoDB] Connecting...",
@@ -526,7 +533,9 @@
                             "name": "regexp",
                             "description": "正規表現を用いる"
                         }
-                    }
+                    },
+                    "succeeded": "メッセージに対する応答を設定しました！",
+                    "alreadyExists": "そのメッセージに対する応答はすでに設定されています！"
                 },
                 "remove": {
                     "name": "remove",
@@ -540,7 +549,8 @@
                     "name": "list",
                     "description": "自動応答の一覧を表示します。"
                 }
-            }
+            },
+            "notInGuildError": "このコマンドはサーバー内でのみ使用できます！"
         },
         "resume": {
             "name": "resume",

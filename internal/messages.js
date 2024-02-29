@@ -122,6 +122,16 @@ class ReplyPattern {
         const { message, reply, perfectMatching } = replyDocument;
         return new ReplyPattern(message, reply, perfectMatching);
     }
+
+    toString() {
+        return strFormat(LANG.internal.messages.replyPattern, {
+            message: this.messagePattern,
+            reply: this.reply,
+            perfectMatching: this.perfectMatching
+                ? LANG.internal.messages.perfectMatching.yes
+                : LANG.internal.messages.perfectMatching.no
+        });
+    }
 }
 
 /**
@@ -171,12 +181,35 @@ class GuildMessageHandler {
         }
         return false;
     }
+
+    /**
+     * 自動応答のパターンを追加する。
+     * @param {ReplyPattern} replyPattern 自動応答のパターン
+     * @returns 新たに追加した場合は true
+     */
+    async addReplyPattern(replyPattern) {
+        const replyPatterns = await this.replyPatternsPromise;
+        const addingMessagePattern = replyPattern.messagePattern;
+        if (replyPatterns.find(({ messagePattern }) => messagePattern == addingMessagePattern)) {
+            return false;
+        }
+        replyPatterns.push(replyPattern);
+        await replyCollection.insertOne(
+            replyPattern.serialize(this.client.user.id, this.guildId)
+        );
+        return true;
+    }
 }
 
 /**
  * クライアントが受け取ったメッセージに対して処理を行うオブジェクト。
  */
 class ClientMessageHandler {
+    /**
+     * @type {ClientMessageHandler | null}
+     */
+    static instance = null;
+
     /**
      * @readonly
      * @type {Client<true>}
@@ -193,6 +226,7 @@ class ClientMessageHandler {
      */
     constructor(client) {
         this.client = client;
+        ClientMessageHandler.instance = this;
     }
 
     /**
