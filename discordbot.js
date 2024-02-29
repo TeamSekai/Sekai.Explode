@@ -137,9 +137,7 @@ client.login(token);
 
 
 
-client.on('messageCreate', async (message) => {
-	await messageHandler?.handleMessage(message);
-});
+client.on('messageCreate', (message) => messageHandler?.handleMessage(message));
 
 
 //!EVENTS

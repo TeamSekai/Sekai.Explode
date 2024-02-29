@@ -206,108 +206,124 @@ class ClientMessageHandler {
             return;
         }
 
-        await replyBetterEmbedUrl(message);
-    }
-}
-
-//!function
-async function getRedirectUrl(shortUrl) {
-    try {
-        const response = await axios.head(shortUrl, {
-			maxRedirects: 0,
-			 validateStatus: (status) => status == 301 || status == 302
-		});
-        const redirectUrl = response.headers.location;
-        console.log(LANG.discordbot.getRedirectUrl.redirectURL, redirectUrl);
-        return redirectUrl;
-    } catch (error) {
-        console.error(LANG.discordbot.getRedirectUrl.error, error.message);
-		return `${LANG.discordbot.getRedirectUrl.error} ${error.message}`
+        await replyAlternativeUrl(message);
     }
 }
 
 /**
- * TODO: 簡略化
- * vxtwitter.com, fxtwitter.com, vxtiktok.com の URL を返信する可能性がある。
+ * 動画の埋め込みに対応した vxtwitter.com, fxtwitter.com, vxtiktok.com の
+ * URL を返信する可能性がある。
  * @param {Message} message メッセージ
- * @returns {Promise<void>} メッセージに反応したかどうか
+ * @returns {Promise<void>}
  */
-async function replyBetterEmbedUrl(message) {
+async function replyAlternativeUrl(message) {
     const urls = message.content.match(/https?:\/\/[^\s]+/g);
-
-    if (urls) {
-        for (let url of urls) {
-            if (url.includes('twitter.com') || url.includes('x.com')) {
-                if (url.includes('vxtwitter.com') || url.includes('fxtwitter.com')) { //ignore vxtwitter.com and fxtwitter.com
-                    return;
-                }
-                await message.react('🔗'); // リアクションを追加
-
-                const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
-                const collector = message.createReactionCollector({ filter, time: 30000 });
-
-                collector.on('collect', async (reaction, user) => {
-                    const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
-                    let fxmsg = strFormat(LANG.discordbot.messageCreate.requestedBy, [user.username]) + `\n${modifiedURL}`;
-                    message.channel.send(fxmsg)
-                        .then(sentmsg => {
-                            message.reactions.removeAll().catch(e => {
-                                console.error(strFormat(LANG.discordbot.messageCreate.reactionRemoveErrorConsole, [e.code]));
-                                let errmsg = '\n' + strFormat(LANG.discordbot.messageCreate.reactionRemoveError, [e.code]);
-                                sentmsg.edit(`${fxmsg}${errmsg}`);
-                            })
-                        })
-
-                    collector.stop();
-                });
-
-                collector.on('end', (collected, reason) => {
-                    if (reason === 'time') {
-                        // TIMEOUT
-                        message.reactions.removeAll();
-                    }
-                });
-            }
-            if (url.includes('vt.tiktok.com') || url.includes('www.tiktok.com')) {
-                if (url.includes('vxtiktok.com')) {
-                    return;
-                }
-                await message.react('🔗'); // リアクションを追加
-
-                const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
-                const collector = message.createReactionCollector({ filter, time: 30000 });
-
-                collector.on('collect', async (reaction, user) => {
-                    console.log(strFormat(LANG.discordbot.messageCreate.beforeUrl, [url]));
-                    if (url.includes('vt.tiktok.com')) {
-                        url = await getRedirectUrl(url);
-                    }
-                    console.log(strFormat(LANG.discordbot.messageCreate.afterUrl, [url]));
-                    if (url.includes('Error')) {
-                        message.channel.send(LANG.discordbot.messageCreate.processError + "\n" + "```" + url + "\n```")
-                    }
-                    const modifiedURL = url.replace('www.tiktok.com', 'vxtiktok.com');
-                    let fxmsg = strFormat(LANG.discordbot.messageCreate.requestedBy, [user.username]) + `\n${modifiedURL}`;
-                    message.channel.send(fxmsg)
-                        .then(sentmsg => {
-                            message.reactions.removeAll().catch(e => {
-                                console.error(strFormat(LANG.discordbot.messageCreate.reactionRemoveErrorConsole, [e.code]));
-                                let errmsg = '\n' + strFormat(LANG.discordbot.messageCreate.reactionRemoveError, [e.code]);
-                                sentmsg.edit(`${fxmsg}${errmsg}`);
-                            })
-                        })
-
-                    collector.stop();
-                });
-
-                collector.on('end', (collected, reason) => {
-                    if (reason === 'time') {
-                        // TIMEOUT
-                        message.reactions.removeAll();
-                    }
-                });
-            }
+    if (urls == null) {
+        return;
+    }
+    for (let url of urls) {
+        if (!isAlternativeUrlAvailable(url)) {
+            return;
         }
+        await message.react('🔗'); // リアクションを追加
+
+        const collector = message.createReactionCollector({
+            filter(reaction, user) {
+                return user.id == message.author.id && reaction.emoji.name === '🔗'
+            },
+            time: 30000
+        });
+
+        collector.on('collect', async (reaction, user) => {
+            try {
+                const modifiedURL = await getAlternativeUrl(url);
+                if (modifiedURL == null) {
+                    return;
+                }
+                const fxMsg = strFormat(LANG.discordbot.messageCreate.requestedBy, [user.username]) + `\n${modifiedURL}`;
+                const sentMsg = await message.channel.send(fxMsg);
+                try {
+                    await message.reactions.removeAll();
+                } catch (e) {  // リアクション削除時のエラー
+                    console.error(strFormat(LANG.discordbot.messageCreate.reactionRemoveErrorConsole, [e.code]));
+                    let errMsg = '\n' + strFormat(LANG.discordbot.messageCreate.reactionRemoveError, [e.code]);
+                    await sentMsg.edit(`${fxMsg}${errMsg}`);
+                }
+            } catch (error) {  // リダイレクト URL 取得時のエラー
+                const errorMessage = `${LANG.discordbot.getRedirectUrl.error} ${error.message}`;
+                await message.channel.send(LANG.discordbot.messageCreate.processError + "\n" + "```" + errorMessage + "\n```");
+            } finally {
+                collector.stop();
+            }
+        });
+
+        collector.on('end', (_collected, reason) => {
+            if (reason === 'time') {
+                // TIMEOUT
+                message.reactions.removeAll();
+            }
+        });
+    }
+}
+
+/**
+ * @param {string} url URL
+ * @returns 動画の埋め込みに対応した代替 URL があるか
+ */
+function isAlternativeUrlAvailable(url) {
+    try {
+        const { hostname } = new URL(url);
+        return (
+            hostname == 'twitter.com' || hostname == 'x.com' ||
+            hostname == 'vt.tiktok.com' || hostname == 'www.tiktok.com'
+        );
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * 動画の埋め込みに対応した代替 URL を取得する。
+ * @param {string} url X または TikTok の URL
+ * @returns {Promise<string | null>} 代替 URL
+ */
+async function getAlternativeUrl(url) {
+    const compiledUrl = new URL(url);
+    const hostname = compiledUrl.hostname;
+    if (hostname == 'twitter.com' || hostname == 'x.com') {
+        compiledUrl.hostname = 'vxtwitter.com';
+        return compiledUrl.toString();
+    }
+    if (hostname == 'vt.tiktok.com' || hostname == 'www.tiktok.com') {
+        const canonicalUrl = hostname == 'vt.tiktok.com' ? await getRedirectUrl(url) : url;
+        console.log(strFormat(LANG.discordbot.messageCreate.beforeUrl, [canonicalUrl]));
+        const compiledCanonicalUrl = new URL(canonicalUrl);
+        compiledCanonicalUrl.hostname = 'vxtiktok.com';
+        const resultUrl = compiledCanonicalUrl.toString();
+        console.log(strFormat(LANG.discordbot.messageCreate.afterUrl, [url]));
+        return resultUrl;
+    }
+    return null;
+}
+
+/**
+ * リダイレクト先の URL を取得する。
+ * 与えられた URL からの応答がリダイレクト先を示さなければ Promise を reject する。
+ * @param {string} shortUrl 短縮 URL
+ * @returns リダイレクト先の URL
+ */
+async function getRedirectUrl(shortUrl) {
+    try {
+        const response = await axios.head(shortUrl, {
+            maxRedirects: 0,
+            validateStatus: (status) => status == 301 || status == 302,
+        });
+        const redirectUrl = response.headers.location;
+        console.log(LANG.discordbot.getRedirectUrl.redirectURL, redirectUrl);
+        return /** @type {string} */ (redirectUrl);
+    } catch (error) {
+        console.error(LANG.discordbot.getRedirectUrl.error, error.message);
+        throw error;
     }
 }
 
