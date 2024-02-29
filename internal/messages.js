@@ -22,6 +22,16 @@ const axios = require('axios').default;
 const { strFormat, LANG } = require("../util/languages");
 
 /**
+ * @typedef {Object} ReplySchema replies コレクションのドキュメント。
+ * @property {string} client
+ * @property {string} guild
+ * @property {string} message
+ * @property {string} reply
+ * @property {boolean} perfectMatching
+ * @property {boolean} regularExpression
+ */
+
+/**
  * 自動応答のパターン。
  */
 class ReplyPattern {
@@ -70,6 +80,24 @@ class ReplyPattern {
             }
         }
         return null;
+    }
+
+    /**
+     * replies コレクションに格納できる形式に変換する。
+     * @param {string} clientUserId クライアントのユーザー ID
+     * @param {string} guildId サーバー ID
+     * @returns {ReplySchema}
+     */
+    serialize(clientUserId, guildId) {
+        const messagePattern = this.messagePattern;
+        return {
+            client: clientUserId,
+            guild: guildId,
+            message: messagePattern,
+            reply: this.reply,
+            perfectMatching: this.perfectMatching,
+            regularExpression: false
+        };
     }
 }
 
