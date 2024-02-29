@@ -25,14 +25,13 @@ module.exports = {
 
 		const channel = client.channels.resolve("1211695901760819281"); //TODO: config.jsonで編集可能に?
 		assert(channel instanceof NewsChannel);
-		channel.addFollower(targetchannel.id)
-			.then(() =>
-				console.log(`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`),
-				interaction.editReply(`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`)
-			)
-			.catch((e) =>
-				console.log(`Something Went wrong. ${e}`),
-				interaction.editReply(`失敗しました！エラー: ${e}`)
-			)
+		try {
+			await channel.addFollower(targetchannel.id);
+			console.log(`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`),
+			await interaction.editReply(`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`)
+		} catch (e) {
+			console.log(`Something Went wrong. ${e}`),
+			await interaction.editReply(`失敗しました！エラー: ${e}`)
+		}
     }
 };
