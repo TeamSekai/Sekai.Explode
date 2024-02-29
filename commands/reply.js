@@ -81,7 +81,7 @@ const commandReply = {
             }
 
             case LANG.commands.reply.subcommands.remove.name: {
-                if (!checkPermission(interaction)) {
+                if (!await checkPermission(interaction)) {
                     return;
                 }
                 const replyPattern = await guildMessageHandler.removeReplyPattern(
