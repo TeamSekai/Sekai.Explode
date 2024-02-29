@@ -7,32 +7,25 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**バグについての説明**
+バグの内容を、明確かつ簡潔に記入してください。
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**再現方法**
+その問題を発生させるための手順を説明してください。
+1. ...に行く
+2. ....をクリックする
+3. ....をスクロール
+4. エラーを発見できる
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**期待される振る舞い(動作)**
+期待される動作を明確かつ簡潔に説明してください。
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**スクリーンショット**
+問題に関連するスクリーンショットを提供していただけると、このissueの解決に役立ちます。
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**動作環境(この項目を埋めてください。):**
+ - OS: [例: Ubuntu 20.04]
+ - Node.jsのバージョン: [例: v18.17.1]
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+**補足説明**
+ほかに記入するべきことがある場合は、記入してください。
