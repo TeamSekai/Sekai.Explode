@@ -1,10 +1,11 @@
 // @ts-check
 
 const assert = require('assert');
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, ChatInputCommandInteraction } = require("discord.js");
 const { LANG } = require("../util/languages");
 const { ClientMessageHandler, ReplyPattern } = require("../internal/messages");
 const Pager = require('../util/pager');
+const config = require("../config.json");
 
 /** @type {import("../util/types").Command} */
 const commandReply = {
@@ -59,6 +60,9 @@ const commandReply = {
 
         switch (subcommand) {
             case LANG.commands.reply.subcommands.add.name: {
+                if (!await checkPermission(interaction)) {
+                    return;
+                }
                 const replyPattern = new ReplyPattern(
                     interaction.options.getString(LANG.commands.reply.subcommands.add.options.message.name, true),
                     interaction.options.getString(LANG.commands.reply.subcommands.add.options.reply.name, true),
@@ -77,6 +81,9 @@ const commandReply = {
             }
 
             case LANG.commands.reply.subcommands.remove.name: {
+                if (!await checkPermission(interaction)) {
+                    return;
+                }
                 const replyPattern = await guildMessageHandler.removeReplyPattern(
                     interaction.options.getString(LANG.commands.reply.subcommands.remove.options.message.name, true)
                 );
@@ -107,5 +114,20 @@ const commandReply = {
         }
     }
 };
+
+/**
+ * 使う権限があるかをチェックする。
+ * @param {ChatInputCommandInteraction} interaction
+ */
+async function checkPermission(interaction) {
+    if (!config.replyCustomizeAllowedUsers?.includes(interaction.user.id)) {
+        await interaction.reply({
+            content: LANG.commands.reply.permissionError,
+            ephemeral: true,
+        });
+        return false;
+    }
+    return true;
+}
 
 module.exports = commandReply;

@@ -550,7 +550,8 @@
                     "description": "自動応答の一覧を表示します。"
                 }
             },
-            "notInGuildError": "このコマンドはサーバー内でのみ使用できます！"
+            "notInGuildError": "このコマンドはサーバー内でのみ使用できます！",
+            "permissionError": "このコマンドを使用する権限がありません！"
         },
         "resume": {
             "name": "resume",
