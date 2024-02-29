@@ -5,7 +5,6 @@ const fs = require("fs");
 const path = require("path");
 const { token, syslogChannel } = require('./config.json');
 const { enableTempLinks } = require('./internal/templinks');
-const axios = require('axios');
 const { Player } = require('discord-player');
 const internal = require('stream');
 process.env["FFMPEG_PATH"] = path.join(__dirname,"ffmpeg")
@@ -18,6 +17,7 @@ const mongodb = require('./internal/mongodb');
 
 const { getDuration, saveQueue, deleteSavedQueues, restoreQueues } = require('./util/players');
 const { LANG, strFormat } = require('./util/languages');
+const { ClientMessageHandler } = require('./internal/messages');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -36,21 +36,6 @@ let oWrite2 = process.stdout.write;
 process.stderr.write = function () {
     oWrite2.apply(this, arguments);
     fs.appendFileSync("discordbot.log", arguments[0] || "")
-}
-//!function
-async function getRedirectUrl(shortUrl) {
-    try {
-        const response = await axios.head(shortUrl, {
-			maxRedirects: 0,
-			 validateStatus: (status) => status == 301 || status == 302
-		});
-        const redirectUrl = response.headers.location;
-        console.log(LANG.discordbot.getRedirectUrl.redirectURL, redirectUrl);
-        return redirectUrl;
-    } catch (error) {
-        console.error(LANG.discordbot.getRedirectUrl.error, error.message);
-		return `${LANG.discordbot.getRedirectUrl.error} ${error.message}`
-    }
 }
 
 //!RUN=======================
@@ -88,8 +73,10 @@ const player = new Player(client);
 player.extractors.loadDefault();
 console.log(LANG.discordbot.main.setupActivityCalling);
 activity.setupActivity(client);
+/** @type {ClientMessageHandler | undefined} */
+let messageHandler;
 
-client.on('ready', async () => {
+client.on('ready', async (readyClient) => {
 	enableTempLinks();
 	console.log(strFormat(LANG.discordbot.ready.loggedIn, { cgreen, creset, tag: client.user.tag }));
 	client.user.setPresence({
@@ -106,6 +93,7 @@ client.on('ready', async () => {
 	let SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
 	restoreQueues(player);
+	messageHandler = new ClientMessageHandler(readyClient);
 });
 
 
@@ -149,90 +137,7 @@ client.login(token);
 
 
 
-client.on('messageCreate', async (message) => {
-    if (message.author.bot) return;
-
-	if (message.content.includes("それはそう")) {
-		message.reply("https://soreha.so/")
-		return;
-	}
-    const urls = message.content.match(/https?:\/\/[^\s]+/g);
-
-    if (urls) {
-        for (let url of urls) {
-            if (url.includes('twitter.com') || url.includes('x.com')) {
-				if (url.includes('vxtwitter.com') || url.includes('fxtwitter.com')) { //ignore vxtwitter.com and fxtwitter.com
-					return;
-				}
-                await message.react('🔗'); // リアクションを追加
-
-				const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
-                const collector = message.createReactionCollector({ filter, time: 30000 });
-
-                collector.on('collect', async (reaction, user) => {
-                    const modifiedURL = url.replace('twitter.com', 'vxtwitter.com').replace('x.com', 'vxtwitter.com');
-					let fxmsg = strFormat(LANG.discordbot.messageCreate.requestedBy, [user.username]) + `\n${modifiedURL}`;
-					message.channel.send(fxmsg)
-						.then(sentmsg => {
-							message.reactions.removeAll().catch(e => {
-								console.error(strFormat(LANG.discordbot.messageCreate.reactionRemoveErrorConsole, [e.code]));
-								let errmsg = '\n' + strFormat(LANG.discordbot.messageCreate.reactionRemoveError, [e.code]);
-								sentmsg.edit(`${fxmsg}${errmsg}`);
-							})
-						})
-		
-					collector.stop();
-                });
-
-                collector.on('end', (collected, reason) => {
-                    if (reason === 'time') {
-                        // TIMEOUT
-                        message.reactions.removeAll();
-                    }
-                });
-            }
-			if (url.includes('vt.tiktok.com') || url.includes('www.tiktok.com')) {
-				if (url.includes('vxtiktok.com')) { 
-					return;
-				}
-                await message.react('🔗'); // リアクションを追加
-
-				const filter = (reaction, user) => user.id == message.author.id && reaction.emoji.name === '🔗';
-                const collector = message.createReactionCollector({ filter, time: 30000 });
-
-                collector.on('collect', async (reaction, user) => {
-					console.log(strFormat(LANG.discordbot.messageCreate.beforeUrl, [url]));
-					if (url.includes('vt.tiktok.com')) {
-						url = await getRedirectUrl(url);
-					}
-					console.log(strFormat(LANG.discordbot.messageCreate.afterUrl, [url]));
-					if (url.includes('Error')) {
-						message.channel.send(LANG.discordbot.messageCreate.processError + "\n" + "```" + url + "\n```")
-					}
-                    const modifiedURL = url.replace('www.tiktok.com', 'vxtiktok.com');
-					let fxmsg = strFormat(LANG.discordbot.messageCreate.requestedBy, [user.username]) + `\n${modifiedURL}`;
-					message.channel.send(fxmsg)
-						.then(sentmsg => {
-							message.reactions.removeAll().catch(e => {
-								console.error(strFormat(LANG.discordbot.messageCreate.reactionRemoveErrorConsole, [e.code]));
-								let errmsg = '\n' + strFormat(LANG.discordbot.messageReply.reactionRemoveError, [e.code]);
-								sentmsg.edit(`${fxmsg}${errmsg}`);
-							})
-						})
-		
-					collector.stop();
-                });
-
-                collector.on('end', (collected, reason) => {
-                    if (reason === 'time') {
-                        // TIMEOUT
-                        message.reactions.removeAll();
-                    }
-                });
-            }
-        }
-    }
-});
+client.on('messageCreate', (message) => messageHandler?.handleMessage(message));
 
 
 //!EVENTS
