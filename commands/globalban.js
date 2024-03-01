@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
+const { SlashCommandBuilder, PermissionsBitField, CommandInteraction } = require('discord.js');
 const mongodb = require('../internal/mongodb') //*MongoDB
 const { AdminUserIDs } = require("../config.json");
 const Pager = require("../util/pager");
@@ -46,7 +46,7 @@ module.exports = {
 				.setName(LANG.commands.globalban.subcommands.list.name)
 				.setDescription(LANG.commands.globalban.subcommands.list.name)
 		),
-    execute: async function (interaction) {
+    execute: async function (/** @type {CommandInteraction} */interaction) {
 		const executorID = interaction.user.id; // executed by
 		const subcommand = interaction.options.getSubcommand()
 		if (!subcommand) {
