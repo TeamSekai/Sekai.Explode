@@ -1,9 +1,9 @@
 // @ts-check
 
+const assert = require("assert");
 const { SlashCommandBuilder } = require("discord.js");
 const { LANG, strFormat } = require("../util/languages");
 const { PlayerCommand } = require("../common/PlayerCommand");
-const { AssertionError } = require("../util/assertion");
 
 module.exports = new PlayerCommand(
 	new SlashCommandBuilder()
@@ -24,7 +24,7 @@ module.exports = new PlayerCommand(
 			queue.node.skip();
 			const currentTrack = queue.currentTrack;
 			if (currentTrack == null) {
-				throw new AssertionError();
+				assert.fail();
 			}
 			await interaction.reply({
 				embeds: [
