@@ -1,34 +1,49 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require("discord.js");
 const axios = require("axios");
-const { LANG, strFormat } = require('../util/languages');
-
+const { LANG, strFormat } = require("../util/languages");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName(LANG.commands.mcstatus.name)
 		.setDescription(LANG.commands.mcstatus.description)
-		.addStringOption(option =>
-			option
-				.setName(LANG.commands.mcstatus.options.serverIp.name)
-				.setDescription(LANG.commands.mcstatus.options.serverIp.description)
-				.setRequired(true) //trueで必須、falseで任意
+		.addStringOption(
+			(option) =>
+				option
+					.setName(LANG.commands.mcstatus.options.serverIp.name)
+					.setDescription(LANG.commands.mcstatus.options.serverIp.description)
+					.setRequired(true), //trueで必須、falseで任意
 		)
-		.addBooleanOption(option =>
-			option
-				.setName(LANG.commands.mcstatus.options.bedrockServer.name)
-				.setDescription(LANG.commands.mcstatus.options.bedrockServer.description)
-				.setRequired(false) // 任意のオプション
+		.addBooleanOption(
+			(option) =>
+				option
+					.setName(LANG.commands.mcstatus.options.bedrockServer.name)
+					.setDescription(
+						LANG.commands.mcstatus.options.bedrockServer.description,
+					)
+					.setRequired(false), // 任意のオプション
 		),
-	execute: async function (/** @type {import("discord.js").CommandInteraction} */ interaction) {
-		let server = interaction.options.getString(LANG.commands.mcstatus.options.serverIp.name);
-		let isbedrock = interaction.options.getBoolean(LANG.commands.mcstatus.options.bedrockServer.name);
+	execute: async function (
+		/** @type {import("discord.js").CommandInteraction} */ interaction,
+	) {
+		let server = interaction.options.getString(
+			LANG.commands.mcstatus.options.serverIp.name,
+		);
+		let isbedrock = interaction.options.getBoolean(
+			LANG.commands.mcstatus.options.bedrockServer.name,
+		);
 		await interaction.deferReply();
 		try {
-//			let target_server = server_ip
+			//			let target_server = server_ip
 			if (server) {
-				let res = await axios.get("https://api.mcsrvstat.us/" + (isbedrock ? "bedrock/" : "") + "3/" + server);
+				let res = await axios.get(
+					"https://api.mcsrvstat.us/" +
+						(isbedrock ? "bedrock/" : "") +
+						"3/" +
+						server,
+				);
 				if (res.data?.online) {
-					let motd = res.data.motd.raw.join("\n")
+					let motd = res.data.motd.raw
+						.join("\n")
 						.replace(/\u00A70/g, "\x1B[30m")
 						.replace(/\u00A71/g, "\x1B[34m")
 						.replace(/\u00A72/g, "\x1B[32m")
@@ -51,31 +66,35 @@ module.exports = {
 						.replace(/\u00A7n/g, "\x1B[4m")
 						.replace(/\u00A7o/g, "\x1B[3m")
 						.replace(/\u00A7r/g, "\x1B[0m");
-					if (motd.length == 0)
-						motd = LANG.commands.mcstatus.online;
+					if (motd.length == 0) motd = LANG.commands.mcstatus.online;
 					await interaction.editReply({
-						embeds: [{
-							"title": `${server}は**オンライン**です!`,
-							"title": strFormat(LANG.commands.mcstatus.serverIsOnline, {
-								server,
-								online: '**' + LANG.commands.mcstatus.online + '**'
-							}),
-							"description": "```ansi\n" + motd + "\n```",
-							color: 0x42d4f5,
-							fields: [{
-								name: LANG.commands.mcstatus.playerCount,
-								value: strFormat(LANG.commands.mcstatus.playerCountValue, {
-									online: res.data.players.online,
-									max: res.data.players.max
-								})
-							}, {
-								name: LANG.commands.mcstatus.version,
-								value: res.data.version
-							}],
-							...(res.data.icon && {
-								thumbnail: { url: "https://api.mcsrvstat.us/icon/" + server }
-							})
-						}]
+						embeds: [
+							{
+								title: `${server}は**オンライン**です!`,
+								title: strFormat(LANG.commands.mcstatus.serverIsOnline, {
+									server,
+									online: "**" + LANG.commands.mcstatus.online + "**",
+								}),
+								description: "```ansi\n" + motd + "\n```",
+								color: 0x42d4f5,
+								fields: [
+									{
+										name: LANG.commands.mcstatus.playerCount,
+										value: strFormat(LANG.commands.mcstatus.playerCountValue, {
+											online: res.data.players.online,
+											max: res.data.players.max,
+										}),
+									},
+									{
+										name: LANG.commands.mcstatus.version,
+										value: res.data.version,
+									},
+								],
+								...(res.data.icon && {
+									thumbnail: { url: "https://api.mcsrvstat.us/icon/" + server },
+								}),
+							},
+						],
 					});
 				} else {
 					await interaction.editReply(`${server}はオフラインです`);
@@ -84,31 +103,38 @@ module.exports = {
 			}
 			let res = await axios.get(server.url);
 			if (res?.data?.status == "online") {
-				await interaction.editReply(strFormat(LANG.commands.mcstatus.serverIsOnline, {
-					server,
-					online: ' ** ' + LANG.commands.mcstatus.online + ' ** '
-				}));
+				await interaction.editReply(
+					strFormat(LANG.commands.mcstatus.serverIsOnline, {
+						server,
+						online: " ** " + LANG.commands.mcstatus.online + " ** ",
+					}),
+				);
 			} else {
 				await interaction.editReply(LANG.commands.mcstatus.connectionFailed);
 			}
 		} catch (e) {
 			if (e?.name == "AxiosError" && e?.response?.status) {
 				await interaction.editReply({
-					embeds: [{
-						title: LANG.commands.mcstatus.errorResult.title,
-						description: strFormat(LANG.commands.mcstatus.errorResult.description, {
-							statusText: e.response.statusText,
-							status: e.response.status
-						}),
-						color: 0xff0000,
-						footer: {
-							text: LANG.commands.mcstatus.errorResult.footer
-						}
-					}]
-				})
+					embeds: [
+						{
+							title: LANG.commands.mcstatus.errorResult.title,
+							description: strFormat(
+								LANG.commands.mcstatus.errorResult.description,
+								{
+									statusText: e.response.statusText,
+									status: e.response.status,
+								},
+							),
+							color: 0xff0000,
+							footer: {
+								text: LANG.commands.mcstatus.errorResult.footer,
+							},
+						},
+					],
+				});
 			} else {
 				throw e;
 			}
 		}
-	}
+	},
 };

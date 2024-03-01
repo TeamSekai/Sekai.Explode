@@ -1,4 +1,10 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, BaseInteraction } = require('discord.js');
+const {
+	EmbedBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	ActionRowBuilder,
+	BaseInteraction,
+} = require("discord.js");
 
 /**
  * @typedef {Object} OptionSet Pager のコンストラクタに渡すことができるオプション
@@ -23,248 +29,269 @@ const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, BaseInteract
  * @returns {R} 結果の値
  */
 function callIfFunciton(obj, ...args) {
-    if (obj instanceof Function) {
-        return obj.apply(null, args);
-    }
-    return obj;
+	if (obj instanceof Function) {
+		return obj.apply(null, args);
+	}
+	return obj;
 }
 
 /**
  * リストをページに分けてを扱うクラス。
  */
 class Pager {
+	/**
+	 * @type {string[]}
+	 */
+	#items;
 
-    /**
-     * @type {string[]}
-     */
-    #items;
+	/**
+	 * @type {number}
+	 */
+	#pageCount;
 
-    /**
-     * @type {number}
-     */
-    #pageCount;
+	/**
+	 * @type {OptionSet}
+	 */
+	#options = {
+		pageLength: 10,
+		title(pager) {
+			return `${pager.items.length}件のアイテムがリストに入っています!`;
+		},
+		color: null,
+		fieldName: null,
+		emptyMessage: "リストにアイテムがありません!",
+		delimiter: "\n",
+		footer(pager) {
+			if (pager.isEmpty()) {
+				return null;
+			}
+			return {
+				text: `${pager.page + 1}/${pager.pageCount}ページ|${pager.items.length}件中${pager.start + 1}件目から${pager.end}件目`,
+			};
+		},
+		prevButton: new ButtonBuilder()
+			.setCustomId("prev")
+			.setLabel("前のページ")
+			.setStyle(ButtonStyle.Secondary)
+			.setEmoji("⬅️"),
+		nextButton: new ButtonBuilder()
+			.setCustomId("next")
+			.setLabel("次のページ")
+			.setStyle(ButtonStyle.Secondary)
+			.setEmoji("➡️"),
+		idleTime: 60000,
+	};
 
-    /**
-     * @type {OptionSet}
-     */
-    #options = {
-        pageLength: 10,
-        title(pager) {
-            return `${pager.items.length}件のアイテムがリストに入っています!`
-        },
-        color: null,
-        fieldName: null,
-        emptyMessage: 'リストにアイテムがありません!',
-        delimiter: '\n',
-        footer(pager) {
-            if (pager.isEmpty()) {
-                return null;
-            }
-            return {
-                text: `${pager.page + 1}/${pager.pageCount}ページ|${pager.items.length}件中${pager.start + 1}件目から${pager.end}件目`
-            };
-        },
-        prevButton: new ButtonBuilder().setCustomId('prev').setLabel('前のページ').setStyle(ButtonStyle.Secondary).setEmoji('⬅️'),
-        nextButton: new ButtonBuilder().setCustomId('next').setLabel('次のページ').setStyle(ButtonStyle.Secondary).setEmoji('➡️'),
-        idleTime: 60000
-    };
+	/**
+	 * @type {number}
+	 */
+	#currentPage;
 
-    /**
-     * @type {number}
-     */
-    #currentPage;
+	/**
+	 * @type {string[]}
+	 */
+	#currentPageItems;
 
-    /**
-     * @type {string[]}
-     */
-    #currentPageItems;
+	#embedBuilder = new EmbedBuilder();
 
-    #embedBuilder = new EmbedBuilder();
+	/**
+	 * @type {{ embeds: EmbedBuilder[], components: ActionRowBuilder<import("discord.js").AnyComponentBuilder> }}
+	 */
+	#reply;
 
-    /**
-     * @type {{ embeds: EmbedBuilder[], components: ActionRowBuilder<import("discord.js").AnyComponentBuilder> }}
-     */
-    #reply;
+	/**
+	 * 新しく Pager を生成する。
+	 * @param {string[]} items アイテムの配列
+	 * @param {Partial<OptionSet>=} options オプション
+	 */
+	constructor(items, options = {}) {
+		Object.assign(this.#options, options);
+		this.#items = Object.freeze([...items]); // 変更されないように配列をコピーしてfreeze
+		this.#pageCount = Math.ceil(this.#items.length / this.#options.pageLength);
+		this.page = 0;
+		this.#reply = {
+			embeds: [this.#embedBuilder],
+		};
+		if (this.pageCount > 1) {
+			this.#reply.components = [
+				new ActionRowBuilder().addComponents(
+					this.#options.prevButton,
+					this.#options.nextButton,
+				),
+			];
+		}
+	}
 
-    /**
-     * 新しく Pager を生成する。
-     * @param {string[]} items アイテムの配列
-     * @param {Partial<OptionSet>=} options オプション
-     */
-    constructor(items, options = {}) {
-        Object.assign(this.#options, options);
-        this.#items = Object.freeze([...items]);  // 変更されないように配列をコピーしてfreeze
-        this.#pageCount = Math.ceil(this.#items.length / this.#options.pageLength);
-        this.page = 0;
-        this.#reply = {
-            embeds: [this.#embedBuilder],
-        };
-        if (this.pageCount > 1) {
-            this.#reply.components = [new ActionRowBuilder().addComponents(this.#options.prevButton, this.#options.nextButton)];
-        }
-    }
+	/**
+	 * リストのアイテムからなる配列。
+	 */
+	get items() {
+		return this.#items;
+	}
 
-    /**
-     * リストのアイテムからなる配列。
-     */
-    get items() {
-        return this.#items;
-    }
+	/**
+	 * 1ページに含まれる最大のアイテム数。
+	 */
+	get pageLength() {
+		return this.#options.pageLength;
+	}
 
-    /**
-     * 1ページに含まれる最大のアイテム数。
-     */
-    get pageLength() {
-        return this.#options.pageLength;
-    }
+	/**
+	 * 全体のページ数。
+	 */
+	get pageCount() {
+		return this.#pageCount;
+	}
 
-    /**
-     * 全体のページ数。
-     */
-    get pageCount() {
-        return this.#pageCount;
-    }
+	/**
+	 * 現在のページ番号 (0 始まり)。
+	 * @type {number}
+	 */
+	get page() {
+		return this.#currentPage;
+	}
 
-    /**
-     * 現在のページ番号 (0 始まり)。
-     * @type {number}
-     */
-    get page() {
-        return this.#currentPage;
-    }
+	set page(value) {
+		const pageOffset = value % this.#pageCount;
+		this.#currentPage =
+			pageOffset >= 0 ? pageOffset : this.#pageCount + pageOffset;
+		this.#currentPageItems = Object.freeze(
+			this.#items.slice(this.start, this.end),
+		);
+		const embedBuilder = this.#embedBuilder;
+		const fieldName = this.getFieldName();
+		const description = this.getDescription();
+		embedBuilder.setTitle(this.getTitle());
+		embedBuilder.setColor(this.getColor());
+		if (fieldName == null) {
+			embedBuilder.setDescription(description);
+		} else {
+			embedBuilder.setFields([
+				{
+					name: fieldName,
+					value: description,
+				},
+			]);
+		}
+		embedBuilder.setFooter(this.getFooter());
+	}
 
-    set page(value) {
-        const pageOffset = value % this.#pageCount;
-        this.#currentPage = pageOffset >= 0 ? pageOffset : this.#pageCount + pageOffset;
-        this.#currentPageItems = Object.freeze(this.#items.slice(this.start, this.end));
-        const embedBuilder = this.#embedBuilder;
-        const fieldName = this.getFieldName();
-        const description = this.getDescription();
-        embedBuilder.setTitle(this.getTitle());
-        embedBuilder.setColor(this.getColor());
-        if (fieldName == null) {
-            embedBuilder.setDescription(description);
-        } else {
-            embedBuilder.setFields([{
-                name: fieldName,
-                value: description
-            }]);
-        }
-        embedBuilder.setFooter(this.getFooter());
-    }
+	/**
+	 * 作成された EmbedBuilder。
+	 */
+	get embedBuilder() {
+		return this.#embedBuilder;
+	}
 
-    /**
-     * 作成された EmbedBuilder。
-     */
-    get embedBuilder() {
-        return this.#embedBuilder;
-    }
+	/**
+	 * ページの最初のアイテムの添字
+	 */
+	get start() {
+		return this.#currentPage * this.#options.pageLength;
+	}
 
-    /**
-     * ページの最初のアイテムの添字
-     */
-    get start() {
-        return this.#currentPage * this.#options.pageLength;
-    }
+	/**
+	 * ページの最後のアイテムの添字 + 1
+	 */
+	get end() {
+		return Math.min(
+			(this.#currentPage + 1) * this.#options.pageLength,
+			this.#items.length,
+		);
+	}
 
-    /**
-     * ページの最後のアイテムの添字 + 1
-     */
-    get end() {
-        return Math.min((this.#currentPage + 1) * this.#options.pageLength, this.#items.length);
-    }
+	/**
+	 * @returns 現在のページのアイテムのリスト
+	 */
+	get pageItems() {
+		return this.#currentPageItems;
+	}
 
-    /**
-     * @returns 現在のページのアイテムのリスト
-     */
-    get pageItems() {
-        return this.#currentPageItems;
-    }
+	isEmpty() {
+		return this.#items.length == 0;
+	}
 
-    isEmpty() {
-        return this.#items.length == 0;
-    }
+	/**
+	 * 埋め込みのタイトルを取得する。
+	 * @returns タイトル
+	 */
+	getTitle() {
+		return callIfFunciton(this.#options.title, this);
+	}
 
-    /**
-     * 埋め込みのタイトルを取得する。
-     * @returns タイトル
-     */
-    getTitle() {
-        return callIfFunciton(this.#options.title, this);
-    }
+	/**
+	 * 埋め込みの色を取得する。
+	 * @returns 色
+	 */
+	getColor() {
+		return callIfFunciton(this.#options.color, this);
+	}
 
-    /**
-     * 埋め込みの色を取得する。
-     * @returns 色
-     */
-    getColor() {
-        return callIfFunciton(this.#options.color, this);
-    }
+	/**
+	 * 埋め込みのフィールドの名前を取得する。
+	 * @returns フィールドの名前
+	 */
+	getFieldName() {
+		return callIfFunciton(this.#options.fieldName, this);
+	}
 
-    /**
-     * 埋め込みのフィールドの名前を取得する。
-     * @returns フィールドの名前
-     */
-    getFieldName() {
-        return callIfFunciton(this.#options.fieldName, this);
-    }
+	/**
+	 * 埋め込みの説明文を取得する。
+	 * @returns 説明文
+	 */
+	getDescription() {
+		if (this.isEmpty()) {
+			return this.#options.emptyMessage;
+		}
+		return this.#currentPageItems.join(this.#options.delimiter);
+	}
 
-    /**
-     * 埋め込みの説明文を取得する。
-     * @returns 説明文
-     */
-    getDescription() {
-        if (this.isEmpty()) {
-            return this.#options.emptyMessage;
-        }
-        return this.#currentPageItems.join(this.#options.delimiter);
-    }
+	/**
+	 * 埋め込みのフッターを取得する。
+	 * @returns {import("discord.js").EmbedFooterOptions} フッター
+	 */
+	getFooter() {
+		return callIfFunciton(this.#options.footer, this);
+	}
 
-    /**
-     * 埋め込みのフッターを取得する。
-     * @returns {import("discord.js").EmbedFooterOptions} フッター
-     */
-    getFooter() {
-        return callIfFunciton(this.#options.footer, this);
-    }
+	/**
+	 * この Pager をリプライとして表示する。
+	 * @param {BaseInteraction} interaction 対話オブジェクト
+	 */
+	async replyTo(interaction) {
+		if (!interaction.isRepliable()) {
+			console.error(`返信することができません! interaction: ${interaction}`);
+			return;
+		}
+		if (interaction.deferred || interaction.replied) {
+			await interaction.editReply(this.#reply);
+		} else {
+			await interaction.reply(this.#reply);
+		}
+		const message = await interaction.fetchReply();
 
-    /**
-     * この Pager をリプライとして表示する。
-     * @param {BaseInteraction} interaction 対話オブジェクト
-     */
-    async replyTo(interaction) {
-        if (!interaction.isRepliable()) {
-            console.error(`返信することができません! interaction: ${interaction}`);
-            return;
-        }
-        if (interaction.deferred || interaction.replied) {
-            await interaction.editReply(this.#reply);
-        } else {
-            await interaction.reply(this.#reply);
-        }
-        const message = await interaction.fetchReply();
+		const collector = message.createMessageComponentCollector({
+			idle: this.#options.idleTime,
+		});
 
-        const collector = message.createMessageComponentCollector({
-            idle: this.#options.idleTime
-        });
+		collector.on("collect", (interaction) => {
+			interaction.deferUpdate();
+			if (interaction.customId == this.#options.prevButton.data.custom_id) {
+				this.page--;
+			} else if (
+				interaction.customId == this.#options.nextButton.data.custom_id
+			) {
+				this.page++;
+			}
+			message.edit(this.#reply);
+		});
 
-        collector.on('collect', interaction => {
-            interaction.deferUpdate();
-            if (interaction.customId == this.#options.prevButton.data.custom_id) {
-                this.page--;
-            } else if (interaction.customId == this.#options.nextButton.data.custom_id) {
-                this.page++;
-            }
-            message.edit(this.#reply);
-        });
-
-        collector.on('end', () => {
-            interaction.editReply({
-                components: []
-            });
-        });
-    }
-
+		collector.on("end", () => {
+			interaction.editReply({
+				components: [],
+			});
+		});
+	}
 }
 
 module.exports = Pager;
