@@ -1,7 +1,4 @@
-const {
-	SlashCommandBuilder,
-	ChannelType,
-} = require("discord.js");
+const { SlashCommandBuilder, ChannelType } = require("discord.js");
 const { LANG, strFormat } = require("../util/languages");
 
 module.exports = {

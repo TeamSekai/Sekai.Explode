@@ -1,9 +1,7 @@
 // @ts-check
 
 const assert = require("assert");
-const {
-	SlashCommandBuilder,
-} = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { LANG } = require("../util/languages");
 const { ClientMessageHandler, ReplyPattern } = require("../internal/messages");
 const Pager = require("../util/pager");

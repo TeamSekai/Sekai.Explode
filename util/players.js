@@ -1,11 +1,7 @@
 // @ts-check
 
 const { GuildMember } = require("discord.js");
-const {
-	useQueue,
-	Track,
-	useMainPlayer,
-} = require("discord-player");
+const { useQueue, Track, useMainPlayer } = require("discord-player");
 const Timespan = require("./timespan");
 const mongodb = require("../internal/mongodb");
 
@@ -135,7 +131,10 @@ const functions = {
 		if (guildId == null) {
 			return null;
 		}
-		const queue = /** @type {import("discord-player").GuildQueue<QueueMetadata>} */ (useQueue(guildId));
+		const queue =
+			/** @type {import("discord-player").GuildQueue<QueueMetadata>} */ (
+				useQueue(guildId)
+			);
 		if (queue?.isPlaying()) return queue;
 
 		return null;

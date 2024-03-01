@@ -17,7 +17,9 @@ module.exports = {
 				.setDescription(LANG.commands.templink.options.url.description)
 				.setRequired(true),
 		),
-	execute: async function (/** @type {import("discord.js").CommandInteraction} */ interaction) {
+	execute: async function (
+		/** @type {import("discord.js").CommandInteraction} */ interaction,
+	) {
 		if (!areTempLinksEnabled()) {
 			return interaction.reply(LANG.commands.templink.internalError);
 		}
