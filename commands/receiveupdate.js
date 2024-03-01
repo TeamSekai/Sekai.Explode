@@ -3,12 +3,8 @@ const {
 	SlashCommandBuilder,
 	ChannelType,
 	PermissionsBitField,
-	CommandInteraction,
-	Client,
 	NewsChannel,
 } = require("discord.js");
-const config = require("../config.json");
-const { LANG } = require("../util/languages");
 
 module.exports = {
 	data: new SlashCommandBuilder()

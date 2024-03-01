@@ -70,7 +70,6 @@ module.exports = {
 					await interaction.editReply({
 						embeds: [
 							{
-								title: `${server}は**オンライン**です!`,
 								title: strFormat(LANG.commands.mcstatus.serverIsOnline, {
 									server,
 									online: "**" + LANG.commands.mcstatus.online + "**",

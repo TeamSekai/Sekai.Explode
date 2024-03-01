@@ -1,14 +1,11 @@
 // @ts-check
 
-const { GuildMember, User, BaseInteraction } = require("discord.js");
+const { GuildMember } = require("discord.js");
 const {
 	useQueue,
 	Track,
-	GuildQueue,
 	useMainPlayer,
-	Player,
 } = require("discord-player");
-const { Collection } = require("mongoose");
 const Timespan = require("./timespan");
 const mongodb = require("../internal/mongodb");
 
@@ -41,12 +38,12 @@ const mongodb = require("../internal/mongodb");
  * @typedef {Object} QueueMetadata キューに付加するメタデータ
  * @property {import('discord.js').TextBasedChannel | null} channel コマンドが実行されたテキストチャンネル
  * @property {GuildMember | null} client コマンドを受け取ったクライアント
- * @property {User} requestedBy コマンドの実行者
+ * @property {import('discord.js').User} requestedBy コマンドの実行者
  */
 
 /**
  * データベースから読み出したドキュメントを元にキューの復元する。
- * @param {Player} player
+ * @param {import("discord-player").Player} player
  * @param {GuildQueueSchema} guildQueueDocument
  * @returns キューが復元されたか
  */
@@ -112,7 +109,7 @@ async function restoreQueue(player, guildQueueDocument) {
 const functions = {
 	/**
 	 * 対話を起こしたメンバーが接続していて、この bot が参加しているか参加できるボイスチャンネルの ID を取得する。
-	 * @param {BaseInteraction} interaction 対話オブジェクト
+	 * @param {import('discord.js').BaseInteraction} interaction 対話オブジェクト
 	 * @returns メンバーが接続しているボイスチャンネルの ID。この bot が接続できる状態にない場合は null
 	 */
 	getPlayableVoiceChannelId(interaction) {
@@ -130,7 +127,7 @@ const functions = {
 
 	/**
 	 * 対話が起こったサーバーで再生されている楽曲のキューを取得する。
-	 * @param {BaseInteraction} interaction 対話オブジェクト
+	 * @param {import('discord.js').BaseInteraction} interaction 対話オブジェクト
 	 * @returns 楽曲を再生している場合、楽曲のキュー。再生していない場合、null
 	 */
 	getPlayingQueue(interaction) {
@@ -138,7 +135,7 @@ const functions = {
 		if (guildId == null) {
 			return null;
 		}
-		const queue = /** @type {GuildQueue<QueueMetadata>} */ (useQueue(guildId));
+		const queue = /** @type {import("discord-player").GuildQueue<QueueMetadata>} */ (useQueue(guildId));
 		if (queue?.isPlaying()) return queue;
 
 		return null;
@@ -159,7 +156,7 @@ const functions = {
 	 * @param {number} volume 音量
 	 */
 	async saveVolumeSetting(guildId, volume) {
-		/** @type {Collection<VolumeSchema>} */
+		/** @type {import("mongoose").Collection<VolumeSchema>} */
 		const volumeCollection = mongodb.connection.collection("volumes");
 		await volumeCollection.updateOne(
 			{ guild: guildId },
@@ -179,7 +176,7 @@ const functions = {
 	 * @returns {Promise<number | undefined>} 音量
 	 */
 	async loadVolumeSetting(guildId) {
-		/** @type {Collection<VolumeSchema>} */
+		/** @type {import("mongoose").Collection<VolumeSchema>} */
 		const volumeCollection = mongodb.connection.collection("volumes");
 		const result = await volumeCollection.findOne({ guild: guildId });
 		if (result != null) {
@@ -196,7 +193,6 @@ const functions = {
 	 * @param {T=} metadata 付加するメタデータ
 	 */
 	async play(guild, channel, query, metadata) {
-		const volume = await functions.loadVolumeSetting(guild);
 		return await useMainPlayer().play(channel, query, {
 			nodeOptions: await functions.getNodeOptions(guild, metadata),
 		});
@@ -226,13 +222,13 @@ const functions = {
 
 	/**
 	 * 現在のキューの状態をデータベースに保存する。
-	 * @param {GuildQueue<QueueMetadata>} queue キュー
+	 * @param {import("discord-player").GuildQueue<QueueMetadata>} queue キュー
 	 */
 	async saveQueue(queue) {
 		const guild = queue.guild.id;
 		const metadata = queue.metadata;
 
-		/** @type {Collection<GuildQueueSchema>} */
+		/** @type {import("mongoose").Collection<GuildQueueSchema>} */
 		const guildQueueCollection = mongodb.connection.collection("guild_queues");
 		await guildQueueCollection.deleteOne({ _id: guild });
 		await guildQueueCollection.insertOne({
@@ -246,7 +242,7 @@ const functions = {
 			requested_by: metadata.requestedBy.id,
 		});
 
-		/** @type {Collection<GuildQueueTrackSchema>} */
+		/** @type {import("mongoose").Collection<GuildQueueTrackSchema>} */
 		const guildQueueTrackCollection =
 			mongodb.connection.collection("guild_queue_tracks");
 		const tracks = queue.tracks.toArray();
@@ -265,25 +261,25 @@ const functions = {
 	 * @param {string[]} guilds ギルド ID
 	 */
 	async deleteSavedQueues(...guilds) {
-		/** @type {Collection<GuildQueueSchema>} */
+		/** @type {import("mongoose").Collection<GuildQueueSchema>} */
 		const guildQueueCollection = mongodb.connection.collection("guild_queues");
-		const deletedQueues = await guildQueueCollection.deleteMany({
+		await guildQueueCollection.deleteMany({
 			_id: { $in: guilds },
 		});
-		/** @type {Collection<GuildQueueTrackSchema>} */
+		/** @type {import("mongoose").Collection<GuildQueueTrackSchema>} */
 		const guildQueueTrackCollection =
 			mongodb.connection.collection("guild_queue_tracks");
-		const deletedTracks = await guildQueueTrackCollection.deleteMany({
+		await guildQueueTrackCollection.deleteMany({
 			guild: { $in: guilds },
 		});
 	},
 
 	/**
 	 * データベースに保存されたキューの状態を復元する。
-	 * @param {Player} player プレイヤー
+	 * @param {import("discord-player").Player} player プレイヤー
 	 */
 	async restoreQueues(player) {
-		/** @type {Collection<GuildQueueSchema>} */
+		/** @type {import("mongoose").Collection<GuildQueueSchema>} */
 		const guildQueueCollection = mongodb.connection.collection("guild_queues");
 		const guildQueueDocuments = guildQueueCollection.find({});
 		const guildsToDeleteQueues = [];
@@ -298,11 +294,11 @@ const functions = {
 
 	/**
 	 * データベースに保存された曲を取得する。
-	 * @param {Player} player プレイヤー
+	 * @param {import("discord-player").Player} player プレイヤー
 	 * @param {string} guild ギルド ID
 	 */
 	async getSavedTracks(player, guild) {
-		/** @type {Collection<GuildQueueTrackSchema>} */
+		/** @type {import("mongoose").Collection<GuildQueueTrackSchema>} */
 		const guildQueueTrackCollection =
 			mongodb.connection.collection("guild_queue_tracks");
 		const guildQueueTrackDocuments = guildQueueTrackCollection.find({ guild });

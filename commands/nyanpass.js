@@ -16,8 +16,6 @@ const axios = require("axios").default;
  * @property {string} count
  */
 
-let axiosNyanpass;
-
 async function getNyanpass() {
 	/** @type {import('axios').AxiosResponse<NyanpassData>} */
 	const res = await axios.get("https://nyanpass.com/api/get_count");
@@ -58,7 +56,6 @@ const commandNyanpass = {
 		.setDescription(LANG.commands.nyanpass.description),
 
 	async execute(interaction) {
-		const firstNyanpass = await getNyanpass();
 		await interaction.reply(await createReply());
 		const interval = setInterval(async () => {
 			await interaction.editReply(await createReply());

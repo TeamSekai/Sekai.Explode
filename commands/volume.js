@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { LANG, strFormat } = require("../util/languages");
 const {
 	getPlayableVoiceChannelId,
@@ -25,7 +25,7 @@ module.exports = {
 				.setRequired(false),
 		),
 	execute: async function (
-		/** @type {CommandInteraction<unknown>} */ interaction,
+		/** @type {import("discord.js").CommandInteraction} */ interaction,
 	) {
 		const vol = interaction.options.getInteger(
 			LANG.commands.volume.options.volume.name,

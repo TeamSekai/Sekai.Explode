@@ -6,9 +6,7 @@ const path = require("path");
 const { token, syslogChannel } = require("./config.json");
 const { enableTempLinks } = require("./internal/templinks");
 const { Player } = require("discord-player");
-const internal = require("stream");
 process.env["FFMPEG_PATH"] = path.join(__dirname, "ffmpeg");
-const os = require("os");
 
 //!Load Internal dir code
 const { onShutdown } = require("./internal/schedules");
@@ -26,7 +24,6 @@ const { ClientMessageHandler } = require("./internal/messages");
 
 const creset = "\x1b[0m";
 const cgreen = "\x1b[32m";
-const cred = "\x1b[31m";
 
 let commands = [];
 

@@ -2,10 +2,8 @@
 
 // 汎用的な型を定義するファイル
 
-const { ChatInputCommandInteraction } = require("discord.js");
-
 /**
  * @typedef {Object} Command スラッシュコマンドを表すオブジェクト
  * @property {import("discord.js").SlashCommandSubcommandsOnlyBuilder} data Discord の API に登録するデータ
- * @property {(interaction: ChatInputCommandInteraction) => Promise<void>} execute コマンドの処理
+ * @property {(interaction: import("discord.js").ChatInputCommandInteraction) => Promise<void>} execute コマンドの処理
  */

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { LANG, strFormat } = require("../util/languages");
 const {
 	CheckHostRequest,

@@ -1,11 +1,7 @@
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
-const { createCanvas, loadImage } = require("canvas");
 const {
-	MessageEmbed,
-	MessageAttachment,
 	SlashCommandBuilder,
 } = require("discord.js");
-const fs = require("fs");
 const activityModule = require("../internal/activity");
 const { LANG, strFormat } = require("../util/languages");
 const wspingValues = activityModule.getPingValues();
@@ -35,8 +31,6 @@ module.exports = {
 		const width = 800;
 		const height = 400;
 
-		const canvas = createCanvas(width, height);
-		const ctx = canvas.getContext("2d");
 		const configuration = {
 			type: "line",
 			data: {

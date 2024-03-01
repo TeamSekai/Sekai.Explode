@@ -17,11 +17,9 @@
  * サーバー毎の処理は {@link GuildMessageHandler#handleMessage} において行われる。
  */
 
-const { Client, Message } = require("discord.js");
 const axios = require("axios").default;
 const { strFormat, LANG } = require("../util/languages");
 const mongodb = require("./mongodb");
-const { Collection } = require("mongoose");
 
 /**
  * @typedef {Object} ReplyGuildSchema replyGuilds のドキュメント。
@@ -39,14 +37,14 @@ const { Collection } = require("mongoose");
  */
 
 /**
- * @return {Collection<ReplyGuildSchema>}
+ * @return {import("mongoose").Collection<ReplyGuildSchema>}
  */
 function getReplyGuildCollection() {
 	return mongodb.connection.collection("replyGuilds");
 }
 
 /**
- * @return {Collection<ReplySchema>}
+ * @return {import("mongoose").Collection<ReplySchema>}
  */
 function getReplyCollection() {
 	return mongodb.connection.collection("replies");
@@ -146,7 +144,7 @@ class ReplyPattern {
 class GuildMessageHandler {
 	/**
 	 * @readonly
-	 * @type {Client<true>}
+	 * @type {import("discord.js").Client<true>}
 	 */
 	client;
 
@@ -162,7 +160,7 @@ class GuildMessageHandler {
 	replyPatternsPromise;
 
 	/**
-	 * @param {Client<true>} client ログイン済みのクライアント
+	 * @param {import("discord.js").Client<true>} client ログイン済みのクライアント
 	 * @param {string} guildId サーバー ID
 	 */
 	constructor(client, guildId) {
@@ -173,7 +171,7 @@ class GuildMessageHandler {
 
 	/**
 	 * サーバー内でメッセージを受け取ったときの処理。
-	 * @param {Message} message メッセージ
+	 * @param {import("discord.js").Message} message メッセージ
 	 * @returns {Promise<boolean>} メッセージに反応したかどうか
 	 */
 	async handleMessage(message) {
@@ -247,7 +245,7 @@ class ClientMessageHandler {
 
 	/**
 	 * @readonly
-	 * @type {Client<true>}
+	 * @type {import("discord.js").Client<true>}
 	 */
 	client;
 
@@ -257,7 +255,7 @@ class ClientMessageHandler {
 	guildMessageHandlerMap = new Map();
 
 	/**
-	 * @param {Client<true>} client ログイン済みのクライアント
+	 * @param {import("discord.js").Client<true>} client ログイン済みのクライアント
 	 */
 	constructor(client) {
 		this.client = client;
@@ -281,7 +279,7 @@ class ClientMessageHandler {
 
 	/**
 	 * メッセージを受け取ったときの処理。
-	 * @param {Message} message メッセージ
+	 * @param {import("discord.js").Message} message メッセージ
 	 * @returns {Promise<void>} メッセージに反応したかどうか
 	 */
 	async handleMessage(message) {
@@ -349,7 +347,7 @@ async function loadReplies(clientUserId, guildId) {
 /**
  * 動画の埋め込みに対応した vxtwitter.com, fxtwitter.com, vxtiktok.com の
  * URL を返信する可能性がある。
- * @param {Message} message メッセージ
+ * @param {import("discord.js").Message} message メッセージ
  * @returns {Promise<void>}
  */
 async function replyAlternativeUrl(message) {

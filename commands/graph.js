@@ -1,7 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
-const { createCanvas, loadImage } = require("canvas");
-const fs = require("fs");
 const { LANG, strFormat } = require("../util/languages");
 
 module.exports = {
@@ -145,8 +143,6 @@ module.exports = {
 		const height = 400;
 
 		const data = values;
-		const canvas = createCanvas(width, height);
-		const ctx = canvas.getContext("2d");
 		const configuration = {
 			type: "line",
 			data: {

@@ -1,4 +1,4 @@
-const { Client, Events, Intents, Status, ActivityType } = require("discord.js");
+const { ActivityType } = require("discord.js");
 const { LANG, strFormat } = require("../util/languages");
 const { onShutdown } = require("./schedules");
 
@@ -32,10 +32,6 @@ module.exports = {
 			const intervalId = setInterval(() => {
 				const wsping = client.ws.ping;
 				addPingValue(wsping);
-				// avg
-				const avgPing =
-					wspingValues.reduce((sum, value) => sum + value, 0) /
-					wspingValues.length;
 				client.user.setPresence({
 					activities: [
 						{

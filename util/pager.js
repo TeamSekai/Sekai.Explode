@@ -3,7 +3,6 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	ActionRowBuilder,
-	BaseInteraction,
 } = require("discord.js");
 
 /**
@@ -256,7 +255,7 @@ class Pager {
 
 	/**
 	 * この Pager をリプライとして表示する。
-	 * @param {BaseInteraction} interaction 対話オブジェクト
+	 * @param {import("discord.js").BaseInteraction} interaction 対話オブジェクト
 	 */
 	async replyTo(interaction) {
 		if (!interaction.isRepliable()) {

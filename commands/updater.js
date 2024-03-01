@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require("discord.js");
 const { AdminUserIDs } = require("../config.json");
 const childprocess = require("child_process");
 const path = require("path");
-const color = require("colors");
 const { LANG } = require("../util/languages");
 const { shutdown } = require("../internal/schedules");
 

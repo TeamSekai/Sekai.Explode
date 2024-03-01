@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, CommandInteraction } = require("discord.js");
-const { useMainPlayer, QueryType, Track } = require("discord-player");
+const { SlashCommandBuilder } = require("discord.js");
+const { useMainPlayer, QueryType } = require("discord-player");
 const {
 	getPlayableVoiceChannelId,
 	getDuration,

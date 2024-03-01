@@ -1,12 +1,10 @@
 // @ts-check
 
-const { CommandInteraction, SlashCommandBuilder } = require("discord.js");
 const {
 	getPlayableVoiceChannelId,
 	getPlayingQueue,
 } = require("../util/players");
 const { LANG } = require("../util/languages");
-const { GuildQueue } = require("discord-player");
 
 /**
  * @typedef {import("../util/types").Command} Command
@@ -29,9 +27,9 @@ class PlayerCommand {
 
 	/**
 	 *
-	 * @param {SlashCommandBuilder} data
-	 * @param {(interaction: CommandInteraction,
-	 *          queue: GuildQueue<QueueMetadata>,
+	 * @param {import("discord.js").SlashCommandBuilder} data
+	 * @param {(interaction: import("discord.js").CommandInteraction,
+	 *          queue: import("discord-player").GuildQueue<QueueMetadata>,
 	 *          voiceChannelId: string) => Promise<void>} action 音楽プレイヤーの操作。チェックを行った後に呼び出される。
 	 */
 	constructor(data, action) {
@@ -40,7 +38,7 @@ class PlayerCommand {
 	}
 
 	/**
-	 * @param {CommandInteraction} interaction
+	 * @param {import("discord.js").CommandInteraction} interaction
 	 */
 	async execute(interaction) {
 		const voiceChannelId = getPlayableVoiceChannelId(interaction);

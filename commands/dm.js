@@ -41,10 +41,12 @@ module.exports = {
 			}
 		}
 
+		/* TODO 実装? コメントアウトを削除?
 		let isSilent = false;
 		if (interaction.options.getBoolean("silent")) {
 			isSilent = interaction.options.getBoolean("silent");
 		}
+		*/
 		const msg = interaction.options.getString(
 			LANG.commands.dm.options.text.name,
 		);

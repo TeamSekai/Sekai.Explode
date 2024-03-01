@@ -1,7 +1,6 @@
 const {
 	SlashCommandBuilder,
 	ChannelType,
-	RoleSelectMenuComponent,
 } = require("discord.js");
 const { LANG, strFormat } = require("../util/languages");
 

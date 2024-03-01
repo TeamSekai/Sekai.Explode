@@ -45,7 +45,7 @@ module.exports = {
 					return;
 				}
 
-				const result = records.map((record, index) => ({
+				const result = records.map((record) => ({
 					priority: record.priority,
 					weight: record.weight,
 					port: record.port,

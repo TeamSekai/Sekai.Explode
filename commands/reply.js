@@ -3,7 +3,6 @@
 const assert = require("assert");
 const {
 	SlashCommandBuilder,
-	ChatInputCommandInteraction,
 } = require("discord.js");
 const { LANG } = require("../util/languages");
 const { ClientMessageHandler, ReplyPattern } = require("../internal/messages");
@@ -164,7 +163,7 @@ const commandReply = {
 
 /**
  * 使う権限があるかをチェックする。
- * @param {ChatInputCommandInteraction} interaction
+ * @param {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function checkPermission(interaction) {
 	if (!config.replyCustomizeAllowedUsers?.includes(interaction.user.id)) {

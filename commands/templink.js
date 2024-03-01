@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { LANG, strFormat } = require("../util/languages");
 const {
 	areTempLinksEnabled,
@@ -17,7 +17,7 @@ module.exports = {
 				.setDescription(LANG.commands.templink.options.url.description)
 				.setRequired(true),
 		),
-	execute: async function (/** @type {CommandInteraction} */ interaction) {
+	execute: async function (/** @type {import("discord.js").CommandInteraction} */ interaction) {
 		if (!areTempLinksEnabled()) {
 			return interaction.reply(LANG.commands.templink.internalError);
 		}
