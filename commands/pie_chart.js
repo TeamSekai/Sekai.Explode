@@ -1,6 +1,6 @@
-const { SlashCommandBuilder } = require("discord.js");
-const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -35,7 +35,7 @@ module.exports = {
 				.setRequired(false),
 		),
 	execute: async function (interaction) {
-		const bgtheme = "#b0cdff";
+		const bgtheme = '#b0cdff';
 
 		const nickname = interaction.member.nickname || interaction.user.username;
 		let graphtitle = strFormat(LANG.commands.pieChart.defaultTitle, [nickname]);
@@ -60,7 +60,7 @@ module.exports = {
 			LANG.commands.pieChart.options.values.name,
 		);
 		console.log(valuesString);
-		const values = valuesString.split(",").map((val) => parseInt(val.trim()));
+		const values = valuesString.split(',').map((val) => parseInt(val.trim()));
 		console.log(values);
 
 		const width = 800;
@@ -68,7 +68,7 @@ module.exports = {
 
 		const data = values;
 		const configuration = {
-			type: "doughnut",
+			type: 'doughnut',
 			data: {
 				labels: values.map((_, index) => `${index + 1}`),
 				datasets: [
@@ -76,16 +76,16 @@ module.exports = {
 						label: label,
 						data: data,
 						backgroundColor: [
-							"rgb(255, 99, 132)",
-							"rgb(255, 205, 86)",
-							"rgb(54, 162, 235)",
-							"rgb(75, 192, 192)",
-							"rgb(153, 102, 255)",
-							"rgb(255, 159, 64)",
-							"rgb(255, 120, 120)",
-							"rgb(120, 255, 120)",
-							"rgb(120, 120, 255)",
-							"rgb(255, 255, 102)",
+							'rgb(255, 99, 132)',
+							'rgb(255, 205, 86)',
+							'rgb(54, 162, 235)',
+							'rgb(75, 192, 192)',
+							'rgb(153, 102, 255)',
+							'rgb(255, 159, 64)',
+							'rgb(255, 120, 120)',
+							'rgb(120, 255, 120)',
+							'rgb(120, 120, 255)',
+							'rgb(255, 255, 102)',
 							// add other
 						],
 					},
@@ -102,14 +102,14 @@ module.exports = {
 			files: [
 				{
 					attachment: orimoto,
-					name: "chart.png",
+					name: 'chart.png',
 				},
 			],
 			embeds: [
 				{
 					title: graphtitle,
 					image: {
-						url: "attachment://chart.png",
+						url: 'attachment://chart.png',
 					},
 				},
 			],

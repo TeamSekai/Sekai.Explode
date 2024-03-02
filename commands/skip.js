@@ -1,9 +1,9 @@
 // @ts-check
 
-const assert = require("assert");
-const { SlashCommandBuilder } = require("discord.js");
-const { LANG, strFormat } = require("../util/languages");
-const { PlayerCommand } = require("../common/PlayerCommand");
+const assert = require('assert');
+const { SlashCommandBuilder } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
+const { PlayerCommand } = require('../common/PlayerCommand');
 
 module.exports = new PlayerCommand(
 	new SlashCommandBuilder()
@@ -30,7 +30,7 @@ module.exports = new PlayerCommand(
 				embeds: [
 					{
 						title: strFormat(LANG.commands.skip.trackSkipped, [
-							"**" + currentTrack.title + "**",
+							'**' + currentTrack.title + '**',
 						]),
 						thumbnail: {
 							url: currentTrack.thumbnail,
@@ -43,7 +43,7 @@ module.exports = new PlayerCommand(
 			await interaction.reply(
 				LANG.commands.skip.generalError
 					.map((s) => strFormat(s, [e]))
-					.join("\n"),
+					.join('\n'),
 			);
 		}
 	},

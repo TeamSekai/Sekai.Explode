@@ -1,9 +1,9 @@
-const { SlashCommandBuilder } = require("discord.js");
-const { AdminUserIDs } = require("../config.json");
-const childprocess = require("child_process");
-const path = require("path");
-const { LANG } = require("../util/languages");
-const { shutdown } = require("../internal/schedules");
+const { SlashCommandBuilder } = require('discord.js');
+const { AdminUserIDs } = require('../config.json');
+const childprocess = require('child_process');
+const path = require('path');
+const { LANG } = require('../util/languages');
+const { shutdown } = require('../internal/schedules');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -18,15 +18,15 @@ module.exports = {
 			return;
 		}
 
-		let msg = ">".yellow + " git pull\n".green;
+		let msg = '>'.yellow + ' git pull\n'.green;
 		await interaction.reply(
-			LANG.commands.updater.updating + "\n" + "```ansi\n" + msg + "\n```",
+			LANG.commands.updater.updating + '\n' + '```ansi\n' + msg + '\n```',
 		);
 		let lock = false;
 		let lockTimeout = null;
 		const gitProcess = childprocess.spawn(
-			"git",
-			["-c", "color.ui=always", "pull"],
+			'git',
+			['-c', 'color.ui=always', 'pull'],
 			{
 				cwd: path.resolve(__dirname),
 			},
@@ -38,11 +38,11 @@ module.exports = {
 			},
 			1000 * 60 * 3,
 		);
-		gitProcess.stdout.on("data", (data) => {
-			msg += data.toString().replace(/\x1b\[m/g, "\x1b[0m");
+		gitProcess.stdout.on('data', (data) => {
+			msg += data.toString().replace(/\x1b\[m/g, '\x1b[0m');
 			if (!lock) {
 				interaction.editReply(
-					LANG.commands.updater.updating + "\n" + "```ansi\n" + msg + "\n```",
+					LANG.commands.updater.updating + '\n' + '```ansi\n' + msg + '\n```',
 				);
 				lock = true;
 			}
@@ -51,16 +51,16 @@ module.exports = {
 				lock = false;
 			}, 1000);
 		});
-		gitProcess.stderr.on("data", (data) => {
+		gitProcess.stderr.on('data', (data) => {
 			console.error(data.toString());
 		});
-		gitProcess.on("close", async () => {
+		gitProcess.on('close', async () => {
 			clearTimeout(timeout);
 			await interaction.editReply(
-				"```ansi\n" +
+				'```ansi\n' +
 					msg +
-					"\n```\n" +
-					LANG.commands.updater.restarting.join("\n"),
+					'\n```\n' +
+					LANG.commands.updater.restarting.join('\n'),
 			);
 			shutdown();
 		});

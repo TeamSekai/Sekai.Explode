@@ -1,11 +1,11 @@
 // @ts-check
 
-const { SlashCommandBuilder } = require("discord.js");
-const { LANG } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const { LANG } = require('../util/languages');
 const {
 	getPlayableVoiceChannelId,
 	getPlayingQueue,
-} = require("../util/players");
+} = require('../util/players');
 
 /** @type {import("../util/types").Command} */
 const commandResume = {

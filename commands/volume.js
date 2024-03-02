@@ -1,10 +1,10 @@
-const { SlashCommandBuilder } = require("discord.js");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
 const {
 	getPlayableVoiceChannelId,
 	getPlayingQueue,
-} = require("../util/players");
-const players = require("../util/players");
+} = require('../util/players');
+const players = require('../util/players');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -58,17 +58,17 @@ module.exports = {
 					keep
 						? LANG.commands.volume.volumeSave
 						: LANG.commands.volume.volumeSet,
-					["**" + vol + "**"],
+					['**' + vol + '**'],
 				),
 			);
 		} catch (e) {
 			interaction.reply(
 				LANG.commands.volume.error +
-					"\n" +
-					"```ansi\n" +
-					"\x1b[31m" +
+					'\n' +
+					'```ansi\n' +
+					'\x1b[31m' +
 					e +
-					"\n```",
+					'\n```',
 			);
 			console.error(e);
 		}

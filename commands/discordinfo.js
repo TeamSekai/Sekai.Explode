@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, ChannelType } = require("discord.js");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder, ChannelType } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -42,7 +42,7 @@ module.exports = {
 			const roles = member.roles.cache
 				.filter((role) => role.id !== interaction.guild.roles.everyone.id)
 				.map((role) => role.name)
-				.join(", ");
+				.join(', ');
 
 			const roleCount = member.roles.cache.filter(
 				(role) => role.id !== interaction.guild.roles.everyone.id,
@@ -107,7 +107,7 @@ module.exports = {
 			const createdAt = `<t:${Math.floor(guild.createdTimestamp / 1000)}:R>`;
 			let guildIcon = guild.iconURL({ dynamic: true });
 			if (!guildIcon) {
-				guildIcon = "https://cdn.mcsv.life/boticon.webp";
+				guildIcon = 'https://cdn.mcsv.life/boticon.webp';
 			}
 
 			await interaction.reply({
@@ -140,7 +140,7 @@ module.exports = {
 											.textChannelCount,
 										[gchannels],
 									) +
-									"\n" +
+									'\n' +
 									strFormat(
 										LANG.commands.discordinfo.subcommands.server
 											.voiceChannelCount,

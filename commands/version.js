@@ -1,6 +1,6 @@
-const { SlashCommandBuilder } = require("discord.js");
-const os = require("os");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const os = require('os');
+const { LANG, strFormat } = require('../util/languages');
 
 // いいかんじに
 module.exports = {

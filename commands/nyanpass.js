@@ -6,9 +6,9 @@ const {
 	ButtonBuilder,
 	ActionRowBuilder,
 	ButtonStyle,
-} = require("discord.js");
-const { LANG, strFormat } = require("../util/languages");
-const axios = require("axios").default;
+} = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
+const axios = require('axios').default;
 
 /**
  * @typedef {Object} NyanpassData
@@ -18,7 +18,7 @@ const axios = require("axios").default;
 
 async function getNyanpass() {
 	/** @type {import('axios').AxiosResponse<NyanpassData>} */
-	const res = await axios.get("https://nyanpass.com/api/get_count");
+	const res = await axios.get('https://nyanpass.com/api/get_count');
 	return res.data;
 }
 
@@ -31,15 +31,15 @@ async function createReply() {
 	const embed = new EmbedBuilder()
 		.setTitle(LANG.commands.nyanpass.title)
 		.setColor(0xe75297)
-		.setDescription("```" + count.padStart(15) + "```")
+		.setDescription('```' + count.padStart(15) + '```')
 		.setFooter({
 			text: strFormat(LANG.commands.nyanpass.footer, [time]),
 		});
 	const component = new ButtonBuilder()
 		.setStyle(ButtonStyle.Link)
-		.setEmoji("✋")
+		.setEmoji('✋')
 		.setLabel(LANG.commands.nyanpass.button)
-		.setURL("https://nyanpass.com/");
+		.setURL('https://nyanpass.com/');
 	/** @type {ActionRowBuilder<ButtonBuilder>} */
 	const row = new ActionRowBuilder();
 	row.addComponents(component);

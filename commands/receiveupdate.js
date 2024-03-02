@@ -1,20 +1,20 @@
-const assert = require("assert");
+const assert = require('assert');
 const {
 	SlashCommandBuilder,
 	ChannelType,
 	PermissionsBitField,
 	NewsChannel,
-} = require("discord.js");
+} = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		//TODO: i18n
-		.setName("follow_announcements")
-		.setDescription("Sekai.Explodeの最新情報をフォローします!")
+		.setName('follow_announcements')
+		.setDescription('Sekai.Explodeの最新情報をフォローします!')
 		.addChannelOption((option) =>
 			option
-				.setName("channel")
-				.setDescription("受信するチャンネルを指定します。")
+				.setName('channel')
+				.setDescription('受信するチャンネルを指定します。')
 				.addChannelTypes(ChannelType.GuildText)
 				.setRequired(true),
 		),
@@ -29,12 +29,12 @@ module.exports = {
 			)
 		) {
 			return await interaction.editReply(
-				"権限がありません!(管理者権限が必要です。)",
+				'権限がありません!(管理者権限が必要です。)',
 			);
 		}
-		const targetchannel = interaction.options.getChannel("channel");
+		const targetchannel = interaction.options.getChannel('channel');
 
-		const channel = client.channels.resolve("1211695901760819281"); //TODO: config.jsonで編集可能に?
+		const channel = client.channels.resolve('1211695901760819281'); //TODO: config.jsonで編集可能に?
 		assert(channel instanceof NewsChannel);
 		try {
 			await channel.addFollower(targetchannel.id);

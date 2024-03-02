@@ -1,11 +1,11 @@
-const { SlashCommandBuilder } = require("discord.js");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
 const {
 	areTempLinksEnabled,
 	createTempLink,
 	InvalidURLError,
-} = require("../internal/templinks");
-const { AxiosError } = require("axios");
+} = require('../internal/templinks');
+const { AxiosError } = require('axios');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -47,14 +47,14 @@ module.exports = {
 		} catch (e) {
 			if (e instanceof InvalidURLError) {
 				await interaction.reply({
-					content: LANG.commands.templink.invalidUrlError.join("\n"),
+					content: LANG.commands.templink.invalidUrlError.join('\n'),
 					ephemeral: true,
 				});
 			} else if (e instanceof AxiosError) {
 				await interaction.reply({
 					content:
 						strFormat(LANG.commands.templink.httpError, [e.response?.status]) +
-						"\n" +
+						'\n' +
 						e.response?.data?.error?.description,
 					ephemeral: true,
 				});

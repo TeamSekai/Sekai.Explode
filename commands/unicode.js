@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("discord.js");
-const { LANG } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const { LANG } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,11 +12,11 @@ module.exports = {
 				.setRequired(true)
 				.addChoices({
 					name: LANG.commands.unicode.options.mode.choices.encode,
-					value: "encode",
+					value: 'encode',
 				})
 				.addChoices({
 					name: LANG.commands.unicode.options.mode.choices.decode,
-					value: "decode",
+					value: 'decode',
 				}),
 		)
 		.addStringOption((option) =>
@@ -33,11 +33,11 @@ module.exports = {
 			LANG.commands.unicode.options.text.name,
 		);
 
-		if (mode === "encode") {
+		if (mode === 'encode') {
 			const unicodeArray = Array.from(text).map((char) => char.charCodeAt(0));
 			const unicodeString = unicodeArray
-				.map((code) => `\\u${code.toString(16).padStart(4, "0")}`)
-				.join("");
+				.map((code) => `\\u${code.toString(16).padStart(4, '0')}`)
+				.join('');
 			await interaction.reply({
 				embeds: [
 					{
@@ -45,13 +45,13 @@ module.exports = {
 						fields: [
 							{
 								name: LANG.common.message.result,
-								value: "```\n" + unicodeString + "\n```",
+								value: '```\n' + unicodeString + '\n```',
 							},
 						],
 					},
 				],
 			});
-		} else if (mode === "decode") {
+		} else if (mode === 'decode') {
 			const unicodeString = text.replace(/\\u[\dA-Fa-f]{4}/g, (match) =>
 				String.fromCharCode(parseInt(match.slice(2), 16)),
 			);
@@ -62,7 +62,7 @@ module.exports = {
 						fields: [
 							{
 								name: LANG.common.message.result,
-								value: "```\n" + unicodeString + "\n```",
+								value: '```\n' + unicodeString + '\n```',
 							},
 						],
 					},

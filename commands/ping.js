@@ -1,7 +1,7 @@
-const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
-const { SlashCommandBuilder } = require("discord.js");
-const activityModule = require("../internal/activity");
-const { LANG, strFormat } = require("../util/languages");
+const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+const { SlashCommandBuilder } = require('discord.js');
+const activityModule = require('../internal/activity');
+const { LANG, strFormat } = require('../util/languages');
 const wspingValues = activityModule.getPingValues();
 
 // いいかんじに
@@ -30,7 +30,7 @@ module.exports = {
 		const height = 400;
 
 		const configuration = {
-			type: "line",
+			type: 'line',
 			data: {
 				labels: data.map((_, index) => index + 1),
 				datasets: [
@@ -38,7 +38,7 @@ module.exports = {
 						label: LANG.commands.ping.graphLabel,
 						data: data,
 						fill: false,
-						borderColor: "rgb(75, 192, 192)",
+						borderColor: 'rgb(75, 192, 192)',
 						tension: 0.1,
 					},
 				],
@@ -54,14 +54,14 @@ module.exports = {
 		const chartJSNodeCanvas = new ChartJSNodeCanvas({
 			width,
 			height,
-			backgroundColour: "#01010e",
+			backgroundColour: '#01010e',
 		});
 		const orimoto = await chartJSNodeCanvas.renderToBuffer(configuration);
 		await interaction.reply({
 			files: [
 				{
 					attachment: orimoto,
-					name: "chart.png",
+					name: 'chart.png',
 				},
 			],
 			embeds: [
@@ -70,7 +70,7 @@ module.exports = {
 						interaction.client.ws.ping,
 					]),
 					image: {
-						url: "attachment://chart.png",
+						url: 'attachment://chart.png',
 					},
 				},
 			],

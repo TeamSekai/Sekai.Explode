@@ -1,11 +1,11 @@
 // @ts-check
 
-const assert = require("assert");
-const { SlashCommandBuilder } = require("discord.js");
-const { LANG } = require("../util/languages");
-const { ClientMessageHandler, ReplyPattern } = require("../internal/messages");
-const Pager = require("../util/pager");
-const config = require("../config.json");
+const assert = require('assert');
+const { SlashCommandBuilder } = require('discord.js');
+const { LANG } = require('../util/languages');
+const { ClientMessageHandler, ReplyPattern } = require('../internal/messages');
+const Pager = require('../util/pager');
+const config = require('../config.json');
 
 /** @type {import("../util/types").Command} */
 const commandReply = {
@@ -103,7 +103,7 @@ const commandReply = {
 				const success = await guildMessageHandler.addReplyPattern(replyPattern);
 				if (success) {
 					await interaction.reply(
-						LANG.commands.reply.subcommands.add.succeeded + "\n" + replyPattern,
+						LANG.commands.reply.subcommands.add.succeeded + '\n' + replyPattern,
 					);
 				} else {
 					await interaction.reply({
@@ -127,7 +127,7 @@ const commandReply = {
 				if (replyPattern != null) {
 					await interaction.reply(
 						LANG.commands.reply.subcommands.remove.succeeded +
-							"\n" +
+							'\n' +
 							replyPattern,
 					);
 				} else {
@@ -144,9 +144,9 @@ const commandReply = {
 				const pager = new Pager(
 					replyPatterns.map((pattern) => `- ${pattern}`),
 					{
-						title: "自動応答メッセージ",
-						color: "Green",
-						emptyMessage: "メッセージが設定されていません",
+						title: '自動応答メッセージ',
+						color: 'Green',
+						emptyMessage: 'メッセージが設定されていません',
 					},
 				);
 				await pager.replyTo(interaction);

@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("discord.js");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -45,7 +45,7 @@ module.exports = {
 					fields: [
 						{
 							name: LANG.common.message.result,
-							value: "```\n" + result + "\n```",
+							value: '```\n' + result + '\n```',
 						},
 					],
 					footer: {

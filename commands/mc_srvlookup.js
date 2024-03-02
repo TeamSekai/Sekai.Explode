@@ -1,6 +1,6 @@
-const { SlashCommandBuilder } = require("discord.js");
-const dns = require("dns");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const dns = require('dns');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -16,7 +16,7 @@ module.exports = {
 		const domain = interaction.options.getString(
 			LANG.commands.mcSrvlookup.options.domain.name,
 		);
-		const domainName = "_minecraft._tcp." + domain;
+		const domainName = '_minecraft._tcp.' + domain;
 		try {
 			dns.resolveSrv(domainName, (err, records) => {
 				if (err) {
@@ -57,23 +57,23 @@ module.exports = {
 					.map(
 						(record, index) =>
 							strFormat(LANG.commands.mcSrvlookup.result.title, [index + 1]) +
-							"\n  " +
+							'\n  ' +
 							strFormat(LANG.commands.mcSrvlookup.result.priority, [
 								record.priority,
 							]) +
-							"\n  " +
+							'\n  ' +
 							strFormat(LANG.commands.mcSrvlookup.result.weight, [
 								record.weight,
 							]) +
-							"\n  " +
+							'\n  ' +
 							strFormat(LANG.commands.mcSrvlookup.result.port, [record.port]) +
-							"\n  " +
+							'\n  ' +
 							strFormat(LANG.commands.mcSrvlookup.result.target, [
 								record.target,
 							]) +
-							"\n",
+							'\n',
 					)
-					.join("\n");
+					.join('\n');
 
 				// interaction.reply(`SRV Records for ${domain}:\n${formattedResult}`);
 				interaction.reply({

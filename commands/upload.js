@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require("discord.js");
-const axios = require("axios").default;
-const FormData = require("form-data");
-const config = require("../config.json");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const axios = require('axios').default;
+const FormData = require('form-data');
+const config = require('../config.json');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -45,7 +45,7 @@ module.exports = {
 
 		try {
 			const res = await axios.get(file.proxyURL, {
-				responseType: "stream",
+				responseType: 'stream',
 			});
 			const form = new FormData();
 			const filename = interaction.options.get(
@@ -55,7 +55,7 @@ module.exports = {
 				interaction.options.get(LANG.commands.upload.options.private.name)
 					?.value == true;
 			console.log(strFormat(LANG.commands.upload.isPrivateLog, [isPrivate]));
-			form.append("file", res.data, filename || file.name);
+			form.append('file', res.data, filename || file.name);
 			const res2 = await axios.post(config.cdnUploadURL, form, {
 				params: {
 					private: isPrivate,
@@ -66,8 +66,8 @@ module.exports = {
 			// console.log("==========")
 			// console.log(res2)
 			const cdnURL =
-				config.cdnRootURL + (isPrivate ? "private/" : "") + res2.data.fileName;
-			interaction.editReply(LANG.commands.upload.fileUploaded + "\n" + cdnURL);
+				config.cdnRootURL + (isPrivate ? 'private/' : '') + res2.data.fileName;
+			interaction.editReply(LANG.commands.upload.fileUploaded + '\n' + cdnURL);
 			const user = interaction.user;
 			const dmChannel = await user.createDM();
 			dmChannel.send({
@@ -84,12 +84,12 @@ module.exports = {
 							{
 								name: LANG.commands.upload.result.url,
 								value:
-									"```" +
+									'```' +
 									cdnURL +
-									"```" +
+									'```' +
 									`\n[${LANG.commands.upload.result.clickToCopy}](https://paste-pgpj.onrender.com/?p=` +
 									encodeURIComponent(cdnURL) +
-									")",
+									')',
 							},
 						],
 					},
@@ -105,7 +105,7 @@ module.exports = {
 					{
 						headers: {
 							Authorization: `Bearer ${config.cfToken}`,
-							"Content-Type": "application/json",
+							'Content-Type': 'application/json',
 						},
 					},
 				);
@@ -113,7 +113,7 @@ module.exports = {
 				console.error(e);
 			}
 		} catch (e) {
-			if (e?.name == "AxiosError" && e?.response?.status) {
+			if (e?.name == 'AxiosError' && e?.response?.status) {
 				await interaction.editReply({
 					embeds: [
 						{

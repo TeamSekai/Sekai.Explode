@@ -1,13 +1,13 @@
-const { SlashCommandBuilder } = require("discord.js");
-const { useMainPlayer, QueryType } = require("discord-player");
+const { SlashCommandBuilder } = require('discord.js');
+const { useMainPlayer, QueryType } = require('discord-player');
 const {
 	getPlayableVoiceChannelId,
 	getDuration,
 	play,
 	deleteSavedQueues,
-} = require("../util/players");
-const { LANG, strFormat } = require("../util/languages");
-const Timespan = require("../util/timespan");
+} = require('../util/players');
+const { LANG, strFormat } = require('../util/languages');
+const Timespan = require('../util/timespan');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 //
@@ -94,7 +94,7 @@ module.exports = {
  */
 function toTrackAddedMessage(track) {
 	const message = strFormat(LANG.commands.play.trackAdded, [
-		"**" + trackToString(track) + "**",
+		'**' + trackToString(track) + '**',
 	]);
 	return message;
 }

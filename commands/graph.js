@@ -1,6 +1,6 @@
-const { SlashCommandBuilder } = require("discord.js");
-const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
-const { LANG, strFormat } = require("../util/languages");
+const { SlashCommandBuilder } = require('discord.js');
+const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -36,32 +36,32 @@ module.exports = {
 		)
 		.addStringOption((option) =>
 			option
-				.setName("line_color")
+				.setName('line_color')
 				.setDescription(LANG.commands.graph.options.lineColor.name)
 				.setRequired(false)
 				.addChoices({
 					name: LANG.commands.graph.options.lineColor.choices.red,
-					value: "rgb(255, 0, 0)",
+					value: 'rgb(255, 0, 0)',
 				})
 				.addChoices({
 					name: LANG.commands.graph.options.lineColor.choices.green,
-					value: "rgb(0, 255, 0)",
+					value: 'rgb(0, 255, 0)',
 				})
 				.addChoices({
 					name: LANG.commands.graph.options.lineColor.choices.pink,
-					value: "rgb(255, 0, 255)",
+					value: 'rgb(255, 0, 255)',
 				})
 				.addChoices({
 					name: LANG.commands.graph.options.lineColor.choices.white,
-					value: "rgb(255, 255, 255)",
+					value: 'rgb(255, 255, 255)',
 				})
 				.addChoices({
 					name: LANG.commands.graph.options.lineColor.choices.black,
-					value: "rgb(0, 0, 0)",
+					value: 'rgb(0, 0, 0)',
 				})
 				.addChoices({
 					name: LANG.commands.graph.options.lineColor.choices.orange,
-					value: "rgb(255, 128, 0)",
+					value: 'rgb(255, 128, 0)',
 				}),
 		)
 		.addStringOption((option) =>
@@ -71,11 +71,11 @@ module.exports = {
 				.setRequired(false)
 				.addChoices({
 					name: LANG.commands.graph.options.backgroundTheme.choices.dark,
-					value: "#01010e",
+					value: '#01010e',
 				})
 				.addChoices({
 					name: LANG.commands.graph.options.backgroundTheme.choices.light,
-					value: "#F3F3F6",
+					value: '#F3F3F6',
 				}),
 		)
 		.addBooleanOption(
@@ -86,7 +86,7 @@ module.exports = {
 					.setRequired(false), // 任意のオプション
 		),
 	execute: async function (interaction) {
-		let linergb = "rgb(75, 192, 192)";
+		let linergb = 'rgb(75, 192, 192)';
 		if (
 			interaction.options.getString(LANG.commands.graph.options.lineColor.name)
 		) {
@@ -95,7 +95,7 @@ module.exports = {
 			);
 		}
 
-		let bgtheme = "#01010e";
+		let bgtheme = '#01010e';
 		if (
 			interaction.options.getString(
 				LANG.commands.graph.options.backgroundTheme.name,
@@ -136,7 +136,7 @@ module.exports = {
 			LANG.commands.graph.options.values.name,
 		);
 		console.log(valuesString);
-		const values = valuesString.split(",").map((val) => parseInt(val.trim()));
+		const values = valuesString.split(',').map((val) => parseInt(val.trim()));
 		console.log(values);
 
 		const width = 800;
@@ -144,7 +144,7 @@ module.exports = {
 
 		const data = values;
 		const configuration = {
-			type: "line",
+			type: 'line',
 			data: {
 				labels: values.map((_, index) => `${index + 1}`),
 				datasets: [
@@ -175,14 +175,14 @@ module.exports = {
 			files: [
 				{
 					attachment: orimoto,
-					name: "chart.png",
+					name: 'chart.png',
 				},
 			],
 			embeds: [
 				{
 					title: graphtitle,
 					image: {
-						url: "attachment://chart.png",
+						url: 'attachment://chart.png',
 					},
 				},
 			],

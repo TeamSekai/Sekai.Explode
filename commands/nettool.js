@@ -1,29 +1,29 @@
 // @ts-check
 
-const { SlashCommandBuilder } = require("discord.js");
-const dns = require("dns");
-const axios = require("axios").default;
-const ipRangeCheck = require("ip-range-check");
-const { LANG, strFormat } = require("../util/languages");
-const { getIpInfo } = require("../util/ip-api");
-const assert = require("assert");
+const { SlashCommandBuilder } = require('discord.js');
+const dns = require('dns');
+const axios = require('axios').default;
+const ipRangeCheck = require('ip-range-check');
+const { LANG, strFormat } = require('../util/languages');
+const { getIpInfo } = require('../util/ip-api');
+const assert = require('assert');
 let cfIps = [];
 axios
-	.get("https://www.cloudflare.com/ips-v4")
+	.get('https://www.cloudflare.com/ips-v4')
 	.catch(() => {
 		console.log(LANG.commands.nettool.ipListFetchError);
 	})
 	.then((res) => {
-		cfIps = res?.data.split("\n");
+		cfIps = res?.data.split('\n');
 	});
 const dnsTypes = /** @type {const} */ ([
-	"A",
-	"AAAA",
-	"NS",
-	"CNAME",
-	"TXT",
-	"MX",
-	"SRV",
+	'A',
+	'AAAA',
+	'NS',
+	'CNAME',
+	'TXT',
+	'MX',
+	'SRV',
 ]);
 
 module.exports = {
@@ -83,11 +83,11 @@ module.exports = {
 					LANG.commands.nettool.subcommands.isProxy.options.ip.name,
 					true,
 				)
-				.replace(/@/g, "@\u200B");
+				.replace(/@/g, '@\u200B');
 			const { status, value: ipInfo } = await getIpInfo(ip, {
-				fields: "status,country,regionName,city,isp,proxy,hosting",
+				fields: 'status,country,regionName,city,isp,proxy,hosting',
 			});
-			if (status == "err") {
+			if (status == 'err') {
 				interaction.reply(
 					strFormat(LANG.commands.nettool.subcommands.isProxy.error, [
 						ipInfo.message,
@@ -134,7 +134,7 @@ module.exports = {
 												.isProxyValue,
 											[ipInfo.proxy],
 										) +
-										"\n" +
+										'\n' +
 										strFormat(
 											LANG.commands.nettool.subcommands.isProxy.detectionResult
 												.isHostingValue,
@@ -159,7 +159,7 @@ module.exports = {
 				true,
 			);
 			const { status, value: data } = await getIpInfo(ip);
-			if (status == "err") {
+			if (status == 'err') {
 				await interaction.editReply({
 					embeds: [
 						{
@@ -181,7 +181,7 @@ module.exports = {
 					data.status,
 				]),
 			);
-			if (data?.status == "404" || data?.bogon == true) {
+			if (data?.status == '404' || data?.bogon == true) {
 				throw new Error(
 					LANG.commands.nettool.subcommands.ipInfo.invalidIpError,
 				);
@@ -245,10 +245,10 @@ module.exports = {
 							let res = await dns.promises.resolve(domainName, type);
 							assert(res instanceof Array);
 							if (res.length > 0) {
-								if (type == "MX") {
+								if (type == 'MX') {
 									res = res.sort((a, b) => b.priority - a.priority);
 									dnsResult[type] =
-										"```\n" +
+										'```\n' +
 										res
 											.map((x) => {
 												return strFormat(
@@ -259,12 +259,12 @@ module.exports = {
 													},
 												);
 											})
-											.join("\n") +
-										"\n```";
+											.join('\n') +
+										'\n```';
 									return;
 								}
 								dnsResult[type] =
-									"```\n" +
+									'```\n' +
 									res
 										.map((x) => {
 											const isCf = ipRangeCheck(x, cfIps);
@@ -280,11 +280,11 @@ module.exports = {
 												},
 											);
 										})
-										.join("\n") +
-									"\n```";
+										.join('\n') +
+									'\n```';
 							}
 						} catch (e) {
-							if (e.code == "ENOTFOUND") {
+							if (e.code == 'ENOTFOUND') {
 								throw new Error(
 									LANG.commands.nettool.subcommands.nsLookup.domainDoesNotExist,
 								);
@@ -318,7 +318,7 @@ module.exports = {
 				await interaction.editReply({
 					embeds: [
 						{
-							title: "エラー",
+							title: 'エラー',
 							description: `${e.message}`,
 							color: 0xff0000,
 							footer: {

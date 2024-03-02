@@ -1,8 +1,12 @@
-const { SlashCommandBuilder, PermissionsBitField } = require("discord.js");
-const mongodb = require("../internal/mongodb"); //*MongoDB
-const { AdminUserIDs } = require("../config.json");
-const Pager = require("../util/pager");
-const { LANG, strFormat } = require("../util/languages");
+const {
+	SlashCommandBuilder,
+	PermissionsBitField,
+	ModalBuilder,
+} = require('discord.js');
+const mongodb = require('../internal/mongodb'); //*MongoDB
+const { AdminUserIDs } = require('../config.json');
+const Pager = require('../util/pager');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -76,7 +80,7 @@ module.exports = {
 			}
 			try {
 				// データベースから全てのユーザーを取得
-				const userCollection = mongodb.connection.collection("globalBans");
+				const userCollection = mongodb.connection.collection('globalBans');
 				const allUsers = await userCollection.find({}).toArray();
 
 				// ユーザー情報をログに表示
@@ -128,7 +132,7 @@ module.exports = {
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply(
-					LANG.commands.globalban.generalError + "\n```" + error + "\n```",
+					LANG.commands.globalban.generalError + '\n```' + error + '\n```',
 				);
 				return;
 			}
@@ -156,7 +160,7 @@ module.exports = {
 		if (subcommand === LANG.commands.globalban.subcommands.add.name) {
 			try {
 				const existingBan = await mongodb.connection
-					.collection("globalBans")
+					.collection('globalBans')
 					.findOne({ userId: user.id });
 				if (existingBan) {
 					return await interaction.editReply(
@@ -165,7 +169,7 @@ module.exports = {
 						]),
 					);
 				}
-				await mongodb.connection.collection("globalBans").insertOne({
+				await mongodb.connection.collection('globalBans').insertOne({
 					userId: user.id,
 					userName: user.tag,
 					reason: reason,
@@ -195,7 +199,7 @@ module.exports = {
 								strFormat(LANG.commands.globalban.operationFailed, {
 									guildName: g.name,
 								}) +
-									"\n" +
+									'\n' +
 									e,
 							); // エラーが出たとき
 						}
@@ -213,14 +217,14 @@ module.exports = {
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply(
-					LANG.commands.globalban.generalError + "\n```" + error + "\n```",
+					LANG.commands.globalban.generalError + '\n```' + error + '\n```',
 				);
 				return;
 			}
 		} else if (subcommand === LANG.commands.globalban.subcommands.remove.name) {
 			try {
 				const existingBan = await mongodb.connection
-					.collection("globalBans")
+					.collection('globalBans')
 					.findOne({ userId: user.id });
 				if (!existingBan) {
 					return await interaction.editReply(
@@ -231,7 +235,7 @@ module.exports = {
 				}
 
 				await mongodb.connection
-					.collection("globalBans")
+					.collection('globalBans')
 					.deleteOne({ userId: user.id });
 				let done = 0;
 				let fail = 0;
@@ -275,7 +279,7 @@ module.exports = {
 			} catch (error) {
 				console.error(error);
 				await interaction.editReply(
-					LANG.commands.globalban.generalError + "\n```" + error + "\n```",
+					LANG.commands.globalban.generalError + '\n```' + error + '\n```',
 				);
 				return;
 			}
@@ -283,18 +287,18 @@ module.exports = {
 			//*LIST
 		} else if (subcommand === LANG.commands.globalban.subcommands.list.name) {
 			try {
-				const userCollection = mongodb.connection.collection("globalBans");
+				const userCollection = mongodb.connection.collection('globalBans');
 				const bans = await userCollection.find({}).toArray();
 				const pager = new Pager(
 					bans.map((ban) =>
 						strFormat(LANG.commands.globalban.subcommands.list.record, {
 							user:
-								"**" +
+								'**' +
 								strFormat(LANG.commands.globalban.subcommands.list.recordUser, {
 									name: ban.userName,
 									id: ban.userId,
 								}) +
-								"**",
+								'**',
 							reason: ban.reason || LANG.commands.globalban.noReason,
 						}),
 					),
@@ -350,6 +354,10 @@ module.exports = {
 					],
 				});
 			}
+		} else if (subcommand === 'report') {
+			const modal = new ModalBuilder()
+				.setCustomId('gbanReportMenu')
+				.setTitle('');
 		} else {
 			return await interaction.editReply(
 				LANG.commands.globalban.unsupportedSubcommandError,
