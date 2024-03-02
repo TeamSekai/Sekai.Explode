@@ -21,32 +21,17 @@ module.exports = {
 		),
 
 	execute: async function (interaction) {
-		if (
-			interaction.options.getInteger(
-				LANG.commands.randomnum.options.minValue.name,
-			)
-		) {
-			min = Math.ceil(
+		const min =
+			Math.ceil(
 				interaction.options.getInteger(
 					LANG.commands.randomnum.options.minValue.name,
 				),
-			);
-		} else {
-			min = 0;
-		}
-		if (
+			) ?? 0;
+		const max = Math.floor(
 			interaction.options.getInteger(
 				LANG.commands.randomnum.options.maxValue.name,
-			)
-		) {
-			max = Math.floor(
-				interaction.options.getInteger(
-					LANG.commands.randomnum.options.maxValue.name,
-				),
-			);
-		} else {
-			max = 100;
-		}
+			) ?? 100,
+		);
 		const result = Math.floor(Math.random() * (max - min) + min);
 		await interaction.reply({
 			embeds: [
