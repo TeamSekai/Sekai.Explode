@@ -35,7 +35,7 @@ module.exports = {
 				.setRequired(false),
 		),
 	execute: async function (interaction) {
-		let bgtheme = "#b0cdff";
+		const bgtheme = "#b0cdff";
 
 		const nickname = interaction.member.nickname || interaction.user.username;
 		let graphtitle = strFormat(LANG.commands.pieChart.defaultTitle, [nickname]);

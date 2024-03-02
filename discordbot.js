@@ -29,13 +29,13 @@ const cgreen = "\x1b[32m";
 let commands = [];
 
 //!LOGGER
-let oWrite = process.stdout.write;
+const oWrite = process.stdout.write;
 process.stdout.write = function () {
 	oWrite.apply(this, arguments);
 	fs.appendFileSync("discordbot.log", arguments[0] || "");
 };
 
-let oWrite2 = process.stdout.write;
+const oWrite2 = process.stdout.write;
 process.stderr.write = function () {
 	oWrite2.apply(this, arguments);
 	fs.appendFileSync("discordbot.log", arguments[0] || "");
@@ -49,7 +49,7 @@ fs.readdirSync(path.join(__dirname, "commands"), {
 	withFileTypes: true,
 }).forEach((file) => {
 	if (!file.isFile() || path.extname(file.name) != ".js") return;
-	let cmds = require(path.join(__dirname, "commands", file.name));
+	const cmds = require(path.join(__dirname, "commands", file.name));
 	cmdscount++;
 	if (Array.isArray(cmds)) commands = [...commands, ...cmds];
 	else commands.push(cmds);
@@ -100,7 +100,7 @@ client.on("ready", async (readyClient) => {
 	console.log(LANG.discordbot.ready.commandsRegistering);
 	await client.application.commands.set(commands.map((x) => x.data.toJSON()));
 	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
-	let SyslogChannel = client.channels.cache.get(syslogChannel);
+	const SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
 	restoreQueues(player);
 	messageHandler = new ClientMessageHandler(readyClient);
@@ -128,7 +128,7 @@ onShutdown(async () => {
 client.on("interactionCreate", async (interaction) => {
 	if (!interaction.isCommand()) return;
 
-	let command = commands.find((x) => x.data.name == interaction.commandName);
+	const command = commands.find((x) => x.data.name == interaction.commandName);
 	if (!command) {
 		console.error(
 			strFormat(LANG.discordbot.interactionCreate.unsupportedCommandError, [

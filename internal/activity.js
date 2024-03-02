@@ -6,7 +6,7 @@ console.log(LANG.internal.activity.called);
 
 // 10秒毎に更新
 
-let wspingValues = [];
+const wspingValues = [];
 
 // add
 function addPingValue(ping) {

@@ -93,9 +93,9 @@ module.exports = {
 								LANG.commands.globalban.subcommands.sync.reasonNotProvided,
 						}),
 					);
-					let usrid = user.userId;
+					const usrid = user.userId;
 					if (!bans.has(usrid)) {
-						let reason = `${user.reason || LANG.commands.globalban.noReason}`;
+						const reason = `${user.reason || LANG.commands.globalban.noReason}`;
 						interaction.guild.members.ban(user.userId, {
 							reason: strFormat(
 								LANG.commands.globalban.globalBanReason,

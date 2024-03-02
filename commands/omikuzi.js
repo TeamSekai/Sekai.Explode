@@ -12,7 +12,7 @@ module.exports = {
 		.setName(LANG.commands.omikuzi.name)
 		.setDescription(LANG.commands.omikuzi.description),
 	execute: async function (interaction) {
-		let number = GenNum();
+		const number = GenNum();
 		if (number == 1) {
 			await interaction.reply(LANG.commands.omikuzi.badLuck);
 			return;

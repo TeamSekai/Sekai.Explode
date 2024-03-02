@@ -19,7 +19,7 @@ module.exports = {
 				.setRequired(true),
 		),
 	execute: async function (/** @type {CommandInteraction} */ interaction) {
-		let url = interaction.options.getString(
+		const url = interaction.options.getString(
 			LANG.commands.checkping.options.ip.name,
 		);
 		if (!isValidHostname(url)) {

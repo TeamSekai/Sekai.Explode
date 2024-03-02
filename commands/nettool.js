@@ -78,7 +78,7 @@ module.exports = {
 	) {
 		const subcommand = interaction.options.getSubcommand();
 		if (subcommand === LANG.commands.nettool.subcommands.isProxy.name) {
-			let ip = interaction.options
+			const ip = interaction.options
 				.getString(
 					LANG.commands.nettool.subcommands.isProxy.options.ip.name,
 					true,
@@ -154,7 +154,7 @@ module.exports = {
 
 		if (subcommand === LANG.commands.nettool.subcommands.ipInfo.name) {
 			await interaction.deferReply();
-			let ip = interaction.options.getString(
+			const ip = interaction.options.getString(
 				LANG.commands.nettool.subcommands.ipInfo.options.ip.name,
 				true,
 			);
@@ -232,12 +232,12 @@ module.exports = {
 		}
 		if (subcommand === LANG.commands.nettool.subcommands.nsLookup.name) {
 			await interaction.deferReply();
-			let domainName = interaction.options.getString(
+			const domainName = interaction.options.getString(
 				LANG.commands.nettool.subcommands.nsLookup.options.domain.name,
 				true,
 			);
 			try {
-				let dnsResult = {};
+				const dnsResult = {};
 
 				await Promise.all(
 					dnsTypes.map(async (type) => {
@@ -267,7 +267,7 @@ module.exports = {
 									"```\n" +
 									res
 										.map((x) => {
-											let isCf = ipRangeCheck(x, cfIps);
+											const isCf = ipRangeCheck(x, cfIps);
 											return strFormat(
 												LANG.commands.nettool.subcommands.nsLookup.record,
 												{
@@ -293,7 +293,7 @@ module.exports = {
 					}),
 				);
 
-				let fields = dnsTypes
+				const fields = dnsTypes
 					.filter((x) => dnsResult[x])
 					.map((x) => {
 						return /** @type {import("discord.js").APIEmbedField} */ ({

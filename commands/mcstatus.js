@@ -25,17 +25,17 @@ module.exports = {
 	execute: async function (
 		/** @type {import("discord.js").CommandInteraction} */ interaction,
 	) {
-		let server = interaction.options.getString(
+		const server = interaction.options.getString(
 			LANG.commands.mcstatus.options.serverIp.name,
 		);
-		let isbedrock = interaction.options.getBoolean(
+		const isbedrock = interaction.options.getBoolean(
 			LANG.commands.mcstatus.options.bedrockServer.name,
 		);
 		await interaction.deferReply();
 		try {
 			//			let target_server = server_ip
 			if (server) {
-				let res = await axios.get(
+				const res = await axios.get(
 					"https://api.mcsrvstat.us/" +
 						(isbedrock ? "bedrock/" : "") +
 						"3/" +
@@ -100,7 +100,7 @@ module.exports = {
 				}
 				return;
 			}
-			let res = await axios.get(server.url);
+			const res = await axios.get(server.url);
 			if (res?.data?.status == "online") {
 				await interaction.editReply(
 					strFormat(LANG.commands.mcstatus.serverIsOnline, {

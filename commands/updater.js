@@ -24,14 +24,14 @@ module.exports = {
 		);
 		let lock = false;
 		let lockTimeout = null;
-		let gitProcess = childprocess.spawn(
+		const gitProcess = childprocess.spawn(
 			"git",
 			["-c", "color.ui=always", "pull"],
 			{
 				cwd: path.resolve(__dirname),
 			},
 		);
-		let timeout = setTimeout(
+		const timeout = setTimeout(
 			() => {
 				gitProcess.kill();
 				interaction.editReply(LANG.commands.updater.timeout);

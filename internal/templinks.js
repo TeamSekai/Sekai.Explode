@@ -61,7 +61,7 @@ function clearExpiredTempLinks() {
  */
 async function oEmbedHandler(req, res) {
 	if (!tempLinks) return res.sendStatus(500);
-	let link = tempLinks.find((x) => x.id == req.params.linkCode);
+	const link = tempLinks.find((x) => x.id == req.params.linkCode);
 	if (!link) {
 		return res.sendStatus(404);
 	}
@@ -83,7 +83,7 @@ async function oEmbedHandler(req, res) {
  */
 async function rootHandler(req, res) {
 	if (!tempLinks) return res.sendStatus(500);
-	let link = tempLinks.find((x) => x.id == req.params.linkCode);
+	const link = tempLinks.find((x) => x.id == req.params.linkCode);
 	if (!link) {
 		return res
 			.status(404)
@@ -118,14 +118,14 @@ function unicodeEscape(str) {
  * @param {express.Response} res
  */
 function linkHandler(req, res) {
-	let remoteIp = req.headers["cf-connecting-ip"];
-	let logPath = path.join(__dirname, "accesslog.txt");
+	const remoteIp = req.headers["cf-connecting-ip"];
+	const logPath = path.join(__dirname, "accesslog.txt");
 	if (!fs.existsSync(logPath))
 		fs.writeFileSync(logPath, "Access Log================\n");
 	fs.appendFileSync(logPath, `IP: ${remoteIp} | ${req.originalUrl}\n`);
 
 	if (!tempLinks) return res.sendStatus(500);
-	let link = tempLinks.find((x) => x.id == req.params.linkCode);
+	const link = tempLinks.find((x) => x.id == req.params.linkCode);
 	if (!link) {
 		return res
 			.status(404)

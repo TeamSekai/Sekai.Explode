@@ -23,7 +23,7 @@ module.exports = {
 		if (!areTempLinksEnabled()) {
 			return interaction.reply(LANG.commands.templink.internalError);
 		}
-		let url = interaction.options.get(
+		const url = interaction.options.get(
 			LANG.commands.templink.options.url.name,
 		).value;
 		try {

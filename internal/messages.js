@@ -355,7 +355,7 @@ async function replyAlternativeUrl(message) {
 	if (urls == null) {
 		return;
 	}
-	for (let url of urls) {
+	for (const url of urls) {
 		if (!isAlternativeUrlAvailable(url)) {
 			return;
 		}
@@ -389,7 +389,7 @@ async function replyAlternativeUrl(message) {
 							[e.code],
 						),
 					);
-					let errMsg =
+					const errMsg =
 						"\n" +
 						strFormat(LANG.discordbot.messageCreate.reactionRemoveError, [
 							e.code,
