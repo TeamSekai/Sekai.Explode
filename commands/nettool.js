@@ -1,8 +1,12 @@
+// @ts-check
+
 const { SlashCommandBuilder } = require("discord.js");
 const dns = require("dns");
-const axios = require("axios"); //*.default?
+const axios = require("axios").default;
 const ipRangeCheck = require("ip-range-check");
 const { LANG, strFormat } = require("../util/languages");
+const { getIpInfo } = require("../util/ip-api");
+const assert = require("assert");
 let cfIps = [];
 axios
 	.get("https://www.cloudflare.com/ips-v4")
@@ -10,9 +14,17 @@ axios
 		console.log(LANG.commands.nettool.ipListFetchError);
 	})
 	.then((res) => {
-		cfIps = res.data.split("\n");
+		cfIps = res?.data.split("\n");
 	});
-const dnsTypes = ["A", "AAAA", "NS", "CNAME", "TXT", "MX", "SRV"];
+const dnsTypes = /** @type {const} */ ([
+	"A",
+	"AAAA",
+	"NS",
+	"CNAME",
+	"TXT",
+	"MX",
+	"SRV",
+]);
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -61,22 +73,24 @@ module.exports = {
 				),
 		),
 
-	execute: async function (interaction) {
+	execute: async function (
+		/** @type {import("discord.js").ChatInputCommandInteraction} */ interaction,
+	) {
 		const subcommand = interaction.options.getSubcommand();
 		if (subcommand === LANG.commands.nettool.subcommands.isProxy.name) {
 			let ip = interaction.options
-				.getString(LANG.commands.nettool.subcommands.isProxy.options.ip.name)
+				.getString(
+					LANG.commands.nettool.subcommands.isProxy.options.ip.name,
+					true,
+				)
 				.replace(/@/g, "@\u200B");
-			try {
-				ipInfo = (
-					await axios.get(
-						`http://ip-api.com/json/${encodeURI(ip)}?fields=status,country,regionName,city,isp,proxy,hosting`,
-					)
-				).data;
-			} catch (e) {
+			const { status, value: ipInfo } = await getIpInfo(ip, {
+				fields: "status,country,regionName,city,isp,proxy,hosting",
+			});
+			if (status == "err") {
 				interaction.reply(
 					strFormat(LANG.commands.nettool.subcommands.isProxy.error, [
-						e.message,
+						ipInfo.message,
 					]),
 				);
 				return;
@@ -142,72 +156,15 @@ module.exports = {
 			await interaction.deferReply();
 			let ip = interaction.options.getString(
 				LANG.commands.nettool.subcommands.ipInfo.options.ip.name,
+				true,
 			);
-			try {
-				let data = (await axios.get(`https://ipinfo.io/${encodeURI(ip)}/json`))
-					.data;
-				console.log(
-					strFormat(LANG.commands.nettool.subcommands.ipInfo.targetLog, [ip]),
-				);
-				console.log(
-					strFormat(LANG.commands.nettool.subcommands.ipInfo.statusLog, [
-						data.status,
-					]),
-				);
-				if (data?.status == "404" || data?.bogon == true) {
-					throw new Error(
-						LANG.commands.nettool.subcommands.ipInfo.invalidIpError,
-					);
-				}
-				console.log(data.hostname);
-				console.log(data.country);
-				console.log(data.city);
-				console.log(data.region);
-				console.log(data.org);
-				await interaction.editReply({
-					embeds: [
-						{
-							title: strFormat(
-								LANG.commands.nettool.subcommands.ipInfo.result.title,
-								[ip],
-							),
-							color: 0xfd75ff,
-							footer: {
-								text: LANG.commands.nettool.resultFooter,
-							},
-							fields: [
-								{
-									name: LANG.commands.nettool.subcommands.ipInfo.result.target,
-									value: interaction.options.getString(
-										LANG.commands.nettool.subcommands.ipInfo.options.ip.name,
-									),
-								},
-								{
-									name: LANG.commands.nettool.subcommands.ipInfo.result.country,
-									value: data.country,
-								},
-								{
-									name: LANG.commands.nettool.subcommands.ipInfo.result.city,
-									value: data.city,
-								},
-								{
-									name: LANG.commands.nettool.subcommands.ipInfo.result.region,
-									value: data.region,
-								},
-								{
-									name: LANG.commands.nettool.subcommands.ipInfo.result.org,
-									value: data.org,
-								},
-							],
-						},
-					],
-				});
-			} catch (e) {
+			const { status, value: data } = await getIpInfo(ip);
+			if (status == "err") {
 				await interaction.editReply({
 					embeds: [
 						{
 							title: LANG.commands.nettool.errorTitle,
-							description: `${e.message}`,
+							description: `${data.message}`,
 							color: 0xff0000,
 							footer: {
 								text: LANG.commands.nettool.resultFooter,
@@ -216,11 +173,68 @@ module.exports = {
 					],
 				});
 			}
+			console.log(
+				strFormat(LANG.commands.nettool.subcommands.ipInfo.targetLog, [ip]),
+			);
+			console.log(
+				strFormat(LANG.commands.nettool.subcommands.ipInfo.statusLog, [
+					data.status,
+				]),
+			);
+			if (data?.status == "404" || data?.bogon == true) {
+				throw new Error(
+					LANG.commands.nettool.subcommands.ipInfo.invalidIpError,
+				);
+			}
+			console.log(data.hostname);
+			console.log(data.country);
+			console.log(data.city);
+			console.log(data.region);
+			console.log(data.org);
+			await interaction.editReply({
+				embeds: [
+					{
+						title: strFormat(
+							LANG.commands.nettool.subcommands.ipInfo.result.title,
+							[ip],
+						),
+						color: 0xfd75ff,
+						footer: {
+							text: LANG.commands.nettool.resultFooter,
+						},
+						fields: [
+							{
+								name: LANG.commands.nettool.subcommands.ipInfo.result.target,
+								value: interaction.options.getString(
+									LANG.commands.nettool.subcommands.ipInfo.options.ip.name,
+								),
+							},
+							{
+								name: LANG.commands.nettool.subcommands.ipInfo.result.country,
+								value: data.country,
+							},
+							{
+								name: LANG.commands.nettool.subcommands.ipInfo.result.city,
+								value: data.city,
+							},
+							{
+								name: LANG.commands.nettool.subcommands.ipInfo.result.region,
+								value: data.region,
+							},
+							{
+								name: LANG.commands.nettool.subcommands.ipInfo.result.org,
+								value: data.org,
+							},
+						],
+					},
+				],
+			});
 		}
 		if (subcommand === LANG.commands.nettool.subcommands.nsLookup.name) {
 			await interaction.deferReply();
 			let domainName = interaction.options.getString(
 				LANG.commands.nettool.subcommands.nsLookup.options.domain.name,
+				true,
 			);
 			try {
 				let dnsResult = {};
@@ -229,6 +243,7 @@ module.exports = {
 					dnsTypes.map(async (type) => {
 						try {
 							let res = await dns.promises.resolve(domainName, type);
+							assert(res instanceof Array);
 							if (res.length > 0) {
 								if (type == "MX") {
 									res = res.sort((a, b) => b.priority - a.priority);
@@ -279,15 +294,13 @@ module.exports = {
 				);
 
 				let fields = dnsTypes
+					.filter((x) => dnsResult[x])
 					.map((x) => {
-						if (dnsResult[x]) {
-							return {
-								name: x,
-								value: dnsResult[x],
-							};
-						}
-					})
-					.filter((x) => !!x);
+						return /** @type {import("discord.js").APIEmbedField} */ ({
+							name: x,
+							value: dnsResult[x],
+						});
+					});
 
 				await interaction.editReply({
 					embeds: [

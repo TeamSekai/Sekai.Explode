@@ -8,4 +8,14 @@
  * @property {(interaction: import("discord.js").ChatInputCommandInteraction) => Promise<void>} execute コマンドの処理
  */
 
+/**
+ * @template {string} S 元の文字列
+ * @template {string} D 区切り文字
+ * @typedef {(
+ *     S extends `${infer T}${D}${infer U}`
+ *         ? T | Split<U, D>
+ *         : S
+ * )} Split 文字列を区切ってできる文字列からなるユニオン型
+ */
+
 module.exports = {};
