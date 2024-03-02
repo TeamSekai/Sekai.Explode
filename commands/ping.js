@@ -1,8 +1,6 @@
-const { ChartJSNodeCanvas } = require("chartjs-node-canvas")
-const { createCanvas, loadImage } = require('canvas');
-const { MessageEmbed, MessageAttachment, SlashCommandBuilder } = require('discord.js');
-const fs = require('fs');
-const activityModule = require('../internal/activity');
+const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
+const { SlashCommandBuilder } = require("discord.js");
+const activityModule = require("../internal/activity");
 const { LANG, strFormat } = require("../util/languages");
 const wspingValues = activityModule.getPingValues();
 
@@ -19,29 +17,31 @@ module.exports = {
 };
 */
 
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName(LANG.commands.ping.name)
 		.setDescription(LANG.commands.ping.description),
-	execute: async function(interaction) {
-		const data = wspingValues.slice(-30).concat(new Array(30 - Math.min(30, wspingValues.length)).fill(0)).reverse(); // データを取得し、0で補完して逆順に並べ替え
+	execute: async function (interaction) {
+		const data = wspingValues
+			.slice(-30)
+			.concat(new Array(30 - Math.min(30, wspingValues.length)).fill(0))
+			.reverse(); // データを取得し、0で補完して逆順に並べ替え
 		const width = 800;
 		const height = 400;
 
-		const canvas = createCanvas(width, height);
-		const ctx = canvas.getContext('2d');
-    	const configuration = {
-			type: 'line',
+		const configuration = {
+			type: "line",
 			data: {
 				labels: data.map((_, index) => index + 1),
-				datasets: [{
-					label: LANG.commands.ping.graphLabel,
-					data: data,
-					fill: false,
-					borderColor: 'rgb(75, 192, 192)',
-					tension: 0.1,
-				}],
+				datasets: [
+					{
+						label: LANG.commands.ping.graphLabel,
+						data: data,
+						fill: false,
+						borderColor: "rgb(75, 192, 192)",
+						tension: 0.1,
+					},
+				],
 			},
 			options: {
 				scales: {
@@ -50,25 +50,33 @@ module.exports = {
 					},
 				},
 			},
-		}
-		const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour:"#01010e" });
+		};
+		const chartJSNodeCanvas = new ChartJSNodeCanvas({
+			width,
+			height,
+			backgroundColour: "#01010e",
+		});
 		const orimoto = await chartJSNodeCanvas.renderToBuffer(configuration);
-    	await interaction.reply({
-			files: [{
-			  attachment: orimoto,
-			  name:"chart.png"
-			}],
-			embeds:[{
-			  title: strFormat(LANG.commands.ping.title, [interaction.client.ws.ping]),
-			  image: {
-				 "url": "attachment://chart.png"
-			  }
-			}]
-		  })
+		await interaction.reply({
+			files: [
+				{
+					attachment: orimoto,
+					name: "chart.png",
+				},
+			],
+			embeds: [
+				{
+					title: strFormat(LANG.commands.ping.title, [
+						interaction.client.ws.ping,
+					]),
+					image: {
+						url: "attachment://chart.png",
+					},
+				},
+			],
+		});
 	},
 };
-
-
 
 // 引用: https://www.geeklibrary.jp/counter-attack/discord-js-bot/
 // module.exportsの補足

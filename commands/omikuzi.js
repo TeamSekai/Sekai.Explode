@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
-const { LANG, strFormat } = require('../util/languages');
+const { SlashCommandBuilder } = require("discord.js");
+const { LANG, strFormat } = require("../util/languages");
 
 function GenNum() {
 	const min = 1;
@@ -11,8 +11,8 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName(LANG.commands.omikuzi.name)
 		.setDescription(LANG.commands.omikuzi.description),
-	execute: async function(interaction) {
-		let number = GenNum();
+	execute: async function (interaction) {
+		const number = GenNum();
 		if (number == 1) {
 			await interaction.reply(LANG.commands.omikuzi.badLuck);
 			return;
@@ -33,6 +33,8 @@ module.exports = {
 			await interaction.reply(LANG.commands.omikuzi.greatGoodLuck);
 			return;
 		}
-		await interaction.reply(strFormat(LANG.commands.omikuzi.assertionError, [number]));
+		await interaction.reply(
+			strFormat(LANG.commands.omikuzi.assertionError, [number]),
+		);
 	},
 };

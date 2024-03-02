@@ -11,36 +11,40 @@
  * @param {FormatTableOption} options オプション
  */
 function formatTable(table, options = {}) {
-    table = table.map(row => row.map(cell => String(cell)));
-    const /** @type {number[]} */ maxWidths = [];
-    for (const row of table) {
-        const length = row.length;
-        for (let j = 0 ; j < length ; j++) {
-            const maxWidth = maxWidths[j]
-            const width = row[j].length;
-            if (!maxWidth || width > maxWidth) {
-                maxWidths[j] = width;
-            }
-        }
-    }
-    const padding = options.fillString ?? ' ';
-    const margin = options.margin ?? ' ';
-    const align = options.align ?? [];
-    return table.map(value => {
-        const last = value.length - 1;
-        return value.map((e, i) => {
-            switch (align[i]) {
-                default:
-                case "left":
-                    if (i == last) {
-                        return e;
-                    }
-                    return e.padEnd(maxWidths[i], padding);
-                case "right":
-                    return e.padStart(maxWidths[i], padding);
-            }
-        }).join(margin);
-    }).join('\n');
+	table = table.map((row) => row.map((cell) => String(cell)));
+	const /** @type {number[]} */ maxWidths = [];
+	for (const row of table) {
+		const length = row.length;
+		for (let j = 0; j < length; j++) {
+			const maxWidth = maxWidths[j];
+			const width = row[j].length;
+			if (!maxWidth || width > maxWidth) {
+				maxWidths[j] = width;
+			}
+		}
+	}
+	const padding = options.fillString ?? " ";
+	const margin = options.margin ?? " ";
+	const align = options.align ?? [];
+	return table
+		.map((value) => {
+			const last = value.length - 1;
+			return value
+				.map((e, i) => {
+					switch (align[i]) {
+						default:
+						case "left":
+							if (i == last) {
+								return e;
+							}
+							return e.padEnd(maxWidths[i], padding);
+						case "right":
+							return e.padStart(maxWidths[i], padding);
+					}
+				})
+				.join(margin);
+		})
+		.join("\n");
 }
 
 module.exports = { formatTable };
