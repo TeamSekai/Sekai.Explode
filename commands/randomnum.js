@@ -1,10 +1,12 @@
-const { SlashCommandBuilder } = require('discord.js');
 const { LANG, strFormat } = require('../util/languages');
+const { SimpleCommand, SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName(LANG.commands.randomnum.name)
-		.setDescription(LANG.commands.randomnum.description)
+module.exports = new SimpleCommand(
+	SimpleSlashCommandBuilder
+		.create(
+			LANG.commands.randomnum.name,
+			LANG.commands.randomnum.description
+		)
 		.addIntegerOption((option) =>
 			option
 				.setName(LANG.commands.randomnum.options.minValue.name)
@@ -20,18 +22,7 @@ module.exports = {
 				.setMinValue(0),
 		),
 
-	execute: async function (interaction) {
-		const min =
-			Math.ceil(
-				interaction.options.getInteger(
-					LANG.commands.randomnum.options.minValue.name,
-				),
-			) ?? 0;
-		const max = Math.floor(
-			interaction.options.getInteger(
-				LANG.commands.randomnum.options.maxValue.name,
-			) ?? 100,
-		);
+	async function execute(interaction, min = 0, max = 100) {
 		const result = Math.floor(Math.random() * (max - min) + min);
 		await interaction.reply({
 			embeds: [
@@ -56,5 +47,5 @@ module.exports = {
 				},
 			],
 		});
-	},
-};
+	}
+)

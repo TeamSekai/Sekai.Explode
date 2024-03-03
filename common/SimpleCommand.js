@@ -16,11 +16,18 @@ const { SlashCommandBuilder } = require('discord.js');
  */
 
 /**
+ * @template {Option<unknown, boolean>} O
+ * @typedef {(
+ *     O extends BooleanOption<infer Required> ? (Required extends true ? boolean : boolean | undefined) :
+ *     O extends IntegerOption<infer Required> ? (Required extends true ? number : number | undefined) :
+ *     never
+ * )} OptionValue
+ */
+
+/**
  * @template {Option<unknown, boolean>[]} Options
- * @typedef {unknown[] & {
- *     [I in number]: Options[I] extends Option<infer T, infer Required>
- *         ? Required extends true ? T : T | null
- *         : never
+ * @typedef {{
+ *     [I in keyof Options]: Options[I] extends Option<unknown, boolean> ? OptionValue<Options[I]> : never
  * }} OptionValues
  */
 
@@ -47,6 +54,7 @@ class Option {
 
 	/**
 	 * オプションの値を取得する。
+     * @abstract
 	 * @param {ChatInputCommandInteraction} _interaction コマンドのインタラクション
 	 * @returns {Required extends true ? T : T | null}
 	 */
@@ -81,15 +89,46 @@ class BooleanOption extends Option {
 	}
 
 	/**
+     * @override
 	 * @param {ChatInputCommandInteraction} interaction
 	 */
 	get(interaction) {
 		if (this.isRequired()) {
 			return interaction.options.getBoolean(this.name, true);
 		} else {
-			return interaction.options.getBoolean(this.name);
+			return interaction.options.getBoolean(this.name) ?? void 0;
 		}
 	}
+}
+
+/**
+ * @typedef {FirstParameter<typeof import('discord.js').SharedSlashCommandOptions.prototype.addIntegerOption>} IntegerOptionInput
+ */
+
+/**
+ * @template {boolean} [Required = false]
+ * @extends {Option<number, Required>}
+ */
+class IntegerOption extends Option {
+	/**
+	 * @param {import('discord.js').SharedSlashCommandOptions} builder
+	 * @param {IntegerOptionInput} input
+	 */
+    constructor(builder, input) {
+        super(builder, (builder) => builder.addIntegerOption(input));
+    }
+
+	/**
+     * @override
+	 * @param {ChatInputCommandInteraction} interaction
+	 */
+    get(interaction) {
+		if (this.isRequired()) {
+			return interaction.options.getInteger(this.name, true);
+		} else {
+			return interaction.options.getInteger(this.name) ?? void 0;
+		}
+    }
 }
 
 /**
@@ -126,6 +165,7 @@ class SimpleSlashCommandBuilder {
 	/**
 	 * @param {string} name コマンドの名前
 	 * @param {string} description コマンドの説明文
+     * @returns {SimpleSlashCommandBuilder<[]>}
 	 */
 	static create(name, description) {
 		return new SimpleSlashCommandBuilder(name, description, []);
@@ -139,6 +179,21 @@ class SimpleSlashCommandBuilder {
 	addBooleanOption(input) {
 		/** @type {[...Options, BooleanOption<Required>]} */
 		const options = [...this.options, new BooleanOption(this.handle, input)];
+		return new SimpleSlashCommandBuilder(
+			this.#name,
+			this.#description,
+			options,
+		);
+	}
+
+	/**
+	 * @template {boolean} [Required = false]
+	 * @param {IntegerOptionInput} input
+	 * @returns
+	 */
+	addIntegerOption(input) {
+		/** @type {[...Options, IntegerOption<Required>]} */
+		const options = [...this.options, new IntegerOption(this.handle, input)];
 		return new SimpleSlashCommandBuilder(
 			this.#name,
 			this.#description,
