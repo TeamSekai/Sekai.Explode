@@ -489,15 +489,15 @@
 			"options": {
 				"minValue": {
 					"name": "min_value",
-					"description": "Specify the minimum value (default: 0)"
+					"description": "Specify the minimum value (default: ${0})"
 				},
 				"maxValue": {
 					"name": "max_value",
-					"description": "Specify the maximum value (default: 100)"
+					"description": "Specify the maximum value (default: ${0})"
 				},
 				"diceCount": {
 					"name": "dice_count",
-					"description": "Specify the count of dice (default: 1)"
+					"description": "Specify the count of dice (default: ${0})"
 				}
 			},
 			"result": {

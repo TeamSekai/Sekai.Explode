@@ -6,6 +6,10 @@ const {
 	SimpleSlashCommandBuilder,
 } = require('../common/SimpleCommand');
 
+const DEFAULT_MIN_VALUE = 0;
+const DEFAULT_MAX_VALUE = 100;
+const DEFAULT_DICE_COUNT = 1;
+
 module.exports = new SimpleCommand(
 	SimpleSlashCommandBuilder.create(
 		LANG.commands.randomnum.name,
@@ -14,27 +18,47 @@ module.exports = new SimpleCommand(
 		.addIntegerOption((option) =>
 			option
 				.setName(LANG.commands.randomnum.options.minValue.name)
-				.setDescription(LANG.commands.randomnum.options.minValue.description)
+				.setDescription(
+					strFormat(
+						LANG.commands.randomnum.options.minValue.description,
+						DEFAULT_MIN_VALUE,
+					),
+				)
 				.setRequired(false)
 				.setMinValue(0),
 		)
 		.addIntegerOption((option) =>
 			option
 				.setName(LANG.commands.randomnum.options.maxValue.name)
-				.setDescription(LANG.commands.randomnum.options.maxValue.description)
+				.setDescription(
+					strFormat(
+						LANG.commands.randomnum.options.maxValue.description,
+						DEFAULT_MAX_VALUE,
+					),
+				)
 				.setRequired(false)
 				.setMinValue(0),
 		)
 		.addIntegerOption((option) =>
 			option
 				.setName(LANG.commands.randomnum.options.diceCount.name)
-				.setDescription(LANG.commands.randomnum.options.diceCount.description)
+				.setDescription(
+					strFormat(
+						LANG.commands.randomnum.options.diceCount.description,
+						DEFAULT_DICE_COUNT,
+					),
+				)
 				.setRequired(false)
 				.setMinValue(1)
 				.setMaxValue(50),
 		),
 
-	async function execute(interaction, min = 0, max = 100, diceCount = 1) {
+	async function execute(
+		interaction,
+		min = DEFAULT_MIN_VALUE,
+		max = DEFAULT_MAX_VALUE,
+		diceCount = DEFAULT_DICE_COUNT,
+	) {
 		const result = [];
 		for (let i = 0; i < diceCount; i++) {
 			result.push(Math.floor(Math.random() * (max - min) + min));
