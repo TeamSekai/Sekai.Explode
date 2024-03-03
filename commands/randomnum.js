@@ -59,6 +59,13 @@ module.exports = new SimpleCommand(
 		max = DEFAULT_MAX_VALUE,
 		diceCount = DEFAULT_DICE_COUNT,
 	) {
+		if (min > max) {
+			await interaction.reply({
+				content: strFormat(LANG.commands.randomnum.boundError, { min, max }),
+				ephemeral: true,
+			});
+			return;
+		}
 		const result = [];
 		const range = max - min + 1;
 		for (let i = 0; i < diceCount; i++) {

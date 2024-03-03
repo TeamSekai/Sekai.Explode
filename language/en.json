@@ -500,6 +500,7 @@
 					"description": "Specify the count of dice (default: ${0})"
 				}
 			},
+			"boundError": "The minimum value must be less than or equal to the maximum value! (Minimum value: ${min}, Maximum value: ${max})",
 			"result": {
 				"title": "Generated a random number!",
 				"description": "Minimum value: ${min}, Maximum value: ${max}, dice count: ${count} (${representation})",
