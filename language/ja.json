@@ -494,11 +494,16 @@
 				"maxValue": {
 					"name": "max_value",
 					"description": "最大値を指定(デフォルト: 100)"
+				},
+				"diceCount": {
+					"name": "dice_count",
+					"description": "ダイスの数を指定(デフォルト: 1)"
 				}
 			},
 			"result": {
 				"title": "乱数を生成しました!",
-				"description": "最小値: ${min}, 最大値: ${max}",
+				"description": "最小値: ${min}, 最大値: ${max}, ダイスの数: ${count} (${representation})",
+				"sumFieldName": "合計:",
 				"footer": "実行者: ${0}"
 			}
 		},

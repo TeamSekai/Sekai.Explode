@@ -494,11 +494,16 @@
 				"maxValue": {
 					"name": "max_value",
 					"description": "Specify the maximum value (default: 100)"
+				},
+				"diceCount": {
+					"name": "dice_count",
+					"description": "Specify the count of dice (default: 1)"
 				}
 			},
 			"result": {
 				"title": "Generated a random number!",
-				"description": "Minimum value: ${min}, Maximum value: ${max}",
+				"description": "Minimum value: ${min}, Maximum value: ${max}, dice count: ${count} (${representation})",
+				"sumFieldName": "Total:",
 				"footer": "Executed by: ${0}"
 			}
 		},
