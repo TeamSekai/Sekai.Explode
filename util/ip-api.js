@@ -1,7 +1,7 @@
 // @ts-check
 
-const axios = require("axios").default;
-const { Ok, Err } = require("./result");
+const axios = require('axios').default;
+const { Ok, Err } = require('./result');
 
 /**
  * @typedef {Object} IpApiGeolocationFullData

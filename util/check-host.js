@@ -1,7 +1,7 @@
 // @ts-check
 
-const { setTimeout } = require("timers/promises");
-const axios = require("axios").default;
+const { setTimeout } = require('timers/promises');
+const axios = require('axios').default;
 
 /**
  * @template {CheckHostResult} R
@@ -41,9 +41,9 @@ const axios = require("axios").default;
 const nodeMap = new Map();
 
 const axiosCheckHost = axios.create({
-	baseURL: "https://check-host.net/",
+	baseURL: 'https://check-host.net/',
 	headers: {
-		Accept: "application/json",
+		Accept: 'application/json',
 	},
 });
 
@@ -56,7 +56,7 @@ async function getCheckHostNode(name) {
 	if (value != null) {
 		return value;
 	}
-	const res = await axiosCheckHost.get("/nodes/hosts");
+	const res = await axiosCheckHost.get('/nodes/hosts');
 	const nodes = res.data.nodes;
 	for (const [key, value] of Object.entries(nodes)) {
 		const mapValue = nodeMap.get(key);
@@ -178,15 +178,15 @@ class CheckHostResultMap extends Map {
 	}
 
 	ok() {
-		return this.count((node, result) => result.state == "ok");
+		return this.count((node, result) => result.state == 'ok');
 	}
 
 	error() {
-		return this.count((node, result) => result.state == "error");
+		return this.count((node, result) => result.state == 'error');
 	}
 
 	processing() {
-		return this.count((node, result) => result.state == "processing");
+		return this.count((node, result) => result.state == 'processing');
 	}
 }
 
@@ -223,7 +223,7 @@ class CheckPingOk extends CheckPingResult {
 	 * @param {any} payload
 	 */
 	constructor(payload) {
-		super("ok");
+		super('ok');
 		this.host = payload[0][2];
 		this.values = payload.map((/** @type {any[]} */ a) => ({
 			reply: a[0],
@@ -234,14 +234,14 @@ class CheckPingOk extends CheckPingResult {
 
 /** @type {CheckHostType<CheckPingResult>} */
 const CHECK_PING = {
-	name: "ping",
+	name: 'ping',
 	castResult(/** @type {any} */ data) {
 		if (data == null) {
-			return new CheckPingResult("processing");
+			return new CheckPingResult('processing');
 		}
 		const payload = data[0];
 		if (payload[0] == null) {
-			return new CheckPingResult("error");
+			return new CheckPingResult('error');
 		}
 		return new CheckPingOk(payload);
 	},
@@ -269,7 +269,7 @@ class CheckTcpOk extends CheckTcpResult {
 	 * @param {any} payload
 	 */
 	constructor(payload) {
-		super("ok");
+		super('ok');
 		this.time = payload.time;
 		this.address = payload.address;
 	}
@@ -282,20 +282,20 @@ class CheckTcpError extends CheckTcpResult {
 	 * @param {string} description
 	 */
 	constructor(description) {
-		super("error");
+		super('error');
 		this.description = description;
 	}
 }
 
 /** @type {CheckHostType<CheckTcpResult>} */
 const CHECK_TCP = {
-	name: "tcp",
+	name: 'tcp',
 	castResult(/** @type {any} */ data) {
 		if (data == null) {
-			return new CheckTcpResult("processing");
+			return new CheckTcpResult('processing');
 		}
 		const payload = data[0];
-		if ("error" in payload) {
+		if ('error' in payload) {
 			return new CheckTcpError(payload.error);
 		}
 		return new CheckTcpOk(payload);

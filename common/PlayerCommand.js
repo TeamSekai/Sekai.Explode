@@ -3,8 +3,8 @@
 const {
 	getPlayableVoiceChannelId,
 	getPlayingQueue,
-} = require("../util/players");
-const { LANG } = require("../util/languages");
+} = require('../util/players');
+const { LANG } = require('../util/languages');
 
 /**
  * @typedef {import("../util/types").Command} Command

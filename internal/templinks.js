@@ -1,16 +1,16 @@
-const express = require("express");
-const http = require("http");
-const fs = require("fs");
-const path = require("path");
-const axios = require("axios").default;
-const { LANG, strFormat } = require("../util/languages");
+const express = require('express');
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios').default;
+const { LANG, strFormat } = require('../util/languages');
 const {
 	tempLinkSrvToken,
 	tempLinkSrvPostURL,
 	linkPort,
 	linkDomain,
-} = require("../config.json");
-const { onShutdown } = require("./schedules");
+} = require('../config.json');
+const { onShutdown } = require('./schedules');
 
 // 内部 TempLink サーバー
 
@@ -24,7 +24,7 @@ const { onShutdown } = require("./schedules");
 
 class InvalidURLError extends TypeError {
 	static {
-		InvalidURLError.prototype.name = "InvalidURLError";
+		InvalidURLError.prototype.name = 'InvalidURLError';
 	}
 
 	/**
@@ -66,12 +66,12 @@ async function oEmbedHandler(req, res) {
 		return res.sendStatus(404);
 	}
 	res.json({
-		version: "1.0",
+		version: '1.0',
 		title: link.url,
-		type: "link",
-		author_name: LANG.discordbot.linkGet.authorName.join("\n"),
+		type: 'link',
+		author_name: LANG.discordbot.linkGet.authorName.join('\n'),
 		provider_name: LANG.discordbot.linkGet.providerName,
-		provider_url: "https://ringoxd.dev/",
+		provider_url: 'https://ringoxd.dev/',
 		url: link.url,
 	});
 }
@@ -97,17 +97,17 @@ async function rootHandler(req, res) {
 function unicodeEscape(str) {
 	if (!String.prototype.repeat) {
 		String.prototype.repeat = function repeat(digit) {
-			var result = "";
+			var result = '';
 			for (var i = 0; i < Number(digit); i++) result += str;
 			return result;
 		};
 	}
-	var strs = str.split(""),
+	var strs = str.split(''),
 		hex,
-		result = "";
+		result = '';
 	for (var i = 0, len = strs.length; i < len; i++) {
 		hex = strs[i].charCodeAt(0).toString(16);
-		result += "\\u" + "0".repeat(Math.abs(hex.length - 4)) + hex;
+		result += '\\u' + '0'.repeat(Math.abs(hex.length - 4)) + hex;
 	}
 	return result;
 }
@@ -118,10 +118,10 @@ function unicodeEscape(str) {
  * @param {express.Response} res
  */
 function linkHandler(req, res) {
-	const remoteIp = req.headers["cf-connecting-ip"];
-	const logPath = path.join(__dirname, "accesslog.txt");
+	const remoteIp = req.headers['cf-connecting-ip'];
+	const logPath = path.join(__dirname, 'accesslog.txt');
 	if (!fs.existsSync(logPath))
-		fs.writeFileSync(logPath, "Access Log================\n");
+		fs.writeFileSync(logPath, 'Access Log================\n');
 	fs.appendFileSync(logPath, `IP: ${remoteIp} | ${req.originalUrl}\n`);
 
 	if (!tempLinks) return res.sendStatus(500);
@@ -140,9 +140,9 @@ function linkHandler(req, res) {
 }
 
 function makeId(length) {
-	let result = "";
+	let result = '';
 	const characters =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	const charactersLength = characters.length;
 	let counter = 0;
 	while (counter < length) {
@@ -168,9 +168,9 @@ function createTempLinkInternal(url, period) {
 const axiosInstance = axios.create({
 	headers: {
 		Authorization: `Bearer ${tempLinkSrvToken}`,
-		"Content-Type": "application/json",
+		'Content-Type': 'application/json',
 	},
-	responseType: "json",
+	responseType: 'json',
 });
 
 async function createTempLinkOnSrv(url, period) {
@@ -192,9 +192,9 @@ function enableTempLinks() {
 	tempLinks = [];
 	const app = express();
 	const intervalId = setInterval(clearExpiredTempLinks, 1000);
-	app.get("/oembed/:linkCode", oEmbedHandler);
-	app.get("/", rootHandler);
-	app.get("/:linkCode", linkHandler);
+	app.get('/oembed/:linkCode', oEmbedHandler);
+	app.get('/', rootHandler);
+	app.get('/:linkCode', linkHandler);
 
 	const server = new http.Server(app);
 	server.listen(linkPort, () => {

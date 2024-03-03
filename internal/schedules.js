@@ -1,5 +1,5 @@
-const { setTimeout } = require("node:timers/promises");
-const { LANG } = require("../util/languages");
+const { setTimeout } = require('node:timers/promises');
+const { LANG } = require('../util/languages');
 
 /**
  * @type {(() => (void | Promise<void>))[]}
@@ -19,8 +19,8 @@ async function shutdown() {
 	process.exit(0);
 }
 
-process.on("SIGINT", shutdown);
-process.on("SIGTERM", shutdown);
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
 /**
  * シャットダウン時の処理を追加する。

@@ -4,8 +4,11 @@
 
 /**
  * @typedef {Object} Command スラッシュコマンドを表すオブジェクト
- * @property {import("discord.js").SlashCommandSubcommandsOnlyBuilder} data Discord の API に登録するデータ
- * @property {(interaction: import("discord.js").ChatInputCommandInteraction) => Promise<void>} execute コマンドの処理
+ * @property {import('discord.js').SlashCommandSubcommandsOnlyBuilder} data Discord の API に登録するデータ
+ * @property {(
+ *     interaction: import('discord.js').ChatInputCommandInteraction,
+ *     client: import('discord.js').Client<true>,
+ * ) => Promise<void>} execute コマンドの処理
  */
 
 /**

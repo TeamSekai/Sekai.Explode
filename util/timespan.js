@@ -4,7 +4,7 @@
  * @param {string} name 値の名前
  */
 function requireNonNegative(num, name) {
-	if (typeof num != "number") throw new TypeError(`${name} must be a number`);
+	if (typeof num != 'number') throw new TypeError(`${name} must be a number`);
 	if (num < 0) throw new RangeError(`${name} must not be negative`);
 	return num;
 }
@@ -20,7 +20,7 @@ function zeroPadding(num, digits = 2) {
 	const integerPartString = integerPart.toString();
 	const originalString =
 		integerPart == num ? integerPartString : num.toString();
-	return "0".repeat(digits - integerPartString.length) + originalString;
+	return '0'.repeat(digits - integerPartString.length) + originalString;
 }
 
 /**
@@ -43,7 +43,7 @@ function valuesToMillis(values) {
 	const minutes = hours * 60 + (values.minutes ?? 0);
 	const seconds = minutes * 60 + (values.seconds ?? 0);
 	const millis = seconds * 1000 + (values.millis ?? 0);
-	return requireNonNegative(millis, "values");
+	return requireNonNegative(millis, 'values');
 }
 
 /**
@@ -122,7 +122,7 @@ class Timespan {
 	 */
 	static toString(values) {
 		const millis = valuesToMillis(values);
-		requireNonNegative(millis, "millis");
+		requireNonNegative(millis, 'millis');
 
 		const seconds = Math.floor(millis / 1000);
 		const minutes = Math.floor(seconds / 60);
@@ -134,17 +134,17 @@ class Timespan {
 
 		const belowMinuteString =
 			zeroPadding(secondPart) +
-			(milliPart != 0 ? "." + zeroPadding(milliPart, 3) : "");
+			(milliPart != 0 ? '.' + zeroPadding(milliPart, 3) : '');
 
-		if (hours == 0) return minutePart + ":" + belowMinuteString;
+		if (hours == 0) return minutePart + ':' + belowMinuteString;
 
 		const days = Math.floor(hours / 24);
 		const hourPart = hours % 24;
 		const belowHourString = `${zeroPadding(minutePart)}:${belowMinuteString}`;
 
-		if (days == 0) return hourPart + ":" + belowHourString;
+		if (days == 0) return hourPart + ':' + belowHourString;
 
-		return days + ":" + zeroPadding(hourPart) + ":" + belowHourString;
+		return days + ':' + zeroPadding(hourPart) + ':' + belowHourString;
 	}
 
 	toString() {

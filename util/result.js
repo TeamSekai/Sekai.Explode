@@ -8,7 +8,7 @@ class Ok {
 	/**
 	 * @readonly
 	 */
-	status = "ok";
+	status = 'ok';
 
 	/**
 	 * @readonly
@@ -32,7 +32,7 @@ class Err {
 	/**
 	 * @readonly
 	 */
-	status = "err";
+	status = 'err';
 
 	/**
 	 * @readonly

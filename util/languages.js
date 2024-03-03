@@ -1,8 +1,8 @@
 // @ts-check
 
-const path = require("path");
-const config = require("../config.json");
-const LANG = require("../language/default.json");
+const path = require('path');
+const config = require('../config.json');
+const LANG = require('../language/default.json');
 
 /**
  * @type {typeof import('../language/default.json')}
@@ -10,9 +10,9 @@ const LANG = require("../language/default.json");
 const configLANG = require(
 	path.join(
 		__dirname,
-		"..",
-		"language",
-		(config.language ?? "default") + ".json",
+		'..',
+		'language',
+		(config.language ?? 'default') + '.json',
 	),
 );
 
@@ -72,8 +72,8 @@ const State = {
  */
 function strFormat(str, ...values) {
 	const map = toMap(values);
-	let result = "";
-	let placeholder = "";
+	let result = '';
+	let placeholder = '';
 
 	// 入力を str, 状態を PLAIN, ESCAPED, AFTER_DOLLAR, IN_PLACEHOLDER とした有限オートマトンを構成
 	// 入力は常に1文字ずつ読み進められる。
@@ -81,30 +81,30 @@ function strFormat(str, ...values) {
 	for (const c of str) {
 		switch (state) {
 			case State.PLAIN:
-				if (c == "\\") state = State.ESCAPED;
-				else if (c == "$") state = State.AFTER_DOLLAR;
+				if (c == '\\') state = State.ESCAPED;
+				else if (c == '$') state = State.AFTER_DOLLAR;
 				else result += c;
 				break;
 			case State.ESCAPED:
-				if (c == "\\" || c == "$" || c == "{") result += c;
-				else result += "\\" + c;
+				if (c == '\\' || c == '$' || c == '{') result += c;
+				else result += '\\' + c;
 				state = State.PLAIN;
 				break;
 			case State.AFTER_DOLLAR:
-				if (c == "\\") {
-					result += "$";
+				if (c == '\\') {
+					result += '$';
 					state = State.ESCAPED;
-				} else if (c == "{") {
+				} else if (c == '{') {
 					state = State.IN_PLACEHOLDER;
 				} else {
-					result += "$" + "c";
+					result += '$' + 'c';
 					state = State.PLAIN;
 				}
 				break;
 			case State.IN_PLACEHOLDER:
-				if (c == "}") {
+				if (c == '}') {
 					result += map?.[placeholder.trim()];
-					placeholder = "";
+					placeholder = '';
 					state = State.PLAIN;
 				} else {
 					placeholder += c;
@@ -113,7 +113,7 @@ function strFormat(str, ...values) {
 		}
 	}
 
-	if (state == State.ESCAPED) result += "\\";
+	if (state == State.ESCAPED) result += '\\';
 	if (state == State.IN_PLACEHOLDER)
 		throw new FormatSyntaxError("Unexpected end of input; '}' expected");
 

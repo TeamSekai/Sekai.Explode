@@ -1,9 +1,9 @@
 // @ts-check
 
-const { GuildMember } = require("discord.js");
-const { useQueue, Track, useMainPlayer } = require("discord-player");
-const Timespan = require("./timespan");
-const mongodb = require("../internal/mongodb");
+const { GuildMember } = require('discord.js');
+const { useQueue, Track, useMainPlayer } = require('discord-player');
+const Timespan = require('./timespan');
+const mongodb = require('../internal/mongodb');
 
 /**
  * @typedef {Object} VolumeSchema volumes コレクションのドキュメント
@@ -93,7 +93,7 @@ async function restoreQueue(player, guildQueueDocument) {
 		},
 	});
 	if (guildQueueDocument.is_paused) {
-		queue.dispatcher?.on("start", (resource) => resource.audioPlayer?.pause());
+		queue.dispatcher?.on('start', (resource) => resource.audioPlayer?.pause());
 	}
 	queue.addTrack(await functions.getSavedTracks(player, guild.id));
 	return true;
@@ -156,7 +156,7 @@ const functions = {
 	 */
 	async saveVolumeSetting(guildId, volume) {
 		/** @type {import("mongoose").Collection<VolumeSchema>} */
-		const volumeCollection = mongodb.connection.collection("volumes");
+		const volumeCollection = mongodb.connection.collection('volumes');
 		await volumeCollection.updateOne(
 			{ guild: guildId },
 			{
@@ -176,7 +176,7 @@ const functions = {
 	 */
 	async loadVolumeSetting(guildId) {
 		/** @type {import("mongoose").Collection<VolumeSchema>} */
-		const volumeCollection = mongodb.connection.collection("volumes");
+		const volumeCollection = mongodb.connection.collection('volumes');
 		const result = await volumeCollection.findOne({ guild: guildId });
 		if (result != null) {
 			return result.volume;
@@ -228,7 +228,7 @@ const functions = {
 		const metadata = queue.metadata;
 
 		/** @type {import("mongoose").Collection<GuildQueueSchema>} */
-		const guildQueueCollection = mongodb.connection.collection("guild_queues");
+		const guildQueueCollection = mongodb.connection.collection('guild_queues');
 		await guildQueueCollection.deleteOne({ _id: guild });
 		await guildQueueCollection.insertOne({
 			_id: guild,
@@ -243,7 +243,7 @@ const functions = {
 
 		/** @type {import("mongoose").Collection<GuildQueueTrackSchema>} */
 		const guildQueueTrackCollection =
-			mongodb.connection.collection("guild_queue_tracks");
+			mongodb.connection.collection('guild_queue_tracks');
 		const tracks = queue.tracks.toArray();
 		await guildQueueTrackCollection.deleteMany({ guild });
 		await guildQueueTrackCollection.insertMany(
@@ -261,13 +261,13 @@ const functions = {
 	 */
 	async deleteSavedQueues(...guilds) {
 		/** @type {import("mongoose").Collection<GuildQueueSchema>} */
-		const guildQueueCollection = mongodb.connection.collection("guild_queues");
+		const guildQueueCollection = mongodb.connection.collection('guild_queues');
 		await guildQueueCollection.deleteMany({
 			_id: { $in: guilds },
 		});
 		/** @type {import("mongoose").Collection<GuildQueueTrackSchema>} */
 		const guildQueueTrackCollection =
-			mongodb.connection.collection("guild_queue_tracks");
+			mongodb.connection.collection('guild_queue_tracks');
 		await guildQueueTrackCollection.deleteMany({
 			guild: { $in: guilds },
 		});
@@ -279,7 +279,7 @@ const functions = {
 	 */
 	async restoreQueues(player) {
 		/** @type {import("mongoose").Collection<GuildQueueSchema>} */
-		const guildQueueCollection = mongodb.connection.collection("guild_queues");
+		const guildQueueCollection = mongodb.connection.collection('guild_queues');
 		const guildQueueDocuments = guildQueueCollection.find({});
 		const guildsToDeleteQueues = [];
 		for await (const guildQueueDocument of guildQueueDocuments) {
@@ -299,7 +299,7 @@ const functions = {
 	async getSavedTracks(player, guild) {
 		/** @type {import("mongoose").Collection<GuildQueueTrackSchema>} */
 		const guildQueueTrackCollection =
-			mongodb.connection.collection("guild_queue_tracks");
+			mongodb.connection.collection('guild_queue_tracks');
 		const guildQueueTrackDocuments = guildQueueTrackCollection.find({ guild });
 		const result = [];
 		for await (const { index, track } of guildQueueTrackDocuments) {
