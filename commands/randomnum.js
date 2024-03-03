@@ -1,12 +1,16 @@
+// @ts-check
+
 const { LANG, strFormat } = require('../util/languages');
-const { SimpleCommand, SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
+const {
+	SimpleCommand,
+	SimpleSlashCommandBuilder,
+} = require('../common/SimpleCommand');
 
 module.exports = new SimpleCommand(
-	SimpleSlashCommandBuilder
-		.create(
-			LANG.commands.randomnum.name,
-			LANG.commands.randomnum.description
-		)
+	SimpleSlashCommandBuilder.create(
+		LANG.commands.randomnum.name,
+		LANG.commands.randomnum.description,
+	)
 		.addIntegerOption((option) =>
 			option
 				.setName(LANG.commands.randomnum.options.minValue.name)
@@ -47,5 +51,5 @@ module.exports = new SimpleCommand(
 				},
 			],
 		});
-	}
-)
+	},
+);

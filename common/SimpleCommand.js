@@ -54,7 +54,7 @@ class Option {
 
 	/**
 	 * オプションの値を取得する。
-     * @abstract
+	 * @abstract
 	 * @param {ChatInputCommandInteraction} _interaction コマンドのインタラクション
 	 * @returns {Required extends true ? T : T | null}
 	 */
@@ -89,7 +89,7 @@ class BooleanOption extends Option {
 	}
 
 	/**
-     * @override
+	 * @override
 	 * @param {ChatInputCommandInteraction} interaction
 	 */
 	get(interaction) {
@@ -114,21 +114,23 @@ class IntegerOption extends Option {
 	 * @param {import('discord.js').SharedSlashCommandOptions} builder
 	 * @param {IntegerOptionInput} input
 	 */
-    constructor(builder, input) {
-        super(builder, (builder) => builder.addIntegerOption(input));
-    }
+	constructor(builder, input) {
+		super(builder, (builder) => {
+			builder.addIntegerOption(input);
+		});
+	}
 
 	/**
-     * @override
+	 * @override
 	 * @param {ChatInputCommandInteraction} interaction
 	 */
-    get(interaction) {
+	get(interaction) {
 		if (this.isRequired()) {
 			return interaction.options.getInteger(this.name, true);
 		} else {
 			return interaction.options.getInteger(this.name) ?? void 0;
 		}
-    }
+	}
 }
 
 /**
@@ -150,10 +152,10 @@ class SimpleSlashCommandBuilder {
 	/**
 	 * @param {string} name
 	 * @param {string} description
+	 * @param {SlashCommandBuilder} handle
 	 * @param {Options} options
 	 */
-	constructor(name, description, options) {
-		const handle = new SlashCommandBuilder();
+	constructor(name, description, handle, options) {
 		handle.setName(name);
 		handle.setDescription(description);
 		this.#name = name;
@@ -165,10 +167,15 @@ class SimpleSlashCommandBuilder {
 	/**
 	 * @param {string} name コマンドの名前
 	 * @param {string} description コマンドの説明文
-     * @returns {SimpleSlashCommandBuilder<[]>}
+	 * @returns {SimpleSlashCommandBuilder<[]>}
 	 */
 	static create(name, description) {
-		return new SimpleSlashCommandBuilder(name, description, []);
+		return new SimpleSlashCommandBuilder(
+			name,
+			description,
+			new SlashCommandBuilder(),
+			[],
+		);
 	}
 
 	/**
@@ -182,6 +189,7 @@ class SimpleSlashCommandBuilder {
 		return new SimpleSlashCommandBuilder(
 			this.#name,
 			this.#description,
+			this.handle,
 			options,
 		);
 	}
@@ -197,6 +205,7 @@ class SimpleSlashCommandBuilder {
 		return new SimpleSlashCommandBuilder(
 			this.#name,
 			this.#description,
+			this.handle,
 			options,
 		);
 	}
