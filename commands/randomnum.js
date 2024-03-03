@@ -7,7 +7,7 @@ const {
 } = require('../common/SimpleCommand');
 
 const DEFAULT_MIN_VALUE = 0;
-const DEFAULT_MAX_VALUE = 100;
+const DEFAULT_MAX_VALUE = 99;
 const DEFAULT_DICE_COUNT = 1;
 
 module.exports = new SimpleCommand(
@@ -60,8 +60,10 @@ module.exports = new SimpleCommand(
 		diceCount = DEFAULT_DICE_COUNT,
 	) {
 		const result = [];
+		const range = max - min + 1;
 		for (let i = 0; i < diceCount; i++) {
-			result.push(Math.floor(Math.random() * (max - min) + min));
+			const value = Math.floor(Math.random() * range + min);
+			result.push(value);
 		}
 		await interaction.reply({
 			embeds: [
