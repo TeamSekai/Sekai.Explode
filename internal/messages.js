@@ -17,9 +17,9 @@
  * サーバー毎の処理は {@link GuildMessageHandler#handleMessage} において行われる。
  */
 
-const axios = require("axios").default;
-const { strFormat, LANG } = require("../util/languages");
-const mongodb = require("./mongodb");
+const axios = require('axios').default;
+const { strFormat, LANG } = require('../util/languages');
+const mongodb = require('./mongodb');
 
 /**
  * @typedef {Object} ReplyGuildSchema replyGuilds のドキュメント。
@@ -40,14 +40,14 @@ const mongodb = require("./mongodb");
  * @return {import("mongoose").Collection<ReplyGuildSchema>}
  */
 function getReplyGuildCollection() {
-	return mongodb.connection.collection("replyGuilds");
+	return mongodb.connection.collection('replyGuilds');
 }
 
 /**
  * @return {import("mongoose").Collection<ReplySchema>}
  */
 function getReplyCollection() {
-	return mongodb.connection.collection("replies");
+	return mongodb.connection.collection('replies');
 }
 
 /**
@@ -129,8 +129,8 @@ class ReplyPattern {
 
 	toString() {
 		return strFormat(LANG.internal.messages.replyPattern, {
-			message: "`" + this.message + "`",
-			reply: "`" + this.reply + "`",
+			message: '`' + this.message + '`',
+			reply: '`' + this.reply + '`',
 			perfectMatching: this.perfectMatching
 				? LANG.internal.messages.perfectMatching.yes
 				: LANG.internal.messages.perfectMatching.no,
@@ -304,7 +304,7 @@ class ClientMessageHandler {
 }
 
 const defaultReplyPatterns = [
-	new ReplyPattern("それはそう", "https://soreha.so/"),
+	new ReplyPattern('それはそう', 'https://soreha.so/'),
 ];
 
 /**
@@ -359,16 +359,16 @@ async function replyAlternativeUrl(message) {
 		if (!isAlternativeUrlAvailable(url)) {
 			return;
 		}
-		await message.react("🔗"); // リアクションを追加
+		await message.react('🔗'); // リアクションを追加
 
 		const collector = message.createReactionCollector({
 			filter(reaction, user) {
-				return user.id == message.author.id && reaction.emoji.name === "🔗";
+				return user.id == message.author.id && reaction.emoji.name === '🔗';
 			},
 			time: 30000,
 		});
 
-		collector.on("collect", async (reaction, user) => {
+		collector.on('collect', async (reaction, user) => {
 			try {
 				const modifiedURL = await getAlternativeUrl(url);
 				if (modifiedURL == null) {
@@ -390,7 +390,7 @@ async function replyAlternativeUrl(message) {
 						),
 					);
 					const errMsg =
-						"\n" +
+						'\n' +
 						strFormat(LANG.discordbot.messageCreate.reactionRemoveError, [
 							e.code,
 						]);
@@ -401,18 +401,18 @@ async function replyAlternativeUrl(message) {
 				const errorMessage = `${LANG.discordbot.getRedirectUrl.error} ${error.message}`;
 				await message.channel.send(
 					LANG.discordbot.messageCreate.processError +
-						"\n" +
-						"```" +
+						'\n' +
+						'```' +
 						errorMessage +
-						"\n```",
+						'\n```',
 				);
 			} finally {
 				collector.stop();
 			}
 		});
 
-		collector.on("end", (_collected, reason) => {
-			if (reason === "time") {
+		collector.on('end', (_collected, reason) => {
+			if (reason === 'time') {
 				// TIMEOUT
 				message.reactions.removeAll();
 			}
@@ -428,10 +428,10 @@ function isAlternativeUrlAvailable(url) {
 	try {
 		const { hostname } = new URL(url);
 		return (
-			hostname == "twitter.com" ||
-			hostname == "x.com" ||
-			hostname == "vt.tiktok.com" ||
-			hostname == "www.tiktok.com"
+			hostname == 'twitter.com' ||
+			hostname == 'x.com' ||
+			hostname == 'vt.tiktok.com' ||
+			hostname == 'www.tiktok.com'
 		);
 	} catch {
 		return false;
@@ -446,18 +446,18 @@ function isAlternativeUrlAvailable(url) {
 async function getAlternativeUrl(url) {
 	const compiledUrl = new URL(url);
 	const hostname = compiledUrl.hostname;
-	if (hostname == "twitter.com" || hostname == "x.com") {
-		compiledUrl.hostname = "vxtwitter.com";
+	if (hostname == 'twitter.com' || hostname == 'x.com') {
+		compiledUrl.hostname = 'vxtwitter.com';
 		return compiledUrl.toString();
 	}
-	if (hostname == "vt.tiktok.com" || hostname == "www.tiktok.com") {
+	if (hostname == 'vt.tiktok.com' || hostname == 'www.tiktok.com') {
 		const canonicalUrl =
-			hostname == "vt.tiktok.com" ? await getRedirectUrl(url) : url;
+			hostname == 'vt.tiktok.com' ? await getRedirectUrl(url) : url;
 		console.log(
 			strFormat(LANG.discordbot.messageCreate.beforeUrl, [canonicalUrl]),
 		);
 		const compiledCanonicalUrl = new URL(canonicalUrl);
-		compiledCanonicalUrl.hostname = "vxtiktok.com";
+		compiledCanonicalUrl.hostname = 'vxtiktok.com';
 		const resultUrl = compiledCanonicalUrl.toString();
 		console.log(strFormat(LANG.discordbot.messageCreate.afterUrl, [url]));
 		return resultUrl;

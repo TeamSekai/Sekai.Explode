@@ -489,16 +489,22 @@
 			"options": {
 				"minValue": {
 					"name": "min_value",
-					"description": "最小値を指定(デフォルト: 0)"
+					"description": "最小値を指定(デフォルト: ${0})"
 				},
 				"maxValue": {
 					"name": "max_value",
-					"description": "最大値を指定(デフォルト: 100)"
+					"description": "最大値を指定(デフォルト: ${0})"
+				},
+				"diceCount": {
+					"name": "dice_count",
+					"description": "ダイスの数を指定(デフォルト: ${0})"
 				}
 			},
+			"boundError": "最小値は最大値よりも以下である必要があります！ (最小値: ${min}, 最大値: ${max})",
 			"result": {
 				"title": "乱数を生成しました!",
-				"description": "最小値: ${min}, 最大値: ${max}",
+				"description": "最小値: ${min}, 最大値: ${max}, ダイスの数: ${count} (${representation})",
+				"sumFieldName": "合計:",
 				"footer": "実行者: ${0}"
 			}
 		},

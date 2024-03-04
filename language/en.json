@@ -489,16 +489,22 @@
 			"options": {
 				"minValue": {
 					"name": "min_value",
-					"description": "Specify the minimum value (default: 0)"
+					"description": "Specify the minimum value (default: ${0})"
 				},
 				"maxValue": {
 					"name": "max_value",
-					"description": "Specify the maximum value (default: 100)"
+					"description": "Specify the maximum value (default: ${0})"
+				},
+				"diceCount": {
+					"name": "dice_count",
+					"description": "Specify the count of dice (default: ${0})"
 				}
 			},
+			"boundError": "The minimum value must be less than or equal to the maximum value! (Minimum value: ${min}, Maximum value: ${max})",
 			"result": {
 				"title": "Generated a random number!",
-				"description": "Minimum value: ${min}, Maximum value: ${max}",
+				"description": "Minimum value: ${min}, Maximum value: ${max}, dice count: ${count} (${representation})",
+				"sumFieldName": "Total:",
 				"footer": "Executed by: ${0}"
 			}
 		},

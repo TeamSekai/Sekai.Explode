@@ -1,6 +1,6 @@
-const { ActivityType } = require("discord.js");
-const { LANG, strFormat } = require("../util/languages");
-const { onShutdown } = require("./schedules");
+const { ActivityType } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
+const { onShutdown } = require('./schedules');
 
 console.log(LANG.internal.activity.called);
 
@@ -28,7 +28,7 @@ module.exports = {
 	 * @param {Client<boolean>} client
 	 */
 	setupActivity(client) {
-		client.on("ready", async () => {
+		client.on('ready', async () => {
 			const intervalId = setInterval(() => {
 				const wsping = client.ws.ping;
 				addPingValue(wsping);
@@ -55,7 +55,7 @@ module.exports = {
 							type: ActivityType.Watching,
 						},
 					],
-					status: "idle",
+					status: 'idle',
 				});
 			});
 		});

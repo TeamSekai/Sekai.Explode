@@ -3,7 +3,7 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	ActionRowBuilder,
-} = require("discord.js");
+} = require('discord.js');
 
 /**
  * @typedef {Object} OptionSet Pager のコンストラクタに渡すことができるオプション
@@ -58,8 +58,8 @@ class Pager {
 		},
 		color: null,
 		fieldName: null,
-		emptyMessage: "リストにアイテムがありません!",
-		delimiter: "\n",
+		emptyMessage: 'リストにアイテムがありません!',
+		delimiter: '\n',
 		footer(pager) {
 			if (pager.isEmpty()) {
 				return null;
@@ -69,15 +69,15 @@ class Pager {
 			};
 		},
 		prevButton: new ButtonBuilder()
-			.setCustomId("prev")
-			.setLabel("前のページ")
+			.setCustomId('prev')
+			.setLabel('前のページ')
 			.setStyle(ButtonStyle.Secondary)
-			.setEmoji("⬅️"),
+			.setEmoji('⬅️'),
 		nextButton: new ButtonBuilder()
-			.setCustomId("next")
-			.setLabel("次のページ")
+			.setCustomId('next')
+			.setLabel('次のページ')
 			.setStyle(ButtonStyle.Secondary)
-			.setEmoji("➡️"),
+			.setEmoji('➡️'),
 		idleTime: 60000,
 	};
 
@@ -273,7 +273,7 @@ class Pager {
 			idle: this.#options.idleTime,
 		});
 
-		collector.on("collect", (interaction) => {
+		collector.on('collect', (interaction) => {
 			interaction.deferUpdate();
 			if (interaction.customId == this.#options.prevButton.data.custom_id) {
 				this.page--;
@@ -285,7 +285,7 @@ class Pager {
 			message.edit(this.#reply);
 		});
 
-		collector.on("end", () => {
+		collector.on('end', () => {
 			interaction.editReply({
 				components: [],
 			});

@@ -1,4 +1,4 @@
-const Timespan = require("./timespan");
+const Timespan = require('./timespan');
 
 const zero = new Timespan();
 const millisecond = new Timespan({ millis: 1 });
@@ -21,13 +21,13 @@ const big2 = new Timespan({
 	millis: 12,
 });
 
-test("toString", () => {
-	expect(zero.toString()).toBe("0:00");
-	expect(millisecond.toString()).toBe("0:00.001");
-	expect(second.toString()).toBe("0:01");
-	expect(minute.toString()).toBe("1:00");
-	expect(hour.toString()).toBe("1:00:00");
-	expect(days.toString()).toBe("1:00:00:00");
-	expect(big1.toString()).toBe("12:03:45:06.789");
-	expect(big2.toString()).toBe("89:07:56:34.012");
+test('toString', () => {
+	expect(zero.toString()).toBe('0:00');
+	expect(millisecond.toString()).toBe('0:00.001');
+	expect(second.toString()).toBe('0:01');
+	expect(minute.toString()).toBe('1:00');
+	expect(hour.toString()).toBe('1:00:00');
+	expect(days.toString()).toBe('1:00:00:00');
+	expect(big1.toString()).toBe('12:03:45:06.789');
+	expect(big2.toString()).toBe('89:07:56:34.012');
 });

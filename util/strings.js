@@ -23,8 +23,8 @@ function formatTable(table, options = {}) {
 			}
 		}
 	}
-	const padding = options.fillString ?? " ";
-	const margin = options.margin ?? " ";
+	const padding = options.fillString ?? ' ';
+	const margin = options.margin ?? ' ';
 	const align = options.align ?? [];
 	return table
 		.map((value) => {
@@ -33,18 +33,18 @@ function formatTable(table, options = {}) {
 				.map((e, i) => {
 					switch (align[i]) {
 						default:
-						case "left":
+						case 'left':
 							if (i == last) {
 								return e;
 							}
 							return e.padEnd(maxWidths[i], padding);
-						case "right":
+						case 'right':
 							return e.padStart(maxWidths[i], padding);
 					}
 				})
 				.join(margin);
 		})
-		.join("\n");
+		.join('\n');
 }
 
 module.exports = { formatTable };
