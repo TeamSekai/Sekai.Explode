@@ -33,7 +33,7 @@ const { SlashCommandBuilder } = require('discord.js');
 
 /**
  * @template {unknown} [T = unknown]
- * @template {boolean} [Required = false]
+ * @template {boolean} [Required = boolean]
  */
 class Option {
 	name;
@@ -56,7 +56,7 @@ class Option {
 	 * オプションの値を取得する。
 	 * @abstract
 	 * @param {ChatInputCommandInteraction} _interaction コマンドのインタラクション
-	 * @returns {Required extends true ? T : T | null}
+	 * @returns {Required extends true ? T : T | undefined}
 	 */
 	get(_interaction) {
 		throw new Error('Not implemented');
@@ -76,7 +76,7 @@ class Option {
  */
 
 /**
- * @template {boolean} [Required = false]
+ * @template {boolean} [Required = boolean]
  * @extends {Option<boolean, Required>}
  */
 class BooleanOption extends Option {
@@ -106,7 +106,7 @@ class BooleanOption extends Option {
  */
 
 /**
- * @template {boolean} [Required = false]
+ * @template {boolean} [Required = boolean]
  * @extends {Option<number, Required>}
  */
 class IntegerOption extends Option {
