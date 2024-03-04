@@ -80,7 +80,7 @@ module.exports = new SimpleCommand(
 						min,
 						max,
 						count: diceCount,
-						representation: `${diceCount}D${max - min}`,
+						representation: `${diceCount}D${range}`,
 					}),
 					color: 0x00fa9a,
 					fields: [
