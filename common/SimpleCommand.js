@@ -18,7 +18,6 @@ const { SlashCommandBuilder } = require('discord.js');
 /**
  * @template {Option<unknown, boolean>} O
  * @typedef {(
- *     O extends BooleanOption<infer Required> ? (Required extends true ? boolean : boolean | undefined) :
  *     O extends IntegerOption<infer Required> ? (Required extends true ? number : number | undefined) :
  *     never
  * )} OptionValue
@@ -68,36 +67,6 @@ class Option {
 	 */
 	isRequired() {
 		return this.#required;
-	}
-}
-
-/**
- * @typedef {FirstParameter<typeof import('discord.js').SharedSlashCommandOptions.prototype.addBooleanOption>} BooleanOptionInput
- */
-
-/**
- * @template {boolean} [Required = boolean]
- * @extends {Option<boolean, Required>}
- */
-class BooleanOption extends Option {
-	/**
-	 * @param {import('discord.js').SharedSlashCommandOptions} builder
-	 * @param {BooleanOptionInput} input
-	 */
-	constructor(builder, input) {
-		super(builder, (builder) => builder.addBooleanOption(input));
-	}
-
-	/**
-	 * @override
-	 * @param {ChatInputCommandInteraction} interaction
-	 */
-	get(interaction) {
-		if (this.isRequired()) {
-			return interaction.options.getBoolean(this.name, true);
-		} else {
-			return interaction.options.getBoolean(this.name) ?? void 0;
-		}
 	}
 }
 
@@ -175,22 +144,6 @@ class SimpleSlashCommandBuilder {
 			description,
 			new SlashCommandBuilder(),
 			[],
-		);
-	}
-
-	/**
-	 * @template {boolean} [Required = false]
-	 * @param {BooleanOptionInput} input
-	 * @returns
-	 */
-	addBooleanOption(input) {
-		/** @type {[...Options, BooleanOption<Required>]} */
-		const options = [...this.options, new BooleanOption(this.handle, input)];
-		return new SimpleSlashCommandBuilder(
-			this.#name,
-			this.#description,
-			this.handle,
-			options,
 		);
 	}
 
