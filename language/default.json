@@ -58,7 +58,7 @@
 	"internal": {
 		"activity": {
 			"called": "Called internal activity system",
-			"presenceName": "Sekai - Added GlobalBan System",
+			"presenceName": "アナタと創るセカイ",
 			"presenceState": "Ping: ${0}ms | Created by ringoXD",
 			"presenceNameShuttingDown": "Shutting down...",
 			"presenceStateShuttingDown": "Sekai.explode is now shutting down..."
