@@ -2,6 +2,7 @@ const {
 	SlashCommandBuilder,
 	PermissionsBitField,
 	ModalBuilder,
+	TextInputBuilder,
 } = require('discord.js');
 const mongodb = require('../internal/mongodb'); //*MongoDB
 const { AdminUserIDs } = require('../config.json');
@@ -356,8 +357,14 @@ module.exports = {
 			}
 		} else if (subcommand === 'report') {
 			const modal = new ModalBuilder()
-				.setCustomId('gbanReportMenu')
-				.setTitle('');
+				.setCustomId('gbanReport')
+				.setTitle('レポートしたいユーザーの情報');
+			
+			const targetid = new TextInputBuilder()
+				.setCustomId('reportuserid')
+				.setLabel('通報したいユーザーのID')
+			
+
 		} else {
 			return await interaction.editReply(
 				LANG.commands.globalban.unsupportedSubcommandError,
