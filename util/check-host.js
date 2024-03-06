@@ -145,10 +145,18 @@ class CheckHostRequest {
 
 	/**
 	 * @overload
+	 * @param {'http'} checkType
+	 * @param {string} host
+	 * @param {number} maxNodes
+	 * @returns {Promise<CheckHostRequest<CheckHttpResult>>}
+	 */
+
+	/**
+	 * @overload
 	 * @param {'tcp'} checkType
 	 * @param {string} host
 	 * @param {number} maxNodes
-	 * @returns {Promise<CheckHostRequest<CheckPingResult>>}
+	 * @returns {Promise<CheckHostRequest<CheckTcpResult>>}
 	 */
 
 	/**
@@ -256,6 +264,86 @@ const CHECK_PING = {
 	},
 };
 
+// check-http
+
+class CheckHttpResult extends CheckHostResult {
+	constructor(state) {
+		super(state);
+	}
+}
+
+class CheckHttpComplete extends CheckHttpResult {
+	/** @type {boolean} */
+	success;
+
+	/** @type {number} */
+	time;
+
+	/** @type {string} */
+	statusMessage;
+
+	/**
+	 * @param {'ok' | 'error' | 'processing'} state
+	 * @param {number} success
+	 * @param {number} time
+	 * @param {string} statusMessage
+	 */
+	constructor(state, success, time, statusMessage) {
+		super(state);
+		this.success = success != 0;
+		this.time = time;
+		this.statusMessage = statusMessage;
+	}
+}
+
+class CheckHttpOk extends CheckHttpComplete {
+	/** @type {number} */
+	statusCode;
+
+	/** @type {string} */
+	host;
+
+	/**
+	 * @param {number} success
+	 * @param {number} time
+	 * @param {string} statusMessage
+	 * @param {string} statusCode
+	 * @param {string} host
+	 */
+	constructor(success, time, statusMessage, statusCode, host) {
+		super('ok', success, time, statusMessage);
+		this.statusCode = Number.parseInt(statusCode);
+		this.host = host;
+	}
+}
+
+class CheckHttpError extends CheckHttpComplete {
+	/**
+	 * @param {number} success
+	 * @param {number} time
+	 * @param {string} statusMessage
+	 */
+	constructor(success, time, statusMessage) {
+		super('error', success, time, statusMessage);
+	}
+}
+
+/** @type {CheckHostType<CheckHttpResult>} */
+const CHECK_HTTP = {
+	name: 'http',
+	castResult(data) {
+		if (!(data instanceof Array)) {
+			return new CheckHttpResult('processing');
+		}
+		const [success, time, statusMessage, statusCode, host] = data[0];
+		if (statusCode != null) {
+			return new CheckHttpOk(success, time, statusMessage, statusCode, host);
+		} else {
+			return new CheckHttpError(success, time, statusMessage);
+		}
+	},
+};
+
 // check-tcp
 
 class CheckTcpResult extends CheckHostResult {
@@ -314,6 +402,7 @@ const CHECK_TCP = {
 const checkTypes = Object.freeze({
 	ping: CHECK_PING,
 	tcp: CHECK_TCP,
+	http: CHECK_HTTP,
 });
 
 // util
@@ -335,10 +424,15 @@ function isValidHostname(str) {
 
 module.exports = {
 	CheckHostRequest,
+	CheckHostResult,
 	CheckPingResult,
 	CheckPingOk,
 	CheckTcpResult,
 	CheckTcpOk,
 	CheckTcpError,
+	CheckHttpResult,
+	CheckHttpComplete,
+	CheckHttpOk,
+	CheckHttpError,
 	isValidHostname,
 };

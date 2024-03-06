@@ -114,6 +114,7 @@
 					"description": "チェックの種類",
 					"choices": {
 						"ping": "Ping",
+						"http": "HTTP",
 						"tcp": "TCP"
 					}
 				},

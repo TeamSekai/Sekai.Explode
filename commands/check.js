@@ -7,27 +7,49 @@ const {
 	isValidHostname,
 	CheckTcpOk,
 	CheckTcpError,
+	CheckHttpOk,
+	CheckHttpComplete,
 } = require('../util/check-host');
 const { formatTable } = require('../util/strings');
 const { SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
+
+const MAX_NODES = 40;
+
+/**
+ * @template {import('../util/check-host').CheckHostResult} T
+ * @param {CheckHostRequest<T>} request
+ * @param {(result: T) => unknown[]} rowFormat
+ * @param {('left' | 'right')[]} align
+ */
+async function getFormattedResult(request, rowFormat, align) {
+	const resultMap = await request.checkResult(1.0, 7);
+	const table = [...resultMap.entries()].map(([node, result]) => {
+		const nodeName = node.name.replace('.node.check-host.net', '');
+		const prefix = `[${nodeName}]`;
+		console.log(strFormat(LANG.common.message.dataFor, [nodeName]), result);
+		return [prefix, ...rowFormat(result)];
+	});
+	return formatTable(table, {
+		align: ['left', ...align],
+	});
+}
 
 /**
  * @param {string} hostname
  */
 async function checkPing(hostname) {
-	const request = await CheckHostRequest.get('ping', hostname, 40);
-	return async () => {
-		const resultMap = await request.checkResult(1.0, 7);
-		const table = [...resultMap.entries()].map(([node, result]) => {
-			const nodeName = node.name.replace('.node.check-host.net', '');
-			const prefix = `[${nodeName}]`;
-			console.log(strFormat(LANG.common.message.dataFor, [nodeName]), result);
-			if (result instanceof CheckPingOk) {
+	const request = await CheckHostRequest.get('ping', hostname, MAX_NODES);
+	return async () =>
+		await getFormattedResult(
+			request,
+			(result) => {
+				if (!(result instanceof CheckPingOk)) {
+					return [result.state];
+				}
 				const values = result.values;
 				const average =
 					values.reduce((a, { ping: b }) => a + b, 0) / values.length;
 				return [
-					prefix,
 					values[3].reply + ',',
 					values[3].ping,
 					'/',
@@ -36,54 +58,71 @@ async function checkPing(hostname) {
 					'| Ping:',
 					`${Math.floor(average * 1000)} ms`,
 				];
-			}
-			return [prefix, result.state];
-		});
-		return formatTable(table, {
-			align: ['left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'],
-		});
-	};
+			},
+			['left', 'left', 'left', 'left', 'left', 'left', 'right'],
+		);
+}
+
+async function checkHttp(hostname) {
+	const request = await CheckHostRequest.get('http', hostname, MAX_NODES);
+	return async () =>
+		await getFormattedResult(
+			request,
+			(result) => {
+				/** @type {unknown[]} */
+				const row = [result.state + ','];
+				if (result instanceof CheckHttpComplete) {
+					const { time, statusMessage } = result;
+					row.push(time + ',');
+					if (result instanceof CheckHttpOk) {
+						const { statusCode, host } = result;
+						row.push(statusMessage + ',', statusCode + ',', host);
+					} else {
+						row.push(statusMessage);
+					}
+				}
+				return row;
+			},
+			['left', 'right', 'left', 'right', 'left'],
+		);
 }
 
 /**
  * @param {string} hostname
  */
 async function checkTcp(hostname) {
-	const request = await CheckHostRequest.get('tcp', hostname, 40);
-	return async () => {
-		const resultMap = await request.checkResult(1.0, 7);
-		const table = [...resultMap.entries()].map(([node, result]) => {
-			const nodeName = node.name.replace('.node.check-host.net', '');
-			const prefix = `[${nodeName}]`;
-			console.log(strFormat(LANG.common.message.dataFor, [nodeName]), result);
-			if (result instanceof CheckTcpOk) {
-				return [
-					prefix,
-					'OK,',
-					result.time,
-					'| Ping: ',
-					`${Math.floor(result.time * 1000)} ms`,
-				];
-			}
-			if (result instanceof CheckTcpError) {
-				return [prefix, 'ERROR', result.description];
-			}
-			return [prefix, result.state];
-		});
-		return formatTable(table, {
-			align: ['left', 'left', 'left', 'left', 'right'],
-		});
-	};
+	const request = await CheckHostRequest.get('tcp', hostname, MAX_NODES);
+	return async () =>
+		await getFormattedResult(
+			request,
+			(result) => {
+				if (result instanceof CheckTcpOk) {
+					return [
+						'OK,',
+						result.time,
+						'| Ping: ',
+						`${Math.floor(result.time * 1000)} ms`,
+					];
+				}
+				if (result instanceof CheckTcpError) {
+					return ['ERROR', result.description];
+				}
+				return [result.state];
+			},
+			['left', 'left', 'left', 'right'],
+		);
 }
 
 /**
- * @param {'ping' | 'tcp'} type
+ * @param {'ping' | 'http' | 'tcp'} type
  * @param {string} hostname
  */
 function check(type, hostname) {
 	switch (type) {
 		case 'ping':
 			return checkPing(hostname);
+		case 'http':
+			return checkHttp(hostname);
 		case 'tcp':
 			return checkTcp(hostname);
 	}
@@ -101,6 +140,10 @@ module.exports = SimpleSlashCommandBuilder.create(
 			{
 				name: LANG.commands.check.options.type.choices.ping,
 				value: 'ping',
+			},
+			{
+				name: LANG.commands.check.options.type.choices.http,
+				value: 'http',
 			},
 			{
 				name: LANG.commands.check.options.type.choices.tcp,
