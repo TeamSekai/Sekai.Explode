@@ -465,8 +465,11 @@ const checkTypes = Object.freeze({
 const ipv4Regex =
 	/^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
 
+const hostnameRegex =
+	/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*\.?$/;
+
 function isValidHostname(str) {
-	if (!ipv4Regex.test(str)) {
+	if (!ipv4Regex.test(str) && !hostnameRegex.test(str)) {
 		try {
 			new URL(str);
 			return true;
