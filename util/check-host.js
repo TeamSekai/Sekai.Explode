@@ -159,11 +159,19 @@ class CheckHostRequest {
 	 */
 
 	/**
+	 * @overload
+	 * @param {'dns'} checkType
+	 * @param {string} host
+	 * @param {number} maxNodes
+	 * @returns {Promise<CheckHostRequest<CheckDnsResult>>}
+	 */
+
+	/**
 	 * Check Host の API にリクエストを送る。
-	 * @param {string} checkType チェックを行う項目
+	 * @param {'ping' | 'http' | 'tcp' | 'dns'} checkType チェックを行う項目
 	 * @param {string} host チェックを行うホスト名
 	 * @param {number} maxNodes チェックに用いる最大ノード数
-	 * @returns {Promise<CheckHostRequest<unknown>>} リクエストを表すオブジェクト
+	 * @returns {Promise<CheckHostRequest<CheckHostResult>>} リクエストを表すオブジェクト
 	 */
 	static async get(checkType, host, maxNodes) {
 		const checkTypeObject = checkTypes[checkType];
@@ -395,12 +403,59 @@ const CHECK_TCP = {
 	},
 };
 
+// check-dns
+
+class CheckDnsResult extends CheckHostResult {
+	/**
+	 * @param {'ok' | 'error' | 'processing'} state
+	 */
+	constructor(state) {
+		super(state);
+	}
+}
+
+class CheckDnsOk extends CheckDnsResult {
+	a;
+
+	aaaa;
+
+	ttl;
+
+	/**
+	 *
+	 * @param {string[]} a
+	 * @param {string[]} aaaa
+	 * @param {number} ttl
+	 */
+	constructor(a, aaaa, ttl) {
+		super('ok');
+		this.a = a;
+		this.aaaa = aaaa;
+		this.ttl = ttl;
+	}
+}
+
+/** @type {CheckHostType<CheckDnsResult>} */
+const CHECK_DNS = {
+	castResult(data) {
+		if (data == null) {
+			return new CheckDnsResult('processing');
+		}
+		const { A, AAAA, TTL } = data[0];
+		if (TTL == null) {
+			return new CheckDnsResult('error');
+		}
+		return new CheckDnsOk(A, AAAA, TTL);
+	},
+};
+
 // util
 
 const checkTypes = Object.freeze({
 	ping: CHECK_PING,
 	tcp: CHECK_TCP,
 	http: CHECK_HTTP,
+	dns: CHECK_DNS,
 });
 
 const ipv4Regex =
@@ -430,5 +485,7 @@ module.exports = {
 	CheckHttpComplete,
 	CheckHttpOk,
 	CheckHttpError,
+	CheckDnsResult,
+	CheckDnsOk,
 	isValidHostname,
 };

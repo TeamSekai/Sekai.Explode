@@ -115,7 +115,8 @@
 					"choices": {
 						"ping": "Ping",
 						"http": "HTTP",
-						"tcp": "TCP"
+						"tcp": "TCP",
+						"dns": "DNS"
 					}
 				},
 				"hostname": {

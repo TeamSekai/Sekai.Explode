@@ -9,6 +9,7 @@ const {
 	CheckTcpError,
 	CheckHttpOk,
 	CheckHttpComplete,
+	CheckDnsOk,
 } = require('../util/check-host');
 const { formatTable } = require('../util/strings');
 const { SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
@@ -19,18 +20,23 @@ const MAX_NODES = 40;
  * @template {import('../util/check-host').CheckHostResult} T
  * @param {CheckHostRequest<T>} request
  * @param {(result: T) => unknown[]} rowFormat
- * @param {('left' | 'right')[]} align
+ * @param {import('../util/strings').FormatTableOption} options
  */
-async function getFormattedResult(request, rowFormat, align) {
+async function getFormattedResult(request, rowFormat, options) {
 	const resultMap = await request.checkResult(1.0, 7);
 	const table = [...resultMap.entries()].map(([node, result]) => {
 		const nodeName = node.name.replace('.node.check-host.net', '');
 		const prefix = `[${nodeName}]`;
 		console.log(strFormat(LANG.common.message.dataFor, [nodeName]), result);
-		return [prefix, ...rowFormat(result)];
+		const row = rowFormat(result);
+		if (row.length == 0) {
+			return [prefix];
+		}
+		return [prefix + ' ' + row[0], ...row.slice(1)];
 	});
 	return formatTable(table, {
-		align: ['left', ...align],
+		align: ['left', ...(options.align ?? [])],
+		...(options ?? {}),
 	});
 }
 
@@ -59,10 +65,15 @@ async function checkPing(hostname) {
 					`${Math.floor(average * 1000)} ms`,
 				];
 			},
-			['left', 'left', 'left', 'left', 'left', 'left', 'right'],
+			{
+				align: ['left', 'left', 'left', 'left', 'left', 'left', 'right'],
+			},
 		);
 }
 
+/**
+ * @param {string} hostname
+ */
 async function checkHttp(hostname) {
 	const request = await CheckHostRequest.get('http', hostname, MAX_NODES);
 	return async () =>
@@ -83,7 +94,35 @@ async function checkHttp(hostname) {
 				}
 				return row;
 			},
-			['left', 'right', 'left', 'right', 'left'],
+			{
+				align: ['left', 'right', 'left', 'right', 'left'],
+			},
+		);
+}
+
+/**
+ * @param {string} hostname
+ */
+async function checkDns(hostname) {
+	const request = await CheckHostRequest.get('dns', hostname, MAX_NODES);
+	return async () =>
+		await getFormattedResult(
+			request,
+			(result) => {
+				if (!(result instanceof CheckDnsOk)) {
+					return [result.state];
+				}
+				return [
+					'TTL:',
+					result.ttl,
+					...[...result.a, ...result.aaaa].map((e, i, { length }) =>
+						i == length - 1 ? e : e + ', ',
+					),
+				];
+			},
+			{
+				align: ['left', 'right', 'left'],
+			},
 		);
 }
 
@@ -109,12 +148,14 @@ async function checkTcp(hostname) {
 				}
 				return [result.state];
 			},
-			['left', 'left', 'left', 'right'],
+			{
+				align: ['left', 'left', 'left', 'right'],
+			},
 		);
 }
 
 /**
- * @param {'ping' | 'http' | 'tcp'} type
+ * @param {'ping' | 'http' | 'tcp' | 'dns'} type
  * @param {string} hostname
  */
 function check(type, hostname) {
@@ -125,6 +166,8 @@ function check(type, hostname) {
 			return checkHttp(hostname);
 		case 'tcp':
 			return checkTcp(hostname);
+		case 'dns':
+			return checkDns(hostname);
 	}
 }
 
@@ -148,6 +191,10 @@ module.exports = SimpleSlashCommandBuilder.create(
 			{
 				name: LANG.commands.check.options.type.choices.tcp,
 				value: 'tcp',
+			},
+			{
+				name: LANG.commands.check.options.type.choices.dns,
+				value: 'dns',
 			},
 		],
 	})
