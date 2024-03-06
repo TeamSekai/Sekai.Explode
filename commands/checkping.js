@@ -1,4 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
+// @ts-check
+
 const { LANG, strFormat } = require('../util/languages');
 const {
 	CheckHostRequest,
@@ -7,24 +8,24 @@ const {
 	isValidHostname,
 } = require('../util/check-host');
 const { formatTable } = require('../util/strings');
+const { SimpleCommand, SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName(LANG.commands.checkping.name)
-		.setDescription(LANG.commands.checkping.description)
-		.addStringOption((option) =>
-			option
-				.setName(LANG.commands.checkping.options.ip.name)
-				.setDescription(LANG.common.optionDescription.ipAddress)
-				.setRequired(true),
-		),
-	execute: async function (/** @type {CommandInteraction} */ interaction) {
-		const url = interaction.options.getString(
-			LANG.commands.checkping.options.ip.name,
-		);
+module.exports = new SimpleCommand(
+	SimpleSlashCommandBuilder.create(
+		LANG.commands.checkping.name,
+		LANG.commands.checkping.description
+	)
+		.addStringOption(/** @type {import('../common/SimpleCommand').SimpleStringOptionData<string, true>} */ ({
+			name: LANG.commands.checkping.options.ip.name,
+			description: LANG.common.optionDescription.ipAddress,
+			required: true
+		})),
+
+	async function (interaction, url) {
 		if (!isValidHostname(url)) {
 			// IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。
-			return await interaction.reply(LANG.commands.checkping.invalidIpError);
+			await interaction.reply(LANG.commands.checkping.invalidIpError);
+			return;
 		}
 		const request = await CheckHostRequest.get(CHECK_PING, url, 40);
 		const msg = await interaction.reply(LANG.common.message.checking);
@@ -62,5 +63,5 @@ module.exports = {
 				},
 			],
 		});
-	},
-};
+	}
+);

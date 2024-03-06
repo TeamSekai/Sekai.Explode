@@ -61,6 +61,19 @@ const { SlashCommandBuilder } = require('discord.js');
  */
 
 /**
+ * @template {string} [T = string]
+ * @template {boolean} [Required = boolean]
+ * @typedef {(
+ *     SimpleCommandOptionData<T, Required> &
+ *     SimpleChoiceOptionData<T> &
+ *     {
+ *         max_length: number;
+ *         min_length: number;
+ *     }
+ * )} SimpleStringOptionData
+ */
+
+/**
  * @template {unknown} [T = unknown]
  * @template {boolean} [Required = boolean]
  */
@@ -90,13 +103,24 @@ class Option {
 }
 
 /**
- * @typedef {FirstParameter<typeof import('discord.js').SharedSlashCommandOptions.prototype.addIntegerOption>} IntegerOptionInput
+ * @template {string | number} T
+ * @param {import('discord.js').ApplicationCommandOptionWithChoicesAndAutocompleteMixin<T>} option
+ * @param {SimpleChoiceOptionData<T>} input
  */
+function setChoices(option, input) {
+	const { choices, autocomplete } = input;
+	if (choices != null) {
+		option.addChoices(...choices);
+	}
+	if (autocomplete != null) {
+		option.setAutocomplete(autocomplete);
+	}
+}
 
 /**
  * @template {number} T
  * @template {boolean} [Required = boolean]
- * @extends {Option<number, Required>}
+ * @extends {Option<T, Required>}
  */
 class IntegerOption extends Option {
 	/**
@@ -111,13 +135,8 @@ class IntegerOption extends Option {
 				.setName(name)
 				.setDescription(input.description)
 				.setRequired(required);
-			const { choices, autocomplete, max_value, min_value } = input;
-			if (choices != null) {
-				option.setChoices(...choices);
-			}
-			if (autocomplete != null) {
-				option.setAutocomplete(autocomplete);
-			}
+			const { max_value, min_value } = input;
+			setChoices(option, input);
 			if (max_value != null) {
 				option.setMaxValue(max_value);
 			}
@@ -139,6 +158,50 @@ class IntegerOption extends Option {
 				)
 			: /** @type {Value<T, Required>} */ (
 					interaction.options.getInteger(this.name, false) ?? void 0
+				);
+	}
+}
+
+/**
+ * @template {string} [T = string]
+ * @template {boolean} [Required = boolean]
+ * @extends {Option<T, Required>}
+ */
+class StringOption extends Option {
+	/**
+	 * @param {import('discord.js').SharedSlashCommandOptions} builder
+	 * @param {SimpleStringOptionData<T, Required>} input
+	 */
+	constructor(builder, input) {
+		super(input.name, input.required);
+		builder.addStringOption((option) => {
+			option
+				.setName(input.name)
+				.setDescription(input.description)
+				.setRequired(input.required);
+			setChoices(option, input);
+			const { max_length, min_length } = input;
+			if (max_length != null) {
+				option.setMaxLength(max_length);
+			}
+			if (min_length != null) {
+				option.setMinLength(min_length);
+			}
+			return option;
+		});
+	}
+
+	/**
+	 * @override
+	 * @param {ChatInputCommandInteraction} interaction
+	 */
+	get(interaction) {
+		return this.required
+			? /** @type {Value<T, Required>} */ (
+					interaction.options.getString(this.name, true)
+				)
+			: /** @type {Value<T, Required>} */ (
+					interaction.options.getString(this.name)
 				);
 	}
 }
@@ -189,20 +252,38 @@ class SimpleSlashCommandBuilder {
 	}
 
 	/**
-	 * @template {number} T
+	 * @template {unknown} T
 	 * @template {boolean} [Required = false]
-	 * @param {SimpleIntegerOptionData<T, Required>} input
-	 * @returns
+	 * @param {Option<T, Required>} option 
 	 */
-	addIntegerOption(input) {
-		/** @type {[...Options, IntegerOption<T, Required>]} */
-		const options = [...this.options, new IntegerOption(this.handle, input)];
+	addOption(option) {
+		/** @type {[...Options, Option<T, Required>]} */
+		const options = [...this.options, option];
 		return new SimpleSlashCommandBuilder(
 			this.#name,
 			this.#description,
 			this.handle,
 			options,
 		);
+	}
+
+	/**
+	 * @template {number} T
+	 * @template {boolean} [Required = boolean]
+	 * @param {SimpleIntegerOptionData<T, Required>} input
+	 */
+	addIntegerOption(input) {
+		return this.addOption(new IntegerOption(this.handle, input));
+	}
+
+	/**
+	 * @template {string} T
+	 * @template {boolean} [Required = boolean]
+	 * @param {SimpleStringOptionData<T, Required>} input
+	 * @returns
+	 */
+	addStringOption(input) {
+		return this.addOption(new StringOption(this.handle, input));
 	}
 }
 
