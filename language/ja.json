@@ -107,7 +107,10 @@
 					"description": "チェックの種類",
 					"choices": {
 						"ping": "Ping",
-						"tcp": "TCP"
+						"http": "HTTP",
+						"tcp": "TCP",
+						"dns": "DNS",
+						"udp": "UDP"
 					}
 				},
 				"hostname": {
