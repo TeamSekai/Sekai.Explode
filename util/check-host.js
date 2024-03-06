@@ -11,15 +11,6 @@ const axios = require('axios').default;
  */
 
 /**
- * @template {CheckHostResult} R
- * @typedef {(
- *     R extends CheckPingResult ? 'ping' :
- *     R extends CheckTcpResult ? 'tcp' :
- *     never
- * )} CheckHostTypeName
- */
-
-/**
  * @typedef {[string, string, string]} CheckHostNodeLocation
  */
 
@@ -29,13 +20,6 @@ const axios = require('axios').default;
  * @property {string} asn
  * @property {string} ip
  * @property {CheckHostNodeLocation} location
- */
-
-/**
- * @typedef {Object} CheckHostAPIParams
- * @property {string} host
- * @property {number} max_nodes
- * @property {string=} node
  */
 
 /**
