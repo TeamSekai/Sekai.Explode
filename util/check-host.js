@@ -11,6 +11,15 @@ const axios = require('axios').default;
  */
 
 /**
+ * @template {CheckHostResult} R
+ * @typedef {(
+ *     R extends CheckPingResult ? 'ping' :
+ *     R extends CheckTcpResult ? 'tcp' :
+ *     never
+ * )} CheckHostTypeName
+ */
+
+/**
  * @typedef {[string, string, string]} CheckHostNodeLocation
  */
 
@@ -143,18 +152,34 @@ class CheckHostRequest {
 	}
 
 	/**
+	 * @overload
+	 * @param {'ping'} checkType
+	 * @param {string} host
+	 * @param {number} maxNodes
+	 * @returns {Promise<CheckHostRequest<CheckPingResult>>}
+	 */
+
+	/**
+	 * @overload
+	 * @param {'tcp'} checkType
+	 * @param {string} host
+	 * @param {number} maxNodes
+	 * @returns {Promise<CheckHostRequest<CheckPingResult>>}
+	 */
+
+	/**
 	 * Check Host の API にリクエストを送る。
-	 * @template {CheckHostResult} R
-	 * @param {CheckHostType<R>} checkType チェックを行う項目
+	 * @param {string} checkType チェックを行う項目
 	 * @param {string} host チェックを行うホスト名
 	 * @param {number} maxNodes チェックに用いる最大ノード数
-	 * @returns {Promise<CheckHostRequest<R>>} リクエストを表すオブジェクト
+	 * @returns {Promise<CheckHostRequest<unknown>>} リクエストを表すオブジェクト
 	 */
 	static async get(checkType, host, maxNodes) {
-		const res = await axiosCheckHost.get(`/check-${checkType.name}`, {
+		const checkTypeObject = checkTypes[checkType];
+		const res = await axiosCheckHost.get(`/check-${checkType}`, {
 			params: { host, maxNodes },
 		});
-		return new CheckHostRequest(checkType, res.data);
+		return new CheckHostRequest(checkTypeObject, res.data);
 	}
 }
 
@@ -302,6 +327,11 @@ const CHECK_TCP = {
 	},
 };
 
+const checkTypes = Object.freeze({
+	ping: CHECK_PING,
+	tcp: CHECK_TCP,
+});
+
 // util
 
 const ipv4Regex =
@@ -323,10 +353,8 @@ module.exports = {
 	CheckHostRequest,
 	CheckPingResult,
 	CheckPingOk,
-	CHECK_PING,
 	CheckTcpResult,
 	CheckTcpOk,
 	CheckTcpError,
-	CHECK_TCP,
 	isValidHostname,
 };

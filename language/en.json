@@ -102,12 +102,20 @@
 			"name": "check",
 			"description": "Ping Checker",
 			"options": {
+				"type": {
+					"name": "type",
+					"description": "check type",
+					"choices": {
+						"ping": "Ping",
+						"tcp": "TCP"
+					}
+				},
 				"hostname": {
 					"name": "hostname",
 					"description": "hostname to check"
 				}
 			},
-			"invalidIpError": "The IP address is invalid. (Only IPv4 and domains supported.)"
+			"invalidHostnameError": "The hostname is invalid. (Only IPv4 and domains supported.)"
 		},
 		"checktcp": {
 			"name": "dev03",
