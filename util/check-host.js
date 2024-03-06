@@ -6,7 +6,6 @@ const axios = require('axios').default;
 /**
  * @template {CheckHostResult} R
  * @typedef {Object} CheckHostType
- * @property {string} name
  * @property {(data: any) => R} castResult
  */
 
@@ -251,7 +250,6 @@ class CheckPingOk extends CheckPingResult {
 
 /** @type {CheckHostType<CheckPingResult>} */
 const CHECK_PING = {
-	name: 'ping',
 	castResult(/** @type {any} */ data) {
 		if (data == null) {
 			return new CheckPingResult('processing');
@@ -330,7 +328,6 @@ class CheckHttpError extends CheckHttpComplete {
 
 /** @type {CheckHostType<CheckHttpResult>} */
 const CHECK_HTTP = {
-	name: 'http',
 	castResult(data) {
 		if (!(data instanceof Array)) {
 			return new CheckHttpResult('processing');
@@ -386,7 +383,6 @@ class CheckTcpError extends CheckTcpResult {
 
 /** @type {CheckHostType<CheckTcpResult>} */
 const CHECK_TCP = {
-	name: 'tcp',
 	castResult(/** @type {any} */ data) {
 		if (data == null) {
 			return new CheckTcpResult('processing');
@@ -399,13 +395,13 @@ const CHECK_TCP = {
 	},
 };
 
+// util
+
 const checkTypes = Object.freeze({
 	ping: CHECK_PING,
 	tcp: CHECK_TCP,
 	http: CHECK_HTTP,
 });
-
-// util
 
 const ipv4Regex =
 	/^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
