@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @typedef {Object} FormatTableOption
  * @property {string=} fillString 列を同じ幅にするために余白を埋める文字
@@ -7,13 +9,13 @@
 
 /**
  * 二次元配列を表形式の文字列に変換する。
- * @param {string[][]} table 二次元配列
+ * @param {unknown[][]} table 二次元配列
  * @param {FormatTableOption} options オプション
  */
 function formatTable(table, options = {}) {
-	table = table.map((row) => row.map((cell) => String(cell)));
+	const stringTable = table.map((row) => row.map((cell) => String(cell)));
 	const /** @type {number[]} */ maxWidths = [];
-	for (const row of table) {
+	for (const row of stringTable) {
 		const length = row.length;
 		for (let j = 0; j < length; j++) {
 			const maxWidth = maxWidths[j];
@@ -26,7 +28,7 @@ function formatTable(table, options = {}) {
 	const padding = options.fillString ?? ' ';
 	const margin = options.margin ?? ' ';
 	const align = options.align ?? [];
-	return table
+	return stringTable
 		.map((value) => {
 			const last = value.length - 1;
 			return value

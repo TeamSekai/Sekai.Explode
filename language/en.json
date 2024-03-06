@@ -98,15 +98,27 @@
 		}
 	},
 	"commands": {
-		"checkping": {
-			"name": "checkping",
+		"check": {
+			"name": "check",
 			"description": "Ping Checker",
 			"options": {
-				"ip": {
-					"name": "ip"
+				"type": {
+					"name": "type",
+					"description": "check type",
+					"choices": {
+						"ping": "Ping",
+						"http": "HTTP",
+						"tcp": "TCP",
+						"dns": "DNS",
+						"udp": "UDP"
+					}
+				},
+				"hostname": {
+					"name": "hostname",
+					"description": "hostname to check"
 				}
 			},
-			"invalidIpError": "The IP address is invalid. (Only IPv4 and domains supported.)"
+			"invalidHostnameError": "The hostname is invalid. (Only IPv4 and domains supported.)"
 		},
 		"checktcp": {
 			"name": "dev03",

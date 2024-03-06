@@ -6,7 +6,6 @@ const axios = require('axios').default;
 /**
  * @template {CheckHostResult} R
  * @typedef {Object} CheckHostType
- * @property {string} name
  * @property {(data: any) => R} castResult
  */
 
@@ -20,13 +19,6 @@ const axios = require('axios').default;
  * @property {string} asn
  * @property {string} ip
  * @property {CheckHostNodeLocation} location
- */
-
-/**
- * @typedef {Object} CheckHostAPIParams
- * @property {string} host
- * @property {number} max_nodes
- * @property {string=} node
  */
 
 /**
@@ -143,18 +135,50 @@ class CheckHostRequest {
 	}
 
 	/**
+	 * @overload
+	 * @param {'ping'} checkType
+	 * @param {string} host
+	 * @param {number} maxNodes
+	 * @returns {Promise<CheckHostRequest<CheckPingResult>>}
+	 */
+
+	/**
+	 * @overload
+	 * @param {'http'} checkType
+	 * @param {string} host
+	 * @param {number} maxNodes
+	 * @returns {Promise<CheckHostRequest<CheckHttpResult>>}
+	 */
+
+	/**
+	 * @overload
+	 * @param {'tcp' | 'udp'} checkType
+	 * @param {string} host
+	 * @param {number} maxNodes
+	 * @returns {Promise<CheckHostRequest<CheckTcpUdpResult>>}
+	 */
+
+	/**
+	 * @overload
+	 * @param {'dns'} checkType
+	 * @param {string} host
+	 * @param {number} maxNodes
+	 * @returns {Promise<CheckHostRequest<CheckDnsResult>>}
+	 */
+
+	/**
 	 * Check Host の API にリクエストを送る。
-	 * @template {CheckHostResult} R
-	 * @param {CheckHostType<R>} checkType チェックを行う項目
+	 * @param {'ping' | 'http' | 'tcp' | 'dns' | 'udp'} checkType チェックを行う項目
 	 * @param {string} host チェックを行うホスト名
 	 * @param {number} maxNodes チェックに用いる最大ノード数
-	 * @returns {Promise<CheckHostRequest<R>>} リクエストを表すオブジェクト
+	 * @returns {Promise<CheckHostRequest<CheckHostResult>>} リクエストを表すオブジェクト
 	 */
 	static async get(checkType, host, maxNodes) {
-		const res = await axiosCheckHost.get(`/check-${checkType.name}`, {
+		const checkTypeObject = checkTypes[checkType];
+		const res = await axiosCheckHost.get(`/check-${checkType}`, {
 			params: { host, maxNodes },
 		});
-		return new CheckHostRequest(checkType, res.data);
+		return new CheckHostRequest(checkTypeObject, res.data);
 	}
 }
 
@@ -234,7 +258,6 @@ class CheckPingOk extends CheckPingResult {
 
 /** @type {CheckHostType<CheckPingResult>} */
 const CHECK_PING = {
-	name: 'ping',
 	castResult(/** @type {any} */ data) {
 		if (data == null) {
 			return new CheckPingResult('processing');
@@ -247,9 +270,88 @@ const CHECK_PING = {
 	},
 };
 
-// check-tcp
+// check-http
 
-class CheckTcpResult extends CheckHostResult {
+class CheckHttpResult extends CheckHostResult {
+	constructor(state) {
+		super(state);
+	}
+}
+
+class CheckHttpComplete extends CheckHttpResult {
+	/** @type {boolean} */
+	success;
+
+	/** @type {number} */
+	time;
+
+	/** @type {string} */
+	statusMessage;
+
+	/**
+	 * @param {'ok' | 'error' | 'processing'} state
+	 * @param {number} success
+	 * @param {number} time
+	 * @param {string} statusMessage
+	 */
+	constructor(state, success, time, statusMessage) {
+		super(state);
+		this.success = success != 0;
+		this.time = time;
+		this.statusMessage = statusMessage;
+	}
+}
+
+class CheckHttpOk extends CheckHttpComplete {
+	/** @type {number} */
+	statusCode;
+
+	/** @type {string} */
+	host;
+
+	/**
+	 * @param {number} success
+	 * @param {number} time
+	 * @param {string} statusMessage
+	 * @param {string} statusCode
+	 * @param {string} host
+	 */
+	constructor(success, time, statusMessage, statusCode, host) {
+		super('ok', success, time, statusMessage);
+		this.statusCode = Number.parseInt(statusCode);
+		this.host = host;
+	}
+}
+
+class CheckHttpError extends CheckHttpComplete {
+	/**
+	 * @param {number} success
+	 * @param {number} time
+	 * @param {string} statusMessage
+	 */
+	constructor(success, time, statusMessage) {
+		super('error', success, time, statusMessage);
+	}
+}
+
+/** @type {CheckHostType<CheckHttpResult>} */
+const CHECK_HTTP = {
+	castResult(data) {
+		if (!(data instanceof Array)) {
+			return new CheckHttpResult('processing');
+		}
+		const [success, time, statusMessage, statusCode, host] = data[0];
+		if (statusCode != null) {
+			return new CheckHttpOk(success, time, statusMessage, statusCode, host);
+		} else {
+			return new CheckHttpError(success, time, statusMessage);
+		}
+	},
+};
+
+// check-tcp, check-udp
+
+class CheckTcpUdpResult extends CheckHostResult {
 	/**
 	 * @param {'ok' | 'error' | 'processing'} state
 	 */
@@ -258,7 +360,7 @@ class CheckTcpResult extends CheckHostResult {
 	}
 }
 
-class CheckTcpOk extends CheckTcpResult {
+class CheckTcpUdpOk extends CheckTcpUdpResult {
 	/** @type {number} */
 	time;
 
@@ -275,7 +377,7 @@ class CheckTcpOk extends CheckTcpResult {
 	}
 }
 
-class CheckTcpError extends CheckTcpResult {
+class CheckTcpUdpError extends CheckTcpUdpResult {
 	description;
 
 	/**
@@ -287,28 +389,87 @@ class CheckTcpError extends CheckTcpResult {
 	}
 }
 
-/** @type {CheckHostType<CheckTcpResult>} */
-const CHECK_TCP = {
-	name: 'tcp',
+/** @type {CheckHostType<CheckTcpUdpResult>} */
+const CHECK_TCP_UDP = {
 	castResult(/** @type {any} */ data) {
 		if (data == null) {
-			return new CheckTcpResult('processing');
+			return new CheckTcpUdpResult('processing');
 		}
 		const payload = data[0];
 		if ('error' in payload) {
-			return new CheckTcpError(payload.error);
+			return new CheckTcpUdpError(payload.error);
 		}
-		return new CheckTcpOk(payload);
+		if ('timeout' in payload) {
+			return new CheckTcpUdpError('Connection timed out');
+		}
+		return new CheckTcpUdpOk(payload);
+	},
+};
+
+// check-dns
+
+class CheckDnsResult extends CheckHostResult {
+	/**
+	 * @param {'ok' | 'error' | 'processing'} state
+	 */
+	constructor(state) {
+		super(state);
+	}
+}
+
+class CheckDnsOk extends CheckDnsResult {
+	a;
+
+	aaaa;
+
+	ttl;
+
+	/**
+	 *
+	 * @param {string[]} a
+	 * @param {string[]} aaaa
+	 * @param {number} ttl
+	 */
+	constructor(a, aaaa, ttl) {
+		super('ok');
+		this.a = a;
+		this.aaaa = aaaa;
+		this.ttl = ttl;
+	}
+}
+
+/** @type {CheckHostType<CheckDnsResult>} */
+const CHECK_DNS = {
+	castResult(data) {
+		if (data == null) {
+			return new CheckDnsResult('processing');
+		}
+		const { A, AAAA, TTL } = data[0];
+		if (TTL == null) {
+			return new CheckDnsResult('error');
+		}
+		return new CheckDnsOk(A, AAAA, TTL);
 	},
 };
 
 // util
 
+const checkTypes = Object.freeze({
+	ping: CHECK_PING,
+	tcp: CHECK_TCP_UDP,
+	http: CHECK_HTTP,
+	dns: CHECK_DNS,
+	udp: CHECK_TCP_UDP,
+});
+
 const ipv4Regex =
 	/^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
 
+const hostnameRegex =
+	/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*\.?$/;
+
 function isValidHostname(str) {
-	if (!ipv4Regex.test(str)) {
+	if (!ipv4Regex.test(str) && !hostnameRegex.test(str)) {
 		try {
 			new URL(str);
 			return true;
@@ -321,12 +482,17 @@ function isValidHostname(str) {
 
 module.exports = {
 	CheckHostRequest,
+	CheckHostResult,
 	CheckPingResult,
 	CheckPingOk,
-	CHECK_PING,
-	CheckTcpResult,
-	CheckTcpOk,
-	CheckTcpError,
-	CHECK_TCP,
+	CheckTcpUdpResult,
+	CheckTcpUdpOk,
+	CheckTcpUdpError,
+	CheckHttpResult,
+	CheckHttpComplete,
+	CheckHttpOk,
+	CheckHttpError,
+	CheckDnsResult,
+	CheckDnsOk,
 	isValidHostname,
 };

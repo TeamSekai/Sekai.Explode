@@ -1,59 +1,45 @@
 // @ts-check
 
 const { LANG, strFormat } = require('../util/languages');
-const {
-	SimpleCommand,
-	SimpleSlashCommandBuilder,
-} = require('../common/SimpleCommand');
+const { SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
 
 const DEFAULT_MIN_VALUE = 0;
 const DEFAULT_MAX_VALUE = 99;
 const DEFAULT_DICE_COUNT = 1;
 
-module.exports = new SimpleCommand(
-	SimpleSlashCommandBuilder.create(
-		LANG.commands.randomnum.name,
-		LANG.commands.randomnum.description,
-	)
-		.addIntegerOption((option) =>
-			option
-				.setName(LANG.commands.randomnum.options.minValue.name)
-				.setDescription(
-					strFormat(
-						LANG.commands.randomnum.options.minValue.description,
-						DEFAULT_MIN_VALUE,
-					),
-				)
-				.setRequired(false)
-				.setMinValue(0),
-		)
-		.addIntegerOption((option) =>
-			option
-				.setName(LANG.commands.randomnum.options.maxValue.name)
-				.setDescription(
-					strFormat(
-						LANG.commands.randomnum.options.maxValue.description,
-						DEFAULT_MAX_VALUE,
-					),
-				)
-				.setRequired(false)
-				.setMinValue(0),
-		)
-		.addIntegerOption((option) =>
-			option
-				.setName(LANG.commands.randomnum.options.diceCount.name)
-				.setDescription(
-					strFormat(
-						LANG.commands.randomnum.options.diceCount.description,
-						DEFAULT_DICE_COUNT,
-					),
-				)
-				.setRequired(false)
-				.setMinValue(1)
-				.setMaxValue(50),
+module.exports = SimpleSlashCommandBuilder.create(
+	LANG.commands.randomnum.name,
+	LANG.commands.randomnum.description,
+)
+	.addIntegerOption({
+		name: LANG.commands.randomnum.options.minValue.name,
+		description: strFormat(
+			LANG.commands.randomnum.options.minValue.description,
+			DEFAULT_MIN_VALUE,
 		),
-
-	async function execute(
+		required: false,
+		min_value: 0,
+	})
+	.addIntegerOption({
+		name: LANG.commands.randomnum.options.maxValue.name,
+		description: strFormat(
+			LANG.commands.randomnum.options.maxValue.description,
+			DEFAULT_MAX_VALUE,
+		),
+		required: false,
+		min_value: 0,
+	})
+	.addIntegerOption({
+		name: LANG.commands.randomnum.options.diceCount.name,
+		description: strFormat(
+			LANG.commands.randomnum.options.diceCount.description,
+			DEFAULT_DICE_COUNT,
+		),
+		required: false,
+		min_value: 1,
+		max_value: 50,
+	})
+	.build(async function execute(
 		interaction,
 		min = DEFAULT_MIN_VALUE,
 		max = DEFAULT_MAX_VALUE,
@@ -101,5 +87,4 @@ module.exports = new SimpleCommand(
 				},
 			],
 		});
-	},
-);
+	});

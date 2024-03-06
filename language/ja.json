@@ -98,15 +98,27 @@
 		}
 	},
 	"commands": {
-		"checkping": {
-			"name": "checkping",
+		"check": {
+			"name": "check",
 			"description": "Ping を確認",
 			"options": {
-				"ip": {
-					"name": "ip"
+				"type": {
+					"name": "type",
+					"description": "チェックの種類",
+					"choices": {
+						"ping": "Ping",
+						"http": "HTTP",
+						"tcp": "TCP",
+						"dns": "DNS",
+						"udp": "UDP"
+					}
+				},
+				"hostname": {
+					"name": "hostname",
+					"description": "チェックを行うホスト名"
 				}
 			},
-			"invalidIpError": "IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。)"
+			"invalidHostnameError": "ホスト名が間違っています。(IPv4、またはドメインのみ対応しています。)"
 		},
 		"checktcp": {
 			"name": "dev03",
