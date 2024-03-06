@@ -103,6 +103,34 @@ async function checkHttp(hostname) {
 /**
  * @param {string} hostname
  */
+async function checkTcp(hostname) {
+	const request = await CheckHostRequest.get('tcp', hostname, MAX_NODES);
+	return async () =>
+		await getFormattedResult(
+			request,
+			(result) => {
+				if (result instanceof CheckTcpOk) {
+					return [
+						'OK,',
+						result.time,
+						'| Ping:',
+						`${Math.floor(result.time * 1000)} ms`,
+					];
+				}
+				if (result instanceof CheckTcpError) {
+					return ['ERROR', result.description];
+				}
+				return [result.state];
+			},
+			{
+				align: ['left', 'left', 'left', 'right'],
+			},
+		);
+}
+
+/**
+ * @param {string} hostname
+ */
 async function checkDns(hostname) {
 	const request = await CheckHostRequest.get('dns', hostname, MAX_NODES);
 	return async () =>
@@ -122,34 +150,6 @@ async function checkDns(hostname) {
 			},
 			{
 				align: ['left', 'right', 'left'],
-			},
-		);
-}
-
-/**
- * @param {string} hostname
- */
-async function checkTcp(hostname) {
-	const request = await CheckHostRequest.get('tcp', hostname, MAX_NODES);
-	return async () =>
-		await getFormattedResult(
-			request,
-			(result) => {
-				if (result instanceof CheckTcpOk) {
-					return [
-						'OK,',
-						result.time,
-						'| Ping: ',
-						`${Math.floor(result.time * 1000)} ms`,
-					];
-				}
-				if (result instanceof CheckTcpError) {
-					return ['ERROR', result.description];
-				}
-				return [result.state];
-			},
-			{
-				align: ['left', 'left', 'left', 'right'],
 			},
 		);
 }
