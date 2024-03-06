@@ -15,43 +15,34 @@ module.exports = new SimpleCommand(
 		LANG.commands.randomnum.name,
 		LANG.commands.randomnum.description,
 	)
-		.addIntegerOption((option) =>
-			option
-				.setName(LANG.commands.randomnum.options.minValue.name)
-				.setDescription(
-					strFormat(
-						LANG.commands.randomnum.options.minValue.description,
-						DEFAULT_MIN_VALUE,
-					),
-				)
-				.setRequired(false)
-				.setMinValue(0),
-		)
-		.addIntegerOption((option) =>
-			option
-				.setName(LANG.commands.randomnum.options.maxValue.name)
-				.setDescription(
-					strFormat(
-						LANG.commands.randomnum.options.maxValue.description,
-						DEFAULT_MAX_VALUE,
-					),
-				)
-				.setRequired(false)
-				.setMinValue(0),
-		)
-		.addIntegerOption((option) =>
-			option
-				.setName(LANG.commands.randomnum.options.diceCount.name)
-				.setDescription(
-					strFormat(
-						LANG.commands.randomnum.options.diceCount.description,
-						DEFAULT_DICE_COUNT,
-					),
-				)
-				.setRequired(false)
-				.setMinValue(1)
-				.setMaxValue(50),
-		),
+		.addIntegerOption({
+			name: LANG.commands.randomnum.options.minValue.name,
+			description: strFormat(
+				LANG.commands.randomnum.options.minValue.description,
+				DEFAULT_MIN_VALUE,
+			),
+			required: false,
+			min_value: 0,
+		})
+		.addIntegerOption({
+			name: LANG.commands.randomnum.options.maxValue.name,
+			description: strFormat(
+				LANG.commands.randomnum.options.maxValue.description,
+				DEFAULT_MAX_VALUE,
+			),
+			required: false,
+			min_value: 0,
+		})
+		.addIntegerOption({
+			name: LANG.commands.randomnum.options.diceCount.name,
+			description: strFormat(
+				LANG.commands.randomnum.options.diceCount.description,
+				DEFAULT_DICE_COUNT,
+			),
+			required: false,
+			min_value: 1,
+			max_value: 50,
+		}),
 
 	async function execute(
 		interaction,

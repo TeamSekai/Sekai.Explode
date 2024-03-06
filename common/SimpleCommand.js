@@ -31,42 +31,37 @@ const { SlashCommandBuilder } = require('discord.js');
  */
 
 /**
+ * @template {unknown} T
+ * @template {boolean} [Required = boolean]
+ * @typedef {Required extends true ? T : T | undefined} Value
+ */
+
+/**
  * @template {unknown} [T = unknown]
  * @template {boolean} [Required = boolean]
  */
 class Option {
 	name;
 
-	#required;
+	required;
 
 	/**
-	 * @param {import('discord.js').SharedSlashCommandOptions} builder オプションの Builder
-	 * @param {(builder: import('discord.js').SharedSlashCommandOptions) => void} addOption Builder にオプションを追加する関数
+	 * @param {string} name オプションの名前
+	 * @param {Required} required 必須のオプションか
 	 */
-	constructor(builder, addOption) {
-		const index = builder.options.length;
-		addOption(builder);
-		const json = builder.options[index].toJSON();
-		this.name = json.name;
-		this.#required = /** @type {Required} */ (json.required);
+	constructor(name, required) {
+		this.name = name;
+		this.required = required;
 	}
 
 	/**
 	 * オプションの値を取得する。
 	 * @abstract
 	 * @param {ChatInputCommandInteraction} _interaction コマンドのインタラクション
-	 * @returns {Required extends true ? T : T | undefined}
+	 * @returns {Value<T, Required>}
 	 */
 	get(_interaction) {
 		throw new Error('Not implemented');
-	}
-
-	/**
-	 * 必須のオプションか
-	 * @returns {this is Option<T, true>}
-	 */
-	isRequired() {
-		return this.#required;
 	}
 }
 
@@ -75,17 +70,37 @@ class Option {
  */
 
 /**
+ * @template {number} T
  * @template {boolean} [Required = boolean]
  * @extends {Option<number, Required>}
  */
 class IntegerOption extends Option {
 	/**
 	 * @param {import('discord.js').SharedSlashCommandOptions} builder
-	 * @param {IntegerOptionInput} input
+	 * @param {SimpleIntegerOptionData<T, Required>} input
 	 */
 	constructor(builder, input) {
-		super(builder, (builder) => {
-			builder.addIntegerOption(input);
+		const { name, required } = input;
+		super(name, required);
+		builder.addIntegerOption((option) => {
+			option
+				.setName(name)
+				.setDescription(input.description)
+				.setRequired(required);
+			const { choices, autocomplete, max_value, min_value } = input;
+			if (choices != null) {
+				option.setChoices(...choices);
+			}
+			if (autocomplete != null) {
+				option.setAutocomplete(autocomplete);
+			}
+			if (max_value != null) {
+				option.setMaxValue(max_value);
+			}
+			if (min_value != null) {
+				option.setMinValue(min_value);
+			}
+			return option;
 		});
 	}
 
@@ -94,13 +109,47 @@ class IntegerOption extends Option {
 	 * @param {ChatInputCommandInteraction} interaction
 	 */
 	get(interaction) {
-		if (this.isRequired()) {
-			return interaction.options.getInteger(this.name, true);
-		} else {
-			return interaction.options.getInteger(this.name) ?? void 0;
-		}
+		return this.required
+			? /** @type {Value<T, Required>} */ (
+					interaction.options.getInteger(this.name, true)
+				)
+			: /** @type {Value<T, Required>} */ (
+					interaction.options.getInteger(this.name, false) ?? void 0
+				);
 	}
 }
+
+/**
+ * @template {unknown} T
+ * @template {boolean} [Required = boolean]
+ * @typedef {Object} SimpleCommandOptionData
+ * @property {string} name
+ * @property {string} description
+ * @property {Required} required
+ */
+
+/**
+ * @template {unknown} T
+ * @typedef {Object} SimpleChoiceOptionData
+ * @property {import('discord.js').APIApplicationCommandOptionChoice<T>[]=} choices
+ * @property {boolean=} autocomplete
+ */
+
+/**
+ * @typedef {Object} SimpleRangeOptionData
+ * @property {number=} max_value
+ * @property {number=} min_value
+ */
+
+/**
+ * @template {number} [T = number]
+ * @template {boolean} [Required = boolean]
+ * @typedef {(
+ *     SimpleCommandOptionData<T, Required> &
+ *     SimpleRangeOptionData &
+ *     SimpleChoiceOptionData<T>
+ * )} SimpleIntegerOptionData
+ */
 
 /**
  * シンプルな SlashCommandBuilder(?)
@@ -148,12 +197,13 @@ class SimpleSlashCommandBuilder {
 	}
 
 	/**
+	 * @template {number} T
 	 * @template {boolean} [Required = false]
-	 * @param {IntegerOptionInput} input
+	 * @param {SimpleIntegerOptionData<T, Required>} input
 	 * @returns
 	 */
 	addIntegerOption(input) {
-		/** @type {[...Options, IntegerOption<Required>]} */
+		/** @type {[...Options, IntegerOption<T, Required>]} */
 		const options = [...this.options, new IntegerOption(this.handle, input)];
 		return new SimpleSlashCommandBuilder(
 			this.#name,
