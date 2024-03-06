@@ -16,24 +16,48 @@ const { SlashCommandBuilder } = require('discord.js');
  */
 
 /**
- * @template {Option<unknown, boolean>} O
- * @typedef {(
- *     O extends IntegerOption<infer Required> ? (Required extends true ? number : number | undefined) :
- *     never
- * )} OptionValue
+ * @template {unknown} T
+ * @template {boolean} [Required = boolean]
+ * @typedef {Required extends true ? T : T | undefined} Value
  */
 
 /**
- * @template {Option<unknown, boolean>[]} Options
- * @typedef {{
- *     [I in keyof Options]: Options[I] extends Option<unknown, boolean> ? OptionValue<Options[I]> : never
- * }} OptionValues
+ * @template {Option<unknown>[]} O
+ * @typedef {({
+ *     [I in keyof O]: O[I] extends Option<infer T, infer Required> ? Value<T, Required> : never
+ * })} OptionValueMap
  */
 
 /**
  * @template {unknown} T
  * @template {boolean} [Required = boolean]
- * @typedef {Required extends true ? T : T | undefined} Value
+ * @typedef {Object} SimpleCommandOptionData
+ * @property {string} name
+ * @property {string} description
+ * @property {Required} required
+ */
+
+/**
+ * @template {unknown} T
+ * @typedef {Object} SimpleChoiceOptionData
+ * @property {import('discord.js').APIApplicationCommandOptionChoice<T>[]=} choices
+ * @property {boolean=} autocomplete
+ */
+
+/**
+ * @typedef {Object} SimpleRangeOptionData
+ * @property {number=} max_value
+ * @property {number=} min_value
+ */
+
+/**
+ * @template {number} [T = number]
+ * @template {boolean} [Required = boolean]
+ * @typedef {(
+ *     SimpleCommandOptionData<T, Required> &
+ *     SimpleRangeOptionData &
+ *     SimpleChoiceOptionData<T>
+ * )} SimpleIntegerOptionData
  */
 
 /**
@@ -120,38 +144,6 @@ class IntegerOption extends Option {
 }
 
 /**
- * @template {unknown} T
- * @template {boolean} [Required = boolean]
- * @typedef {Object} SimpleCommandOptionData
- * @property {string} name
- * @property {string} description
- * @property {Required} required
- */
-
-/**
- * @template {unknown} T
- * @typedef {Object} SimpleChoiceOptionData
- * @property {import('discord.js').APIApplicationCommandOptionChoice<T>[]=} choices
- * @property {boolean=} autocomplete
- */
-
-/**
- * @typedef {Object} SimpleRangeOptionData
- * @property {number=} max_value
- * @property {number=} min_value
- */
-
-/**
- * @template {number} [T = number]
- * @template {boolean} [Required = boolean]
- * @typedef {(
- *     SimpleCommandOptionData<T, Required> &
- *     SimpleRangeOptionData &
- *     SimpleChoiceOptionData<T>
- * )} SimpleIntegerOptionData
- */
-
-/**
  * シンプルな SlashCommandBuilder(?)
  * @template {Option<unknown, boolean>[]} [Options = []]
  */
@@ -228,7 +220,7 @@ class SimpleCommand {
 	 * @param {SimpleSlashCommandBuilder<Options>} builder
 	 * @param {(
 	 *     interaction: ChatInputCommandInteraction,
-	 *     ...options: OptionValues<Options>
+	 *     ...options: OptionValueMap<Options>
 	 * ) => Promise<void>} action
 	 */
 	constructor(builder, action) {
@@ -241,7 +233,7 @@ class SimpleCommand {
 	 * @param {ChatInputCommandInteraction} interaction コマンドのインタラクション
 	 */
 	async execute(interaction) {
-		const optionValues = /** @type {OptionValues<Options>} */ (
+		const optionValues = /** @type {OptionValueMap<Options>} */ (
 			this.builder.options.map((option) => option.get(interaction))
 		);
 		await this.action(interaction, ...optionValues);
