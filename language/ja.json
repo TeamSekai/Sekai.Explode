@@ -98,8 +98,8 @@
 		}
 	},
 	"commands": {
-		"checkping": {
-			"name": "checkping",
+		"check": {
+			"name": "check",
 			"description": "Ping を確認",
 			"options": {
 				"ip": {
