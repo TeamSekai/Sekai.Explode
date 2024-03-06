@@ -116,7 +116,8 @@
 						"ping": "Ping",
 						"http": "HTTP",
 						"tcp": "TCP",
-						"dns": "DNS"
+						"dns": "DNS",
+						"udp": "UDP"
 					}
 				},
 				"hostname": {

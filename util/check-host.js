@@ -152,10 +152,10 @@ class CheckHostRequest {
 
 	/**
 	 * @overload
-	 * @param {'tcp'} checkType
+	 * @param {'tcp' | 'udp'} checkType
 	 * @param {string} host
 	 * @param {number} maxNodes
-	 * @returns {Promise<CheckHostRequest<CheckTcpResult>>}
+	 * @returns {Promise<CheckHostRequest<CheckTcpUdpResult>>}
 	 */
 
 	/**
@@ -168,7 +168,7 @@ class CheckHostRequest {
 
 	/**
 	 * Check Host の API にリクエストを送る。
-	 * @param {'ping' | 'http' | 'tcp' | 'dns'} checkType チェックを行う項目
+	 * @param {'ping' | 'http' | 'tcp' | 'dns' | 'udp'} checkType チェックを行う項目
 	 * @param {string} host チェックを行うホスト名
 	 * @param {number} maxNodes チェックに用いる最大ノード数
 	 * @returns {Promise<CheckHostRequest<CheckHostResult>>} リクエストを表すオブジェクト
@@ -349,9 +349,9 @@ const CHECK_HTTP = {
 	},
 };
 
-// check-tcp
+// check-tcp, check-udp
 
-class CheckTcpResult extends CheckHostResult {
+class CheckTcpUdpResult extends CheckHostResult {
 	/**
 	 * @param {'ok' | 'error' | 'processing'} state
 	 */
@@ -360,7 +360,7 @@ class CheckTcpResult extends CheckHostResult {
 	}
 }
 
-class CheckTcpOk extends CheckTcpResult {
+class CheckTcpUdpOk extends CheckTcpUdpResult {
 	/** @type {number} */
 	time;
 
@@ -377,7 +377,7 @@ class CheckTcpOk extends CheckTcpResult {
 	}
 }
 
-class CheckTcpError extends CheckTcpResult {
+class CheckTcpUdpError extends CheckTcpUdpResult {
 	description;
 
 	/**
@@ -389,17 +389,20 @@ class CheckTcpError extends CheckTcpResult {
 	}
 }
 
-/** @type {CheckHostType<CheckTcpResult>} */
-const CHECK_TCP = {
+/** @type {CheckHostType<CheckTcpUdpResult>} */
+const CHECK_TCP_UDP = {
 	castResult(/** @type {any} */ data) {
 		if (data == null) {
-			return new CheckTcpResult('processing');
+			return new CheckTcpUdpResult('processing');
 		}
 		const payload = data[0];
 		if ('error' in payload) {
-			return new CheckTcpError(payload.error);
+			return new CheckTcpUdpError(payload.error);
 		}
-		return new CheckTcpOk(payload);
+		if ('timeout' in payload) {
+			return new CheckTcpUdpError('Connection timed out');
+		}
+		return new CheckTcpUdpOk(payload);
 	},
 };
 
@@ -453,9 +456,10 @@ const CHECK_DNS = {
 
 const checkTypes = Object.freeze({
 	ping: CHECK_PING,
-	tcp: CHECK_TCP,
+	tcp: CHECK_TCP_UDP,
 	http: CHECK_HTTP,
 	dns: CHECK_DNS,
+	udp: CHECK_TCP_UDP,
 });
 
 const ipv4Regex =
@@ -478,9 +482,9 @@ module.exports = {
 	CheckHostResult,
 	CheckPingResult,
 	CheckPingOk,
-	CheckTcpResult,
-	CheckTcpOk,
-	CheckTcpError,
+	CheckTcpUdpResult,
+	CheckTcpUdpOk,
+	CheckTcpUdpError,
 	CheckHttpResult,
 	CheckHttpComplete,
 	CheckHttpOk,

@@ -5,8 +5,8 @@ const {
 	CheckHostRequest,
 	CheckPingOk,
 	isValidHostname,
-	CheckTcpOk,
-	CheckTcpError,
+	CheckTcpUdpOk,
+	CheckTcpUdpError,
 	CheckHttpOk,
 	CheckHttpComplete,
 	CheckDnsOk,
@@ -101,15 +101,16 @@ async function checkHttp(hostname) {
 }
 
 /**
+ * @param {'tcp' | 'udp'} type
  * @param {string} hostname
  */
-async function checkTcp(hostname) {
-	const request = await CheckHostRequest.get('tcp', hostname, MAX_NODES);
+async function checkTcpUdp(type, hostname) {
+	const request = await CheckHostRequest.get(type, hostname, MAX_NODES);
 	return async () =>
 		await getFormattedResult(
 			request,
 			(result) => {
-				if (result instanceof CheckTcpOk) {
+				if (result instanceof CheckTcpUdpOk) {
 					return [
 						'OK,',
 						result.time,
@@ -117,8 +118,8 @@ async function checkTcp(hostname) {
 						`${Math.floor(result.time * 1000)} ms`,
 					];
 				}
-				if (result instanceof CheckTcpError) {
-					return ['ERROR', result.description];
+				if (result instanceof CheckTcpUdpError) {
+					return ['ERROR,', result.description];
 				}
 				return [result.state];
 			},
@@ -155,7 +156,7 @@ async function checkDns(hostname) {
 }
 
 /**
- * @param {'ping' | 'http' | 'tcp' | 'dns'} type
+ * @param {'ping' | 'http' | 'tcp' | 'dns' | 'udp'} type
  * @param {string} hostname
  */
 function check(type, hostname) {
@@ -165,7 +166,8 @@ function check(type, hostname) {
 		case 'http':
 			return checkHttp(hostname);
 		case 'tcp':
-			return checkTcp(hostname);
+		case 'udp':
+			return checkTcpUdp(type, hostname);
 		case 'dns':
 			return checkDns(hostname);
 	}
@@ -195,6 +197,10 @@ module.exports = SimpleSlashCommandBuilder.create(
 			{
 				name: LANG.commands.check.options.type.choices.dns,
 				value: 'dns',
+			},
+			{
+				name: LANG.commands.check.options.type.choices.udp,
+				value: 'udp',
 			},
 		],
 	})
