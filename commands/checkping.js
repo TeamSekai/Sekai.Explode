@@ -8,20 +8,18 @@ const {
 	isValidHostname,
 } = require('../util/check-host');
 const { formatTable } = require('../util/strings');
-const { SimpleCommand, SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
+const { SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
 
-module.exports = new SimpleCommand(
-	SimpleSlashCommandBuilder.create(
-		LANG.commands.checkping.name,
-		LANG.commands.checkping.description
-	)
-		.addStringOption(/** @type {import('../common/SimpleCommand').SimpleStringOptionData<string, true>} */ ({
-			name: LANG.commands.checkping.options.ip.name,
-			description: LANG.common.optionDescription.ipAddress,
-			required: true
-		})),
-
-	async function (interaction, url) {
+module.exports = SimpleSlashCommandBuilder.create(
+	LANG.commands.checkping.name,
+	LANG.commands.checkping.description,
+)
+	.addStringOption({
+		name: LANG.commands.checkping.options.ip.name,
+		description: LANG.common.optionDescription.ipAddress,
+		required: true,
+	})
+	.build(async (interaction, url) => {
 		if (!isValidHostname(url)) {
 			// IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。
 			await interaction.reply(LANG.commands.checkping.invalidIpError);
@@ -63,5 +61,4 @@ module.exports = new SimpleCommand(
 				},
 			],
 		});
-	}
-);
+	});

@@ -67,8 +67,8 @@ const { SlashCommandBuilder } = require('discord.js');
  *     SimpleCommandOptionData<T, Required> &
  *     SimpleChoiceOptionData<T> &
  *     {
- *         max_length: number;
- *         min_length: number;
+ *         max_length?: number;
+ *         min_length?: number;
  *     }
  * )} SimpleStringOptionData
  */
@@ -254,7 +254,7 @@ class SimpleSlashCommandBuilder {
 	/**
 	 * @template {unknown} T
 	 * @template {boolean} [Required = false]
-	 * @param {Option<T, Required>} option 
+	 * @param {Option<T, Required>} option
 	 */
 	addOption(option) {
 		/** @type {[...Options, Option<T, Required>]} */
@@ -284,6 +284,16 @@ class SimpleSlashCommandBuilder {
 	 */
 	addStringOption(input) {
 		return this.addOption(new StringOption(this.handle, input));
+	}
+
+	/**
+	 * @param {(
+	 *     interaction: ChatInputCommandInteraction,
+	 *     ...options: OptionValueMap<Options>
+	 * ) => Promise<void>} action
+	 */
+	build(action) {
+		return new SimpleCommand(this, action);
 	}
 }
 
