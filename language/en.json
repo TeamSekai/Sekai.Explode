@@ -102,8 +102,9 @@
 			"name": "check",
 			"description": "Ping Checker",
 			"options": {
-				"ip": {
-					"name": "ip"
+				"hostname": {
+					"name": "hostname",
+					"description": "hostname to check"
 				}
 			},
 			"invalidIpError": "The IP address is invalid. (Only IPv4 and domains supported.)"

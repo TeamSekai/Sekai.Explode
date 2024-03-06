@@ -102,8 +102,9 @@
 			"name": "check",
 			"description": "Ping を確認",
 			"options": {
-				"ip": {
-					"name": "ip"
+				"hostname": {
+					"name": "hostname",
+					"description": "チェックを行うホスト名"
 				}
 			},
 			"invalidIpError": "IPアドレスが間違っています。(IPv4、またはドメインのみ対応しています。)"

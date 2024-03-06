@@ -15,8 +15,8 @@ module.exports = SimpleSlashCommandBuilder.create(
 	LANG.commands.check.description,
 )
 	.addStringOption({
-		name: LANG.commands.check.options.ip.name,
-		description: LANG.common.optionDescription.ipAddress,
+		name: LANG.commands.check.options.hostname.name,
+		description: LANG.commands.check.options.hostname.description,
 		required: true,
 	})
 	.build(async (interaction, url) => {
