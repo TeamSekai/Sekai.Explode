@@ -1,75 +1,93 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { LANG } = require('../util/languages');
+// @ts-check
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName(LANG.commands.poll.name)
-		.setDescription(LANG.commands.poll.description)
-		.addStringOption((option) =>
-			option
-				.setName('title')
-				.setDescription(LANG.commands.poll.polltitle)
-				.setRequired(true),
-		)
-		.addStringOption((option) =>
-			option
-				.setName('choice1')
-				.setDescription(LANG.commands.poll.pollchoices)
-				.setRequired(true),
-		)
-		.addStringOption((option) =>
-			option
-				.setName('choice2')
-				.setDescription(LANG.commands.poll.pollchoices)
-				.setRequired(true),
-		)
-		.addStringOption((option) =>
-			option.setName('choice3').setDescription(LANG.commands.poll.pollchoices),
-		)
-		.addStringOption((option) =>
-			option.setName('choice4').setDescription(LANG.commands.poll.pollchoices),
-		)
-		.addStringOption((option) =>
-			option.setName('choice5').setDescription(LANG.commands.poll.pollchoices),
-		)
-		.addStringOption((option) =>
-			option.setName('choice6').setDescription(LANG.commands.poll.pollchoices),
-		)
-		.addStringOption((option) =>
-			option.setName('choice7').setDescription(LANG.commands.poll.pollchoices),
-		)
-		.addStringOption((option) =>
-			option.setName('choice8').setDescription(LANG.commands.poll.pollchoices),
-		)
-		.addStringOption((option) =>
-			option.setName('choice9').setDescription(LANG.commands.poll.pollchoices),
-		)
-		.addStringOption((option) =>
-			option.setName('choice10').setDescription(LANG.commands.poll.pollchoices),
-		),
-	execute: async function (interaction) {
+const { EmbedBuilder } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
+const { SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
+
+module.exports = SimpleSlashCommandBuilder.create(
+	LANG.commands.poll.name,
+	LANG.commands.poll.description,
+)
+	.addStringOption({
+		name: LANG.commands.poll.options.title.name,
+		description: LANG.commands.poll.polltitle,
+		required: true,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 1),
+		description: LANG.commands.poll.pollchoices,
+		required: true,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 2),
+		description: LANG.commands.poll.pollchoices,
+		required: true,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 3),
+		description: LANG.commands.poll.pollchoices,
+		required: false,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 4),
+		description: LANG.commands.poll.pollchoices,
+		required: false,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 5),
+		description: LANG.commands.poll.pollchoices,
+		required: false,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 6),
+		description: LANG.commands.poll.pollchoices,
+		required: false,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 7),
+		description: LANG.commands.poll.pollchoices,
+		required: false,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 8),
+		description: LANG.commands.poll.pollchoices,
+		required: false,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 9),
+		description: LANG.commands.poll.pollchoices,
+		required: false,
+	})
+	.addStringOption({
+		name: strFormat(LANG.commands.poll.options.choice$.name, 10),
+		description: LANG.commands.poll.pollchoices,
+		required: false,
+	})
+	.build(async function (interaction, title, ...choices) {
 		await interaction.deferReply();
 		const { channel } = await interaction;
-		const options = await interaction.options.data;
+		if (channel == null) {
+			return;
+		}
+
+		const filteredChoices = choices.filter(x => x != null);
 		const emojis = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'];
 		const poll = new EmbedBuilder();
 		poll.setColor(0x2aa198);
-		for (let i = 1; i < options.length; i++) {
-			const emoji = emojis[i - 1];
-			const option = options[i];
-			poll.addFields({ name: `${emoji} **${option.value}**`, value: ' ' });
+		for (const [i, choice] of filteredChoices.entries()) {
+			const emoji = emojis[i];
+			poll.addFields({ name: `${emoji} **${choice}**`, value: ' ' });
 		}
 		poll.setTimestamp();
 		poll.setFooter({
-			text: `Sekai.Explode - (Poll Created by ${interaction.user.displayName})`,
+			text: strFormat(LANG.commands.poll.footer, [interaction.user.displayName]),
 			iconURL:
 				'https://github.com/TeamSekai/Sekai.Explode/raw/v14-dev/assets/images/icon.webp',
 		});
 		const message = await channel.send({ embeds: [poll] });
-		for (let i = 1; i < options.length; i++) {
-			const emoji = emojis[i - 1];
+		for (const i of filteredChoices.keys()) {
+			const emoji = emojis[i];
 			await message.react(emoji);
 		}
-		return await interaction.editReply(`**${options[0].value}**`);
-	},
-};
+		await interaction.editReply(`**${title}**`);
+	});

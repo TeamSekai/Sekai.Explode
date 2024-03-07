@@ -33,7 +33,9 @@ module.exports = {
 				LANG.commands.receiveupdate.permissionError,
 			);
 		}
-		const targetchannel = interaction.options.getChannel(LANG.commands.receiveupdate.options.channel.name);
+		const targetchannel = interaction.options.getChannel(
+			LANG.commands.receiveupdate.options.channel.name,
+		);
 
 		const channel = client.channels.resolve('1211695901760819281'); //TODO: config.jsonで編集可能に?
 		assert(channel instanceof NewsChannel);
@@ -44,11 +46,16 @@ module.exports = {
 				strFormat(LANG.commands.receiveupdate.followerAddedLog, { name, id }),
 			);
 			await interaction.editReply(
-				strFormat(LANG.commands.receiveupdate.followerAddedMessage, `<#${targetchannel.id}>`),
+				strFormat(
+					LANG.commands.receiveupdate.followerAddedMessage,
+					`<#${targetchannel.id}>`,
+				),
 			);
 		} catch (e) {
 			console.log(strFormat(LANG.commands.receiveupdate.errorOccurredLog, [e]));
-			await interaction.editReply(strFormat(LANG.commands.receiveupdate.errorOccurredMessage, [e]));
+			await interaction.editReply(
+				strFormat(LANG.commands.receiveupdate.errorOccurredMessage, [e]),
+			);
 		}
 	},
 };

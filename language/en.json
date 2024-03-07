@@ -730,7 +730,16 @@
 			"name": "poll",
 			"description": "Create a new poll.",
 			"polltitle": "Type your title!",
-			"pollchoices": "Type your choices..."
+			"pollchoices": "Type your choices...",
+			"options": {
+				"title": {
+					"name": "title"
+				},
+				"choice$": {
+					"name": "choice${0}"
+				}
+			},
+			"footer": "Sekai.Explode - (Poll Created by ${0})"
 		}
 	}
 }
