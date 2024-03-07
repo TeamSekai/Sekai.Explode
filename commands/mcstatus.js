@@ -96,7 +96,7 @@ module.exports = {
 						],
 					});
 				} else {
-					await interaction.editReply(`${server}はオフラインです`);
+					await interaction.editReply(strFormat(LANG.commands.mcstatus.serverIsOffline, [server]));
 				}
 				return;
 			}
