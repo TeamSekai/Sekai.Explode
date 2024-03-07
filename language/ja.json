@@ -84,6 +84,17 @@
 			"shutdown": "[TempLink] サーバーを閉じました"
 		}
 	},
+	"util": {
+		"pager": {
+			"defaults": {
+				"title": "${0}件のアイテムがリストに入っています!",
+				"emptyMessage": "リストにアイテムがありません!",
+				"footer": "${page}/${pageCount}ページ|${length}件中${start}件目から${end}件目",
+				"prevButton": "前のページ",
+				"nextButton": "次のページ"
+			}
+		}
+	},
 	"common": {
 		"optionDescription": {
 			"ipAddress": "IPアドレスを入力",

@@ -4,6 +4,7 @@ const {
 	ButtonStyle,
 	ActionRowBuilder,
 } = require('discord.js');
+const { strFormat, LANG } = require('./languages');
 
 /**
  * @typedef {Object} OptionSet Pager のコンストラクタに渡すことができるオプション
@@ -54,28 +55,34 @@ class Pager {
 	#options = {
 		pageLength: 10,
 		title(pager) {
-			return `${pager.items.length}件のアイテムがリストに入っています!`;
+			return strFormat(LANG.util.pager.defaults.title, [pager.items.length]);
 		},
 		color: null,
 		fieldName: null,
-		emptyMessage: 'リストにアイテムがありません!',
+		emptyMessage: LANG.util.pager.defaults.emptyMessage,
 		delimiter: '\n',
 		footer(pager) {
 			if (pager.isEmpty()) {
 				return null;
 			}
 			return {
-				text: `${pager.page + 1}/${pager.pageCount}ページ|${pager.items.length}件中${pager.start + 1}件目から${pager.end}件目`,
+				text: strFormat(LANG.util.pager.defaults.footer, {
+					page: pager.page + 1,
+					pageCount: pager.pageCount,
+					length: pager.items.length,
+					start: pager.start,
+					end: pager.end
+				}),
 			};
 		},
 		prevButton: new ButtonBuilder()
 			.setCustomId('prev')
-			.setLabel('前のページ')
+			.setLabel(LANG.util.pager.defaults.prevButton)
 			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('⬅️'),
 		nextButton: new ButtonBuilder()
 			.setCustomId('next')
-			.setLabel('次のページ')
+			.setLabel(LANG.util.pager.defaults.nextButton)
 			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('➡️'),
 		idleTime: 60000,
@@ -255,12 +262,11 @@ class Pager {
 
 	/**
 	 * この Pager をリプライとして表示する。
-	 * @param {import("discord.js").BaseInteraction} interaction 対話オブジェクト
+	 * @param {import("discord.js").RepliableInteraction} interaction 対話オブジェクト
 	 */
 	async replyTo(interaction) {
 		if (!interaction.isRepliable()) {
-			console.error(`返信することができません! interaction: ${interaction}`);
-			return;
+			throw new TypeError(`Cannot reply to interaction: ${interaction}`);
 		}
 		if (interaction.deferred || interaction.replied) {
 			await interaction.editReply(this.#reply);

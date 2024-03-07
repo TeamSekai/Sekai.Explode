@@ -84,6 +84,17 @@
 			"shutdown": "[TempLink] Server closed"
 		}
 	},
+	"util": {
+		"pager": {
+			"defaults": {
+				"title": "${0} item(s) in the list",
+				"emptyMessage": "There are no items in the list!",
+				"footer": "page ${page}/${pageCount}|${start}-${end} out of ${length} item(s)",
+				"prevButton": "Previous page",
+				"nextButton": "Next page"
+			}
+		}
+	},
 	"common": {
 		"optionDescription": {
 			"ipAddress": "Enter the IP address",
