@@ -5,16 +5,17 @@ const {
 	PermissionsBitField,
 	NewsChannel,
 } = require('discord.js');
+const { LANG, strFormat } = require('../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		//TODO: i18n
-		.setName('follow_announcements')
-		.setDescription('Sekai.Explodeの最新情報をフォローします!')
+		.setName(LANG.commands.receiveupdate.name)
+		.setDescription(LANG.commands.receiveupdate.description)
 		.addChannelOption((option) =>
 			option
-				.setName('channel')
-				.setDescription('受信するチャンネルを指定します。')
+				.setName(LANG.commands.receiveupdate.options.channel.name)
+				.setDescription(LANG.commands.receiveupdate.options.channel.description)
 				.addChannelTypes(ChannelType.GuildText)
 				.setRequired(true),
 		),
@@ -29,24 +30,25 @@ module.exports = {
 			)
 		) {
 			return await interaction.editReply(
-				'権限がありません!(管理者権限が必要です。)',
+				LANG.commands.receiveupdate.permissionError,
 			);
 		}
-		const targetchannel = interaction.options.getChannel('channel');
+		const targetchannel = interaction.options.getChannel(LANG.commands.receiveupdate.options.channel.name);
 
 		const channel = client.channels.resolve('1211695901760819281'); //TODO: config.jsonで編集可能に?
 		assert(channel instanceof NewsChannel);
 		try {
 			await channel.addFollower(targetchannel.id);
+			const { name, id } = interaction.guild;
 			console.log(
-				`[Sekai.Explode] new follower! ${interaction.guild.name} - ${interaction.guild.id}`,
-			),
-				await interaction.editReply(
-					`<#${targetchannel.id}>にSekai.Explodeのアナウンスを通知します :wave:`,
-				);
+				strFormat(LANG.commands.receiveupdate.followerAddedLog, { name, id }),
+			);
+			await interaction.editReply(
+				strFormat(LANG.commands.receiveupdate.followerAddedMessage, `<#${targetchannel.id}>`),
+			);
 		} catch (e) {
-			console.log(`Something Went wrong. ${e}`),
-				await interaction.editReply(`失敗しました！エラー: ${e}`);
+			console.log(strFormat(LANG.commands.receiveupdate.errorOccurredLog, [e]));
+			await interaction.editReply(strFormat(LANG.commands.receiveupdate.errorOccurredMessage, [e]));
 		}
 	},
 };

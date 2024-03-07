@@ -527,6 +527,21 @@
 				"footer": "Executed by: ${0}"
 			}
 		},
+		"receiveupdate": {
+			"name": "follow_announcements",
+			"description": "Receives latest information of Sekai.Explode",
+			"options": {
+				"channel": {
+					"name": "channel",
+					"description": "Specify the channel to receive in."
+				}
+			},
+			"permissionError": "You don't have the permission! (The administrator role is required.)",
+			"followerAddedLog": "[Sekai.Explode] new follower! ${name} - ${id}",
+			"followerAddedMessage": "Will notify announcements of Sekai.Explode to <#${0}> :wave:",
+			"errorOccurredLog": "Something Went wrong. ${0}",
+			"errorOccurredMessage": "Failed! Error: ${0}"
+		},
 		"reply": {
 			"name": "reply",
 			"description": "Customizes automatic reply messages.",
@@ -565,7 +580,9 @@
 				},
 				"list": {
 					"name": "list",
-					"description": "Shows an list of automatic reply messages."
+					"description": "Shows an list of automatic reply messages.",
+					"title": "自動応答メッセージ",
+					"emptyMessage": "メッセージが設定されていません"
 				}
 			},
 			"notInGuildError": "This commands must be used in a server!",

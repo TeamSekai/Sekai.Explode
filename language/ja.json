@@ -527,6 +527,21 @@
 				"footer": "実行者: ${0}"
 			}
 		},
+		"receiveupdate": {
+			"name": "follow_announcements",
+			"description": "Sekai.Explodeの最新情報をフォローします!",
+			"options": {
+				"channel": {
+					"name": "channel",
+					"description": "受信するチャンネルを指定します。"
+				}
+			},
+			"permissionError": "権限がありません!(管理者権限が必要です。)",
+			"followerAddedLog": "[Sekai.Explode] new follower! ${name} - ${id}",
+			"followerAddedMessage": "${0}にSekai.Explodeのアナウンスを通知します :wave:",
+			"errorOccurredLog": "Something Went wrong. ${0}",
+			"errorOccurredMessage": "失敗しました！エラー: ${0}"
+		},
 		"reply": {
 			"name": "reply",
 			"description": "自動応答をカスタマイズします。",
@@ -565,7 +580,9 @@
 				},
 				"list": {
 					"name": "list",
-					"description": "自動応答の一覧を表示します。"
+					"description": "自動応答の一覧を表示します。",
+					"title": "自動応答メッセージ",
+					"emptyMessage": "メッセージが設定されていません"
 				}
 			},
 			"notInGuildError": "このコマンドはサーバー内でのみ使用できます！",
