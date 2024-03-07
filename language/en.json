@@ -63,6 +63,13 @@
 			"presenceNameShuttingDown": "Shutting down...",
 			"presenceStateShuttingDown": "Sekai.explode is now shutting down..."
 		},
+		"messages": {
+			"replyPattern": "${message}: ${reply}${perfectMatching}",
+			"perfectMatching": {
+				"yes": " (perfect matching)",
+				"no": ""
+			}
+		},
 		"mongodb": {
 			"called": "Called mongodb internal system.",
 			"dbConnecting": "[MongoDB] Connecting...",
@@ -519,6 +526,50 @@
 				"sumFieldName": "Total:",
 				"footer": "Executed by: ${0}"
 			}
+		},
+		"reply": {
+			"name": "reply",
+			"description": "Customizes automatic reply messages.",
+			"subcommands": {
+				"add": {
+					"name": "add",
+					"description": "Adds an automatic reply message.",
+					"options": {
+						"message": {
+							"name": "message",
+							"description": "Message content to reply"
+						},
+						"reply": {
+							"name": "reply",
+							"description": "Reply content"
+						},
+						"perfectMatching": {
+							"name": "perfect_matching",
+							"description": "Prefect matching"
+						}
+					},
+					"succeeded": "Added an automatic reply message!",
+					"alreadyExists": "A reply message is already set for it!"
+				},
+				"remove": {
+					"name": "remove",
+					"description": "Removes an automatic reply message.",
+					"options": {
+						"message": {
+							"name": "message",
+							"description": "Message content to reply"
+						}
+					},
+					"succeeded": "Removed the automatic reply message!",
+					"doNotExist": "No reply message is set for it!"
+				},
+				"list": {
+					"name": "list",
+					"description": "Shows an list of automatic reply messages."
+				}
+			},
+			"notInGuildError": "This commands must be used in a server!",
+			"permissionError": "You have not permission to use this command!"
 		},
 		"resume": {
 			"name": "resume",

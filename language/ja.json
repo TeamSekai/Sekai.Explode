@@ -63,6 +63,13 @@
 			"presenceNameShuttingDown": "シャットダウン中…",
 			"presenceStateShuttingDown": "Sekai.explode はシャットダウン中です…"
 		},
+		"messages": {
+			"replyPattern": "${message}: ${reply}${perfectMatching}",
+			"perfectMatching": {
+				"yes": " (完全一致)",
+				"no": ""
+			}
+		},
 		"mongodb": {
 			"called": "MongoDB 内部システムを呼び出しました。",
 			"dbConnecting": "[MongoDB] 接続中…",
@@ -519,6 +526,50 @@
 				"sumFieldName": "合計:",
 				"footer": "実行者: ${0}"
 			}
+		},
+		"reply": {
+			"name": "reply",
+			"description": "自動応答をカスタマイズします。",
+			"subcommands": {
+				"add": {
+					"name": "add",
+					"description": "自動応答を追加します。",
+					"options": {
+						"message": {
+							"name": "message",
+							"description": "反応するメッセージ内容"
+						},
+						"reply": {
+							"name": "reply",
+							"description": "返信内容"
+						},
+						"perfectMatching": {
+							"name": "perfect_matching",
+							"description": "完全一致"
+						}
+					},
+					"succeeded": "メッセージに対する応答を設定しました！",
+					"alreadyExists": "そのメッセージに対する応答はすでに設定されています！"
+				},
+				"remove": {
+					"name": "remove",
+					"description": "自動応答を削除します。",
+					"options": {
+						"message": {
+							"name": "message",
+							"description": "反応するメッセージ内容"
+						}
+					},
+					"succeeded": "メッセージに対する応答を削除しました！",
+					"doNotExist": "そのメッセージに対する応答は設定されていません！"
+				},
+				"list": {
+					"name": "list",
+					"description": "自動応答の一覧を表示します。"
+				}
+			},
+			"notInGuildError": "このコマンドはサーバー内でのみ使用できます！",
+			"permissionError": "このコマンドを使用する権限がありません！"
 		},
 		"resume": {
 			"name": "resume",
