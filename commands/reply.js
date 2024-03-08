@@ -144,9 +144,9 @@ const commandReply = {
 				const pager = new Pager(
 					replyPatterns.map((pattern) => `- ${pattern}`),
 					{
-						title: '自動応答メッセージ',
+						title: LANG.commands.reply.subcommands.list.title,
 						color: 'Green',
-						emptyMessage: 'メッセージが設定されていません',
+						emptyMessage: LANG.commands.reply.subcommands.list.emptyMessage,
 					},
 				);
 				await pager.replyTo(interaction);
