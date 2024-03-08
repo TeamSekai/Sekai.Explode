@@ -70,7 +70,7 @@ module.exports = SimpleSlashCommandBuilder.create(
 			return;
 		}
 
-		const filteredChoices = choices.filter(x => x != null);
+		const filteredChoices = choices.filter((x) => x != null);
 		const emojis = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'];
 		const poll = new EmbedBuilder();
 		poll.setColor(0x2aa198);
@@ -80,7 +80,9 @@ module.exports = SimpleSlashCommandBuilder.create(
 		}
 		poll.setTimestamp();
 		poll.setFooter({
-			text: strFormat(LANG.commands.poll.footer, [interaction.user.displayName]),
+			text: strFormat(LANG.commands.poll.footer, [
+				interaction.user.displayName,
+			]),
 			iconURL:
 				'https://github.com/TeamSekai/Sekai.Explode/raw/v14-dev/assets/images/icon.webp',
 		});

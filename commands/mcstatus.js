@@ -96,7 +96,9 @@ module.exports = {
 						],
 					});
 				} else {
-					await interaction.editReply(strFormat(LANG.commands.mcstatus.serverIsOffline, [server]));
+					await interaction.editReply(
+						strFormat(LANG.commands.mcstatus.serverIsOffline, [server]),
+					);
 				}
 				return;
 			}

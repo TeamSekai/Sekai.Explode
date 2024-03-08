@@ -71,7 +71,7 @@ class Pager {
 					pageCount: pager.pageCount,
 					length: pager.items.length,
 					start: pager.start,
-					end: pager.end
+					end: pager.end,
 				}),
 			};
 		},
