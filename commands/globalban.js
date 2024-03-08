@@ -43,7 +43,7 @@ module.exports = {
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName(LANG.commands.globalban.subcommands.remove.name)
-				.setDescription(LANG.commands.globalban.subcommands.remove.name)
+				.setDescription(LANG.commands.globalban.subcommands.remove.description)
 				.addUserOption((option) =>
 					option
 						.setName(LANG.commands.globalban.addRemoveOptionNames.user)
@@ -57,7 +57,7 @@ module.exports = {
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName(LANG.commands.globalban.subcommands.list.name)
-				.setDescription(LANG.commands.globalban.subcommands.list.name),
+				.setDescription(LANG.commands.globalban.subcommands.list.description),
 		),
 	execute: async function (
 		/** @type {import("discord.js").CommandInteraction} */ interaction,
