@@ -2,10 +2,8 @@ const mongoose = require('mongoose');
 const config = require('../config.json');
 const { LANG } = require('../util/languages');
 
-console.log(LANG.internal.mongodb.called);
-connectMongoose();
-
 async function connectMongoose() {
+	console.log(LANG.internal.mongodb.called);
 	try {
 		await mongoose.connect(
 			`mongodb://${config.mongoDBuser}:${config.mongoDBpass}@${config.mongoDBhost}:${config.mongoDBport}/${config.mongoDBdatabase}?authSource=admin`,
@@ -30,6 +28,7 @@ db.on('disconnected', function () {
 });
 
 module.exports = {
+	connectMongoose,
 	connection: db,
 	mongoose: mongoose,
 };

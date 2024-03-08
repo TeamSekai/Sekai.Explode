@@ -14,6 +14,8 @@ const { onShutdown } = require('./internal/schedules');
 const activity = require('./internal/activity');
 const mongodb = require('./internal/mongodb');
 
+mongodb.connectMongoose();
+
 const {
 	getDuration,
 	saveQueue,
