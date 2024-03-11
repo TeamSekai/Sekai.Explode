@@ -4,8 +4,8 @@ const { SlashCommandBuilder } = require('discord.js');
 const dns = require('dns');
 const axios = require('axios').default;
 const ipRangeCheck = require('ip-range-check');
-const { LANG, strFormat } = require('../util/languages');
-const { getIpInfo } = require('../util/ip-api');
+const { LANG, strFormat } = require('../../../util/languages');
+const { getIpInfo } = require('../../../util/ip-api');
 const assert = require('assert');
 let cfIps = [];
 axios
@@ -98,7 +98,7 @@ module.exports = {
 			console.log(ipInfo.proxy);
 			console.log(ipInfo.hosting);
 			if (ipInfo.proxy || ipInfo.hosting) {
-				return interaction.reply({
+				await interaction.reply({
 					embeds: [
 						{
 							title:
@@ -146,6 +146,7 @@ module.exports = {
 						},
 					],
 				});
+				return;
 			}
 			await interaction.reply(
 				strFormat(LANG.commands.nettool.subcommands.isProxy.safeResult, [ip]),

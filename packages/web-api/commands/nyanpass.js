@@ -7,7 +7,7 @@ const {
 	ActionRowBuilder,
 	ButtonStyle,
 } = require('discord.js');
-const { LANG, strFormat } = require('../util/languages');
+const { LANG, strFormat } = require('../../../util/languages');
 const axios = require('axios').default;
 
 /**
@@ -49,7 +49,7 @@ async function createReply() {
 	};
 }
 
-/** @type {import("../util/types").Command} */
+/** @type {import("../../../util/types").Command} */
 const commandNyanpass = {
 	data: new SlashCommandBuilder()
 		.setName(LANG.commands.nyanpass.name)

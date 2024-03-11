@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const axios = require('axios');
-const { LANG, strFormat } = require('../util/languages');
+const { LANG, strFormat } = require('../../../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()

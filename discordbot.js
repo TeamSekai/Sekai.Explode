@@ -19,6 +19,7 @@ const { playerFeature } = require('player');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
 const { CommandManager } = require('./internal/commands');
+const { webApiFeature } = require('./packages/web-api');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -71,7 +72,7 @@ activity.setupActivity(client);
 /** @type {ClientMessageHandler | undefined} */
 let messageHandler;
 
-const features = [playerFeature];
+const features = [playerFeature, webApiFeature];
 const featuresLoadPromise = Promise.all(
 	features.map((feature) => feature.onLoad?.(client)),
 );

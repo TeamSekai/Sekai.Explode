@@ -1,6 +1,6 @@
 // @ts-check
 
-const { LANG, strFormat } = require('../util/languages');
+const { LANG, strFormat } = require('../../../util/languages');
 const {
 	CheckHostRequest,
 	CheckPingOk,
@@ -10,17 +10,17 @@ const {
 	CheckHttpOk,
 	CheckHttpComplete,
 	CheckDnsOk,
-} = require('../util/check-host');
-const { formatTable } = require('../util/strings');
-const { SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
+} = require('../../../util/check-host');
+const { formatTable } = require('../../../util/strings');
+const { SimpleSlashCommandBuilder } = require('../../../common/SimpleCommand');
 
 const MAX_NODES = 40;
 
 /**
- * @template {import('../util/check-host').CheckHostResult} T
+ * @template {import('../../../util/check-host').CheckHostResult} T
  * @param {CheckHostRequest<T>} request
  * @param {(result: T) => unknown[]} rowFormat
- * @param {import('../util/strings').FormatTableOption} options
+ * @param {import('../../../util/strings').FormatTableOption} options
  */
 async function getFormattedResult(request, rowFormat, options) {
 	const resultMap = await request.checkResult(1.0, 7);
