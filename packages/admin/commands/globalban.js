@@ -4,10 +4,10 @@ const {
 	ModalBuilder,
 	TextInputBuilder,
 } = require('discord.js');
-const mongodb = require('../internal/mongodb'); //*MongoDB
-const { AdminUserIDs } = require('../config.json');
-const Pager = require('../util/pager');
-const { LANG, strFormat } = require('../util/languages');
+const mongodb = require('../../../internal/mongodb'); //*MongoDB
+const { AdminUserIDs } = require('../../../config.json');
+const Pager = require('../../../util/pager');
+const { LANG, strFormat } = require('../../../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
