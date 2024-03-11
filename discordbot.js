@@ -14,12 +14,6 @@ const mongodb = require('./internal/mongodb');
 
 mongodb.connectMongoose();
 
-const { playerFeature } = require('player');
-const { webApiFeature } = require('web-api');
-const { templinkFeature } = require('templink');
-const { adminFeature } = require('admin');
-const { miscFeature } = require('misc');
-const { cdnFeature } = require('cdn');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
 const { CommandManager } = require('./internal/commands');
@@ -68,14 +62,16 @@ activity.setupActivity(client);
 /** @type {ClientMessageHandler | undefined} */
 let messageHandler;
 
-const features = [
-	playerFeature,
-	webApiFeature,
-	templinkFeature,
-	cdnFeature,
-	adminFeature,
-	miscFeature,
-];
+const features = fs
+	.readdirSync(path.join(__dirname, 'packages'))
+	.map((file) => {
+		console.log(`loading ${file} feature`);
+		const feature = require(file).feature;
+		if (feature == null) {
+			throw new TypeError(`${file} feature is undefined`);
+		}
+		return feature;
+	});
 const featuresLoadPromise = Promise.all(
 	features.map((feature) => feature.onLoad?.(client)),
 );

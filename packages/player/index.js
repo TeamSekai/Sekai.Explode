@@ -90,6 +90,4 @@ class PlayerFeature {
 	}
 }
 
-module.exports = {
-	playerFeature: new PlayerFeature(),
-};
+module.exports = { feature: new PlayerFeature() };

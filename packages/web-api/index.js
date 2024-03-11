@@ -21,4 +21,4 @@ class WebApiFeature {
 	}
 }
 
-module.exports = { webApiFeature: new WebApiFeature() };
+module.exports = { feature: new WebApiFeature() };

@@ -9,4 +9,4 @@ class CdnFeature {
 	}
 }
 
-module.exports = { cdnFeature: new CdnFeature() };
+module.exports = { feature: new CdnFeature() };

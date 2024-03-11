@@ -9,4 +9,4 @@ class AdminFeature {
 	}
 }
 
-module.exports = { adminFeature: new AdminFeature() };
+module.exports = { feature: new AdminFeature() };

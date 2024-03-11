@@ -16,4 +16,4 @@ class TempLinkFeature {
 	}
 }
 
-module.exports = { templinkFeature: new TempLinkFeature() };
+module.exports = { feature: new TempLinkFeature() };

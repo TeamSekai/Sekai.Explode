@@ -15,4 +15,4 @@ class MiscFeature {
 	}
 }
 
-module.exports = { miscFeature: new MiscFeature() };
+module.exports = { feature: new MiscFeature() };
