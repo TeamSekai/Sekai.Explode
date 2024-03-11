@@ -24,12 +24,10 @@ const {
 } = require('./util/players');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
+const { CommandManager } = require('./internal/commands');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
-
-/** @type {import("./util/types").Command[]} */
-let commands = [];
 
 //!LOGGER
 const oWrite = process.stdout.write;
@@ -47,15 +45,12 @@ process.stderr.write = function () {
 //!RUN=======================
 
 console.log(LANG.discordbot.main.botStarting);
-let cmdscount = 0;
 fs.readdirSync(path.join(__dirname, 'commands'), {
 	withFileTypes: true,
 }).forEach((file) => {
 	if (!file.isFile() || path.extname(file.name) != '.js') return;
 	const cmds = require(path.join(__dirname, 'commands', file.name));
-	cmdscount++;
-	if (Array.isArray(cmds)) commands = [...commands, ...cmds];
-	else commands.push(cmds);
+	CommandManager.default.addCommands(cmds);
 });
 
 const options = {
@@ -70,7 +65,11 @@ const options = {
 };
 
 console.log(
-	cgreen + strFormat(LANG.discordbot.main.commandsLoaded, [cmdscount]) + creset,
+	cgreen +
+		strFormat(LANG.discordbot.main.commandsLoaded, [
+			CommandManager.default.size,
+		]) +
+		creset,
 );
 const client = new Client(options);
 console.log(LANG.discordbot.main.playerLoading);
@@ -101,7 +100,7 @@ client.on('ready', async (readyClient) => {
 		status: 'dnd',
 	});
 	console.log(LANG.discordbot.ready.commandsRegistering);
-	await client.application.commands.set(commands.map((x) => x.data.toJSON()));
+	await CommandManager.default.setClient(client);
 	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
@@ -126,36 +125,6 @@ onShutdown(async () => {
 			),
 		mongodb.connection.close(),
 	]);
-});
-
-client.on('interactionCreate', async (interaction) => {
-	if (!interaction.isCommand()) return;
-
-	const command = commands.find((x) => x.data.name == interaction.commandName);
-	if (!command) {
-		console.error(
-			strFormat(LANG.discordbot.interactionCreate.unsupportedCommandError, [
-				interaction.commandName,
-			]),
-		);
-		return;
-	}
-	try {
-		await command.execute(interaction, client);
-	} catch (error) {
-		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({
-				content: LANG.discordbot.interactionCreate.commandError,
-				ephemeral: true,
-			});
-		} else {
-			await interaction.reply({
-				content: LANG.discordbot.interactionCreate.commandError,
-				ephemeral: true,
-			});
-		}
-		throw error;
-	}
 });
 
 client.login(token);
