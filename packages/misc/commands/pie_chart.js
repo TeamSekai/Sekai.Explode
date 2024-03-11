@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-const { LANG, strFormat } = require('../util/languages');
+const { LANG, strFormat } = require('../../../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()

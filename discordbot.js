@@ -18,6 +18,7 @@ const { playerFeature } = require('player');
 const { webApiFeature } = require('web-api');
 const { templinkFeature } = require('templink');
 const { adminFeature } = require('admin');
+const { miscFeature } = require('misc');
 const { cdnFeature } = require('cdn');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
@@ -42,13 +43,6 @@ process.stderr.write = function () {
 //!RUN=======================
 
 console.log(LANG.discordbot.main.botStarting);
-fs.readdirSync(path.join(__dirname, 'commands'), {
-	withFileTypes: true,
-}).forEach((file) => {
-	if (!file.isFile() || path.extname(file.name) != '.js') return;
-	const cmds = require(path.join(__dirname, 'commands', file.name));
-	CommandManager.default.addCommands(cmds);
-});
 
 const options = {
 	intents: [
@@ -80,6 +74,7 @@ const features = [
 	templinkFeature,
 	cdnFeature,
 	adminFeature,
+	miscFeature,
 ];
 const featuresLoadPromise = Promise.all(
 	features.map((feature) => feature.onLoad?.(client)),

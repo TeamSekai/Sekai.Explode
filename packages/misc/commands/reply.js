@@ -2,12 +2,15 @@
 
 const assert = require('assert');
 const { SlashCommandBuilder } = require('discord.js');
-const { LANG } = require('../util/languages');
-const { ClientMessageHandler, ReplyPattern } = require('../internal/messages');
-const Pager = require('../util/pager');
-const config = require('../config.json');
+const { LANG } = require('../../../util/languages');
+const {
+	ClientMessageHandler,
+	ReplyPattern,
+} = require('../../../internal/messages');
+const Pager = require('../../../util/pager');
+const config = require('../../../config.json');
 
-/** @type {import("../util/types").Command} */
+/** @type {import("../../../util/types").Command} */
 const commandReply = {
 	data: new SlashCommandBuilder()
 		.setName(LANG.commands.reply.name)

@@ -1,8 +1,8 @@
 // @ts-check
 
 const { EmbedBuilder } = require('discord.js');
-const { LANG, strFormat } = require('../util/languages');
-const { SimpleSlashCommandBuilder } = require('../common/SimpleCommand');
+const { LANG, strFormat } = require('../../../util/languages');
+const { SimpleSlashCommandBuilder } = require('../../../common/SimpleCommand');
 
 module.exports = SimpleSlashCommandBuilder.create(
 	LANG.commands.poll.name,
