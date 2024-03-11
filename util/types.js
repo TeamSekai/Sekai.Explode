@@ -4,7 +4,10 @@
 
 /**
  * @typedef {Object} Command スラッシュコマンドを表すオブジェクト
- * @property {import('discord.js').SlashCommandSubcommandsOnlyBuilder} data Discord の API に登録するデータ
+ * @property {{
+ *     name: string,
+ *     toJSON(): import('discord.js').RESTPostAPIChatInputApplicationCommandsJSONBody
+ * }} data Discord の API に登録するデータ
  * @property {(
  *     interaction: import('discord.js').ChatInputCommandInteraction,
  *     client: import('discord.js').Client<true>,
@@ -19,6 +22,17 @@
  *         ? T | Split<U, D>
  *         : S
  * )} Split 文字列を区切ってできる文字列からなるユニオン型
+ */
+
+/**
+ * @typedef {Object} Feature 機能の1単位を表すオブジェクト
+ * @property {Feature_onLoad=} onLoad 読み込まれた時の処理
+ */
+
+/**
+ * @callback Feature_onLoad
+ * @param {import('../internal/commands').CommandManager} commands
+ * @returns {void}
  */
 
 module.exports = {};

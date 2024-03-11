@@ -17,11 +17,12 @@ const mongodb = require('./internal/mongodb');
 mongodb.connectMongoose();
 
 const {
+	playerFeature,
 	getDuration,
 	saveQueue,
 	deleteSavedQueues,
 	restoreQueues,
-} = require('./util/players');
+} = require('player');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
 const { CommandManager } = require('./internal/commands');
@@ -52,6 +53,11 @@ fs.readdirSync(path.join(__dirname, 'commands'), {
 	const cmds = require(path.join(__dirname, 'commands', file.name));
 	CommandManager.default.addCommands(cmds);
 });
+
+const features = [playerFeature];
+for (const feature of features) {
+	feature.onLoad?.(CommandManager.default);
+}
 
 const options = {
 	intents: [

@@ -1,17 +1,14 @@
 // @ts-check
 
-const {
-	getPlayableVoiceChannelId,
-	getPlayingQueue,
-} = require('../util/players');
-const { LANG } = require('../util/languages');
+const { getPlayableVoiceChannelId, getPlayingQueue } = require('./players');
+const { LANG } = require('../../util/languages');
 
 /**
- * @typedef {import("../util/types").Command} Command
+ * @typedef {import("../../util/types").Command} Command
  */
 
 /**
- * @typedef {import('../util/players').QueueMetadata} QueueMetadata
+ * @typedef {import('./players').QueueMetadata} QueueMetadata
  */
 
 /**
@@ -28,7 +25,7 @@ class PlayerCommand {
 	/**
 	 *
 	 * @param {import("discord.js").SlashCommandBuilder} data
-	 * @param {(interaction: import("discord.js").CommandInteraction,
+	 * @param {(interaction: import("discord.js").ChatInputCommandInteraction,
 	 *          queue: import("discord-player").GuildQueue<QueueMetadata>,
 	 *          voiceChannelId: string) => Promise<void>} action 音楽プレイヤーの操作。チェックを行った後に呼び出される。
 	 */
@@ -38,7 +35,7 @@ class PlayerCommand {
 	}
 
 	/**
-	 * @param {import("discord.js").CommandInteraction} interaction
+	 * @param {import("discord.js").ChatInputCommandInteraction} interaction
 	 */
 	async execute(interaction) {
 		const voiceChannelId = getPlayableVoiceChannelId(interaction);

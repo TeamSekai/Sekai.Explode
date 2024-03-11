@@ -2,8 +2,8 @@
 
 const { GuildMember } = require('discord.js');
 const { useQueue, Track, useMainPlayer } = require('discord-player');
-const Timespan = require('./timespan');
-const mongodb = require('../internal/mongodb');
+const Timespan = require('../../util/timespan');
+const mongodb = require('../../internal/mongodb');
 
 /**
  * @typedef {Object} VolumeSchema volumes コレクションのドキュメント

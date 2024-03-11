@@ -1,8 +1,8 @@
 // @ts-check
 
 const { SlashCommandBuilder } = require('discord.js');
-const { LANG } = require('../util/languages');
-const { PlayerCommand } = require('../common/PlayerCommand');
+const { LANG } = require('../../../util/languages');
+const { PlayerCommand } = require('../PlayerCommand');
 
 module.exports = new PlayerCommand(
 	new SlashCommandBuilder()

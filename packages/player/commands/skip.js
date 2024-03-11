@@ -2,8 +2,8 @@
 
 const assert = require('assert');
 const { SlashCommandBuilder } = require('discord.js');
-const { LANG, strFormat } = require('../util/languages');
-const { PlayerCommand } = require('../common/PlayerCommand');
+const { LANG, strFormat } = require('../../../util/languages');
+const { PlayerCommand } = require('../PlayerCommand');
 
 module.exports = new PlayerCommand(
 	new SlashCommandBuilder()

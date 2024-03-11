@@ -5,9 +5,9 @@ const {
 	getDuration,
 	play,
 	deleteSavedQueues,
-} = require('../util/players');
-const { LANG, strFormat } = require('../util/languages');
-const Timespan = require('../util/timespan');
+} = require('../players');
+const { LANG, strFormat } = require('../../../util/languages');
+const Timespan = require('../../../util/timespan');
 // const ytdl = require('ytdl-core'); さよなら!!!
 // const yts = require('yt-search'); 検索機能？要らんやろ
 //
@@ -57,7 +57,7 @@ module.exports = {
 				interaction.guildId,
 				voiceChannelId,
 				searchResult,
-				/** @type {import('../util/players').QueueMetadata} */ ({
+				/** @type {import('../players').QueueMetadata} */ ({
 					channel: interaction.channel,
 					client: interaction.guild.members.me,
 					requestedBy: interaction.user,

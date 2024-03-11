@@ -1,10 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { LANG, strFormat } = require('../util/languages');
-const {
-	getPlayableVoiceChannelId,
-	getPlayingQueue,
-} = require('../util/players');
-const players = require('../util/players');
+const { LANG, strFormat } = require('../../../util/languages');
+const { getPlayableVoiceChannelId, getPlayingQueue } = require('../players');
+const players = require('../players');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -36,18 +33,21 @@ module.exports = {
 
 		const channel = getPlayableVoiceChannelId(interaction);
 		if (channel == null) {
-			return await interaction.reply({
+			await interaction.reply({
 				content: LANG.common.message.notPlayableError,
 				ephemeral: true,
 			});
+			return;
 		}
 
 		const queue = getPlayingQueue(interaction);
-		if (queue == null)
-			return interaction.reply({
+		if (queue == null) {
+			await interaction.reply({
 				content: LANG.common.message.noTracksPlayed,
 				ephemeral: true,
 			});
+			return;
+		}
 
 		try {
 			if (keep) await players.saveVolumeSetting(interaction.guildId, vol);
