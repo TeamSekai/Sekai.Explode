@@ -16,10 +16,10 @@ const mongodb = require('./internal/mongodb');
 mongodb.connectMongoose();
 
 const { playerFeature } = require('player');
+const { webApiFeature } = require('web-api');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
 const { CommandManager } = require('./internal/commands');
-const { webApiFeature } = require('./packages/web-api');
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
