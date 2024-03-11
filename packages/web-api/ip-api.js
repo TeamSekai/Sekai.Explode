@@ -1,7 +1,7 @@
 // @ts-check
 
 const axios = require('axios').default;
-const { Ok, Err } = require('./result');
+const { Ok, Err } = require('../../util/result');
 
 /**
  * @typedef {Object} IpApiGeolocationFullData
@@ -50,7 +50,7 @@ const { Ok, Err } = require('./result');
 /**
  * @template {string} T
  * @typedef {Partial<IpApiGeolocationFullData> & ({
- *     [K in import("../util/types").Split<T, ","> & keyof IpApiGeolocationFullData]: IpApiGeolocationFullData[K]
+ *     [K in import("../../util/types").Split<T, ","> & keyof IpApiGeolocationFullData]: IpApiGeolocationFullData[K]
  * })} IpApiGeolocationData
  */
 
@@ -58,7 +58,7 @@ const { Ok, Err } = require('./result');
  * @template {string} F
  * @param {string} ip IP アドレス
  * @param {IpApiGeolocationOption<F>=} params 情報を取得する項目
- * @returns {Promise<import("../util/result").Result<IpApiGeolocationData<F>>>} 結果を Result 型でラップしたもの
+ * @returns {Promise<import("../../util/result").Result<IpApiGeolocationData<F>>>} 結果を Result 型でラップしたもの
  */
 async function getIpInfo(ip, params) {
 	try {

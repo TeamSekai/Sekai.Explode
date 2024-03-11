@@ -10,14 +10,14 @@ const {
 	CheckHttpOk,
 	CheckHttpComplete,
 	CheckDnsOk,
-} = require('../../../util/check-host');
+} = require('../check-host');
 const { formatTable } = require('../../../util/strings');
 const { SimpleSlashCommandBuilder } = require('../../../common/SimpleCommand');
 
 const MAX_NODES = 40;
 
 /**
- * @template {import('../../../util/check-host').CheckHostResult} T
+ * @template {import('../check-host').CheckHostResult} T
  * @param {CheckHostRequest<T>} request
  * @param {(result: T) => unknown[]} rowFormat
  * @param {import('../../../util/strings').FormatTableOption} options

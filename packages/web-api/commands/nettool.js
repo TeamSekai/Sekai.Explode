@@ -5,7 +5,7 @@ const dns = require('dns');
 const axios = require('axios').default;
 const ipRangeCheck = require('ip-range-check');
 const { LANG, strFormat } = require('../../../util/languages');
-const { getIpInfo } = require('../../../util/ip-api');
+const { getIpInfo } = require('../ip-api');
 const assert = require('assert');
 let cfIps = [];
 axios
