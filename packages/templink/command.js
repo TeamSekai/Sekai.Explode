@@ -1,10 +1,10 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { LANG, strFormat } = require('../util/languages');
+const { LANG, strFormat } = require('../../util/languages');
 const {
 	areTempLinksEnabled,
 	createTempLink,
 	InvalidURLError,
-} = require('../internal/templinks');
+} = require('./templinks');
 const { AxiosError } = require('axios');
 
 module.exports = {

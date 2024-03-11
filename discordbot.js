@@ -5,7 +5,6 @@ const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const { token, syslogChannel } = require('./config.json');
-const { enableTempLinks } = require('./internal/templinks');
 process.env['FFMPEG_PATH'] = path.join(__dirname, 'ffmpeg');
 
 //!Load Internal dir code
@@ -17,6 +16,7 @@ mongodb.connectMongoose();
 
 const { playerFeature } = require('player');
 const { webApiFeature } = require('web-api');
+const { templinkFeature } = require('templink');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
 const { CommandManager } = require('./internal/commands');
@@ -72,7 +72,7 @@ activity.setupActivity(client);
 /** @type {ClientMessageHandler | undefined} */
 let messageHandler;
 
-const features = [playerFeature, webApiFeature];
+const features = [playerFeature, webApiFeature, templinkFeature];
 const featuresLoadPromise = Promise.all(
 	features.map((feature) => feature.onLoad?.(client)),
 );
@@ -82,7 +82,6 @@ client.on('ready', async (readyClient) => {
 	await Promise.all(
 		features.map((feature) => feature.onClientReady?.(readyClient)),
 	);
-	enableTempLinks();
 	console.log(
 		strFormat(LANG.discordbot.ready.loggedIn, {
 			cgreen,

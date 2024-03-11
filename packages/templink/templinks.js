@@ -3,14 +3,13 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios').default;
-const { LANG, strFormat } = require('../util/languages');
+const { LANG, strFormat } = require('../../util/languages');
 const {
 	tempLinkSrvToken,
 	tempLinkSrvPostURL,
 	linkPort,
 	linkDomain,
-} = require('../config.json');
-const { onShutdown } = require('./schedules');
+} = require('../../config.json');
 
 // 内部 TempLink サーバー
 
@@ -181,6 +180,9 @@ async function createTempLinkOnSrv(url, period) {
 	return res.data.ok;
 }
 
+/** @type {{ intervalId: NodeJS.Timeout, server: http.Server } | null} */
+let internalServer = null;
+
 /**
  * TempLink サーバーを有効化する。
  */
@@ -205,22 +207,26 @@ function enableTempLinks() {
 			}),
 		);
 	});
+	internalServer = { intervalId, server };
+}
 
-	onShutdown(async () => {
-		clearInterval(intervalId);
-		for (const link of tempLinks) {
-			console.log(strFormat(LANG.discordbot.interval.linkExpired, [link.id]));
-		}
-		tempLinks = [];
-		await new Promise((resolve, reject) => {
-			server.close((err) => {
-				if (!err) {
-					console.log(LANG.internal.templinks.shutdown);
-					resolve();
-				} else {
-					reject(err);
-				}
-			});
+async function disableTempLinks() {
+	if (internalServer == null) {
+		return;
+	}
+	clearInterval(internalServer.intervalId);
+	for (const link of tempLinks) {
+		console.log(strFormat(LANG.discordbot.interval.linkExpired, [link.id]));
+	}
+	tempLinks = [];
+	await new Promise((resolve, reject) => {
+		internalServer.server.close((err) => {
+			if (!err) {
+				console.log(LANG.internal.templinks.shutdown);
+				resolve();
+			} else {
+				reject(err);
+			}
 		});
 	});
 }
@@ -253,6 +259,7 @@ function createTempLink(url, period) {
 module.exports = {
 	InvalidURLError,
 	enableTempLinks,
+	disableTempLinks,
 	areTempLinksEnabled,
 	createTempLink,
 };
