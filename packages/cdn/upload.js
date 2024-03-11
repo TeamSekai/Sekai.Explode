@@ -1,8 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const axios = require('axios').default;
 const FormData = require('form-data');
-const config = require('../config.json');
-const { LANG, strFormat } = require('../util/languages');
+const config = require('../../config.json');
+const { LANG, strFormat } = require('../../util/languages');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -30,13 +30,15 @@ module.exports = {
 		interaction,
 	) {
 		if (!config.cdnUploadURL || !config.uploadAllowUsers) {
-			return interaction.reply(LANG.commands.upload.internalError);
+			await interaction.reply(LANG.commands.upload.internalError);
+			return;
 		}
 		if (!config.uploadAllowUsers.includes(interaction.user.id)) {
-			return interaction.reply({
+			await interaction.reply({
 				content: LANG.commands.upload.permissionError,
 				ephemeral: true,
 			});
+			return;
 		}
 		await interaction.deferReply();
 		const file = interaction.options.getAttachment(

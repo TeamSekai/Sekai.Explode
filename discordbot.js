@@ -17,6 +17,7 @@ mongodb.connectMongoose();
 const { playerFeature } = require('player');
 const { webApiFeature } = require('web-api');
 const { templinkFeature } = require('templink');
+const { cdnFeature } = require('cdn');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
 const { CommandManager } = require('./internal/commands');
@@ -72,7 +73,7 @@ activity.setupActivity(client);
 /** @type {ClientMessageHandler | undefined} */
 let messageHandler;
 
-const features = [playerFeature, webApiFeature, templinkFeature];
+const features = [playerFeature, webApiFeature, templinkFeature, cdnFeature];
 const featuresLoadPromise = Promise.all(
 	features.map((feature) => feature.onLoad?.(client)),
 );
