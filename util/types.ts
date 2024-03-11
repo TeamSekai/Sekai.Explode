@@ -5,7 +5,6 @@ import {
 	Client,
 	RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord.js';
-import { CommandManager } from '../internal/commands';
 
 // 汎用的な型を定義するファイル
 
@@ -47,5 +46,15 @@ export interface Feature {
 	/**
 	 * 読み込まれた時の処理
 	 */
-	onLoad(commands: CommandManager): void;
+	onLoad?(client: Client<boolean>): PromiseLike<void> | void;
+
+	/**
+	 * クライアントにログインしたときの処理
+	 */
+	onClientReady?(client: Client<true>): PromiseLike<void> | void;
+
+	/**
+	 * 終了したときの処理
+	 */
+	onUnload?(): PromiseLike<void> | void;
 }

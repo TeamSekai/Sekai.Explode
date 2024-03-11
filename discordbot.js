@@ -6,7 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const { token, syslogChannel } = require('./config.json');
 const { enableTempLinks } = require('./internal/templinks');
-const { Player } = require('discord-player');
 process.env['FFMPEG_PATH'] = path.join(__dirname, 'ffmpeg');
 
 //!Load Internal dir code
@@ -16,13 +15,7 @@ const mongodb = require('./internal/mongodb');
 
 mongodb.connectMongoose();
 
-const {
-	playerFeature,
-	getDuration,
-	saveQueue,
-	deleteSavedQueues,
-	restoreQueues,
-} = require('player');
+const { playerFeature } = require('player');
 const { LANG, strFormat } = require('./util/languages');
 const { ClientMessageHandler } = require('./internal/messages');
 const { CommandManager } = require('./internal/commands');
@@ -54,11 +47,6 @@ fs.readdirSync(path.join(__dirname, 'commands'), {
 	CommandManager.default.addCommands(cmds);
 });
 
-const features = [playerFeature];
-for (const feature of features) {
-	feature.onLoad?.(CommandManager.default);
-}
-
 const options = {
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -78,15 +66,21 @@ console.log(
 		creset,
 );
 const client = new Client(options);
-console.log(LANG.discordbot.main.playerLoading);
-const player = new Player(client);
-player.extractors.loadDefault();
 console.log(LANG.discordbot.main.setupActivityCalling);
 activity.setupActivity(client);
 /** @type {ClientMessageHandler | undefined} */
 let messageHandler;
 
+const features = [playerFeature];
+const featuresLoadPromise = Promise.all(
+	features.map((feature) => feature.onLoad?.(client)),
+);
+
 client.on('ready', async (readyClient) => {
+	await featuresLoadPromise;
+	await Promise.all(
+		features.map((feature) => feature.onClientReady?.(readyClient)),
+	);
 	enableTempLinks();
 	console.log(
 		strFormat(LANG.discordbot.ready.loggedIn, {
@@ -110,19 +104,13 @@ client.on('ready', async (readyClient) => {
 	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
-	restoreQueues(player);
 	messageHandler = new ClientMessageHandler(readyClient);
 });
 
 onShutdown(async () => {
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
 	await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
-	console.log('Saving queues');
-	for (const [guildId, queue] of player.nodes.cache) {
-		console.log(guildId);
-		await saveQueue(queue);
-	}
-	await player.destroy();
+	await Promise.all(features.map((feature) => feature.onUnload?.()));
 	await Promise.all([
 		client
 			.destroy()
@@ -138,38 +126,6 @@ client.login(token);
 client.on('messageCreate', (message) => messageHandler?.handleMessage(message));
 
 //!EVENTS
-player.events.on('playerStart', (queue, track) => {
-	// we will later define queue.metadata object while creating the queue
-	// queue.metadata.channel.send(`**${track.title}**を再生中`);
-	queue.metadata.channel.send({
-		embeds: [
-			{
-				title: strFormat(LANG.discordbot.playerStart.playingTrack, [
-					'**' +
-						strFormat(LANG.common.message.playerTrack, {
-							title: track.title,
-							duration: getDuration(track),
-						}) +
-						'**',
-				]),
-				thumbnail: {
-					url: track.thumbnail,
-				},
-				footer: {
-					text: strFormat(LANG.discordbot.playerStart.requestedBy, [
-						queue.currentTrack.requestedBy.tag,
-					]),
-				},
-				color: 0x5865f2,
-			},
-		],
-	});
-});
-
-player.events.on('playerFinish', (queue) => deleteSavedQueues(queue.guild.id));
-player.events.on('queueDelete', (queue) => deleteSavedQueues(queue.guild.id));
-
-player.on('error', () => console.log(LANG.discordbot.playerError.message));
 
 process.on('uncaughtException', function (err) {
 	console.error(err);
