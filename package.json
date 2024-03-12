@@ -36,5 +36,8 @@
 	},
 	"scripts": {
 		"test": "jest"
-	}
+	},
+	"workspaces": [
+		"packages/*"
+	]
 }
