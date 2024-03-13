@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * このファイルではクライアントが受け取ったメッセージに対して処理を行う。
  *
@@ -18,8 +16,8 @@
  */
 
 const axios = require('axios').default;
-const { strFormat, LANG } = require('../util/languages');
-const mongodb = require('./mongodb');
+import { strFormat, LANG } from '../util/languages';
+import mongodb from './mongodb';
 
 /**
  * @typedef {Object} ReplyGuildSchema replyGuilds のドキュメント。
@@ -53,7 +51,7 @@ function getReplyCollection() {
 /**
  * 自動応答のパターン。
  */
-class ReplyPattern {
+export class ReplyPattern {
 	/**
 	 * @readonly
 	 * @type {string}
@@ -141,7 +139,7 @@ class ReplyPattern {
 /**
  * サーバーのメッセージに対して処理を行うオブジェクト。
  */
-class GuildMessageHandler {
+export class GuildMessageHandler {
 	/**
 	 * @readonly
 	 * @type {import("discord.js").Client<true>}
@@ -237,7 +235,7 @@ class GuildMessageHandler {
 /**
  * クライアントが受け取ったメッセージに対して処理を行うオブジェクト。
  */
-class ClientMessageHandler {
+export class ClientMessageHandler {
 	/**
 	 * @type {ClientMessageHandler | null}
 	 */
@@ -479,11 +477,9 @@ async function getRedirectUrl(shortUrl) {
 		});
 		const redirectUrl = response.headers.location;
 		console.log(LANG.discordbot.getRedirectUrl.redirectURL, redirectUrl);
-		return /** @type {string} */ (redirectUrl);
+		return /** @type {string} */ redirectUrl;
 	} catch (error) {
 		console.error(LANG.discordbot.getRedirectUrl.error, error.message);
 		throw error;
 	}
 }
-
-module.exports = { ReplyPattern, GuildMessageHandler, ClientMessageHandler };

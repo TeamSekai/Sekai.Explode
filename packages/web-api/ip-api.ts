@@ -1,5 +1,3 @@
-// @ts-check
-
 const axios = require('axios').default;
 const { Ok, Err } = require('../../util/result');
 
@@ -60,15 +58,13 @@ const { Ok, Err } = require('../../util/result');
  * @param {IpApiGeolocationOption<F>=} params 情報を取得する項目
  * @returns {Promise<import("../../util/result").Result<IpApiGeolocationData<F>>>} 結果を Result 型でラップしたもの
  */
-async function getIpInfo(ip, params) {
+export async function getIpInfo(ip, params?) {
 	try {
 		const res = await axios.get(
 			`http://ip-api.com/json/${encodeURI(ip)}?${new URLSearchParams(params)}`,
 		);
-		return new Ok(/** @type {IpApiGeolocationData<F>} */ (res.data));
+		return new Ok(/** @type {IpApiGeolocationData<F>} */ res.data);
 	} catch (e) {
 		return new Err(e);
 	}
 }
-
-module.exports = { getIpInfo };

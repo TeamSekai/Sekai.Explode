@@ -1,4 +1,4 @@
-const { strFormat, FormatSyntaxError, assignDeep } = require('./languages');
+import { strFormat, FormatSyntaxError, assignDeep } from './languages';
 
 test('assignDeep', () => {
 	expect(

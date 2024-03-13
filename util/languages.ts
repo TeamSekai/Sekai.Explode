@@ -1,5 +1,3 @@
-// @ts-check
-
 const path = require('path');
 const config = require('../config.json');
 const LANG = require('../language/default.json');
@@ -133,4 +131,4 @@ function toMap(values) {
 	return values;
 }
 
-module.exports = { LANG, FormatSyntaxError, strFormat, assignDeep };
+export { LANG, FormatSyntaxError, strFormat, assignDeep };

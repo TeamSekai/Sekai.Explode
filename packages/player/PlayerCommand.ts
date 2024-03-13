@@ -1,5 +1,3 @@
-// @ts-check
-
 const { getPlayableVoiceChannelId, getPlayingQueue } = require('./players');
 const { LANG } = require('../../util/languages');
 
@@ -17,7 +15,7 @@ const { LANG } = require('../../util/languages');
  * かつ音楽が再生されている場合に action 関数を呼び出す。
  * @implements {Command}
  */
-class PlayerCommand {
+export class PlayerCommand {
 	data;
 
 	action;
@@ -59,5 +57,3 @@ class PlayerCommand {
 		this.action(interaction, queue, voiceChannelId);
 	}
 }
-
-module.exports = { PlayerCommand };

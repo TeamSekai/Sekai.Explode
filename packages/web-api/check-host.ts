@@ -1,5 +1,3 @@
-// @ts-check
-
 const { setTimeout } = require('timers/promises');
 const axios = require('axios').default;
 
@@ -480,7 +478,7 @@ function isValidHostname(str) {
 	return true;
 }
 
-module.exports = {
+export {
 	CheckHostRequest,
 	CheckHostResult,
 	CheckPingResult,

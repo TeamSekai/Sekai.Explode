@@ -1,5 +1,3 @@
-// @ts-check
-
 const { GuildMember } = require('discord.js');
 const { useQueue, Track, useMainPlayer } = require('discord-player');
 const Timespan = require('../../util/timespan');
@@ -132,8 +130,8 @@ const functions = {
 			return null;
 		}
 		const queue =
-			/** @type {import("discord-player").GuildQueue<QueueMetadata>} */ (
-				useQueue(guildId)
+			/** @type {import("discord-player").GuildQueue<QueueMetadata>} */ useQueue(
+				guildId,
 			);
 		if (queue?.isPlaying()) return queue;
 
@@ -309,4 +307,30 @@ const functions = {
 	},
 };
 
-module.exports = functions;
+const {
+	getPlayableVoiceChannelId,
+	getPlayingQueue,
+	getDuration,
+	saveVolumeSetting,
+	loadVolumeSetting,
+	play,
+	getNodeOptions,
+	saveQueue,
+	deleteSavedQueues,
+	restoreQueues,
+	getSavedTracks,
+} = functions;
+
+export {
+	getPlayableVoiceChannelId,
+	getPlayingQueue,
+	getDuration,
+	saveVolumeSetting,
+	loadVolumeSetting,
+	play,
+	getNodeOptions,
+	saveQueue,
+	deleteSavedQueues,
+	restoreQueues,
+	getSavedTracks,
+};

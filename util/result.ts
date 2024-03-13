@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * @template T
  * 正常な処理結果。
@@ -54,4 +52,4 @@ class Err {
  * @typedef {Ok<T> | Err<E>} Result 処理の結果を表す型
  */
 
-module.exports = { Ok, Err };
+export { Ok, Err };
