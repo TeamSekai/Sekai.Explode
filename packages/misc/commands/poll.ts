@@ -2,7 +2,7 @@ import { EmbedBuilder } from 'discord.js';
 import { LANG, strFormat } from '../../../util/languages';
 import { SimpleSlashCommandBuilder } from '../../../common/SimpleCommand';
 
-export default SimpleSlashCommandBuilder.create(
+module.exports = SimpleSlashCommandBuilder.create(
 	LANG.commands.poll.name,
 	LANG.commands.poll.description,
 )

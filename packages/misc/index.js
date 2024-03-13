@@ -8,7 +8,8 @@ class MiscFeature {
 		fs.readdirSync(path.join(__dirname, 'commands'), {
 			withFileTypes: true,
 		}).forEach((file) => {
-			if (!file.isFile() || path.extname(file.name) != '.js') return;
+			const ext = path.extname(file.name);
+			if (!file.isFile() || (ext != '.js' && ext != '.ts')) return;
 			const cmds = require(path.join(__dirname, 'commands', file.name));
 			CommandManager.default.addCommands(cmds);
 		});

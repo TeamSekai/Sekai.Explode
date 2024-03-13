@@ -1,7 +1,5 @@
-// @ts-check
-
-const { LANG, strFormat } = require('../../../util/languages');
-const {
+import { LANG, strFormat } from '../../../util/languages';
+import {
 	CheckHostRequest,
 	CheckPingOk,
 	isValidHostname,
@@ -10,9 +8,10 @@ const {
 	CheckHttpOk,
 	CheckHttpComplete,
 	CheckDnsOk,
-} = require('../check-host');
-const { formatTable } = require('../../../util/strings');
-const { SimpleSlashCommandBuilder } = require('../../../common/SimpleCommand');
+} from '../check-host';
+import { formatTable } from '../../../util/strings';
+import { SimpleSlashCommandBuilder } from '../../../common/SimpleCommand';
+import { Command } from '../../../util/types';
 
 const MAX_NODES = 40;
 

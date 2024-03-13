@@ -1,9 +1,7 @@
-// @ts-check
-
-const assert = require('assert');
-const { SlashCommandBuilder } = require('discord.js');
-const { LANG, strFormat } = require('../../../util/languages');
-const { PlayerCommand } = require('../PlayerCommand');
+import assert from 'assert';
+import { SlashCommandBuilder } from 'discord.js';
+import { LANG, strFormat } from '../../../util/languages';
+import { PlayerCommand } from '../PlayerCommand';
 
 module.exports = new PlayerCommand(
 	new SlashCommandBuilder()

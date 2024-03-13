@@ -1,8 +1,6 @@
-// @ts-check
-
-const { SlashCommandBuilder } = require('discord.js');
-const { LANG } = require('../../../util/languages');
-const { PlayerCommand } = require('../PlayerCommand');
+import { SlashCommandBuilder } from 'discord.js';
+import { LANG } from '../../../util/languages';
+import { PlayerCommand } from '../PlayerCommand';
 
 module.exports = new PlayerCommand(
 	new SlashCommandBuilder()

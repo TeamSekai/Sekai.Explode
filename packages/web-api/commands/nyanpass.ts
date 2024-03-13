@@ -1,13 +1,11 @@
-// @ts-check
-
-const {
+import {
 	SlashCommandBuilder,
 	EmbedBuilder,
 	ButtonBuilder,
 	ActionRowBuilder,
 	ButtonStyle,
-} = require('discord.js');
-const { LANG, strFormat } = require('../../../util/languages');
+} from 'discord.js';
+import { LANG, strFormat } from '../../../util/languages';
 const axios = require('axios').default;
 
 /**
