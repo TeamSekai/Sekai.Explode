@@ -3,6 +3,7 @@
 		"@discord-player/extractor": "^4.4.6",
 		"@discordjs/opus": "^0.9.0",
 		"@discordjs/voice": "^0.16.1",
+		"@types/node": "^20.11.26",
 		"axios": "^1.6.7",
 		"bytebuffer": "^5.0.1",
 		"canvas": "2.11.2",
@@ -21,11 +22,13 @@
 		"mongoose": "^8.2.1",
 		"path": "^0.12.7",
 		"rcon-client": "^4.2.4",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.2",
 		"ytdl-core": "^4.11.5"
 	},
 	"name": "mcsv-discord-bot",
 	"version": "2.1.0",
-	"main": "index.js",
+	"main": "discordbot.js",
 	"repository": "https://github.com/ringo360/Discord.js_Bot.git",
 	"author": "ringo360",
 	"license": "GPL-3.0-only",
@@ -35,6 +38,7 @@
 		"prettier": "^3.2.5"
 	},
 	"scripts": {
+		"start": "npx ts-node .",
 		"test": "jest"
 	},
 	"workspaces": [
