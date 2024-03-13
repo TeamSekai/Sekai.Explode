@@ -1,5 +1,5 @@
-const { CommandManager } = require('../../internal/commands');
-const upload = require('./upload');
+import { CommandManager } from '../../internal/commands';
+import upload from './upload';
 
 class CdnFeature {
 	onLoad() {
@@ -7,4 +7,4 @@ class CdnFeature {
 	}
 }
 
-module.exports = { feature: new CdnFeature() };
+export const feature = new CdnFeature();
