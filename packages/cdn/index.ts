@@ -1,5 +1,3 @@
-// @ts-check
-
 const { CommandManager } = require('../../internal/commands');
 const upload = require('./upload');
 
