@@ -153,12 +153,14 @@ class IntegerOption extends Option {
 	 */
 	get(interaction) {
 		return this.required
-			? /** @type {Value<T, Required>} */ (
-					interaction.options.getInteger(this.name, true)
+			? /** @type {Value<T, Required>} */ interaction.options.getInteger(
+					this.name,
+					true,
 				)
-			: /** @type {Value<T, Required>} */ (
-					interaction.options.getInteger(this.name, false) ?? void 0
-				);
+			: /** @type {Value<T, Required>} */ interaction.options.getInteger(
+					this.name,
+					false,
+				) ?? void 0;
 	}
 }
 
@@ -197,11 +199,12 @@ class StringOption extends Option {
 	 */
 	get(interaction) {
 		return this.required
-			? /** @type {Value<T, Required>} */ (
-					interaction.options.getString(this.name, true)
+			? /** @type {Value<T, Required>} */ interaction.options.getString(
+					this.name,
+					true,
 				)
-			: /** @type {Value<T, Required>} */ (
-					interaction.options.getString(this.name)
+			: /** @type {Value<T, Required>} */ interaction.options.getString(
+					this.name,
 				);
 	}
 }
@@ -306,6 +309,8 @@ class SimpleCommand {
 
 	builder;
 
+	data;
+
 	/**
 	 *
 	 * @param {SimpleSlashCommandBuilder<Options>} builder
@@ -324,9 +329,10 @@ class SimpleCommand {
 	 * @param {ChatInputCommandInteraction} interaction コマンドのインタラクション
 	 */
 	async execute(interaction) {
-		const optionValues = /** @type {OptionValueMap<Options>} */ (
-			this.builder.options.map((option) => option.get(interaction))
-		);
+		const optionValues =
+			/** @type {OptionValueMap<Options>} */ this.builder.options.map(
+				(option) => option.get(interaction),
+			);
 		await this.action(interaction, ...optionValues);
 	}
 }
