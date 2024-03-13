@@ -1,34 +1,27 @@
-const { setTimeout } = require('timers/promises');
-const axios = require('axios').default;
+import { setTimeout } from 'timers/promises';
+import axios from 'axios';
 
-/**
- * @template {CheckHostResult} R
- * @typedef {Object} CheckHostType
- * @property {(data: any) => R} castResult
- */
+interface CheckHostType<R extends CheckHostResult> {
+	castResult: (data: any) => R;
+}
 
-/**
- * @typedef {[string, string, string]} CheckHostNodeLocation
- */
+type CheckHostNodeLocation = [string, string, string];
 
-/**
- * @typedef {Object} CheckHostNode
- * @property {string} name
- * @property {string} asn
- * @property {string} ip
- * @property {CheckHostNodeLocation} location
- */
+interface CheckHostNode {
+	name: string;
+	asn: string;
+	ip: string;
+	location: CheckHostNodeLocation;
+}
 
-/**
- * @typedef {Object} RequestData
- * @property {1} ok
- * @property {string} request_id
- * @property {string} permanent_link
- * @property {{[key: string]: string[]}} nodes
- */
+interface RequestData {
+	ok: 1;
+	request_id: string;
+	permanent_link: string;
+	nodes: { [key: string]: string[] };
+}
 
-/** @type {Map<string, CheckHostNode>} */
-const nodeMap = new Map();
+const nodeMap = new Map<string, CheckHostNode>();
 
 const axiosCheckHost = axios.create({
 	baseURL: 'https://check-host.net/',
@@ -39,9 +32,9 @@ const axiosCheckHost = axios.create({
 
 /**
  * 名前からノードを取得する。
- * @param {string} name ノードの名前
+ * @param name ノードの名前
  */
-async function getCheckHostNode(name) {
+async function getCheckHostNode(name: string) {
 	const value = nodeMap.get(name);
 	if (value != null) {
 		return value;
@@ -51,7 +44,7 @@ async function getCheckHostNode(name) {
 	for (const [key, value] of Object.entries(nodes)) {
 		const mapValue = nodeMap.get(key);
 		if (mapValue == null) {
-			nodeMap.set(key, value);
+			nodeMap.set(key, value as CheckHostNode);
 		}
 	}
 	const result = nodeMap.get(name);
@@ -61,27 +54,16 @@ async function getCheckHostNode(name) {
 	return result;
 }
 
-/**
- * @template {CheckHostResult} R
- */
-class CheckHostRequest {
-	/** @type {CheckHostType<R>} */
-	checkType;
+class CheckHostRequest<R extends CheckDnsResult> {
+	checkType: CheckHostType<R>;
 
-	/** @type {string} */
-	requestId;
+	requestId: string;
 
-	/** @type {string} */
-	permanentLink;
+	permanentLink: string;
 
-	/** @type {CheckHostNode[]} */
-	nodes;
+	nodes: CheckHostNode[];
 
-	/**
-	 * @param {CheckHostType<R>} checkType
-	 * @param {RequestData} data
-	 */
-	constructor(checkType, data) {
+	constructor(checkType: CheckHostType<R>, data: RequestData) {
 		this.checkType = checkType;
 		this.requestId = data.request_id;
 		this.permanentLink = data.permanent_link;
@@ -91,8 +73,7 @@ class CheckHostRequest {
 			if (existingNode != null) {
 				nodes.push(existingNode);
 			} else {
-				/** @type {CheckHostNode} */
-				const node = {
+				const node: CheckHostNode = {
 					name: key,
 					asn: value[4],
 					ip: value[3],
@@ -107,14 +88,17 @@ class CheckHostRequest {
 
 	/**
 	 * 結果を問い合わせる。
-	 * @param {number} successRate この割合のノードが成功したら終了
-	 * @param {number} time 問い合わせる最大の回数
-	 * @param {number} period 問い合わせる周期
+	 * @param successRate この割合のノードが成功したら終了
+	 * @param time 問い合わせる最大の回数
+	 * @param period 問い合わせる周期
 	 * @returns
 	 */
-	async checkResult(successRate = 0, time = 1, period = 2000) {
-		/** @type {CheckHostResultMap<R>} */
-		const result = new CheckHostResultMap();
+	async checkResult(
+		successRate: number = 0,
+		time: number = 1,
+		period: number = 2000,
+	) {
+		const result = new CheckHostResultMap<R>();
 		const successThreshold = this.nodes.length * successRate;
 		for (let i = 0; i < time; i++) {
 			await setTimeout(period);
@@ -171,7 +155,11 @@ class CheckHostRequest {
 	 * @param {number} maxNodes チェックに用いる最大ノード数
 	 * @returns {Promise<CheckHostRequest<CheckHostResult>>} リクエストを表すオブジェクト
 	 */
-	static async get(checkType, host, maxNodes) {
+	static async get(
+		checkType: 'ping' | 'http' | 'tcp' | 'dns' | 'udp',
+		host: string,
+		maxNodes: number,
+	): Promise<CheckHostRequest<CheckHostResult>> {
 		const checkTypeObject = checkTypes[checkType];
 		const res = await axiosCheckHost.get(`/check-${checkType}`, {
 			params: { host, maxNodes },
@@ -180,16 +168,15 @@ class CheckHostRequest {
 	}
 }
 
-/**
- * @template {CheckHostResult} R
- * @extends {Map<CheckHostNode, R>}
- */
-class CheckHostResultMap extends Map {
+class CheckHostResultMap<R extends CheckHostResult> extends Map<
+	CheckHostNode,
+	R
+> {
 	/**
 	 * 条件に一致するノードの個数を返す。
 	 * @param {(node: CheckHostNode, result: R) => boolean} predicate
 	 */
-	count(predicate) {
+	count(predicate: (node: CheckHostNode, result: R) => boolean) {
 		let count = 0;
 		for (const [node, result] of this.entries()) {
 			if (predicate(node, result)) {
@@ -215,10 +202,7 @@ class CheckHostResultMap extends Map {
 class CheckHostResult {
 	state;
 
-	/**
-	 * @param {'ok' | 'error' | 'processing'} state
-	 */
-	constructor(state) {
+	constructor(state: 'ok' | 'error' | 'processing') {
 		this.state = state;
 	}
 }
@@ -226,37 +210,28 @@ class CheckHostResult {
 // check-ping
 
 class CheckPingResult extends CheckHostResult {
-	/**
-	 * @param {'ok' | 'error' | 'processing'} state
-	 */
-	constructor(state) {
+	constructor(state: 'ok' | 'error' | 'processing') {
 		super(state);
 	}
 }
 
 class CheckPingOk extends CheckPingResult {
-	/** @type {string} */
-	host;
+	host: string;
 
-	/** @type {{reply: 'OK' | 'TIMEOUT' | 'MALFORMED', ping: number}[]} */
-	values;
+	values: { reply: 'OK' | 'TIMEOUT' | 'MALFORMED'; ping: number }[];
 
-	/**
-	 * @param {any} payload
-	 */
-	constructor(payload) {
+	constructor(payload: any) {
 		super('ok');
 		this.host = payload[0][2];
-		this.values = payload.map((/** @type {any[]} */ a) => ({
+		this.values = payload.map((a: any[]) => ({
 			reply: a[0],
 			ping: a[1],
 		}));
 	}
 }
 
-/** @type {CheckHostType<CheckPingResult>} */
-const CHECK_PING = {
-	castResult(/** @type {any} */ data) {
+const CHECK_PING: CheckHostType<CheckPingResult> = {
+	castResult(data: any) {
 		if (data == null) {
 			return new CheckPingResult('processing');
 		}
@@ -271,28 +246,24 @@ const CHECK_PING = {
 // check-http
 
 class CheckHttpResult extends CheckHostResult {
-	constructor(state) {
+	constructor(state: 'ok' | 'error' | 'processing') {
 		super(state);
 	}
 }
 
 class CheckHttpComplete extends CheckHttpResult {
-	/** @type {boolean} */
-	success;
+	success: boolean;
 
-	/** @type {number} */
-	time;
+	time: number;
 
-	/** @type {string} */
-	statusMessage;
+	statusMessage: string;
 
-	/**
-	 * @param {'ok' | 'error' | 'processing'} state
-	 * @param {number} success
-	 * @param {number} time
-	 * @param {string} statusMessage
-	 */
-	constructor(state, success, time, statusMessage) {
+	constructor(
+		state: 'ok' | 'error' | 'processing',
+		success: number,
+		time: number,
+		statusMessage: string,
+	) {
 		super(state);
 		this.success = success != 0;
 		this.time = time;
@@ -301,20 +272,17 @@ class CheckHttpComplete extends CheckHttpResult {
 }
 
 class CheckHttpOk extends CheckHttpComplete {
-	/** @type {number} */
-	statusCode;
+	statusCode: number;
 
-	/** @type {string} */
-	host;
+	host: string;
 
-	/**
-	 * @param {number} success
-	 * @param {number} time
-	 * @param {string} statusMessage
-	 * @param {string} statusCode
-	 * @param {string} host
-	 */
-	constructor(success, time, statusMessage, statusCode, host) {
+	constructor(
+		success: number,
+		time: number,
+		statusMessage: string,
+		statusCode: string,
+		host: string,
+	) {
 		super('ok', success, time, statusMessage);
 		this.statusCode = Number.parseInt(statusCode);
 		this.host = host;
@@ -322,18 +290,13 @@ class CheckHttpOk extends CheckHttpComplete {
 }
 
 class CheckHttpError extends CheckHttpComplete {
-	/**
-	 * @param {number} success
-	 * @param {number} time
-	 * @param {string} statusMessage
-	 */
-	constructor(success, time, statusMessage) {
+	constructor(success: number, time: number, statusMessage: string) {
 		super('error', success, time, statusMessage);
 	}
 }
 
 /** @type {CheckHostType<CheckHttpResult>} */
-const CHECK_HTTP = {
+const CHECK_HTTP: CheckHostType<CheckHttpResult> = {
 	castResult(data) {
 		if (!(data instanceof Array)) {
 			return new CheckHttpResult('processing');
@@ -350,25 +313,17 @@ const CHECK_HTTP = {
 // check-tcp, check-udp
 
 class CheckTcpUdpResult extends CheckHostResult {
-	/**
-	 * @param {'ok' | 'error' | 'processing'} state
-	 */
-	constructor(state) {
+	constructor(state: 'ok' | 'error' | 'processing') {
 		super(state);
 	}
 }
 
 class CheckTcpUdpOk extends CheckTcpUdpResult {
-	/** @type {number} */
-	time;
+	time: number;
 
-	/** @type {string} */
-	address;
+	address: string;
 
-	/**
-	 * @param {any} payload
-	 */
-	constructor(payload) {
+	constructor(payload: any) {
 		super('ok');
 		this.time = payload.time;
 		this.address = payload.address;
@@ -378,18 +333,14 @@ class CheckTcpUdpOk extends CheckTcpUdpResult {
 class CheckTcpUdpError extends CheckTcpUdpResult {
 	description;
 
-	/**
-	 * @param {string} description
-	 */
-	constructor(description) {
+	constructor(description: string) {
 		super('error');
 		this.description = description;
 	}
 }
 
-/** @type {CheckHostType<CheckTcpUdpResult>} */
-const CHECK_TCP_UDP = {
-	castResult(/** @type {any} */ data) {
+const CHECK_TCP_UDP: CheckHostType<CheckTcpUdpResult> = {
+	castResult(data: any) {
 		if (data == null) {
 			return new CheckTcpUdpResult('processing');
 		}
@@ -407,10 +358,7 @@ const CHECK_TCP_UDP = {
 // check-dns
 
 class CheckDnsResult extends CheckHostResult {
-	/**
-	 * @param {'ok' | 'error' | 'processing'} state
-	 */
-	constructor(state) {
+	constructor(state: 'ok' | 'error' | 'processing') {
 		super(state);
 	}
 }
@@ -422,13 +370,7 @@ class CheckDnsOk extends CheckDnsResult {
 
 	ttl;
 
-	/**
-	 *
-	 * @param {string[]} a
-	 * @param {string[]} aaaa
-	 * @param {number} ttl
-	 */
-	constructor(a, aaaa, ttl) {
+	constructor(a: string[], aaaa: string[], ttl: number) {
 		super('ok');
 		this.a = a;
 		this.aaaa = aaaa;
@@ -436,8 +378,7 @@ class CheckDnsOk extends CheckDnsResult {
 	}
 }
 
-/** @type {CheckHostType<CheckDnsResult>} */
-const CHECK_DNS = {
+const CHECK_DNS: CheckHostType<CheckDnsResult> = {
 	castResult(data) {
 		if (data == null) {
 			return new CheckDnsResult('processing');
@@ -466,7 +407,7 @@ const ipv4Regex =
 const hostnameRegex =
 	/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*\.?$/;
 
-function isValidHostname(str) {
+function isValidHostname(str: string) {
 	if (!ipv4Regex.test(str) && !hostnameRegex.test(str)) {
 		try {
 			new URL(str);

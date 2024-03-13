@@ -1,4 +1,4 @@
-interface FormatTableOption {
+export interface FormatTableOption {
 	/** 列を同じ幅にするために余白を埋める文字 */
 	fillString?: string;
 
@@ -11,12 +11,15 @@ interface FormatTableOption {
 
 /**
  * 二次元配列を表形式の文字列に変換する。
- * @param {unknown[][]} table 二次元配列
- * @param {FormatTableOption} options オプション
+ * @param table 二次元配列
+ * @param options オプション
  */
-export function formatTable(table, options: FormatTableOption = {}) {
+export function formatTable(
+	table: unknown[][],
+	options: FormatTableOption = {},
+) {
 	const stringTable = table.map((row) => row.map((cell) => String(cell)));
-	const /** @type {number[]} */ maxWidths = [];
+	const /** @type {number[]} */ maxWidths: number[] = [];
 	for (const row of stringTable) {
 		const length = row.length;
 		for (let j = 0; j < length; j++) {

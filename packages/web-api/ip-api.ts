@@ -1,67 +1,59 @@
+import { Result } from '../../util/result';
+import { Split } from '../../util/types';
+
 const axios = require('axios').default;
 const { Ok, Err } = require('../../util/result');
 
-/**
- * @typedef {Object} IpApiGeolocationFullData
- * @property {string} status
- * @property {string} message
- * @property {string} continent
- * @property {string} continentCode
- * @property {string} country
- * @property {string} countryCode
- * @property {string} region
- * @property {string} regionName
- * @property {string} city
- * @property {string} district
- * @property {string} zip
- * @property {number} lat
- * @property {number} lon
- * @property {string} timezone
- * @property {number} offset
- * @property {string} isp
- * @property {string} org
- * @property {string} as
- * @property {string} asname
- * @property {string} reverse
- * @property {boolean} mobile
- * @property {boolean} proxy
- * @property {boolean} hosting
- * @property {string} query
- */
+interface IpApiGeolocationFullData {
+	status: string;
+	message: string;
+	continent: string;
+	continentCode: string;
+	country: string;
+	countryCode: string;
+	region: string;
+	regionName: string;
+	city: string;
+	district: string;
+	zip: string;
+	lat: number;
+	lon: number;
+	timezone: string;
+	offset: number;
+	isp: string;
+	org: string;
+	as: string;
+	asname: string;
+	reverse: string;
+	mobile: boolean;
+	proxy: boolean;
+	hosting: boolean;
+	query: string;
+}
+
+interface IpApiGeolocationOption<F extends string> {
+	fields?: F;
+	lang?: 'en' | 'de' | 'es' | 'pt-BR' | 'fr' | 'ja' | 'zh-CN' | 'ru';
+}
+
+type IpApiGeolocationData<T extends string> =
+	Partial<IpApiGeolocationFullData> & {
+		[K in Split<T, ','> &
+			keyof IpApiGeolocationFullData]: IpApiGeolocationFullData[K];
+	};
 
 /**
- * @template {string} F
- * @typedef {Object} IpApiGeolocationOption
- * @property {F=} fields
- * @property {(
- *     "en" |
- *     "de" |
- *     "es" |
- *     "pt-BR" |
- *     "fr" |
- *     "ja" |
- *     "zh-CN" |
- *     "ru"
- * )=} lang
+ * @param ip IP アドレス
+ * @param params 情報を取得する項目
+ * @returns 結果を Result 型でラップしたもの
  */
-
-/**
- * @template {string} T
- * @typedef {Partial<IpApiGeolocationFullData> & ({
- *     [K in import("../../util/types").Split<T, ","> & keyof IpApiGeolocationFullData]: IpApiGeolocationFullData[K]
- * })} IpApiGeolocationData
- */
-
-/**
- * @template {string} F
- * @param {string} ip IP アドレス
- * @param {IpApiGeolocationOption<F>=} params 情報を取得する項目
- * @returns {Promise<import("../../util/result").Result<IpApiGeolocationData<F>>>} 結果を Result 型でラップしたもの
- */
-export async function getIpInfo(ip, params?) {
+export async function getIpInfo<F extends string>(
+	ip: string,
+	params?: IpApiGeolocationOption<F>,
+): Promise<Result<IpApiGeolocationData<F>>> {
 	try {
 		const res = await axios.get(
-			`http://ip-api.com/json/${encodeURI(ip)}?${new URLSearchParams(params)}`,
+			`http://ip-api.com/json/${encodeURI(ip)}?${new URLSearchParams(params as Record<string, string>)}`,
 		);
 		return new Ok(/** @type {IpApiGeolocationData<F>} */ res.data);
 	} catch (e) {

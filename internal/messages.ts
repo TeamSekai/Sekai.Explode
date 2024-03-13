@@ -15,36 +15,30 @@
  * サーバー毎の処理は {@link GuildMessageHandler#handleMessage} において行われる。
  */
 
-const axios = require('axios').default;
+import axios from 'axios';
 import { strFormat, LANG } from '../util/languages';
 import mongodb from './mongodb';
+import { Collection } from 'mongoose';
+import { Client, Message } from 'discord.js';
 
-/**
- * @typedef {Object} ReplyGuildSchema replyGuilds のドキュメント。
- * @property {string} client クライアントのユーザー ID
- * @property {string} guild サーバー ID
- */
+interface ReplyGuildSchema {
+	client: string;
+	guild: string;
+}
 
-/**
- * @typedef {Object} ReplySchema replies コレクションのドキュメント。
- * @property {string} client クライアントのユーザー ID
- * @property {string} guild サーバー ID
- * @property {string} message 反応するメッセージ内容
- * @property {string} reply 返信内容
- * @property {boolean} perfectMatching 完全一致する必要があるか
- */
+interface ReplySchema {
+	client: string;
+	guild: string;
+	message: string;
+	reply: string;
+	perfectMatching: boolean;
+}
 
-/**
- * @return {import("mongoose").Collection<ReplyGuildSchema>}
- */
-function getReplyGuildCollection() {
+function getReplyGuildCollection(): Collection<ReplyGuildSchema> {
 	return mongodb.connection.collection('replyGuilds');
 }
 
-/**
- * @return {import("mongoose").Collection<ReplySchema>}
- */
-function getReplyCollection() {
+function getReplyCollection(): Collection<ReplySchema> {
 	return mongodb.connection.collection('replies');
 }
 
@@ -52,30 +46,22 @@ function getReplyCollection() {
  * 自動応答のパターン。
  */
 export class ReplyPattern {
-	/**
-	 * @readonly
-	 * @type {string}
-	 */
-	message;
+	readonly message: string;
+
+	readonly reply: string;
+
+	readonly perfectMatching: boolean;
 
 	/**
-	 * @readonly
-	 * @type {string}
+	 * @param messagePattern 反応するメッセージ内容
+	 * @param reply 返信内容
+	 * @param perfectMatching 完全一致する必要があるか
 	 */
-	reply;
-
-	/**
-	 * @readonly
-	 * @type {boolean}
-	 */
-	perfectMatching;
-
-	/**
-	 * @param {string} messagePattern 反応するメッセージ内容
-	 * @param {string} reply 返信内容
-	 * @param {boolean=} perfectMatching 完全一致する必要があるか
-	 */
-	constructor(messagePattern, reply, perfectMatching = false) {
+	constructor(
+		messagePattern: string,
+		reply: string,
+		perfectMatching: boolean = false,
+	) {
 		this.message = messagePattern;
 		this.reply = reply;
 		this.perfectMatching = perfectMatching;
@@ -83,10 +69,10 @@ export class ReplyPattern {
 
 	/**
 	 * メッセージ内容がこのパターンに一致するかを調べ、一致する場合は返信内容を返す。
-	 * @param {string} message メッセージ内容
+	 * @param message メッセージ内容
 	 * @returns メッセージ内容がパターンに一致する場合は返信内容、一致しなければ null
 	 */
-	apply(message) {
+	apply(message: string) {
 		if (this.perfectMatching) {
 			if (message == this.message) {
 				return this.reply;
@@ -101,11 +87,10 @@ export class ReplyPattern {
 
 	/**
 	 * replies コレクションに格納できる形式に変換する。
-	 * @param {string} clientUserId クライアントのユーザー ID
-	 * @param {string} guildId サーバー ID
-	 * @returns {ReplySchema}
+	 * @param clientUserId クライアントのユーザー ID
+	 * @param guildId サーバー ID
 	 */
-	serialize(clientUserId, guildId) {
+	serialize(clientUserId: string, guildId: string): ReplySchema {
 		const message = this.message;
 		return {
 			client: clientUserId,
@@ -118,9 +103,9 @@ export class ReplyPattern {
 
 	/**
 	 * replies コレクションからのデータを ReplyPattern に変換する。
-	 * @param {ReplySchema} replyDocument replies コレクションのドキュメント
+	 * @param replyDocument replies コレクションのドキュメント
 	 */
-	static deserialize(replyDocument) {
+	static deserialize(replyDocument: ReplySchema) {
 		const { message, reply, perfectMatching } = replyDocument;
 		return new ReplyPattern(message, reply, perfectMatching);
 	}
@@ -140,28 +125,17 @@ export class ReplyPattern {
  * サーバーのメッセージに対して処理を行うオブジェクト。
  */
 export class GuildMessageHandler {
-	/**
-	 * @readonly
-	 * @type {import("discord.js").Client<true>}
-	 */
-	client;
+	readonly client: Client<true>;
+
+	readonly guildId: string;
+
+	replyPatternsPromise: Promise<Map<string, ReplyPattern>>;
 
 	/**
-	 * @readonly
-	 * @type {string}
+	 * @param client ログイン済みのクライアント
+	 * @param guildId サーバー ID
 	 */
-	guildId;
-
-	/**
-	 * @type {Promise<Map<string, ReplyPattern>>}
-	 */
-	replyPatternsPromise;
-
-	/**
-	 * @param {import("discord.js").Client<true>} client ログイン済みのクライアント
-	 * @param {string} guildId サーバー ID
-	 */
-	constructor(client, guildId) {
+	constructor(client: Client<true>, guildId: string) {
 		this.client = client;
 		this.guildId = guildId;
 		this.replyPatternsPromise = loadReplies(client.user.id, guildId);
@@ -169,10 +143,10 @@ export class GuildMessageHandler {
 
 	/**
 	 * サーバー内でメッセージを受け取ったときの処理。
-	 * @param {import("discord.js").Message} message メッセージ
-	 * @returns {Promise<boolean>} メッセージに反応したかどうか
+	 * @param message メッセージ
+	 * @returns メッセージに反応したかどうか
 	 */
-	async handleMessage(message) {
+	async handleMessage(message: Message): Promise<boolean> {
 		const messageContent = message.content;
 		for (const replyPattern of (await this.replyPatternsPromise).values()) {
 			const replyContent = replyPattern.apply(messageContent);
@@ -186,10 +160,10 @@ export class GuildMessageHandler {
 
 	/**
 	 * 自動応答のパターンを追加する。
-	 * @param {ReplyPattern} replyPattern 自動応答のパターン
+	 * @param replyPattern 自動応答のパターン
 	 * @returns 新たに追加した場合は true
 	 */
-	async addReplyPattern(replyPattern) {
+	async addReplyPattern(replyPattern: ReplyPattern) {
 		const replyPatterns = await this.replyPatternsPromise;
 		const message = replyPattern.message;
 		if (replyPatterns.has(message)) {
@@ -204,10 +178,10 @@ export class GuildMessageHandler {
 
 	/**
 	 * 自動応答のパターンを削除する。
-	 * @param {string} message 反応するメッセージ内容
+	 * @param message 反応するメッセージ内容
 	 * @returns 削除した ReplyPattern または、存在しなかった場合 null
 	 */
-	async removeReplyPattern(message) {
+	async removeReplyPattern(message: string) {
 		const replyPatterns = await this.replyPatternsPromise;
 		const replyPattern = replyPatterns.get(message);
 		if (replyPattern == null) {
@@ -224,9 +198,9 @@ export class GuildMessageHandler {
 
 	/**
 	 * 自動応答のパターンを全て取得する。
-	 * @returns {Promise<ReplyPattern[]>} {@link ReplyPattern} の配列
+	 * @returns {@link ReplyPattern} の配列
 	 */
-	async getReplyPatterns() {
+	async getReplyPatterns(): Promise<ReplyPattern[]> {
 		const replyPatterns = await this.replyPatternsPromise;
 		return [...replyPatterns.values()];
 	}
@@ -236,35 +210,25 @@ export class GuildMessageHandler {
  * クライアントが受け取ったメッセージに対して処理を行うオブジェクト。
  */
 export class ClientMessageHandler {
-	/**
-	 * @type {ClientMessageHandler | null}
-	 */
-	static instance = null;
+	static instance: ClientMessageHandler | null = null;
+
+	readonly client: Client<true>;
+
+	guildMessageHandlerMap: Map<string, GuildMessageHandler> = new Map();
 
 	/**
-	 * @readonly
-	 * @type {import("discord.js").Client<true>}
+	 * @param client ログイン済みのクライアント
 	 */
-	client;
-
-	/**
-	 * @type {Map<string, GuildMessageHandler>}
-	 */
-	guildMessageHandlerMap = new Map();
-
-	/**
-	 * @param {import("discord.js").Client<true>} client ログイン済みのクライアント
-	 */
-	constructor(client) {
+	constructor(client: Client<true>) {
 		this.client = client;
 		ClientMessageHandler.instance = this;
 	}
 
 	/**
 	 * サーバーに対応する {@link GuildMessageHandler} を取得するか、存在しない場合は新規に作成する。
-	 * @param {string} guildId サーバー ID
+	 * @param guildId サーバー ID
 	 */
-	getGuildMessageHandler(guildId) {
+	getGuildMessageHandler(guildId: string) {
 		const guildMessageHandlerMap = this.guildMessageHandlerMap;
 		const existing = guildMessageHandlerMap.get(guildId);
 		if (existing != null) {
@@ -277,10 +241,10 @@ export class ClientMessageHandler {
 
 	/**
 	 * メッセージを受け取ったときの処理。
-	 * @param {import("discord.js").Message} message メッセージ
-	 * @returns {Promise<void>} メッセージに反応したかどうか
+	 * @param message メッセージ
+	 * @returns メッセージに反応したかどうか
 	 */
-	async handleMessage(message) {
+	async handleMessage(message: Message): Promise<void> {
 		if (message.author.bot) {
 			return;
 		}
@@ -307,10 +271,10 @@ const defaultReplyPatterns = [
 
 /**
  * サーバーの自動応答パターンを取得する。
- * @param {string} clientUserId クライアントのユーザー ID
- * @param {string} guildId サーバー ID
+ * @param clientUserId クライアントのユーザー ID
+ * @param guildId サーバー ID
  */
-async function loadReplies(clientUserId, guildId) {
+async function loadReplies(clientUserId: string, guildId: string) {
 	const replyGuildCollection = getReplyGuildCollection();
 	const replyCollection = getReplyCollection();
 	const replyGuildDocument = await replyGuildCollection.findOne({
@@ -329,8 +293,7 @@ async function loadReplies(clientUserId, guildId) {
 			),
 		);
 	}
-	/** @type {Map<string, ReplyPattern>} */
-	const result = new Map();
+	const result: Map<string, ReplyPattern> = new Map();
 	const replyDocuments = replyCollection.find({
 		client: clientUserId,
 		guild: guildId,
@@ -345,10 +308,9 @@ async function loadReplies(clientUserId, guildId) {
 /**
  * 動画の埋め込みに対応した vxtwitter.com, fxtwitter.com, vxtiktok.com の
  * URL を返信する可能性がある。
- * @param {import("discord.js").Message} message メッセージ
- * @returns {Promise<void>}
+ * @param message メッセージ
  */
-async function replyAlternativeUrl(message) {
+async function replyAlternativeUrl(message: Message): Promise<void> {
 	const urls = message.content.match(/https?:\/\/[^\s]+/g);
 	if (urls == null) {
 		return;
@@ -419,10 +381,10 @@ async function replyAlternativeUrl(message) {
 }
 
 /**
- * @param {string} url URL
+ * @param url URL
  * @returns 動画の埋め込みに対応した代替 URL があるか
  */
-function isAlternativeUrlAvailable(url) {
+function isAlternativeUrlAvailable(url: string) {
 	try {
 		const { hostname } = new URL(url);
 		return (
@@ -438,10 +400,10 @@ function isAlternativeUrlAvailable(url) {
 
 /**
  * 動画の埋め込みに対応した代替 URL を取得する。
- * @param {string} url X または TikTok の URL
- * @returns {Promise<string | null>} 代替 URL
+ * @param url X または TikTok の URL
+ * @returns 代替 URL
  */
-async function getAlternativeUrl(url) {
+async function getAlternativeUrl(url: string): Promise<string | null> {
 	const compiledUrl = new URL(url);
 	const hostname = compiledUrl.hostname;
 	if (hostname == 'twitter.com' || hostname == 'x.com') {
@@ -466,10 +428,10 @@ async function getAlternativeUrl(url) {
 /**
  * リダイレクト先の URL を取得する。
  * 与えられた URL からの応答がリダイレクト先を示さなければ Promise を reject する。
- * @param {string} shortUrl 短縮 URL
+ * @param shortUrl 短縮 URL
  * @returns リダイレクト先の URL
  */
-async function getRedirectUrl(shortUrl) {
+async function getRedirectUrl(shortUrl: string) {
 	try {
 		const response = await axios.head(shortUrl, {
 			maxRedirects: 0,
@@ -477,7 +439,7 @@ async function getRedirectUrl(shortUrl) {
 		});
 		const redirectUrl = response.headers.location;
 		console.log(LANG.discordbot.getRedirectUrl.redirectURL, redirectUrl);
-		return /** @type {string} */ redirectUrl;
+		return redirectUrl as string;
 	} catch (error) {
 		console.error(LANG.discordbot.getRedirectUrl.error, error.message);
 		throw error;

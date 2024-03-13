@@ -1,11 +1,8 @@
-const path = require('path');
-const config = require('../config.json');
-const LANG = require('../language/default.json');
+import * as path from 'path';
+import * as config from '../config.json';
+import * as LANG from '../language/default.json';
 
-/**
- * @type {typeof import('../language/default.json')}
- */
-const configLANG = require(
+const configLANG: typeof import('../language/default.json') = require(
 	path.join(
 		__dirname,
 		'..',
@@ -14,10 +11,12 @@ const configLANG = require(
 	),
 );
 
-function assignDeep(target, source) {
+function assignDeep(target: Record<string, unknown>, source: unknown) {
 	for (const [key, value] of Object.entries(source)) {
-		if (target[key] instanceof Object) assignDeep(target[key], value);
-		else if (value instanceof Object) target[key] = assignDeep({}, value);
+		const targetValue = target[key];
+		if (targetValue instanceof Object) {
+			assignDeep(targetValue as Record<string, unknown>, value);
+		} else if (value instanceof Object) target[key] = assignDeep({}, value);
 		else target[key] = value;
 	}
 	return target;
@@ -26,10 +25,7 @@ function assignDeep(target, source) {
 assignDeep(LANG, configLANG);
 
 class FormatSyntaxError extends SyntaxError {
-	/**
-	 * @param {string} message
-	 */
-	constructor(message) {
+	constructor(message: string) {
 		super(message);
 	}
 }
@@ -40,7 +36,9 @@ const State = {
 	ESCAPED: 1,
 	AFTER_DOLLAR: 2,
 	IN_PLACEHOLDER: 3,
-};
+} as const;
+
+type State = (typeof State)[keyof typeof State];
 
 /**
  * 文字列中のプレースホルダを指定された値で置き換える。
@@ -65,17 +63,17 @@ const State = {
  * strFormat("text ${0} abc", 123);           // == "text 123 abc"
  * ```
  *
- * @param {string} str 文字列のフォーマット
- * @param {unknown[]} values プレースホルダを置き換える値
+ * @param str 文字列のフォーマット
+ * @param values プレースホルダを置き換える値
  */
-function strFormat(str, ...values) {
+function strFormat(str: string, ...values: unknown[]) {
 	const map = toMap(values);
 	let result = '';
 	let placeholder = '';
 
 	// 入力を str, 状態を PLAIN, ESCAPED, AFTER_DOLLAR, IN_PLACEHOLDER とした有限オートマトンを構成
 	// 入力は常に1文字ずつ読み進められる。
-	let state = State.PLAIN;
+	let state: State = State.PLAIN;
 	for (const c of str) {
 		switch (state) {
 			case State.PLAIN:
@@ -118,17 +116,14 @@ function strFormat(str, ...values) {
 	return result;
 }
 
-/**
- * @param  {unknown[]} values
- */
-function toMap(values) {
+function toMap(values: unknown[]): Record<string, unknown> | null {
 	if (values.length == 0) {
 		return null;
 	}
 	if (values.length == 1 && values[0] instanceof Object) {
-		return values[0];
+		return values[0] as Record<string, unknown>;
 	}
-	return values;
+	return values as object as Record<string, unknown>;
 }
 
 export { LANG, FormatSyntaxError, strFormat, assignDeep };

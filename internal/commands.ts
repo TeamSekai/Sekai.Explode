@@ -41,10 +41,6 @@ export class CommandManager {
 		}
 	}
 
-	get client() {
-		return this.client;
-	}
-
 	get size() {
 		return this.#commands.size;
 	}

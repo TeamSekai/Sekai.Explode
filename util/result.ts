@@ -1,55 +1,27 @@
 /**
- * @template T
  * 正常な処理結果。
  */
-class Ok {
-	/**
-	 * @readonly
-	 */
-	status = 'ok';
+export class Ok<T> {
+	readonly status = 'ok';
 
-	/**
-	 * @readonly
-	 * @type {T}
-	 */
-	value;
+	readonly value: T;
 
-	/**
-	 * @param {T} value
-	 */
-	constructor(value) {
+	constructor(value: T) {
 		this.value = value;
 	}
 }
 
 /**
- * @template E
  * 処理中のエラー。
  */
-class Err {
-	/**
-	 * @readonly
-	 */
-	status = 'err';
+export class Err<E> {
+	readonly status = 'err';
 
-	/**
-	 * @readonly
-	 * @type {E}
-	 */
-	value;
+	readonly value: E;
 
-	/**
-	 * @param {E} value
-	 */
-	constructor(value) {
+	constructor(value: E) {
 		this.value = value;
 	}
 }
 
-/**
- * @template T
- * @template [E=any]
- * @typedef {Ok<T> | Err<E>} Result 処理の結果を表す型
- */
-
-export { Ok, Err };
+export type Result<T, E = any> = Ok<T> | Err<E>;

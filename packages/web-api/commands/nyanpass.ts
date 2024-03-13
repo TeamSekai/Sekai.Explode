@@ -4,27 +4,25 @@ import {
 	ButtonBuilder,
 	ActionRowBuilder,
 	ButtonStyle,
+	InteractionReplyOptions,
 } from 'discord.js';
 import { LANG, strFormat } from '../../../util/languages';
-const axios = require('axios').default;
+import axios from 'axios';
+import { Command } from '../../../util/types';
 
-/**
- * @typedef {Object} NyanpassData
- * @property {string} time
- * @property {string} count
- */
+interface NyanpassData {
+	time: string;
+	count: string;
+}
 
 async function getNyanpass() {
-	/** @type {import('axios').AxiosResponse<NyanpassData>} */
-	const res = await axios.get('https://nyanpass.com/api/get_count');
+	const res = await axios.get<NyanpassData>(
+		'https://nyanpass.com/api/get_count',
+	);
 	return res.data;
 }
 
-/**
- *
- * @returns {Promise<import('discord.js').InteractionReplyOptions>}
- */
-async function createReply() {
+async function createReply(): Promise<InteractionReplyOptions> {
 	const { time, count } = await getNyanpass();
 	const embed = new EmbedBuilder()
 		.setTitle(LANG.commands.nyanpass.title)
@@ -38,8 +36,7 @@ async function createReply() {
 		.setEmoji('✋')
 		.setLabel(LANG.commands.nyanpass.button)
 		.setURL('https://nyanpass.com/');
-	/** @type {ActionRowBuilder<ButtonBuilder>} */
-	const row = new ActionRowBuilder();
+	const row = new ActionRowBuilder<ButtonBuilder>();
 	row.addComponents(component);
 	return {
 		embeds: [embed],
@@ -47,8 +44,7 @@ async function createReply() {
 	};
 }
 
-/** @type {import("../../../util/types").Command} */
-const commandNyanpass = {
+const commandNyanpass: Command = {
 	data: new SlashCommandBuilder()
 		.setName(LANG.commands.nyanpass.name)
 		.setDescription(LANG.commands.nyanpass.description),

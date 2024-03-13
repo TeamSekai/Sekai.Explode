@@ -8,20 +8,18 @@ import {
 	CheckHttpOk,
 	CheckHttpComplete,
 	CheckDnsOk,
+	CheckHostResult,
 } from '../check-host';
-import { formatTable } from '../../../util/strings';
+import { FormatTableOption, formatTable } from '../../../util/strings';
 import { SimpleSlashCommandBuilder } from '../../../common/SimpleCommand';
-import { Command } from '../../../util/types';
 
 const MAX_NODES = 40;
 
-/**
- * @template {import('../check-host').CheckHostResult} T
- * @param {CheckHostRequest<T>} request
- * @param {(result: T) => unknown[]} rowFormat
- * @param {import('../../../util/strings').FormatTableOption} options
- */
-async function getFormattedResult(request, rowFormat, options) {
+async function getFormattedResult<T extends CheckHostResult>(
+	request: CheckHostRequest<T>,
+	rowFormat: (result: T) => unknown[],
+	options: FormatTableOption,
+) {
 	const resultMap = await request.checkResult(1.0, 7);
 	const table = [...resultMap.entries()].map(([node, result]) => {
 		const nodeName = node.name.replace('.node.check-host.net', '');
@@ -39,10 +37,7 @@ async function getFormattedResult(request, rowFormat, options) {
 	});
 }
 
-/**
- * @param {string} hostname
- */
-async function checkPing(hostname) {
+async function checkPing(hostname: string) {
 	const request = await CheckHostRequest.get('ping', hostname, MAX_NODES);
 	return async () =>
 		await getFormattedResult(
@@ -70,17 +65,13 @@ async function checkPing(hostname) {
 		);
 }
 
-/**
- * @param {string} hostname
- */
-async function checkHttp(hostname) {
+async function checkHttp(hostname: string) {
 	const request = await CheckHostRequest.get('http', hostname, MAX_NODES);
 	return async () =>
 		await getFormattedResult(
 			request,
 			(result) => {
-				/** @type {unknown[]} */
-				const row = [result.state + ','];
+				const row: unknown[] = [result.state + ','];
 				if (result instanceof CheckHttpComplete) {
 					const { time, statusMessage } = result;
 					row.push(time + ',');
@@ -99,11 +90,7 @@ async function checkHttp(hostname) {
 		);
 }
 
-/**
- * @param {'tcp' | 'udp'} type
- * @param {string} hostname
- */
-async function checkTcpUdp(type, hostname) {
+async function checkTcpUdp(type: 'tcp' | 'udp', hostname: string) {
 	const request = await CheckHostRequest.get(type, hostname, MAX_NODES);
 	return async () =>
 		await getFormattedResult(
@@ -128,10 +115,7 @@ async function checkTcpUdp(type, hostname) {
 		);
 }
 
-/**
- * @param {string} hostname
- */
-async function checkDns(hostname) {
+async function checkDns(hostname: string) {
 	const request = await CheckHostRequest.get('dns', hostname, MAX_NODES);
 	return async () =>
 		await getFormattedResult(
@@ -154,11 +138,10 @@ async function checkDns(hostname) {
 		);
 }
 
-/**
- * @param {'ping' | 'http' | 'tcp' | 'dns' | 'udp'} type
- * @param {string} hostname
- */
-function check(type, hostname) {
+function check(
+	type: 'ping' | 'http' | 'tcp' | 'dns' | 'udp',
+	hostname: string,
+) {
 	switch (type) {
 		case 'ping':
 			return checkPing(hostname);
