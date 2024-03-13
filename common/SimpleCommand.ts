@@ -1,113 +1,73 @@
-// @ts-check
+import {
+	APIApplicationCommandOptionChoice,
+	ApplicationCommandOptionWithChoicesAndAutocompleteMixin,
+	CacheType,
+	SharedSlashCommandOptions,
+	SlashCommandBuilder,
+} from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
+import { Command } from '../util/types';
 
-const { SlashCommandBuilder } = require('discord.js');
+type Value<T, Required extends boolean = boolean> = Required extends true
+	? T
+	: T | undefined;
 
-/**
- * @typedef {import('../util/types').Command} Command
- */
+type OptionValueMap<O extends Option<unknown>[]> = {
+	[I in keyof O]: O[I] extends Option<infer T, infer Required>
+		? Value<T, Required>
+		: never;
+};
 
-/**
- * @typedef {import('discord.js').ChatInputCommandInteraction} ChatInputCommandInteraction
- */
+interface SimpleCommandOptionData<T, Required extends boolean = boolean> {
+	name: string;
+	description: string;
+	required: Required;
+}
 
-/**
- * @template {Function} F
- * @typedef {F extends (arg: infer T) => unknown ? T : never} FirstParameter
- */
+interface SimpleChoiceOptionData<T> {
+	choices?: APIApplicationCommandOptionChoice<T>[];
+	autocomplete?: boolean;
+}
 
-/**
- * @template {unknown} T
- * @template {boolean} [Required = boolean]
- * @typedef {Required extends true ? T : T | undefined} Value
- */
+interface SimpleRangeOptionData {
+	max_value?: number;
+	min_value?: number;
+}
 
-/**
- * @template {Option<unknown>[]} O
- * @typedef {({
- *     [I in keyof O]: O[I] extends Option<infer T, infer Required> ? Value<T, Required> : never
- * })} OptionValueMap
- */
+interface SimpleIntegerOptionData<
+	T extends number = number,
+	Required extends boolean = boolean,
+> extends SimpleCommandOptionData<T, Required>,
+		SimpleRangeOptionData,
+		SimpleChoiceOptionData<T> {}
 
-/**
- * @template {unknown} T
- * @template {boolean} [Required = boolean]
- * @typedef {Object} SimpleCommandOptionData
- * @property {string} name
- * @property {string} description
- * @property {Required} required
- */
+interface SimpleStringOptionData<
+	T extends string = string,
+	Required extends boolean = boolean,
+> extends SimpleCommandOptionData<T, Required>,
+		SimpleChoiceOptionData<T> {
+	max_length?: number;
+	min_length?: number;
+}
 
-/**
- * @template {unknown} T
- * @typedef {Object} SimpleChoiceOptionData
- * @property {import('discord.js').APIApplicationCommandOptionChoice<T>[]=} choices
- * @property {boolean=} autocomplete
- */
+interface Option<T = unknown, Required extends boolean = boolean> {
+	/** オプションの名前 */
+	name: string;
 
-/**
- * @typedef {Object} SimpleRangeOptionData
- * @property {number=} max_value
- * @property {number=} min_value
- */
-
-/**
- * @template {number} [T = number]
- * @template {boolean} [Required = boolean]
- * @typedef {(
- *     SimpleCommandOptionData<T, Required> &
- *     SimpleRangeOptionData &
- *     SimpleChoiceOptionData<T>
- * )} SimpleIntegerOptionData
- */
-
-/**
- * @template {string} [T = string]
- * @template {boolean} [Required = boolean]
- * @typedef {(
- *     SimpleCommandOptionData<T, Required> &
- *     SimpleChoiceOptionData<T> &
- *     {
- *         max_length?: number;
- *         min_length?: number;
- *     }
- * )} SimpleStringOptionData
- */
-
-/**
- * @template {unknown} [T = unknown]
- * @template {boolean} [Required = boolean]
- */
-class Option {
-	name;
-
-	required;
-
-	/**
-	 * @param {string} name オプションの名前
-	 * @param {Required} required 必須のオプションか
-	 */
-	constructor(name, required) {
-		this.name = name;
-		this.required = required;
-	}
+	/** 必須のオプションか */
+	required: Required;
 
 	/**
 	 * オプションの値を取得する。
-	 * @abstract
-	 * @param {ChatInputCommandInteraction} _interaction コマンドのインタラクション
-	 * @returns {Value<T, Required>}
+	 * @param interaction コマンドのインタラクション
 	 */
-	get(_interaction) {
-		throw new Error('Not implemented');
-	}
+	get(interaction: ChatInputCommandInteraction): Value<T, Required>;
 }
 
-/**
- * @template {string | number} T
- * @param {import('discord.js').ApplicationCommandOptionWithChoicesAndAutocompleteMixin<T>} option
- * @param {SimpleChoiceOptionData<T>} input
- */
-function setChoices(option, input) {
+function setChoices<T extends string | number>(
+	option: ApplicationCommandOptionWithChoicesAndAutocompleteMixin<T>,
+	input: SimpleChoiceOptionData<T>,
+) {
 	const { choices, autocomplete } = input;
 	if (choices != null) {
 		option.addChoices(...choices);
@@ -117,19 +77,20 @@ function setChoices(option, input) {
 	}
 }
 
-/**
- * @template {number} T
- * @template {boolean} [Required = boolean]
- * @extends {Option<T, Required>}
- */
-class IntegerOption extends Option {
-	/**
-	 * @param {import('discord.js').SharedSlashCommandOptions} builder
-	 * @param {SimpleIntegerOptionData<T, Required>} input
-	 */
-	constructor(builder, input) {
+class IntegerOption<T extends number, Required extends boolean = boolean>
+	implements Option<T, Required>
+{
+	name: string;
+
+	required: Required;
+
+	constructor(
+		builder: SharedSlashCommandOptions,
+		input: SimpleIntegerOptionData<T, Required>,
+	) {
 		const { name, required } = input;
-		super(name, required);
+		this.name = name;
+		this.required = required;
 		builder.addIntegerOption((option) => {
 			option
 				.setName(name)
@@ -147,35 +108,31 @@ class IntegerOption extends Option {
 		});
 	}
 
-	/**
-	 * @override
-	 * @param {ChatInputCommandInteraction} interaction
-	 */
-	get(interaction) {
+	get(interaction: ChatInputCommandInteraction) {
 		return this.required
-			? /** @type {Value<T, Required>} */ interaction.options.getInteger(
-					this.name,
-					true,
-				)
-			: /** @type {Value<T, Required>} */ interaction.options.getInteger(
-					this.name,
-					false,
-				) ?? void 0;
+			? (interaction.options.getInteger(this.name, true) as Value<T, Required>)
+			: ((interaction.options.getInteger(this.name, false) ?? void 0) as Value<
+					T,
+					Required
+				>);
 	}
 }
 
-/**
- * @template {string} [T = string]
- * @template {boolean} [Required = boolean]
- * @extends {Option<T, Required>}
- */
-class StringOption extends Option {
-	/**
-	 * @param {import('discord.js').SharedSlashCommandOptions} builder
-	 * @param {SimpleStringOptionData<T, Required>} input
-	 */
-	constructor(builder, input) {
-		super(input.name, input.required);
+class StringOption<
+	T extends string = string,
+	Required extends boolean = boolean,
+> implements Option<T, Required>
+{
+	name: string;
+
+	required: Required;
+
+	constructor(
+		builder: SharedSlashCommandOptions,
+		input: SimpleStringOptionData<T, Required>,
+	) {
+		this.name = input.name;
+		this.required = input.required;
 		builder.addStringOption((option) => {
 			option
 				.setName(input.name)
@@ -193,45 +150,33 @@ class StringOption extends Option {
 		});
 	}
 
-	/**
-	 * @override
-	 * @param {ChatInputCommandInteraction} interaction
-	 */
-	get(interaction) {
+	get(interaction: ChatInputCommandInteraction) {
 		return this.required
-			? /** @type {Value<T, Required>} */ interaction.options.getString(
-					this.name,
-					true,
-				)
-			: /** @type {Value<T, Required>} */ interaction.options.getString(
-					this.name,
-				);
+			? (interaction.options.getString(this.name, true) as Value<T, Required>)
+			: (interaction.options.getString(this.name) as Value<T, Required>);
 	}
 }
 
 /**
  * シンプルな SlashCommandBuilder(?)
- * @template {Option<unknown, boolean>[]} [Options = []]
  */
-class SimpleSlashCommandBuilder {
-	#name;
+export class SimpleSlashCommandBuilder<
+	Options extends Option<unknown, boolean>[] = [],
+> {
+	#name: string;
 
-	#description;
+	#description: string;
 
-	handle;
+	handle: SlashCommandBuilder;
 
-	/**
-	 * @type {Options}
-	 */
-	options;
+	options: Options;
 
-	/**
-	 * @param {string} name
-	 * @param {string} description
-	 * @param {SlashCommandBuilder} handle
-	 * @param {Options} options
-	 */
-	constructor(name, description, handle, options) {
+	constructor(
+		name: string,
+		description: string,
+		handle: SlashCommandBuilder,
+		options: Options,
+	) {
 		handle.setName(name);
 		handle.setDescription(description);
 		this.#name = name;
@@ -241,11 +186,13 @@ class SimpleSlashCommandBuilder {
 	}
 
 	/**
-	 * @param {string} name コマンドの名前
-	 * @param {string} description コマンドの説明文
-	 * @returns {SimpleSlashCommandBuilder<[]>}
+	 * @param name コマンドの名前
+	 * @param description コマンドの説明文
 	 */
-	static create(name, description) {
+	static create(
+		name: string,
+		description: string,
+	): SimpleSlashCommandBuilder<[]> {
 		return new SimpleSlashCommandBuilder(
 			name,
 			description,
@@ -254,14 +201,12 @@ class SimpleSlashCommandBuilder {
 		);
 	}
 
-	/**
-	 * @template {unknown} T
-	 * @template {boolean} [Required = false]
-	 * @param {Option<T, Required>} option
-	 */
-	addOption(option) {
+	addOption<T, Required extends boolean = false>(option: Option<T, Required>) {
 		/** @type {[...Options, Option<T, Required>]} */
-		const options = [...this.options, option];
+		const options: [...Options, Option<T, Required>] = [
+			...this.options,
+			option,
+		];
 		return new SimpleSlashCommandBuilder(
 			this.#name,
 			this.#description,
@@ -270,56 +215,47 @@ class SimpleSlashCommandBuilder {
 		);
 	}
 
-	/**
-	 * @template {number} T
-	 * @template {boolean} [Required = boolean]
-	 * @param {SimpleIntegerOptionData<T, Required>} input
-	 */
-	addIntegerOption(input) {
+	addIntegerOption<T extends number, Required extends boolean = boolean>(
+		input: SimpleIntegerOptionData<T, Required>,
+	) {
 		return this.addOption(new IntegerOption(this.handle, input));
 	}
 
-	/**
-	 * @template {string} T
-	 * @template {boolean} [Required = boolean]
-	 * @param {SimpleStringOptionData<T, Required>} input
-	 * @returns
-	 */
-	addStringOption(input) {
+	addStringOption<T extends string, Required extends boolean = boolean>(
+		input: SimpleStringOptionData<T, Required>,
+	) {
 		return this.addOption(new StringOption(this.handle, input));
 	}
 
-	/**
-	 * @param {(
-	 *     interaction: ChatInputCommandInteraction,
-	 *     ...options: OptionValueMap<Options>
-	 * ) => Promise<void>} action
-	 */
-	build(action) {
+	build(
+		action: (
+			interaction: ChatInputCommandInteraction,
+			...options: OptionValueMap<Options>
+		) => Promise<void>,
+	) {
 		return new SimpleCommand(this, action);
 	}
 }
 
-/**
- * @template {Option<unknown, boolean>[]} [Options = []]
- * @implements {Command}
- */
-class SimpleCommand {
-	action;
+export class SimpleCommand<Options extends Option<unknown, boolean>[]>
+	implements Command
+{
+	action: (
+		interaction: ChatInputCommandInteraction<CacheType>,
+		...options: OptionValueMap<Options>
+	) => Promise<void>;
 
-	builder;
+	builder: SimpleSlashCommandBuilder<Options>;
 
-	data;
+	data: any;
 
-	/**
-	 *
-	 * @param {SimpleSlashCommandBuilder<Options>} builder
-	 * @param {(
-	 *     interaction: ChatInputCommandInteraction,
-	 *     ...options: OptionValueMap<Options>
-	 * ) => Promise<void>} action
-	 */
-	constructor(builder, action) {
+	constructor(
+		builder: SimpleSlashCommandBuilder<Options>,
+		action: (
+			interaction: ChatInputCommandInteraction,
+			...options: OptionValueMap<Options>
+		) => Promise<void>,
+	) {
 		this.builder = builder;
 		this.data = builder.handle;
 		this.action = action;
@@ -328,16 +264,10 @@ class SimpleCommand {
 	/**
 	 * @param {ChatInputCommandInteraction} interaction コマンドのインタラクション
 	 */
-	async execute(interaction) {
-		const optionValues =
-			/** @type {OptionValueMap<Options>} */ this.builder.options.map(
-				(option) => option.get(interaction),
-			);
+	async execute(interaction: ChatInputCommandInteraction) {
+		const optionValues = this.builder.options.map((option) =>
+			option.get(interaction),
+		) as OptionValueMap<Options>;
 		await this.action(interaction, ...optionValues);
 	}
 }
-
-module.exports = {
-	SimpleSlashCommandBuilder,
-	SimpleCommand,
-};
