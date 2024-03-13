@@ -1,5 +1,3 @@
-// @ts-check
-
 const { strFormat, LANG } = require('../util/languages');
 
 /**
