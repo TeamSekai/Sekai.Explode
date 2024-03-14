@@ -84,6 +84,17 @@
 			"shutdown": "[TempLink] サーバーを閉じました"
 		}
 	},
+	"util": {
+		"pager": {
+			"defaults": {
+				"title": "${0}件のアイテムがリストに入っています!",
+				"emptyMessage": "リストにアイテムがありません!",
+				"footer": "${page}/${pageCount}ページ|${length}件中${start}件目から${end}件目",
+				"prevButton": "前のページ",
+				"nextButton": "次のページ"
+			}
+		}
+	},
 	"common": {
 		"optionDescription": {
 			"ipAddress": "IPアドレスを入力",
@@ -527,6 +538,21 @@
 				"footer": "実行者: ${0}"
 			}
 		},
+		"receiveupdate": {
+			"name": "follow_announcements",
+			"description": "Sekai.Explodeの最新情報をフォローします!",
+			"options": {
+				"channel": {
+					"name": "channel",
+					"description": "受信するチャンネルを指定します。"
+				}
+			},
+			"permissionError": "権限がありません!(管理者権限が必要です。)",
+			"followerAddedLog": "[Sekai.Explode] new follower! ${name} - ${id}",
+			"followerAddedMessage": "${0}にSekai.Explodeのアナウンスを通知します :wave:",
+			"errorOccurredLog": "Something Went wrong. ${0}",
+			"errorOccurredMessage": "失敗しました！エラー: ${0}"
+		},
 		"reply": {
 			"name": "reply",
 			"description": "自動応答をカスタマイズします。",
@@ -565,7 +591,9 @@
 				},
 				"list": {
 					"name": "list",
-					"description": "自動応答の一覧を表示します。"
+					"description": "自動応答の一覧を表示します。",
+					"title": "自動応答メッセージ",
+					"emptyMessage": "メッセージが設定されていません"
 				}
 			},
 			"notInGuildError": "このコマンドはサーバー内でのみ使用できます！",
@@ -714,7 +742,16 @@
 			"name": "poll",
 			"description": "pollを作成します。",
 			"polltitle": "Pollのタイトル",
-			"pollchoices": "選択肢を入力..."
+			"pollchoices": "選択肢を入力...",
+			"options": {
+				"title": {
+					"name": "title"
+				},
+				"choice$": {
+					"name": "choice${0}"
+				}
+			},
+			"footer": "Sekai.Explode - (Poll Created by ${0})"
 		}
 	}
 }

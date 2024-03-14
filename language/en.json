@@ -63,6 +63,13 @@
 			"presenceNameShuttingDown": "Shutting down...",
 			"presenceStateShuttingDown": "Sekai.explode is now shutting down..."
 		},
+		"messages": {
+			"replyPattern": "${message}: ${reply}${perfectMatching}",
+			"perfectMatching": {
+				"yes": " (perfect matching)",
+				"no": ""
+			}
+		},
 		"mongodb": {
 			"called": "Called mongodb internal system.",
 			"dbConnecting": "[MongoDB] Connecting...",
@@ -75,6 +82,17 @@
 		},
 		"templinks": {
 			"shutdown": "[TempLink] Server closed"
+		}
+	},
+	"util": {
+		"pager": {
+			"defaults": {
+				"title": "${0} item(s) in the list",
+				"emptyMessage": "There are no items in the list!",
+				"footer": "page ${page}/${pageCount}|${start}-${end} out of ${length} item(s)",
+				"prevButton": "Previous page",
+				"nextButton": "Next page"
+			}
 		}
 	},
 	"common": {
@@ -520,6 +538,67 @@
 				"footer": "Executed by: ${0}"
 			}
 		},
+		"receiveupdate": {
+			"name": "follow_announcements",
+			"description": "Receives latest information of Sekai.Explode",
+			"options": {
+				"channel": {
+					"name": "channel",
+					"description": "Specify the channel to receive in."
+				}
+			},
+			"permissionError": "You don't have the permission! (The administrator role is required.)",
+			"followerAddedLog": "[Sekai.Explode] new follower! ${name} - ${id}",
+			"followerAddedMessage": "Will notify announcements of Sekai.Explode to <#${0}> :wave:",
+			"errorOccurredLog": "Something Went wrong. ${0}",
+			"errorOccurredMessage": "Failed! Error: ${0}"
+		},
+		"reply": {
+			"name": "reply",
+			"description": "Customizes automatic reply messages.",
+			"subcommands": {
+				"add": {
+					"name": "add",
+					"description": "Adds an automatic reply message.",
+					"options": {
+						"message": {
+							"name": "message",
+							"description": "Message content to reply"
+						},
+						"reply": {
+							"name": "reply",
+							"description": "Reply content"
+						},
+						"perfectMatching": {
+							"name": "perfect_matching",
+							"description": "Prefect matching"
+						}
+					},
+					"succeeded": "Added an automatic reply message!",
+					"alreadyExists": "A reply message is already set for it!"
+				},
+				"remove": {
+					"name": "remove",
+					"description": "Removes an automatic reply message.",
+					"options": {
+						"message": {
+							"name": "message",
+							"description": "Message content to reply"
+						}
+					},
+					"succeeded": "Removed the automatic reply message!",
+					"doNotExist": "No reply message is set for it!"
+				},
+				"list": {
+					"name": "list",
+					"description": "Shows an list of automatic reply messages.",
+					"title": "自動応答メッセージ",
+					"emptyMessage": "メッセージが設定されていません"
+				}
+			},
+			"notInGuildError": "This commands must be used in a server!",
+			"permissionError": "You have not permission to use this command!"
+		},
 		"resume": {
 			"name": "resume",
 			"description": "Resumes the player",
@@ -662,7 +741,16 @@
 			"name": "poll",
 			"description": "Create a new poll.",
 			"polltitle": "Type your title!",
-			"pollchoices": "Type your choices..."
+			"pollchoices": "Type your choices...",
+			"options": {
+				"title": {
+					"name": "title"
+				},
+				"choice$": {
+					"name": "choice${0}"
+				}
+			},
+			"footer": "Sekai.Explode - (Poll Created by ${0})"
 		}
 	}
 }
