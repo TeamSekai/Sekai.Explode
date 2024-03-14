@@ -1,33 +1,19 @@
-// @ts-check
+import { strFormat, LANG } from '../util/languages';
+import { ChatInputCommandInteraction, Client } from 'discord.js';
+import { Command } from '../util/types';
 
-const { strFormat, LANG } = require('../util/languages');
+export class CommandManager {
+	static readonly default = new CommandManager();
 
-/**
- * @template {boolean} [Ready = boolean]
- * @typedef {import('discord.js').Client<Ready>} Client
- */
+	#client: Client<true> | null = null;
 
-/**
- * @typedef {import('../util/types').Command} Command
- */
-
-class CommandManager {
-	/**
-	 * @readonly
-	 */
-	static default = new CommandManager();
-
-	/** @type {import('discord.js').Client<true> | null} */
-	#client = null;
-
-	/** @type {Map<string, Command>} */
-	#commands = new Map();
+	#commands: Map<string, Command> = new Map();
 
 	/**
 	 * クライアントにコマンドを登録する。
-	 * @param {Client<true>} client ログイン済みのクライアント
+	 * @param client ログイン済みのクライアント
 	 */
-	async setClient(client) {
+	async setClient(client: Client<true>) {
 		this.#client = client;
 		const commands = [];
 		for (const command of this.#commands.values()) {
@@ -43,9 +29,9 @@ class CommandManager {
 
 	/**
 	 * コマンドを追加する。
-	 * @param {Command | Command[]} commands 追加するコマンド
+	 * @param commands 追加するコマンド
 	 */
-	addCommands(commands) {
+	addCommands(commands: Command | Command[]) {
 		if (Array.isArray(commands)) {
 			for (const command of commands) {
 				this.#commands.set(command.data.name, command);
@@ -55,20 +41,17 @@ class CommandManager {
 		}
 	}
 
-	get client() {
-		return this.client;
-	}
-
 	get size() {
 		return this.#commands.size;
 	}
 
 	/**
 	 * コマンドの処理を行う。
-	 * @param {import('discord.js').ChatInputCommandInteraction} interaction
-	 * @param {Client<true>} client
 	 */
-	async #handleInteraction(interaction, client) {
+	async #handleInteraction(
+		interaction: ChatInputCommandInteraction,
+		client: Client<true>,
+	) {
 		const command = this.#commands.get(interaction.commandName);
 		if (!command) {
 			console.error(
@@ -96,5 +79,3 @@ class CommandManager {
 		}
 	}
 }
-
-module.exports = { CommandManager };

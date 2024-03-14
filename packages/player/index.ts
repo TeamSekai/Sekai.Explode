@@ -1,21 +1,21 @@
-// @ts-check
-
-const assert = require('assert');
-const { Player } = require('discord-player');
-const { LANG, strFormat } = require('../../util/languages');
-const { CommandManager } = require('../../internal/commands');
-const {
+import assert from 'assert';
+import { GuildQueue, Player } from 'discord-player';
+import { LANG, strFormat } from '../../util/languages';
+import { CommandManager } from '../../internal/commands';
+import {
 	restoreQueues,
 	saveQueue,
 	getDuration,
 	deleteSavedQueues,
-} = require('./players');
+} from './players';
+import { Feature } from '../../util/types';
+import { Client } from 'discord.js';
 
-class PlayerFeature {
+class PlayerFeature implements Feature {
 	/** @type {Player | null} */
-	#player = null;
+	#player: Player | null = null;
 
-	onLoad(client) {
+	onLoad(client: Client<boolean>) {
 		console.log(LANG.discordbot.main.playerLoading);
 		const player = new Player(client);
 		player.extractors.loadDefault();
@@ -82,12 +82,10 @@ class PlayerFeature {
 		assert(player != null);
 		for (const [guildId, queue] of player.nodes.cache) {
 			console.log(guildId);
-			await saveQueue(
-				/** @type {import('discord-player').GuildQueue<any>} */ (queue),
-			);
+			await saveQueue(queue as GuildQueue<any>);
 		}
 		await player.destroy();
 	}
 }
 
-module.exports = { feature: new PlayerFeature() };
+export const feature = new PlayerFeature();

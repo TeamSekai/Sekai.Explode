@@ -1,30 +1,20 @@
-// @ts-check
-
-const { SlashCommandBuilder } = require('discord.js');
-const dns = require('dns');
-const axios = require('axios').default;
-const ipRangeCheck = require('ip-range-check');
-const { LANG, strFormat } = require('../../../util/languages');
-const { getIpInfo } = require('../ip-api');
-const assert = require('assert');
-let cfIps = [];
+import { SlashCommandBuilder } from 'discord.js';
+import dns from 'dns';
+import axios from 'axios';
+import ipRangeCheck from 'ip-range-check';
+import { LANG, strFormat } from '../../../util/languages';
+import { getIpInfo } from '../ip-api';
+import assert from 'assert';
+let cfIps: string[] = [];
 axios
 	.get('https://www.cloudflare.com/ips-v4')
+	.then((res) => {
+		cfIps = res.data.split('\n');
+	})
 	.catch(() => {
 		console.log(LANG.commands.nettool.ipListFetchError);
-	})
-	.then((res) => {
-		cfIps = res?.data.split('\n');
 	});
-const dnsTypes = /** @type {const} */ ([
-	'A',
-	'AAAA',
-	'NS',
-	'CNAME',
-	'TXT',
-	'MX',
-	'SRV',
-]);
+const dnsTypes = ['A', 'AAAA', 'NS', 'CNAME', 'TXT', 'MX', 'SRV'] as const;
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -74,7 +64,7 @@ module.exports = {
 		),
 
 	execute: async function (
-		/** @type {import("discord.js").ChatInputCommandInteraction} */ interaction,
+		interaction: import('discord.js').ChatInputCommandInteraction,
 	) {
 		const subcommand = interaction.options.getSubcommand();
 		if (subcommand === LANG.commands.nettool.subcommands.isProxy.name) {
@@ -238,7 +228,7 @@ module.exports = {
 				true,
 			);
 			try {
-				const dnsResult = {};
+				const dnsResult: Record<string, string> = {};
 
 				await Promise.all(
 					dnsTypes.map(async (type) => {
@@ -247,7 +237,9 @@ module.exports = {
 							assert(res instanceof Array);
 							if (res.length > 0) {
 								if (type == 'MX') {
-									res = res.sort((a, b) => b.priority - a.priority);
+									res = (res as dns.MxRecord[]).sort(
+										(a, b) => b.priority - a.priority,
+									);
 									dnsResult[type] =
 										'```\n' +
 										res
@@ -268,7 +260,7 @@ module.exports = {
 									'```\n' +
 									res
 										.map((x) => {
-											const isCf = ipRangeCheck(x, cfIps);
+											const isCf = ipRangeCheck(String(x), cfIps);
 											return strFormat(
 												LANG.commands.nettool.subcommands.nsLookup.record,
 												{
@@ -297,10 +289,10 @@ module.exports = {
 				const fields = dnsTypes
 					.filter((x) => dnsResult[x])
 					.map((x) => {
-						return /** @type {import("discord.js").APIEmbedField} */ ({
+						return /** @type {import("discord.js").APIEmbedField} */ {
 							name: x,
 							value: dnsResult[x],
-						});
+						};
 					});
 
 				await interaction.editReply({

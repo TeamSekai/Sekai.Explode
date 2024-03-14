@@ -1,17 +1,12 @@
-// @ts-check
+import assert from 'assert';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { LANG } from '../../../util/languages';
+import { ClientMessageHandler, ReplyPattern } from '../../../internal/messages';
+import Pager from '../../../util/pager';
+import config from '../../../config.json';
+import { Command } from '../../../util/types';
 
-const assert = require('assert');
-const { SlashCommandBuilder } = require('discord.js');
-const { LANG } = require('../../../util/languages');
-const {
-	ClientMessageHandler,
-	ReplyPattern,
-} = require('../../../internal/messages');
-const Pager = require('../../../util/pager');
-const config = require('../../../config.json');
-
-/** @type {import("../../../util/types").Command} */
-const commandReply = {
+module.exports = {
 	data: new SlashCommandBuilder()
 		.setName(LANG.commands.reply.name)
 		.setDescription(LANG.commands.reply.description)
@@ -160,13 +155,12 @@ const commandReply = {
 				assert.fail(subcommand);
 		}
 	},
-};
+} as Command;
 
 /**
  * 使う権限があるかをチェックする。
- * @param {import("discord.js").ChatInputCommandInteraction} interaction
  */
-async function checkPermission(interaction) {
+async function checkPermission(interaction: ChatInputCommandInteraction) {
 	if (!config.replyCustomizeAllowedUsers?.includes(interaction.user.id)) {
 		await interaction.reply({
 			content: LANG.commands.reply.permissionError,
@@ -176,5 +170,3 @@ async function checkPermission(interaction) {
 	}
 	return true;
 }
-
-module.exports = commandReply;

@@ -1,6 +1,4 @@
-// @ts-check
-
-const { ReplyPattern } = require('./messages');
+import { ReplyPattern } from './messages';
 
 test('ReplyPattern.match', () => {
 	const pattern1 = new ReplyPattern('それはそう', 'https://soreha.so/');

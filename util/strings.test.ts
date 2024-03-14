@@ -1,4 +1,4 @@
-const { formatTable } = require('./strings');
+import { formatTable } from './strings';
 
 test('formatTable', () => {
 	expect(

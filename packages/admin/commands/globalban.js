@@ -360,15 +360,15 @@ module.exports = {
 			const modal = new ModalBuilder()
 				.setCustomId('gbanReport')
 				.setTitle('レポートしたいユーザーの情報')
-				.setStyle(TextInputStyle.Short)
-			
+				.setStyle(TextInputStyle.Short);
+
 			const targetid = new TextInputBuilder()
 				.setCustomId('reportuserid')
-				.setLabel('通報したいユーザーのID')
+				.setLabel('通報したいユーザーのID');
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
-				.setTitle('通報理由')
+				.setTitle('通報理由');
 		} else {
 			return await interaction.editReply(
 				LANG.commands.globalban.unsupportedSubcommandError,

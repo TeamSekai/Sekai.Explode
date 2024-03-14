@@ -1,6 +1,4 @@
-// @ts-check
-
-const { CommandManager } = require('../../internal/commands');
+import { CommandManager } from '../../internal/commands';
 
 /**
  * @typedef {import("../../util/types").Feature} Feature
