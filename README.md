@@ -28,13 +28,15 @@ discord.js@v14を使用した、多機能botです。
 2. `npm install`で依存関係をインストール
 3. `config.json.example`を`config.json`としてコピーする
 4. `config.json`を編集
-6. `node discordbot.js`、または`pm2 start discordbot.js`で起動!
+6. `npm start`、または`pm2 start npm -- start`で起動!
 
 
 ## コマンドを登録する
-`commands`ディレクトリにファイルを作成するだけで、起動時に自動で読み込まれます。
 
-### 例:
+### `misc` パッケージに追加する方法
+`packages/misc/commands`ディレクトリにファイルを作成するだけで、起動時に自動で読み込まれます。
+
+#### 例:
 ```js
 const { SlashCommandBuilder } = require('discord.js');
 
@@ -46,4 +48,34 @@ module.exports = {
         await interaction.reply('Hello World!') //処理を記述
     }
 };
+```
+
+### パッケージを追加する方法
+`packages` ディレクトリ以下に workspace を作成します。
+このパッケージは自動的に読み込まれます。
+```sh
+npm init -w packages/example
+```
+
+エントリーポイントのファイル (`index.js` など) でコマンドを追加し、feature をエクスポートします。
+
+#### 例:
+```js
+const { CommandManager } = require('../../internal/commands');
+const upload = require('./upload');
+
+class ExampleFeature {
+	onLoad() {
+		CommandManager.default.addCommands({
+            data: new SlashCommandBuilder()
+                .setName('hello')
+                .setDescription('Hello World!'),
+            execute: async function (interaction) {
+                await interaction.reply('Hello World!') //処理を記述
+            }
+        });
+	}
+}
+
+module.exports = { feature: new ExampleFeature() };
 ```
