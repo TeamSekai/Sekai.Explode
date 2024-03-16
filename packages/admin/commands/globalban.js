@@ -10,6 +10,7 @@ const mongodb = require('../../../internal/mongodb'); //*MongoDB
 const { AdminUserIDs } = require('../../../config.json');
 const Pager = require('../../../util/pager');
 const { LANG, strFormat } = require('../../../util/languages');
+const config = require('../../../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -69,6 +70,7 @@ module.exports = {
 		),
 	execute: async function (
 		/** @type {import("discord.js").CommandInteraction} */ interaction,
+		/** @type {Client} */ client,
 	) {
 		const executorID = interaction.user.id; // executed by
 		const subcommand = interaction.options.getSubcommand();
@@ -400,9 +402,40 @@ module.exports = {
 				//TODO: 通報された情報をどこかに送信
 				const resultid = submitted.fields.getTextInputValue('reportuserid');
 				const resultreason = submitted.fields.getTextInputValue('reason');
-				await submitted.reply(`Result: ${resultid}, ${resultreason}`);
-				const SyslogChannel = client.channels.cache.get(syslogChannel);
-				await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
+				await submitted.reply({
+					embeds: [
+						{
+							title: '通報が完了しました!',
+							description: `ご報告ありがとうございます!\n<@${resultid}>(${resultid})の通報が完了しました。`,
+						},
+					],
+				});
+				if (!config.notificationChannel) {
+					throw new Error('configのnotificationChannelを定義しなさい。');
+				}
+				const channel = client.channels.cache.get(config.notificationChannel);
+				const d = new Date();
+				const u = d.getTime();
+				const fxunix = Math.floor(u / 1000);
+				await channel.send({
+					embeds: [
+						{
+							title: `レポートが届きました!`,
+							description: `通報者: ${interaction.user.username} | 通報時刻: ${fxunix}`,
+							color: 0xff0000,
+							fields: [
+								{
+									name: 'ユーザー名',
+									value: `<@${resultid}>(${resultid})`,
+								},
+								{
+									name: '理由',
+									value: resultreason,
+								},
+							],
+						},
+					],
+				});
 			}
 		} else {
 			return await interaction.editReply(
