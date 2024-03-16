@@ -376,14 +376,14 @@ module.exports = {
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
-				.setTitle('通報理由')
+				.setLabel('通報理由')
 				.setStyle(TextInputStyle.Paragraph)
 				.setValue('グローバルBANするべきである理由を記入してください。')
 			modal.addComponents(targetid, reason)
 			await interaction.showModal(modal)
 			const filter = (mInteraction) => mInteraction.customId === 'gbanreport'
 			interaction.awaitModalSubmit({ filter, time: 60000 })
-				.then(async mInteraction => {
+				.then(async mInteraction => { //TODO: 通報された情報をどこかに送信
 					const resultid = mInteraction.fields.getTextInputValue('reportuserid')
 					const resultreason = mInteraction.fields.getTextInputValue('reason')
 					await mInteraction.reply(`Result: ${resultid}, ${resultreason}`)
