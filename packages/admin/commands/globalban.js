@@ -375,12 +375,16 @@ module.exports = {
 				.setCustomId('reportuserid')
 				.setLabel('ユーザーID')
 				.setStyle(TextInputStyle.Short)
-				.setMinLength(17);
+				.setMinLength(17)
+				.setPlaceholder('1063527758292070591')
+				.setRequired(true)
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
 				.setLabel('通報理由')
-				.setStyle(TextInputStyle.Paragraph);
+				.setStyle(TextInputStyle.Paragraph)
+				.setPlaceholder('通報理由をここに記入')
+				.setRequired(true)
 			const firstRow = new ActionRowBuilder().addComponents(targetid);
 			const secondRow = new ActionRowBuilder().addComponents(reason);
 			modal.addComponents(firstRow, secondRow);
@@ -397,6 +401,8 @@ module.exports = {
 				const resultid = submitted.fields.getTextInputValue('reportuserid');
 				const resultreason = submitted.fields.getTextInputValue('reason');
 				await submitted.reply(`Result: ${resultid}, ${resultreason}`);
+				const SyslogChannel = client.channels.cache.get(syslogChannel);
+				await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
 			}
 		} else {
 			return await interaction.editReply(
