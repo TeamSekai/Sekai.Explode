@@ -377,7 +377,7 @@ module.exports = {
 				.setStyle(TextInputStyle.Short)
 				.setMinLength(17)
 				.setMaxLength(18)
-				.setValue('1063527758292070591');
+				.setValue('1063527758292...');
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
