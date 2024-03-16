@@ -4,11 +4,13 @@ const {
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle,
+	ActionRowBuilder,
 } = require('discord.js');
 const mongodb = require('../../../internal/mongodb'); //*MongoDB
 const { AdminUserIDs } = require('../../../config.json');
 const Pager = require('../../../util/pager');
 const { LANG, strFormat } = require('../../../util/languages');
+const config = require('../../../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -55,6 +57,12 @@ module.exports = {
 						.setRequired(true),
 				),
 		)
+		.addSubcommand(
+			(subcommand) =>
+				subcommand
+					.setName('report')
+					.setDescription('危険なユーザーを通報できます。'), //TODO: 18n
+		)
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName(LANG.commands.globalban.subcommands.list.name)
@@ -62,6 +70,7 @@ module.exports = {
 		),
 	execute: async function (
 		/** @type {import("discord.js").CommandInteraction} */ interaction,
+		/** @type {Client} */ client,
 	) {
 		const executorID = interaction.user.id; // executed by
 		const subcommand = interaction.options.getSubcommand();
@@ -71,7 +80,10 @@ module.exports = {
 			);
 		}
 
-		await interaction.deferReply();
+		if (subcommand !== 'report') {
+			console.log('Defering');
+			await interaction.deferReply();
+		}
 		if (subcommand === LANG.commands.globalban.subcommands.sync.name) {
 			const member = interaction.guild.members.cache.get(interaction.user.id);
 			if (!member.permissions.has([PermissionsBitField.Flags.Administrator])) {
@@ -359,16 +371,74 @@ module.exports = {
 		} else if (subcommand === 'report') {
 			const modal = new ModalBuilder()
 				.setCustomId('gbanReport')
-				.setTitle('レポートしたいユーザーの情報')
-				.setStyle(TextInputStyle.Short)
-			
+				.setTitle('通報したいユーザーについて');
+
 			const targetid = new TextInputBuilder()
 				.setCustomId('reportuserid')
-				.setLabel('通報したいユーザーのID')
+				.setLabel('ユーザーID')
+				.setStyle(TextInputStyle.Short)
+				.setMinLength(17)
+				.setPlaceholder('1063527758292070591')
+				.setRequired(true);
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
-				.setTitle('通報理由')
+				.setLabel('通報理由')
+				.setStyle(TextInputStyle.Paragraph)
+				.setPlaceholder('通報理由をここに記入')
+				.setRequired(true);
+			const firstRow = new ActionRowBuilder().addComponents(targetid);
+			const secondRow = new ActionRowBuilder().addComponents(reason);
+			modal.addComponents(firstRow, secondRow);
+			await interaction.showModal(modal);
+			// const filter = (mInteraction) => mInteraction.customId === 'gbanreport';
+			const submitted = await interaction
+				.awaitModalSubmit({
+					time: 60000,
+					filter: (i) => i.user.id === interaction.user.id,
+				})
+				.catch((e) => console.error(e));
+			if (submitted) {
+				//TODO: 通報された情報をどこかに送信
+				const resultid = submitted.fields.getTextInputValue('reportuserid');
+				const resultreason = submitted.fields.getTextInputValue('reason');
+				await submitted.reply({
+					embeds: [
+						{
+							title: '通報が完了しました!',
+							description: `ご報告ありがとうございます!\n<@${resultid}>(${resultid})の通報が完了しました。`,
+						},
+					],
+					ephemeral: true,
+				});
+				if (!config.notificationChannel) {
+					throw new Error('configのnotificationChannelを定義しなさい。');
+				}
+				const channel = client.channels.cache.get(config.notificationChannel);
+				const d = new Date();
+				const u = d.getTime();
+				const fxunix = Math.floor(u / 1000);
+				return await channel.send({
+					embeds: [
+						{
+							title: `レポートが届きました!`,
+							description: `通報者: ${interaction.user.username} | 通報時刻: <t:${fxunix}:f>`,
+							color: 0xff0000,
+							fields: [
+								{
+									name: 'ユーザー名',
+									value: `<@${resultid}>(${resultid})`,
+								},
+								{
+									name: '理由',
+									value: resultreason,
+								},
+							],
+						},
+					],
+				});
+			}
+			return;
 		} else {
 			return await interaction.editReply(
 				LANG.commands.globalban.unsupportedSubcommandError,

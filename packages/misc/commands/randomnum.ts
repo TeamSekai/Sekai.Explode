@@ -1,7 +1,5 @@
-// @ts-check
-
-const { LANG, strFormat } = require('../../../util/languages');
-const { SimpleSlashCommandBuilder } = require('../../../common/SimpleCommand');
+import { LANG, strFormat } from '../../../util/languages';
+import { SimpleSlashCommandBuilder } from '../../../common/SimpleCommand';
 
 const DEFAULT_MIN_VALUE = 0;
 const DEFAULT_MAX_VALUE = 99;
