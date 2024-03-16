@@ -4,6 +4,7 @@ const {
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle,
+	ActionRowBuilder,
 } = require('discord.js');
 const mongodb = require('../../../internal/mongodb'); //*MongoDB
 const { AdminUserIDs } = require('../../../config.json');
@@ -382,7 +383,9 @@ module.exports = {
 				.setLabel('通報理由')
 				.setStyle(TextInputStyle.Paragraph)
 				.setValue('グローバルBANするべきである理由を記入してください。')
-			modal.addComponents(targetid, reason)
+			const firstRow = new ActionRowBuilder().addComponents(targetid)
+			const secondRow = new ActionRowBuilder().addComponents(reason)
+			modal.addComponents(firstRow, secondRow)
 			await interaction.showModal(modal)
 			const filter = (mInteraction) => mInteraction.customId === 'gbanreport'
 			interaction.awaitModalSubmit({ filter, time: 60000 })
