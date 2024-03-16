@@ -375,28 +375,29 @@ module.exports = {
 				.setCustomId('reportuserid')
 				.setLabel('ユーザーID')
 				.setStyle(TextInputStyle.Short)
-				.setMinLength(17)
+				.setMinLength(17);
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
 				.setLabel('通報理由')
-				.setStyle(TextInputStyle.Paragraph)
+				.setStyle(TextInputStyle.Paragraph);
 			const firstRow = new ActionRowBuilder().addComponents(targetid);
 			const secondRow = new ActionRowBuilder().addComponents(reason);
 			modal.addComponents(firstRow, secondRow);
 			await interaction.showModal(modal);
 			// const filter = (mInteraction) => mInteraction.customId === 'gbanreport';
-			const submitted = await interaction.awaitModalSubmit({
-				time: 60000,
-				filter: i => i.user.id === interaction.user.id
-			}).catch(e => console.error(e))
+			const submitted = await interaction
+				.awaitModalSubmit({
+					time: 60000,
+					filter: (i) => i.user.id === interaction.user.id,
+				})
+				.catch((e) => console.error(e));
 			if (submitted) {
 				//TODO: 通報された情報をどこかに送信
 				const resultid = submitted.fields.getTextInputValue('reportuserid');
 				const resultreason = submitted.fields.getTextInputValue('reason');
 				await submitted.reply(`Result: ${resultid}, ${resultreason}`);
 			}
-			
 		} else {
 			return await interaction.editReply(
 				LANG.commands.globalban.unsupportedSubcommandError,
