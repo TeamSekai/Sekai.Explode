@@ -56,10 +56,11 @@ module.exports = {
 						.setRequired(true),
 				),
 		)
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName('report')
-				.setDescription('危険なユーザーを通報できます。'), //TODO: 18n
+		.addSubcommand(
+			(subcommand) =>
+				subcommand
+					.setName('report')
+					.setDescription('危険なユーザーを通報できます。'), //TODO: 18n
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
@@ -78,7 +79,7 @@ module.exports = {
 		}
 
 		if (subcommand !== 'report') {
-			console.log('Defering')
+			console.log('Defering');
 			await interaction.deferReply();
 		}
 		if (subcommand === LANG.commands.globalban.subcommands.sync.name) {
@@ -368,7 +369,7 @@ module.exports = {
 		} else if (subcommand === 'report') {
 			const modal = new ModalBuilder()
 				.setCustomId('gbanReport')
-				.setTitle('レポートしたいユーザーの情報')
+				.setTitle('レポートしたいユーザーの情報');
 
 			const targetid = new TextInputBuilder()
 				.setCustomId('reportuserid')
@@ -376,25 +377,28 @@ module.exports = {
 				.setStyle(TextInputStyle.Short)
 				.setMinLength(17)
 				.setMaxLength(18)
-				.setValue('開発者ツールを使用して、ユーザーidを入手してください!')
+				.setValue('開発者ツールを使用して、ユーザーidを入手してください!');
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
 				.setLabel('通報理由')
 				.setStyle(TextInputStyle.Paragraph)
-				.setValue('グローバルBANするべきである理由を記入してください。')
-			const firstRow = new ActionRowBuilder().addComponents(targetid)
-			const secondRow = new ActionRowBuilder().addComponents(reason)
-			modal.addComponents(firstRow, secondRow)
-			await interaction.showModal(modal)
-			const filter = (mInteraction) => mInteraction.customId === 'gbanreport'
-			interaction.awaitModalSubmit({ filter, time: 60000 })
-				.then(async mInteraction => { //TODO: 通報された情報をどこかに送信
-					const resultid = mInteraction.fields.getTextInputValue('reportuserid')
-					const resultreason = mInteraction.fields.getTextInputValue('reason')
-					await mInteraction.reply(`Result: ${resultid}, ${resultreason}`)
+				.setValue('グローバルBANするべきである理由を記入してください。');
+			const firstRow = new ActionRowBuilder().addComponents(targetid);
+			const secondRow = new ActionRowBuilder().addComponents(reason);
+			modal.addComponents(firstRow, secondRow);
+			await interaction.showModal(modal);
+			const filter = (mInteraction) => mInteraction.customId === 'gbanreport';
+			interaction
+				.awaitModalSubmit({ filter, time: 60000 })
+				.then(async (mInteraction) => {
+					//TODO: 通報された情報をどこかに送信
+					const resultid =
+						mInteraction.fields.getTextInputValue('reportuserid');
+					const resultreason = mInteraction.fields.getTextInputValue('reason');
+					await mInteraction.reply(`Result: ${resultid}, ${resultreason}`);
 				})
-				.catch(console.error)
+				.catch(console.error);
 		} else {
 			return await interaction.editReply(
 				LANG.commands.globalban.unsupportedSubcommandError,
