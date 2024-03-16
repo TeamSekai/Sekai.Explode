@@ -76,7 +76,10 @@ module.exports = {
 			);
 		}
 
-		await interaction.deferReply();
+		if (subcommand !== 'report') {
+			console.log('Defering')
+			await interaction.deferReply();
+		}
 		if (subcommand === LANG.commands.globalban.subcommands.sync.name) {
 			const member = interaction.guild.members.cache.get(interaction.user.id);
 			if (!member.permissions.has([PermissionsBitField.Flags.Administrator])) {
