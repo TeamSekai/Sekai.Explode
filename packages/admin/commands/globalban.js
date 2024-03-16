@@ -377,14 +377,14 @@ module.exports = {
 				.setStyle(TextInputStyle.Short)
 				.setMinLength(17)
 				.setPlaceholder('1063527758292070591')
-				.setRequired(true)
+				.setRequired(true);
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
 				.setLabel('通報理由')
 				.setStyle(TextInputStyle.Paragraph)
 				.setPlaceholder('通報理由をここに記入')
-				.setRequired(true)
+				.setRequired(true);
 			const firstRow = new ActionRowBuilder().addComponents(targetid);
 			const secondRow = new ActionRowBuilder().addComponents(reason);
 			modal.addComponents(firstRow, secondRow);
