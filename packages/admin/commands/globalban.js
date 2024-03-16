@@ -369,21 +369,21 @@ module.exports = {
 		} else if (subcommand === 'report') {
 			const modal = new ModalBuilder()
 				.setCustomId('gbanReport')
-				.setTitle('レポートしたいユーザーの情報');
+				.setTitle('通報したいユーザーについて');
 
 			const targetid = new TextInputBuilder()
 				.setCustomId('reportuserid')
-				.setLabel('通報したいユーザーのID')
+				.setLabel('ユーザーID')
 				.setStyle(TextInputStyle.Short)
 				.setMinLength(17)
 				.setMaxLength(18)
-				.setValue('開発者ツールを使用して、ユーザーidを入手してください!');
+				.setValue('1063527758292070591');
 
 			const reason = new TextInputBuilder()
 				.setCustomId('reason')
 				.setLabel('通報理由')
 				.setStyle(TextInputStyle.Paragraph)
-				.setValue('グローバルBANするべきである理由を記入してください。');
+				.setValue('理由を記入');
 			const firstRow = new ActionRowBuilder().addComponents(targetid);
 			const secondRow = new ActionRowBuilder().addComponents(reason);
 			modal.addComponents(firstRow, secondRow);
