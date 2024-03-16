@@ -57,6 +57,11 @@ module.exports = {
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
+				.setName('report')
+				.setDescription('危険なユーザーを通報できます。'), //TODO: 18n
+		)
+		.addSubcommand((subcommand) =>
+			subcommand
 				.setName(LANG.commands.globalban.subcommands.list.name)
 				.setDescription(LANG.commands.globalban.subcommands.list.description),
 		),
