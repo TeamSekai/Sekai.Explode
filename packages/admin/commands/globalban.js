@@ -409,6 +409,7 @@ module.exports = {
 							description: `ご報告ありがとうございます!\n<@${resultid}>(${resultid})の通報が完了しました。`,
 						},
 					],
+					ephemeral: true,
 				});
 				if (!config.notificationChannel) {
 					throw new Error('configのnotificationChannelを定義しなさい。');
@@ -417,11 +418,11 @@ module.exports = {
 				const d = new Date();
 				const u = d.getTime();
 				const fxunix = Math.floor(u / 1000);
-				await channel.send({
+				return await channel.send({
 					embeds: [
 						{
 							title: `レポートが届きました!`,
-							description: `通報者: ${interaction.user.username} | 通報時刻: ${fxunix}`,
+							description: `通報者: ${interaction.user.username} | 通報時刻: <t:${fxunix}:f>`,
 							color: 0xff0000,
 							fields: [
 								{
@@ -437,6 +438,7 @@ module.exports = {
 					],
 				});
 			}
+			return;
 		} else {
 			return await interaction.editReply(
 				LANG.commands.globalban.unsupportedSubcommandError,
