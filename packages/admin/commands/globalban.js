@@ -375,8 +375,8 @@ module.exports = {
 				.setCustomId('reportuserid')
 				.setLabel('ユーザーID')
 				.setStyle(TextInputStyle.Short)
-				.setMinLength(17)
-				.setMaxLength(18)
+				// .setMinLength(17)
+				// .setMaxLength(18)
 				.setValue('10635277582...');
 
 			const reason = new TextInputBuilder()
