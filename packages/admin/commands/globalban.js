@@ -422,7 +422,7 @@ module.exports = {
 					embeds: [
 						{
 							title: `レポートが届きました!`,
-							description: `通報者: ${interaction.user.username} | 通報時刻: <t:${fxunix}:f>`,
+							description: `通報者: <@${interaction.user.id}>(${interaction.user.id}) | 通報時刻: <t:${fxunix}:f>`,
 							color: 0xff0000,
 							fields: [
 								{
