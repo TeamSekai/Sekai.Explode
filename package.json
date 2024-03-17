@@ -25,7 +25,7 @@
 	},
 	"name": "mcsv-discord-bot",
 	"version": "2.1.0",
-	"main": "discordbot.js",
+	"main": "discordbot.ts",
 	"repository": "https://github.com/ringo360/Discord.js_Bot.git",
 	"author": "ringo360",
 	"license": "GPL-3.0-only",
@@ -37,13 +37,14 @@
 		"lint-staged": "^15.2.2",
 		"prettier": "^3.2.5",
 		"ts-jest": "^29.1.2",
-		"ts-node": "^10.9.2",
+		"tsx": "^4.7.1",
 		"typescript": "^5.4.2"
 	},
 	"scripts": {
-		"start": "npx ts-node .",
+		"start": "npx tsx .",
 		"test": "jest",
-		"prepare": "husky"
+		"prepare": "husky",
+		"check": "npx tsc --noemit"
 	},
 	"workspaces": [
 		"packages/*"

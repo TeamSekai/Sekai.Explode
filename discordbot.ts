@@ -1,38 +1,33 @@
+import { teeWrite } from './internal/logger';
+import { ClientMessageHandler } from './internal/messages';
+
 //* Discord.js Bot - by ringoXD -
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1';
 require('colors');
-const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
-const fs = require('fs');
-const path = require('path');
-const { token, syslogChannel } = require('./config.json');
+import { Client, GatewayIntentBits, ActivityType } from 'discord.js';
+import fs from 'fs/promises';
+import path from 'path';
+import { token, syslogChannel } from './config.json';
 process.env['FFMPEG_PATH'] = path.join(__dirname, 'ffmpeg');
 
 //!Load Internal dir code
-const { onShutdown } = require('./internal/schedules');
-const activity = require('./internal/activity');
-const mongodb = require('./internal/mongodb');
+import { onShutdown } from './internal/schedules';
+import activity from './internal/activity';
+import mongodb from './internal/mongodb';
 
 mongodb.connectMongoose();
 
-const { LANG, strFormat } = require('./util/languages');
-const { ClientMessageHandler } = require('./internal/messages');
-const { CommandManager } = require('./internal/commands');
+import { LANG, strFormat } from './util/languages';
+import { CommandManager } from './internal/commands';
+import assert from 'assert';
+import { Feature } from './util/types';
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
 
 //!LOGGER
-const oWrite = process.stdout.write;
-process.stdout.write = function () {
-	oWrite.apply(this, arguments);
-	fs.appendFileSync('discordbot.log', arguments[0] || '');
-};
-
-const oWrite2 = process.stdout.write;
-process.stderr.write = function () {
-	oWrite2.apply(this, arguments);
-	fs.appendFileSync('discordbot.log', arguments[0] || '');
-};
+teeWrite(process.stdout, 'discordbot.log');
+teeWrite(process.stderr, 'discordbot.log');
 
 //!RUN=======================
 
@@ -59,25 +54,27 @@ console.log(
 const client = new Client(options);
 console.log(LANG.discordbot.main.setupActivityCalling);
 activity.setupActivity(client);
-/** @type {ClientMessageHandler | undefined} */
-let messageHandler;
+let messageHandler: ClientMessageHandler | undefined;
 
-const features = fs
-	.readdirSync(path.join(__dirname, 'packages'))
-	.map((file) => {
-		console.log(`loading ${file} feature`);
-		const feature = require(file).feature;
-		if (feature == null) {
-			throw new TypeError(`${file} feature is undefined`);
-		}
-		return feature;
-	});
-const featuresLoadPromise = Promise.all(
-	features.map((feature) => feature.onLoad?.(client)),
-);
+const featuresLoadPromise = fs
+	.readdir(path.join(__dirname, 'packages'))
+	.then((files) =>
+		Promise.all(
+			files.map(async (file) => {
+				console.log(`loading ${file} feature`);
+				const module = await import(file);
+				const feature: Feature = module.feature;
+				if (feature == null) {
+					throw new TypeError(`${file} feature is undefined`);
+				}
+				await feature.onLoad?.(client);
+				return feature;
+			}),
+		),
+	);
 
 client.on('ready', async (readyClient) => {
-	await featuresLoadPromise;
+	const features = await featuresLoadPromise;
 	await Promise.all(
 		features.map((feature) => feature.onClientReady?.(readyClient)),
 	);
@@ -99,16 +96,24 @@ client.on('ready', async (readyClient) => {
 		status: 'dnd',
 	});
 	console.log(LANG.discordbot.ready.commandsRegistering);
-	await CommandManager.default.setClient(client);
-	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
+	await CommandManager.default.setClient(readyClient);
+	console.log(
+		strFormat(LANG.discordbot.ready.readyAndTime, {
+			ready: cgreen + LANG.discordbot.ready.commandsReady + creset,
+			time: Math.round(performance.now()) + ' ms',
+		}),
+	);
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
+	assert(SyslogChannel.isTextBased());
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
 	messageHandler = new ClientMessageHandler(readyClient);
 });
 
 onShutdown(async () => {
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
+	assert(SyslogChannel.isTextBased());
 	await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
+	const features = await featuresLoadPromise;
 	await Promise.all(features.map((feature) => feature.onUnload?.()));
 	await Promise.all([
 		client

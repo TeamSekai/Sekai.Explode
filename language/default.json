@@ -19,6 +19,7 @@
 			"presenceNameLoading": "Loading...",
 			"presenceStateLoading": "Sekai.explode is now loading...",
 			"commandsRegistering": "Registering commands...",
+			"readyAndTime": "${ready} (${time})",
 			"commandsReady": "Ready!"
 		},
 		"shutdown": {
