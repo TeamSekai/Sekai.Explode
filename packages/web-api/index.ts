@@ -19,4 +19,4 @@ class WebApiFeature {
 	}
 }
 
-module.exports = { feature: new WebApiFeature() };
+export const feature = new WebApiFeature();

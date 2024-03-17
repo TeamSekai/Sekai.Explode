@@ -5,7 +5,7 @@ import { ClientMessageHandler } from './internal/messages';
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1';
 require('colors');
 import { Client, GatewayIntentBits, ActivityType } from 'discord.js';
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { token, syslogChannel } from './config.json';
 process.env['FFMPEG_PATH'] = path.join(__dirname, 'ffmpeg');
@@ -20,6 +20,7 @@ mongodb.connectMongoose();
 import { LANG, strFormat } from './util/languages';
 import { CommandManager } from './internal/commands';
 import assert from 'assert';
+import { Feature } from './util/types';
 
 const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
@@ -55,22 +56,25 @@ console.log(LANG.discordbot.main.setupActivityCalling);
 activity.setupActivity(client);
 let messageHandler: ClientMessageHandler | undefined;
 
-const features = fs
-	.readdirSync(path.join(__dirname, 'packages'))
-	.map((file) => {
-		console.log(`loading ${file} feature`);
-		const feature = require(file).feature;
-		if (feature == null) {
-			throw new TypeError(`${file} feature is undefined`);
-		}
-		return feature;
-	});
-const featuresLoadPromise = Promise.all(
-	features.map((feature) => feature.onLoad?.(client)),
-);
+const featuresLoadPromise = fs
+	.readdir(path.join(__dirname, 'packages'))
+	.then((files) =>
+		Promise.all(
+			files.map(async (file) => {
+				console.log(`loading ${file} feature`);
+				const module = await import(file);
+				const feature: Feature = module.feature;
+				if (feature == null) {
+					throw new TypeError(`${file} feature is undefined`);
+				}
+				await feature.onLoad?.(client);
+				return feature;
+			}),
+		),
+	);
 
 client.on('ready', async (readyClient) => {
-	await featuresLoadPromise;
+	const features = await featuresLoadPromise;
 	await Promise.all(
 		features.map((feature) => feature.onClientReady?.(readyClient)),
 	);
@@ -104,6 +108,7 @@ onShutdown(async () => {
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
 	assert(SyslogChannel.isTextBased());
 	await SyslogChannel.send(LANG.discordbot.shutdown.sysLog);
+	const features = await featuresLoadPromise;
 	await Promise.all(features.map((feature) => feature.onUnload?.()));
 	await Promise.all([
 		client
