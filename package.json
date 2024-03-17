@@ -25,7 +25,7 @@
 	},
 	"name": "mcsv-discord-bot",
 	"version": "2.1.0",
-	"main": "discordbot.js",
+	"main": "discordbot.ts",
 	"repository": "https://github.com/ringo360/Discord.js_Bot.git",
 	"author": "ringo360",
 	"license": "GPL-3.0-only",
