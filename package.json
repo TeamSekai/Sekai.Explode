@@ -43,7 +43,8 @@
 	"scripts": {
 		"start": "npx tsx .",
 		"test": "jest",
-		"prepare": "husky"
+		"prepare": "husky",
+		"check": "npx tsc --noemit"
 	},
 	"workspaces": [
 		"packages/*"
