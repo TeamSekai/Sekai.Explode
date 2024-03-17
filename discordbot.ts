@@ -97,7 +97,12 @@ client.on('ready', async (readyClient) => {
 	});
 	console.log(LANG.discordbot.ready.commandsRegistering);
 	await CommandManager.default.setClient(readyClient);
-	console.log(cgreen + LANG.discordbot.ready.commandsReady + creset);
+	console.log(
+		strFormat(LANG.discordbot.ready.readyAndTime, {
+			ready: cgreen + LANG.discordbot.ready.commandsReady + creset,
+			time: Math.round(performance.now()) + ' ms',
+		}),
+	);
 	const SyslogChannel = client.channels.cache.get(syslogChannel);
 	assert(SyslogChannel.isTextBased());
 	SyslogChannel.send(LANG.discordbot.ready.sysLog);
