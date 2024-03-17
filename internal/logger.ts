@@ -2,7 +2,7 @@ import * as fs from 'fs/promises';
 
 type Callback = (err?: Error) => void;
 
-export function wrapWrite(
+export function teeWrite(
 	stream: NodeJS.WriteStream,
 	logFilename: string,
 ): void {

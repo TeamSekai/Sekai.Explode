@@ -1,4 +1,4 @@
-import { wrapWrite } from './internal/logger';
+import { teeWrite } from './internal/logger';
 import { ClientMessageHandler } from './internal/messages';
 
 //* Discord.js Bot - by ringoXD -
@@ -25,8 +25,8 @@ const creset = '\x1b[0m';
 const cgreen = '\x1b[32m';
 
 //!LOGGER
-wrapWrite(process.stdout, 'discordbot.log');
-wrapWrite(process.stderr, 'discordbot.log');
+teeWrite(process.stdout, 'discordbot.log');
+teeWrite(process.stderr, 'discordbot.log');
 
 //!RUN=======================
 
