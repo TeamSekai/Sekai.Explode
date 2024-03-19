@@ -47,37 +47,58 @@ module.exports = {
 			isSilent = interaction.options.getBoolean("silent");
 		}
 		*/
-		const msg = interaction.options.getString(
-			LANG.commands.dm.options.text.name,
-		);
 
 		const userId = interaction.options.getUser(
 			LANG.commands.dm.options.user.name,
 		);
-		const dmChannel = await userId.createDM();
 
-		dmChannel.send({
-			embeds: [
-				{
-					title: strFormat(LANG.commands.dm.messageTitle, [
-						interaction.user.username,
-					]),
-					thumbnail: {
-						url: interaction.user.displayAvatarURL(),
-					},
-					color: 0x5865f2,
-					fields: [
-						{
-							name: LANG.commands.dm.messageFieldName,
-							value: msg,
+		const modal = new ModalBuilder()
+			.setCustomId('modaldm')
+			.setTitle('DMを送信します...');
+
+		const msgcontent = new TextInputBuilder()
+			.setCustomId('content')
+			.setLabel('送信したいメッセージ')
+			.setStyle(TextInputStyle.Paragraph)
+			.setPlaceholder('送りたいメッセージをここに記入...')
+			.setRequired(true);
+		const firstRow = new ActionRowBuilder().addComponents(msgcontent);
+		modal.addComponents(firstRow);
+		await interaction.showModal(modal);
+		// const filter = (mInteraction) => mInteraction.customId === 'gbanreport';
+		const submitted = await interaction
+			.awaitModalSubmit({
+				time: 60000,
+				filter: (i) => i.user.id === interaction.user.id,
+			})
+			.catch((e) => console.error(e));
+		if (submitted) {
+			const msg = submitted.fields.getTextInputValue('msg');
+			const userName = userId.username;
+			await interaction.reply();
+			await submitted.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
+			const dmChannel = await userId.createDM();
+
+			dmChannel.send({
+				embeds: [
+					{
+						title: strFormat(LANG.commands.dm.messageTitle, [
+							interaction.user.username,
+						]),
+						thumbnail: {
+							url: interaction.user.displayAvatarURL(),
 						},
-					],
-				},
-			],
-		});
-
-		const userName = userId.username;
-		await interaction.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
+						color: 0x5865f2,
+						fields: [
+							{
+								name: LANG.commands.dm.messageFieldName,
+								value: msg,
+							},
+						],
+					},
+				],
+			});
+		}
 
 		const expirationTime = Date.now() + cooldownTime * 1000;
 		cooldowns.set(executorId, expirationTime);
