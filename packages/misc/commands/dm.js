@@ -67,7 +67,8 @@ module.exports = {
 			.setLabel('送信したいメッセージ')
 			.setStyle(TextInputStyle.Paragraph)
 			.setPlaceholder('送りたいメッセージをここに記入...')
-			.setRequired(true);
+			.setRequired(true)
+			.setMaxLength(1024);
 		const firstRow = new ActionRowBuilder().addComponents(msgcontent);
 		modal.addComponents(firstRow);
 		await interaction.showModal(modal);
@@ -80,13 +81,6 @@ module.exports = {
 			.catch((e) => console.error(e));
 		if (submitted) {
 			const msg = submitted.fields.getTextInputValue('content');
-			const msglength = msg.length;
-			if (msg > 1024) {
-				return await interaction.reply({
-					content: '文字の長さは1024文字以下にしてください!',
-					ephemeral: true,
-				});
-			}
 			const userName = userId.username;
 			await submitted.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
 			const dmChannel = await userId.createDM();
