@@ -1,4 +1,10 @@
-const { SlashCommandBuilder } = require('discord.js');
+const {
+	SlashCommandBuilder,
+	ModalBuilder,
+	TextInputBuilder,
+	TextInputStyle,
+	ActionRowBuilder,
+} = require('discord.js');
 const { LANG, strFormat } = require('../../../util/languages');
 const cooldowns = new Map();
 
@@ -10,12 +16,6 @@ module.exports = {
 			option
 				.setName(LANG.commands.dm.options.user.name)
 				.setDescription(LANG.commands.dm.options.user.description)
-				.setRequired(true),
-		)
-		.addStringOption((option) =>
-			option
-				.setName(LANG.commands.dm.options.text.name)
-				.setDescription(LANG.commands.dm.options.text.description)
 				.setRequired(true),
 		),
 	/* .addBooleanOption(option =>
@@ -41,45 +41,69 @@ module.exports = {
 			}
 		}
 
-		/* TODO 実装? コメントアウトを削除?
-		let isSilent = false;
-		if (interaction.options.getBoolean("silent")) {
-			isSilent = interaction.options.getBoolean("silent");
-		}
-		*/
-		const msg = interaction.options.getString(
-			LANG.commands.dm.options.text.name,
-		);
-
 		const userId = interaction.options.getUser(
 			LANG.commands.dm.options.user.name,
 		);
-		const dmChannel = await userId.createDM();
+		if (userId.bot) {
+			return await interaction.reply({
+				content: 'Botに対して実行することはできません!',
+				ephemeral: true,
+			});
+		}
 
-		dmChannel.send({
-			embeds: [
-				{
-					title: strFormat(LANG.commands.dm.messageTitle, [
-						interaction.user.username,
-					]),
-					thumbnail: {
-						url: interaction.user.displayAvatarURL(),
-					},
-					color: 0x5865f2,
-					fields: [
+		const modal = new ModalBuilder()
+			.setCustomId('modaldm')
+			.setTitle('DMを送信します...');
+
+		const msgcontent = new TextInputBuilder()
+			.setCustomId('content')
+			.setLabel('送信したいメッセージ')
+			.setStyle(TextInputStyle.Paragraph)
+			.setPlaceholder('送りたいメッセージをここに記入...')
+			.setRequired(true)
+			.setMaxLength(1024);
+		const firstRow = new ActionRowBuilder().addComponents(msgcontent);
+		modal.addComponents(firstRow);
+		await interaction.showModal(modal);
+		// const filter = (mInteraction) => mInteraction.customId === 'gbanreport';
+		try {
+			const submitted = await interaction
+				.awaitModalSubmit({
+					time: 60000,
+					filter: (i) => i.user.id === interaction.user.id,
+				})
+				.catch((e) => console.error(e));
+			if (submitted) {
+				const msg = submitted.fields.getTextInputValue('content');
+				const userName = userId.username;
+				await submitted.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
+				const dmChannel = await userId.createDM();
+
+				dmChannel.send({
+					embeds: [
 						{
-							name: LANG.commands.dm.messageFieldName,
-							value: msg,
+							title: strFormat(LANG.commands.dm.messageTitle, [
+								interaction.user.username,
+							]),
+							thumbnail: {
+								url: interaction.user.displayAvatarURL(),
+							},
+							color: 0x5865f2,
+							fields: [
+								{
+									name: LANG.commands.dm.messageFieldName,
+									value: msg,
+								},
+							],
 						},
 					],
-				},
-			],
-		});
-
-		const userName = userId.username;
-		await interaction.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
-
-		const expirationTime = Date.now() + cooldownTime * 1000;
-		cooldowns.set(executorId, expirationTime);
+				});
+			}
+		} catch (e) {
+			console.error(e);
+		} finally {
+			const expirationTime = Date.now() + cooldownTime * 1000;
+			cooldowns.set(executorId, expirationTime);
+		}
 	},
 };

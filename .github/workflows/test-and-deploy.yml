@@ -2,7 +2,9 @@ name: Code Test and Deploy
 
 on:
   push:
-    branches: v14-dev
+    branches:
+        - '**'
+        - '!v14-stable'
 jobs:
   test:
     runs-on: ubuntu-latest
