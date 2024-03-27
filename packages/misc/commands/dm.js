@@ -17,12 +17,6 @@ module.exports = {
 				.setName(LANG.commands.dm.options.user.name)
 				.setDescription(LANG.commands.dm.options.user.description)
 				.setRequired(true),
-		)
-		.addStringOption((option) =>
-			option
-				.setName(LANG.commands.dm.options.text.name)
-				.setDescription(LANG.commands.dm.options.text.description)
-				.setRequired(true),
 		),
 	/* .addBooleanOption(option =>
 			option
@@ -79,7 +73,7 @@ module.exports = {
 			})
 			.catch((e) => console.error(e));
 		if (submitted) {
-			const msg = submitted.fields.getTextInputValue('msg');
+			const msg = submitted.fields.getTextInputValue('content');
 			const userName = userId.username;
 			await interaction.reply();
 			await submitted.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
