@@ -75,7 +75,6 @@ module.exports = {
 		if (submitted) {
 			const msg = submitted.fields.getTextInputValue('content');
 			const userName = userId.username;
-			await interaction.reply();
 			await submitted.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
 			const dmChannel = await userId.createDM();
 
