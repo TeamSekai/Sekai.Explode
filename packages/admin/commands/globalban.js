@@ -11,6 +11,7 @@ const { AdminUserIDs } = require('../../../config.json');
 const Pager = require('../../../util/pager');
 const { LANG, strFormat } = require('../../../util/languages');
 const config = require('../../../config.json');
+const cooldowns = new Map();
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -369,10 +370,21 @@ module.exports = {
 				});
 			}
 		} else if (subcommand === 'report') {
+			const cooldownTime = 10;
+			if (cooldowns.has(interaction.user.id)) {
+				const expirationTime = cooldowns.get(interaction.user.id);
+				const currTime = Date.now();
+
+				const remainingTime = Math.ceil((expirationTime - currTime) / 1000);
+				if (remainingTime > 0) {
+					return interaction.reply(
+						strFormat(LANG.commands.dm.cooldown, [remainingTime]),
+					);
+				}
+			}
 			const modal = new ModalBuilder()
 				.setCustomId('gbanReport')
 				.setTitle('通報したいユーザーについて');
-
 			const targetid = new TextInputBuilder()
 				.setCustomId('reportuserid')
 				.setLabel('ユーザーID')
@@ -438,6 +450,8 @@ module.exports = {
 					],
 				});
 			}
+			const expirationTime = Date.now() + cooldownTime * 1000;
+			cooldowns.set(executorId, expirationTime);
 			return;
 		} else {
 			return await interaction.editReply(
