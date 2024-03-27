@@ -51,6 +51,12 @@ module.exports = {
 		const userId = interaction.options.getUser(
 			LANG.commands.dm.options.user.name,
 		);
+		if (userId === interaction.user.bot) {
+			await interaction.reply({
+				content: 'Botに対して実行することはできません!',
+				ephemeral: true,
+			});
+		}
 
 		const modal = new ModalBuilder()
 			.setCustomId('modaldm')
