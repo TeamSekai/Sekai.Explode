@@ -41,18 +41,11 @@ module.exports = {
 			}
 		}
 
-		/* TODO 実装? コメントアウトを削除?
-		let isSilent = false;
-		if (interaction.options.getBoolean("silent")) {
-			isSilent = interaction.options.getBoolean("silent");
-		}
-		*/
-
 		const userId = interaction.options.getUser(
 			LANG.commands.dm.options.user.name,
 		);
-		if (userId === interaction.user.bot) {
-			await interaction.reply({
+		if (userId.bot) {
+			return await interaction.reply({
 				content: 'Botに対して実行することはできません!',
 				ephemeral: true,
 			});
@@ -73,40 +66,44 @@ module.exports = {
 		modal.addComponents(firstRow);
 		await interaction.showModal(modal);
 		// const filter = (mInteraction) => mInteraction.customId === 'gbanreport';
-		const submitted = await interaction
-			.awaitModalSubmit({
-				time: 60000,
-				filter: (i) => i.user.id === interaction.user.id,
-			})
-			.catch((e) => console.error(e));
-		if (submitted) {
-			const msg = submitted.fields.getTextInputValue('content');
-			const userName = userId.username;
-			await submitted.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
-			const dmChannel = await userId.createDM();
+		try {
+			const submitted = await interaction
+				.awaitModalSubmit({
+					time: 60000,
+					filter: (i) => i.user.id === interaction.user.id,
+				})
+				.catch((e) => console.error(e));
+			if (submitted) {
+				const msg = submitted.fields.getTextInputValue('content');
+				const userName = userId.username;
+				await submitted.reply(strFormat(LANG.commands.dm.dmSent, [userName]));
+				const dmChannel = await userId.createDM();
 
-			dmChannel.send({
-				embeds: [
-					{
-						title: strFormat(LANG.commands.dm.messageTitle, [
-							interaction.user.username,
-						]),
-						thumbnail: {
-							url: interaction.user.displayAvatarURL(),
-						},
-						color: 0x5865f2,
-						fields: [
-							{
-								name: LANG.commands.dm.messageFieldName,
-								value: msg,
+				dmChannel.send({
+					embeds: [
+						{
+							title: strFormat(LANG.commands.dm.messageTitle, [
+								interaction.user.username,
+							]),
+							thumbnail: {
+								url: interaction.user.displayAvatarURL(),
 							},
-						],
-					},
-				],
-			});
+							color: 0x5865f2,
+							fields: [
+								{
+									name: LANG.commands.dm.messageFieldName,
+									value: msg,
+								},
+							],
+						},
+					],
+				});
+			}
+		} catch (e) {
+			console.error(e);
+		} finally {
+			const expirationTime = Date.now() + cooldownTime * 1000;
+			cooldowns.set(executorId, expirationTime);
 		}
-
-		const expirationTime = Date.now() + cooldownTime * 1000;
-		cooldowns.set(executorId, expirationTime);
 	},
 };
