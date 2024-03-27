@@ -451,7 +451,7 @@ module.exports = {
 				});
 			}
 			const expirationTime = Date.now() + cooldownTime * 1000;
-			cooldowns.set(executorId, expirationTime);
+			cooldowns.set(interaction.user.id, expirationTime);
 			return;
 		} else {
 			return await interaction.editReply(
