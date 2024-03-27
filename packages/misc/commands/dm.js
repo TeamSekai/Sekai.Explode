@@ -1,4 +1,10 @@
-const { SlashCommandBuilder } = require('discord.js');
+const {
+	SlashCommandBuilder,
+	ModalBuilder,
+	TextInputBuilder,
+	TextInputStyle,
+	ActionRowBuilder,
+} = require('discord.js');
 const { LANG, strFormat } = require('../../../util/languages');
 const cooldowns = new Map();
 
