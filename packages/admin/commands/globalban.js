@@ -370,7 +370,7 @@ module.exports = {
 				});
 			}
 		} else if (subcommand === 'report') {
-			const cooldownTime = 10;
+			const cooldownTime = 30;
 			if (cooldowns.has(interaction.user.id)) {
 				const expirationTime = cooldowns.get(interaction.user.id);
 				const currTime = Date.now();
