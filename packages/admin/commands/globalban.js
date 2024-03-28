@@ -82,7 +82,7 @@ module.exports = {
 		}
 
 		if (subcommand !== 'report') {
-			console.log('Defering');
+			// console.log('Defering'); devlog
 			await interaction.deferReply();
 		}
 		if (subcommand === LANG.commands.globalban.subcommands.sync.name) {
@@ -430,7 +430,7 @@ module.exports = {
 				const d = new Date();
 				const u = d.getTime();
 				const fxunix = Math.floor(u / 1000);
-				return await channel.send({
+				await channel.send({
 					embeds: [
 						{
 							title: `レポートが届きました!`,
